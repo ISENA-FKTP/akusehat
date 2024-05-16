@@ -19,7 +19,7 @@ Berikut adalah langkah-langkah untuk menginstal dan menjalankan proyek ini secar
 1. **Clone repositori ini**
 
     ```bash
-    git clone https://github.com/username/nama-proyek.git
+    git clone https://github.com/ISENA-FKTP/isena-fktp.git
     ```
 
 2. **Masuk ke direktori proyek**
@@ -57,11 +57,11 @@ nama-proyek/
 │   ├── json/
 │   ├── services/
 │   ├── views/
-    │   ├── apoteker/
-    │   ├── dokter/
-    │   ├── klinik/
-    │   ├── manage/
-    │   ├── statistik/
+|   │   ├── apoteker/
+|   │   ├── dokter/
+|   │   ├── klinik/
+|   │   ├── manage/
+|   │   ├── statistik/
 │   ├── App.jsx
 │   ├── main.jsx
 ├── .gitignore
