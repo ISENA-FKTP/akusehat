@@ -1,9 +1,32 @@
 import { useState } from "react";
-import { BsArrowLeftShort, BsSearch } from "react-icons/bs";
+import { BsArrowLeftShort, BsSearch, BsChevronDown } from "react-icons/bs";
 import { AiFillEnvironment } from "react-icons/ai";
+import { RiDashboardFill } from "react-icons/ri";
 
 export default function Sidebar() {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
+  const [submenuOpen, setSubmenuOpen] = useState(false);
+
+  const Menus = [
+    { title: "Dashboard" },
+    { title: "Pages" },
+    { title: "Media", spacing: true },
+    {
+      title: "Project",
+      subMenu: true,
+      submenuItems: [
+        { title: "Submenu 1" },
+        { title: "Submenu 2" },
+        { title: "Submenu 3" },
+      ],
+    },
+    { title: "Analytics" },
+    { title: "Inbox" },
+    { title: "Profile", spacing: true },
+    { title: "Settings" },
+    { title: "Logout" },
+  ];
+
   return (
     <>
       <div
@@ -50,6 +73,48 @@ export default function Sidebar() {
             }`}
           />
         </div>
+        <ul className="pt-2">
+          {Menus.map((menu, index) => (
+            <>
+              <li
+                key={index}
+                className={`text-gray-300 text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-slate-500 rounded-md ${
+                  menu.spacing ? "mt-9" : "mt-2"
+                } mt-2`}
+              >
+                <span className="text-2xl block float-left">
+                  <RiDashboardFill />
+                </span>
+                <span
+                  className={`text-base font-medium flex-1 duration-200 ${
+                    !open && "hidden"
+                  }`}
+                >
+                  {menu.title}
+                </span>
+                {menu.subMenu && (
+                  <BsChevronDown
+                    className="float-right text-2xl cursor-pointer"
+                    onClick={() => {}}
+                  />
+                )}
+              </li>
+
+              {menu.subMenu && (
+                <ul>
+                  {menu.submenuItems.map((submenuOpen, index) => (
+                    <li
+                      key={index}
+                      className="text-gray-300 text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-slate-500 rounded-md"
+                    >
+                      {submeuItem.title}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </>
+          ))}
+        </ul>
       </div>
     </>
   );
