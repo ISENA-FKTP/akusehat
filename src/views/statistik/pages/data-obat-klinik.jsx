@@ -1,4 +1,4 @@
-import Sidebar from "../../../components/sidebar";
+import Sidebar from "../../../components/statistik/sidebar";
 
 export default function DataObatKlinik() {
   return (
