@@ -73,7 +73,12 @@ export default {
         950: "#052e14",
       },
     },
-    extend: {},
+    extend: {
+      fontFamily: {
+        primary: ["Poppins"],
+        secondary: ["Karla"],
+      },
+    },
   },
   plugins: [],
 };

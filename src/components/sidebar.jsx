@@ -1,7 +1,5 @@
 import { useState } from "react";
-import(
-  "https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-);
+import { useNavigate, useLocation } from "react-router-dom";
 
 import { BsArrowLeftShort, BsFillImageFill } from "react-icons/bs";
 import { AiOutlineBarChart, AiOutlineFileText } from "react-icons/ai";
@@ -9,12 +7,26 @@ import { RiDashboardFill } from "react-icons/ri";
 
 export default function Sidebar() {
   const [open, setOpen] = useState(true);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const Menus = [
-    { title: "Dashboard" },
-    { title: "Data Sakit Polisi", icon: <AiOutlineFileText /> },
-    { title: "Data Pengunjung Klinik", icon: <BsFillImageFill /> },
-    { title: "Data Obat Klinik", icon: <AiOutlineBarChart /> },
+    { title: "Dashboard", path: "/" },
+    {
+      title: "Data Sakit Polisi",
+      path: "/data-sakit-polisi",
+      icon: <AiOutlineFileText />,
+    },
+    {
+      title: "Data Pengunjung Klinik",
+      path: "/data-pengunjung-klinik",
+      icon: <BsFillImageFill />,
+    },
+    {
+      title: "Data Obat Klinik",
+      path: "/data-obat-klinik",
+      icon: <AiOutlineBarChart />,
+    },
   ];
 
   return (
@@ -50,23 +62,24 @@ export default function Sidebar() {
         {/* Sub Menu */}
         <ul className="pt-10">
           {Menus.map((menu, index) => (
-            <>
-              <li
-                key={index}
-                className={`text-white flex items-center gap-x-4 cursor-pointer p-3 hover:bg-primary-300 hover:text-primary-600 px-5 ${
-                  menu.spacing ? "mt-9" : "mt-2"
-                } mt-2`}
+            <li
+              key={index}
+              className={`text-white flex items-center gap-x-4 cursor-pointer p-3 ${
+                location.pathname === menu.path
+                  ? "bg-primary-300 text-primary-600"
+                  : "hover:bg-primary-300 hover:text-primary-600"
+              } px-5 ${menu.spacing ? "mt-9" : "mt-2"}`}
+              onClick={() => navigate(menu.path)}
+            >
+              <span className="text-2xl block float-left">
+                {menu.icon ? menu.icon : <RiDashboardFill />}
+              </span>
+              <span
+                className={`text-lg font-medium flex-1 ${!open && "hidden"}`}
               >
-                <span className="text-2xl block float-left">
-                  {menu.icon ? menu.icon : <RiDashboardFill />}
-                </span>
-                <span
-                  className={`text-lg font-medium flex-1 ${!open && "hidden"}`}
-                >
-                  {menu.title}
-                </span>
-              </li>
-            </>
+                {menu.title}
+              </span>
+            </li>
           ))}
         </ul>
       </div>
