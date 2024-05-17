@@ -1,117 +1,71 @@
 import { useState } from "react";
-import { BsArrowLeftShort, BsSearch, BsChevronDown } from "react-icons/bs";
-import { AiFillEnvironment } from "react-icons/ai";
+import(
+  "https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+);
+
+import { BsArrowLeftShort, BsFillImageFill } from "react-icons/bs";
+import { AiOutlineBarChart, AiOutlineFileText } from "react-icons/ai";
 import { RiDashboardFill } from "react-icons/ri";
 
 export default function Sidebar() {
   const [open, setOpen] = useState(true);
-  const [submenuOpen, setSubmenuOpen] = useState(false);
 
   const Menus = [
     { title: "Dashboard" },
-    { title: "Pages" },
-    { title: "Media", spacing: true },
-    {
-      title: "Project",
-      subMenu: true,
-      submenuItems: [
-        { title: "Submenu 1" },
-        { title: "Submenu 2" },
-        { title: "Submenu 3" },
-      ],
-    },
-    { title: "Analytics" },
-    { title: "Inbox" },
-    { title: "Profile", spacing: true },
-    { title: "Settings" },
-    { title: "Logout" },
+    { title: "Data Sakit Polisi", icon: <AiOutlineFileText /> },
+    { title: "Data Pengunjung Klinik", icon: <BsFillImageFill /> },
+    { title: "Data Obat Klinik", icon: <AiOutlineBarChart /> },
   ];
 
   return (
     <>
       <div
-        className={`bg-purple-950 h-screen p-5 pt-8 ${
+        className={`bg-primary-600 h-screen py-5 pt-8 font-poppins ${
           open ? "w-72" : "w-20"
         } duration-300 relative`}
       >
+        {/* Title */}
         <BsArrowLeftShort
-          className={`bg-white text-purple-950 text-3xl rounded-full absolute top-9 -right-3 border border-purple-950 cursor-pointer ${
-            !open && "rotate-180"
+          className={`bg-transparent right-5 text-white text-3xl rounded-full absolute top-9 border border-purple-950 cursor-pointer ${
+            !open && "rotate-180 right-8"
           }`}
           onClick={() => setOpen(!open)}
         />
-        <div className="inline-flex">
-          <AiFillEnvironment
-            className={`bg-amber-300 text-4xl rounded cursor-pointer block float-left mr-2 duration-500 ${
-              open && "rotate-[360deg]"
-            }`}
-          />
-          <h1
-            className={`text-white text-2xl origin-left font-medium duration-300 ${
-              !open && "scale-0"
-            }`}
-          >
-            Tailwind
-          </h1>
-        </div>
-
-        <div
-          className={`flex items-center rounded-md bg-zinc-600 mt-6 px-4 py-2 ${
-            !open ? "px-2.5" : "px-2.5"
-          }`}
-        >
-          <BsSearch
-            className={`text-white text-lg block float-left cursor-pointer ${
-              open && "mr-2"
-            }`}
-          />
-          <input
-            type="{search}"
-            placeholder="Search"
-            className={`text-base bg-transparent w-full text-white focus:outline-none ${
+        <div className="inline-flex px-5">
+          <img
+            src="/logo.png"
+            className={`w-10 h-10 cursor-pointer block float-left mr-3 duration-500 ${
               !open && "hidden"
             }`}
           />
+          <h1
+            className={`text-white text-2xl origin-left font-bold duration-500 mt-[0.20rem] ${
+              !open && "hidden"
+            }`}
+          >
+            ISENA FKTP
+          </h1>
         </div>
-        <ul className="pt-2">
+
+        {/* Sub Menu */}
+        <ul className="pt-10">
           {Menus.map((menu, index) => (
             <>
               <li
                 key={index}
-                className={`text-gray-300 text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-slate-500 rounded-md ${
+                className={`text-white flex items-center gap-x-4 cursor-pointer p-3 hover:bg-primary-300 hover:text-primary-600 px-5 ${
                   menu.spacing ? "mt-9" : "mt-2"
                 } mt-2`}
               >
                 <span className="text-2xl block float-left">
-                  <RiDashboardFill />
+                  {menu.icon ? menu.icon : <RiDashboardFill />}
                 </span>
                 <span
-                  className={`text-base font-medium flex-1 duration-200 ${
-                    !open && "hidden"
-                  }`}
+                  className={`text-lg font-medium flex-1 ${!open && "hidden"}`}
                 >
                   {menu.title}
                 </span>
-                {menu.subMenu && (
-                  <BsChevronDown
-                    className="float-right text-2xl cursor-pointer"
-                    onClick={() => {}}
-                  />
-                )}
               </li>
-
-              {menu.subMenu && (
-                <ul>
-                  {menu.submenuItems.map((submenuOpen, index) => (
-                    <li
-                      key={index}
-                      className="text-gray-300 text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-slate-500 rounded-md"
-                    >
-                      {submeuItem.title}
-                    </li>
-                  ))}
-                </ul>
-              )}
             </>
           ))}
         </ul>
