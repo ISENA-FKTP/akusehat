@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-
-import { BsArrowLeftShort, BsFillImageFill } from "react-icons/bs";
-import { AiOutlineBarChart, AiOutlineFileText } from "react-icons/ai";
-import { RiDashboardFill } from "react-icons/ri";
+import { GiMedicines } from "react-icons/gi";
+import { MdSick } from "react-icons/md";
+import { GoHomeFill } from "react-icons/go";
+import { FaPeopleGroup } from "react-icons/fa6";
+import { IoMdArrowDropleft } from "react-icons/io";
 
 export default function Sidebar() {
   const [open, setOpen] = useState(true);
@@ -15,30 +16,30 @@ export default function Sidebar() {
     {
       title: "Data Sakit Polisi",
       path: "/data-sakit-polisi",
-      icon: <AiOutlineFileText />,
+      icon: <MdSick />,
     },
     {
       title: "Data Pengunjung Klinik",
       path: "/data-pengunjung-klinik",
-      icon: <BsFillImageFill />,
+      icon: <FaPeopleGroup />,
     },
     {
       title: "Data Obat Klinik",
       path: "/data-obat-klinik",
-      icon: <AiOutlineBarChart />,
+      icon: <GiMedicines />,
     },
   ];
 
   return (
     <>
       <div
-        className={`bg-primary-600 h-screen py-5 pt-8 font-poppins ${
+        className={`bg-primary-600 h-screen fixed left-0 py-5 pt-8 font-poppins ${
           open ? "w-72" : "w-20"
         } duration-300 relative`}
       >
         {/* Title */}
-        <BsArrowLeftShort
-          className={`bg-transparent right-5 text-white text-3xl rounded-full absolute top-9 border border-purple-950 cursor-pointer ${
+        <IoMdArrowDropleft
+          className={`bg-transparent right-5 text-white text-3xl rounded-full absolute top-9 cursor-pointer ${
             !open && "rotate-180 right-8"
           }`}
           onClick={() => setOpen(!open)}
@@ -72,7 +73,7 @@ export default function Sidebar() {
               onClick={() => navigate(menu.path)}
             >
               <span className="text-2xl block float-left">
-                {menu.icon ? menu.icon : <RiDashboardFill />}
+                {menu.icon ? menu.icon : <GoHomeFill />}
               </span>
               <span
                 className={`text-lg font-medium flex-1 ${!open && "hidden"}`}
