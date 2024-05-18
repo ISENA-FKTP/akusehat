@@ -15,17 +15,17 @@ export default function Sidebar_Klinik() {
     { title: "Dashboard", path: "/" },
     {
       title: "Administrasi",
-      path: "/Administrasi",
+      path: "/administrasi",
       icon: <FaReadme />,
     },
     {
       title: "Dokter",
-      path: "/Dokter",
+      path: "/dokter",
       icon: <FaUserDoctor />,
     },
     {
       title: "Laporan",
-      path: "/Laporan",
+      path: "/laporan",
       icon: <TbReportAnalytics />,
     },
   ];

@@ -1,4 +1,4 @@
-import Sidebar_Klinik from "../../components/klinik/sidebar_klinik";
+import Sidebar_Klinik from "../../../components/klinik/sidebar_klinik";
 
 export default function Administrasi() {
   return (
