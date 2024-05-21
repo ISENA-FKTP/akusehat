@@ -5,6 +5,7 @@ import { FaReadme } from "react-icons/fa6";
 import { GoHomeFill } from "react-icons/go";
 import { FaUserDoctor } from "react-icons/fa6";
 import { IoMdArrowDropleft } from "react-icons/io";
+import { MdSpaceDashboard } from "react-icons/md";
 
 export default function Sidebar_Klinik() {
   const [open, setOpen] = useState(true);
@@ -12,7 +13,10 @@ export default function Sidebar_Klinik() {
   const location = useLocation();
 
   const Menus = [
-    { title: "Dashboard", path: "/" },
+    { title: "Dashboard", 
+      path: "/dashboard",
+      Icon: <MdSpaceDashboard />,
+    },
     {
       title: "Administrasi",
       path: "/administrasi",
