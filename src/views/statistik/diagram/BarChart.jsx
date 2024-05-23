@@ -51,12 +51,12 @@ const BarChart = () => {
         legendOffset: -50,
         truncateTickAt: 0,
       }}
-      enableLabel={false}
-      enableTotals={true}
+      enableLabel={true}
+      enableTotals={false}
       labelSkipHeight={12}
       labelTextColor={{
         from: "color",
-        modifiers: [["darker", 1.6]],
+        modifiers: [["brighter", "5"]],
       }}
       legends={[
         {
