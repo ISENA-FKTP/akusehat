@@ -7,7 +7,7 @@ export const DataPegawaiRawat = [
     awalsakit: "2024-05-01",
     keterangan: "Demam tinggi disertai flu",
     WFH: "Tidak",
-    sumberbiaya: "Asuransi",
+    sumberbiaya: "BPJS",
     pegawaiId: 1,
   },
   {
@@ -18,7 +18,7 @@ export const DataPegawaiRawat = [
     awalsakit: "2024-05-10",
     keterangan: "Patah tulang akibat kecelakaan",
     WFH: "Tidak",
-    sumberbiaya: "Pribadi",
+    sumberbiaya: "Non-BPJS",
     pegawaiId: 2,
   },
   {
@@ -29,7 +29,7 @@ export const DataPegawaiRawat = [
     awalsakit: "2024-05-15",
     keterangan: "Migraine berat",
     WFH: "Ya",
-    sumberbiaya: "Asuransi",
+    sumberbiaya: "BPJS",
     pegawaiId: 3,
   },
   {
@@ -40,7 +40,7 @@ export const DataPegawaiRawat = [
     awalsakit: "2024-05-20",
     keterangan: "Gastritis akut",
     WFH: "Tidak",
-    sumberbiaya: "Pribadi",
+    sumberbiaya: "Non-BPJS",
     pegawaiId: 4,
   },
   {
@@ -51,35 +51,31 @@ export const DataPegawaiRawat = [
     awalsakit: "2024-05-25",
     keterangan: "Positif Covid-19 dengan gejala ringan",
     WFH: "Ya",
-    sumberbiaya: "Asuransi",
+    sumberbiaya: "BPJS",
     pegawaiId: 5,
   },
 ];
 
 export const calculateTotals = () => {
   const totals = {
-    rawatJalan: 0,
-    rawatInap: 0,
-    lainnya: 0,
+    bpjs: 0,
+    nonBpjs: 0,
   };
 
   DataPegawaiRawat.forEach((item) => {
-    const jenisperawatan = item.jenisperawatan.toLowerCase();
-    if (jenisperawatan === "rawat jalan") {
-      totals.rawatJalan += 1;
-    } else if (jenisperawatan === "rawat inap") {
-      totals.rawatInap += 1;
+    const sumberbiaya = item.sumberbiaya.toLowerCase();
+    if (sumberbiaya === "bpjs") {
+      totals.bpjs += 1;
     } else {
-      totals.lainnya += 1;
+      totals.nonBpjs += 1;
     }
   });
 
-  const totalCases = totals.rawatJalan + totals.rawatInap + totals.lainnya;
+  const totalCases = totals.bpjs + totals.nonBpjs;
 
   const percentages = {
-    rawatJalan: ((totals.rawatJalan / totalCases) * 100).toFixed(0),
-    rawatInap: ((totals.rawatInap / totalCases) * 100).toFixed(0),
-    lainnya: ((totals.lainnya / totalCases) * 100).toFixed(0),
+    bpjs: ((totals.bpjs / totalCases) * 100).toFixed(0),
+    nonBpjs: ((totals.nonBpjs / totalCases) * 100).toFixed(0),
   };
 
   return percentages;

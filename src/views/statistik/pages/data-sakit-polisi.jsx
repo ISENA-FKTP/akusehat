@@ -30,22 +30,16 @@ export default function DataSakitPolisi() {
   };
 
   const renderTreatmentText = () => {
-    const { rawatJalan, rawatInap, lainnya } = percentages;
+    const { bpjs, nonBpjs } = percentages;
 
-    if (rawatJalan > rawatInap && rawatJalan > lainnya) {
-      return `${rawatJalan}% Pasien Polisi Melakukan Rawat Jalan`;
-    } else if (rawatInap > rawatJalan && rawatInap > lainnya) {
-      return `${rawatInap}% Pasien Polisi Melakukan Rawat Inap`;
-    } else if (lainnya > rawatJalan && lainnya > rawatInap) {
-      return `${lainnya}% Pasien Polisi Melakukan Perawatan Lainnya`;
-    } else if (rawatJalan === rawatInap && rawatJalan > lainnya) {
-      return `${rawatJalan}% Pasien Polisi Melakukan Rawat Jalan dan Rawat Inap`;
-    } else if (rawatJalan === lainnya && rawatJalan > rawatInap) {
-      return `${rawatJalan}% Pasien Polisi Melakukan Rawat Jalan dan Perawatan Lainnya`;
-    } else if (rawatInap === lainnya && rawatInap > rawatJalan) {
-      return `${rawatInap}% Pasien Polisi Melakukan Rawat Inap dan Perawatan Lainnya`;
+    if (bpjs > nonBpjs && bpjs) {
+      return `${bpjs}% Sumber Biaya Berasal dari BPJS`;
+    } else if (nonBpjs > bpjs && nonBpjs) {
+      return `${nonBpjs}% Sumber Biaya Berasal dari Non-BPJS`;
+    } else if (bpjs === nonBpjs && bpjs) {
+      return `${bpjs}% Sumber Biaya Berasal dari BPJS dan Non-BPJS`;
     } else {
-      return "Distribusi Perawatan Pasien Polisi Tidak Diketahui";
+      return "Distribusi Sumber Biaya Tidak Diketahui";
     }
   };
 
@@ -190,26 +184,43 @@ export default function DataSakitPolisi() {
               </div>
             </div>
 
-            {/* Pie Chart Apotik */}
-            <div className="pb-7 w-96">
-              <div className="shadow-lg py-2 px-5 rounded-lg bg-white relative">
-                <div className="absolute inset-0 flex items-center left-[4.5rem] h-[18.5rem] text-center">
-                  <h1 className="text-xl text-primary-950 font-semibold">
-                    {percentages.rawatJalan}%
-                  </h1>
-                </div>
-                <div className="flex">
-                  <div className="font-semibold">
-                    <h1 className="text-secondary-400">Jenis Data</h1>
-                    <h1 className="text-sm">Jumlah Jenis Perawatan</h1>
+            <div>
+              {/* Pie Chart Apotik */}
+              <div className="pb-3 w-96">
+                <div className="shadow-lg py-2 px-5 rounded-lg bg-white relative">
+                  <div className="absolute inset-0 flex items-center left-[5rem] h-[17.8rem] text-center">
+                    <h1 className="text-xl text-primary-950 font-semibold">
+                      {percentages.bpjs}%
+                    </h1>
+                  </div>
+                  <div className="flex">
+                    <div className="font-semibold">
+                      <h1 className="text-secondary-400">Jenis Data</h1>
+                      <h1 className="text-sm">Jumlah Jenis Perawatan</h1>
+                    </div>
+                  </div>
+                  <div className="flex">
+                    <div className="h-40 w-64 mt-2">
+                      <PieChartTotalRawat />
+                    </div>
+                    <div className="place-content-center text-base font-semibold">
+                      <p>{renderTreatmentText()}</p>
+                    </div>
                   </div>
                 </div>
-                <div className="flex">
-                  <div className="h-44 w-64 mt-2">
-                    <PieChartTotalRawat />
+              </div>
+
+              {/* Bar Chart */}
+              <div className="">
+                <div className="shadow-lg py-2 px-5 rounded-lg bg-white">
+                  <div className="flex">
+                    <div className="font-semibold">
+                      <h1 className="text-secondary-400">Jenis Data</h1>
+                      <h1>Satuan Kerja Tertinggi</h1>
+                    </div>
                   </div>
-                  <div className="place-content-center text-base font-semibold">
-                    <p>{renderTreatmentText()}</p>
+                  <div className="h-36 w-64 mt-2">
+                    <BarChartSektor />
                   </div>
                 </div>
               </div>

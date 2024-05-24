@@ -5,8 +5,8 @@ const PieChart = () => {
   const percentages = calculateTotals();
 
   const data = [
-    { id: "Rawat Jalan", value: percentages.rawatJalan },
-    { id: "Rawat Inap", value: percentages.rawatInap },
+    { id: "BPJS", value: percentages.bpjs },
+    { id: "Non-BPJS", value: percentages.nonBpjs },
     { id: "Lainnya", value: percentages.lainnya },
   ];
 
