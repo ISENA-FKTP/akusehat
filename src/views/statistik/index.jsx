@@ -6,6 +6,10 @@ import LineChart from "./diagram/LineChart";
 import { FaCircleArrowUp } from "react-icons/fa6";
 import { FaCircleArrowDown } from "react-icons/fa6";
 import { calculateTotals } from "./model/dataObat";
+import { BsPeopleFill } from "react-icons/bs";
+import { FaPeopleGroup } from "react-icons/fa6";
+import { GiMedicines } from "react-icons/gi";
+import { FaVirus } from "react-icons/fa6";
 
 export default function Statistik() {
   const { totalJumlahObat, totalObatKeluar } = calculateTotals();
@@ -16,90 +20,162 @@ export default function Statistik() {
 
   return (
     <>
-      <div className="flex gap-5 bg-[#E0F1EE] h-full font-primary">
+      <div className="bg-[#E0F1EE] font-primary ">
+        {/* Sidebar */}
         <div className="fixed z-50">
           <Sidebar />
         </div>
-        <div className="py-7 pl-32">
-          <div className="shadow-lg py-2 rounded-lg bg-white">
-            <div className="flex place-content-between px-5">
-              <div className="font-semibold">
-                <h1 className="text-secondary-400">Jenis Data</h1>
-                <h1>Jenis Penyakit</h1>
+
+        <div className="container mx-auto pl-5">
+          {/* Informasi */}
+          <div className="flex pt-7 gap-3 place-content-center">
+            {/* Polisi Sakit */}
+            <div className="flex bg-white px-5 py-3 rounded-lg shadow-lg">
+              <div className="text-white bg-primary-600 rounded-md">
+                <BsPeopleFill size={75} className="p-2" />
               </div>
-              <p className="bg-primary-200 text-primary-500 place-content-center my-2 px-5 rounded-full font-medium">
-                2024
-              </p>
+              <div className="place-content-center ml-3">
+                <h1 className="text-3xl font-bold">28</h1>
+                <h3 className="font-semibold text-lg">Polisi Sakit</h3>
+              </div>
             </div>
-            <div className="h-96 w-[30rem] mt-2 ">
-              <PieChartPolisi />
+
+            {/* Pengunjung Klinik */}
+            <div className="flex bg-white px-4 py-3 rounded-lg shadow-lg">
+              <div className="text-white bg-primary-600 rounded-md place-content-center">
+                <FaPeopleGroup size={70} className="p-2" />
+              </div>
+              <div className="place-content-center ml-3">
+                <h1 className="text-3xl font-bold">108</h1>
+                <h3 className="font-semibold text-lg">Pengunjung Klinik</h3>
+              </div>
+            </div>
+
+            {/* Obat Masuk */}
+            <div className="flex bg-white px-4 py-3 rounded-lg shadow-lg">
+              <div className="text-white bg-primary-600 rounded-md">
+                <GiMedicines size={70} className="p-2" />
+              </div>
+              <div className="place-content-center ml-3">
+                <h1 className="text-3xl font-bold">{totalJumlahObat}</h1>
+                <h3 className="font-semibold text-lg">Obat Masuk</h3>
+              </div>
+            </div>
+
+            {/* Obat Keluar */}
+            <div className="flex bg-white px-4 py-3 rounded-lg shadow-lg">
+              <div className="text-white bg-primary-600 rounded-md">
+                <GiMedicines size={70} className="p-2" />
+              </div>
+              <div className="place-content-center ml-3">
+                <h1 className="text-3xl font-bold">{totalObatKeluar}</h1>
+                <h3 className="font-semibold text-lg">Obat Keluar</h3>
+              </div>
+            </div>
+
+            {/* Jenis Penyakit */}
+            <div className="flex bg-white px-4 py-3 rounded-lg shadow-lg">
+              <div className="text-white bg-primary-600 rounded-md">
+                <FaVirus size={70} className="p-2" />
+              </div>
+              <div className="place-content-center ml-3">
+                <h1 className="text-3xl font-bold">12</h1>
+                <h3 className="font-semibold text-lg">Jenis Penyakit</h3>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="py-7">
-          <div className="shadow-lg py-2 px-5 rounded-lg bg-white">
-            <div className="flex place-content-between px-5">
-              <div className="font-semibold">
-                <h1 className="text-secondary-400">Jenis Data</h1>
-                <h1>Jumlah Sakit Kesatuan Polisi</h1>
-              </div>
-              <p className="bg-primary-200 text-primary-500 place-content-center my-2 px-5 rounded-full font-medium">
-                2024
-              </p>
-            </div>
-            <div className="h-96 w-[40rem] mt-2 ">
-              <BarChart />
-            </div>
-          </div>
-        </div>
-        <div className="flex-col">
-          <div className="pt-7 pb-3">
-            <div className="shadow-lg py-2 px-5 rounded-lg bg-white">
-              <div className="flex place-content-between px-5">
-                <div className="font-semibold">
-                  <h1 className="text-secondary-400">Jenis Data</h1>
-                  <h1>Jumlah Sakit Kesatuan Polisi</h1>
+
+          {/* Statistik */}
+          <div className="flex gap-3 place-content-center">
+            {/* Pie Chart Polisi */}
+            <div className="py-7">
+              <div className="shadow-lg py-2 rounded-lg bg-white">
+                <div className="flex place-content-between pl-5">
+                  <div className="font-semibold">
+                    <h1 className="text-secondary-400">Jenis Data</h1>
+                    <h1>Jenis Penyakit</h1>
+                  </div>
+                  <p className="bg-primary-200 text-primary-500 place-content-center my-2 px-5 mr-5 rounded-full font-medium">
+                    2024
+                  </p>
                 </div>
-                <p className="bg-primary-200 text-primary-500 place-content-center my-2 px-5 rounded-full font-medium">
-                  2024
-                </p>
-              </div>
-              <div className="h-[149px] w-[28rem] mt-2 ">
-                <LineChart />
+                <div className="h-96 w-96 mb-2 ">
+                  <PieChartPolisi />
+                </div>
               </div>
             </div>
-          </div>
-          <div className="pb-7">
-            <div className="shadow-lg py-2 px-5 rounded-lg bg-white">
-              <div className="flex place-content-between px-5">
-                <div className="font-semibold">
-                  <h1 className="text-secondary-400">Jenis Data</h1>
-                  <h1>Jumlah Sakit Kesatuan Polisi</h1>
+
+            {/* Bar Chart */}
+            <div className="py-7">
+              <div className="shadow-lg py-2 px-5 rounded-lg bg-white">
+                <div className="flex place-content-between px-5">
+                  <div className="font-semibold">
+                    <h1 className="text-secondary-400">Jenis Data</h1>
+                    <h1>Jumlah Sakit Kesatuan Polisi</h1>
+                  </div>
+                  <p className="bg-primary-200 text-primary-500 place-content-center my-2 px-5 rounded-full font-medium">
+                    2024
+                  </p>
                 </div>
-                <p className="bg-primary-200 text-primary-500 place-content-center my-2 px-5 rounded-full font-medium">
-                  2024
-                </p>
+                <div className="h-96 w-96 mt-2 ">
+                  <BarChart />
+                </div>
               </div>
-              <div className="flex">
-                <div className="h-[151px] w-44 mt-2 ">
-                  <PieChartApotik />
-                </div>
-                <div className="place-content-center text-lg font-semibold ">
-                  <div className="flex gap-4 place-content-center mb-3">
-                    <div className="text-success-700 place-content-center">
-                      <FaCircleArrowUp />
+            </div>
+
+            {/* Line Chart */}
+            <div className="flex-col">
+              <div className="pt-7 pb-3">
+                <div className="shadow-lg py-2 px-5 rounded-lg bg-white">
+                  <div className="flex place-content-between px-5">
+                    <div className="font-semibold">
+                      <h1 className="text-secondary-400">Jenis Data</h1>
+                      <h1>Jumlah Sakit Kesatuan Polisi</h1>
                     </div>
-                    <p>
-                      {persen_obat_masuk}% Obat Masuk ({totalJumlahObat})
+                    <p className="bg-primary-200 text-primary-500 place-content-center my-2 px-5 rounded-full font-medium">
+                      2024
                     </p>
                   </div>
-                  <div className="flex gap-4">
-                    <div className="text-error-600 place-content-center">
-                      <FaCircleArrowDown />
+                  <div className="h-[149px] w-96 mt-2 ">
+                    <LineChart />
+                  </div>
+                </div>
+              </div>
+
+              {/* Pie Chaart Apotik */}
+              <div className="pb-7">
+                <div className="shadow-lg py-2 px-5 rounded-lg bg-white">
+                  <div className="flex place-content-between px-5">
+                    <div className="font-semibold">
+                      <h1 className="text-secondary-400">Jenis Data</h1>
+                      <h1>Jumlah Obat Keluar/Masuk</h1>
                     </div>
-                    <p>
-                      {persen_obat_keluar}% Obat Keluar ({totalObatKeluar})
+                    <p className="bg-primary-200 text-primary-500 place-content-center my-2 px-5 rounded-full font-medium">
+                      2024
                     </p>
+                  </div>
+                  <div className="flex">
+                    <div className="h-[151px] w-44 mt-2 ">
+                      <PieChartApotik />
+                    </div>
+                    <div className="place-content-center text-lg font-semibold ">
+                      <div className="flex gap-4 place-content-center mb-3">
+                        <div className="text-success-700 place-content-center">
+                          <FaCircleArrowUp />
+                        </div>
+                        <p>
+                          {persen_obat_masuk}% Obat Masuk ({totalJumlahObat})
+                        </p>
+                      </div>
+                      <div className="flex gap-4">
+                        <div className="text-error-600 place-content-center">
+                          <FaCircleArrowDown />
+                        </div>
+                        <p>
+                          {persen_obat_keluar}% Obat Keluar ({totalObatKeluar})
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

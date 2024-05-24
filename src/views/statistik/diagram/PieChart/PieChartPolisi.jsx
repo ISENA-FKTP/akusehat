@@ -40,7 +40,7 @@ const PieChart = () => {
   return (
     <ResponsivePie
       data={data}
-      margin={{ top: 10, right: 160, bottom: 10, left: 25 }}
+      margin={{ top: 10, right: 50, bottom: 20, left: 50 }}
       sortByValue={true}
       cornerRadius={3}
       activeOuterRadiusOffset={8}
@@ -58,18 +58,18 @@ const PieChart = () => {
       }}
       legends={[
         {
-          anchor: "right",
-          direction: "column",
+          anchor: "bottom",
+          direction: "row",
           justify: false,
-          translateX: 100,
-          translateY: 0,
+          translateX: 10,
+          translateY: -25,
           itemsSpacing: 0,
-          itemWidth: 80,
-          itemHeight: 40,
+          itemWidth: 65,
+          itemHeight: 0,
           itemTextColor: "#999",
-          itemDirection: "left-to-right",
+          itemDirection: "top-to-bottom",
           itemOpacity: 1,
-          symbolSize: 20,
+          symbolSize: 18,
           symbolShape: "circle",
           effects: [
             {

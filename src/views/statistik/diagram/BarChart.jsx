@@ -7,7 +7,7 @@ const BarChart = () => {
       data={data}
       keys={["polda", "polres"]}
       indexBy="bulan"
-      margin={{ top: 20, right: 50, bottom: 100, left: 70 }}
+      margin={{ top: 20, right: 10, bottom: 100, left: 55 }}
       padding={0.15}
       groupMode="grouped"
       valueScale={{ type: "linear" }}
