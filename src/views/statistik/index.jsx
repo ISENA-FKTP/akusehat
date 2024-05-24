@@ -212,7 +212,7 @@ export default function Statistik() {
                     <div className="h-[151px] w-44 mt-2 ">
                       <PieChartApotik />
                     </div>
-                    <div className="place-content-center text-lg font-semibold ">
+                    <div className="place-content-center text-base font-semibold ">
                       <div className="flex gap-4 place-content-center mb-3">
                         <div className="text-success-700 place-content-center">
                           <FaCircleArrowUp />
