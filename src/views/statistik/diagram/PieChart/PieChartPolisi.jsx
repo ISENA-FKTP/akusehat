@@ -40,7 +40,7 @@ const PieChart = () => {
   return (
     <ResponsivePie
       data={data}
-      margin={{ top: 10, right: 50, bottom: 20, left: 50 }}
+      margin={{ top: 10, right: 50, bottom: 50, left: 50 }}
       sortByValue={true}
       cornerRadius={3}
       activeOuterRadiusOffset={8}
@@ -62,7 +62,7 @@ const PieChart = () => {
           direction: "row",
           justify: false,
           translateX: 10,
-          translateY: -25,
+          translateY: 10,
           itemsSpacing: 0,
           itemWidth: 65,
           itemHeight: 0,

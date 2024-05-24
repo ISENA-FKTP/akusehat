@@ -35,3 +35,15 @@ export const DataPolisi = [
     polres: 86,
   },
 ];
+
+export const calculateTotals = () => {
+  let totalJumlahPolda = 0;
+  let totalObatPolres = 0;
+
+  for (const data of DataPolisi) {
+    totalJumlahPolda += data.polda;
+    totalObatPolres += data.polres;
+  }
+
+  return { totalJumlahPolda, totalObatPolres };
+};

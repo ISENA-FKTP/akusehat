@@ -1,7 +1,8 @@
+import { useState } from "react";
 import PieChartPolisi from "./diagram/PieChart/PieChartPolisi";
 import PieChartApotik from "./diagram/PieChart/PieChartApotik";
 import Sidebar from "../../components/statistik/sidebar";
-import BarChart from "./diagram/BarChart";
+import BarChart from "./diagram/BarChart/BarChart";
 import LineChart from "./diagram/LineChart";
 import { FaCircleArrowUp } from "react-icons/fa6";
 import { FaCircleArrowDown } from "react-icons/fa6";
@@ -11,12 +12,24 @@ import { FaPeopleGroup } from "react-icons/fa6";
 import { GiMedicines } from "react-icons/gi";
 import { FaVirus } from "react-icons/fa6";
 
+const currentYear = new Date().getFullYear();
+
 export default function Statistik() {
+  const [year, setYear] = useState(currentYear);
+  const [month, setMonth] = useState(new Date().getMonth() + 1);
   const { totalJumlahObat, totalObatKeluar } = calculateTotals();
 
   const total = totalJumlahObat + totalObatKeluar;
   const persen_obat_masuk = ((totalJumlahObat / total) * 100).toFixed(2);
   const persen_obat_keluar = ((totalObatKeluar / total) * 100).toFixed(2);
+
+  const handleYearChange = (e) => {
+    setYear(e.target.value);
+  };
+
+  const handleMonthChange = (e) => {
+    setMonth(e.target.value);
+  };
 
   return (
     <>
@@ -27,6 +40,47 @@ export default function Statistik() {
         </div>
 
         <div className="container mx-auto pl-5">
+          {/* Filter */}
+          <div className="flex pt-7 gap-3 place-content-end">
+            <div>
+              <label htmlFor="year" className="mr-2">
+                Tahun:
+              </label>
+              <select
+                id="year"
+                value={year}
+                onChange={handleYearChange}
+                className="p-2 rounded-md"
+              >
+                {[...Array(10)].map((_, i) => {
+                  const y = currentYear - i;
+                  return (
+                    <option key={y} value={y}>
+                      {y}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+            <div>
+              <label htmlFor="month" className="mr-2">
+                Bulan:
+              </label>
+              <select
+                id="month"
+                value={month}
+                onChange={handleMonthChange}
+                className="p-2 rounded-md"
+              >
+                {Array.from({ length: 12 }, (_, i) => (
+                  <option key={i + 1} value={i + 1}>
+                    {new Date(0, i).toLocaleString("id-ID", { month: "long" })}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
           {/* Informasi */}
           <div className="flex pt-7 gap-3 place-content-center">
             {/* Polisi Sakit */}
@@ -96,7 +150,7 @@ export default function Statistik() {
                     <h1>Jenis Penyakit</h1>
                   </div>
                   <p className="bg-primary-200 text-primary-500 place-content-center my-2 px-5 mr-5 rounded-full font-medium">
-                    2024
+                    {year}
                   </p>
                 </div>
                 <div className="h-96 w-96 mb-2 ">
@@ -114,7 +168,7 @@ export default function Statistik() {
                     <h1>Jumlah Sakit Kesatuan Polisi</h1>
                   </div>
                   <p className="bg-primary-200 text-primary-500 place-content-center my-2 px-5 rounded-full font-medium">
-                    2024
+                    {year}
                   </p>
                 </div>
                 <div className="h-96 w-96 mt-2 ">
@@ -133,7 +187,7 @@ export default function Statistik() {
                       <h1>Jumlah Sakit Kesatuan Polisi</h1>
                     </div>
                     <p className="bg-primary-200 text-primary-500 place-content-center my-2 px-5 rounded-full font-medium">
-                      2024
+                      {year}
                     </p>
                   </div>
                   <div className="h-[149px] w-96 mt-2 ">
@@ -151,7 +205,7 @@ export default function Statistik() {
                       <h1>Jumlah Obat Keluar/Masuk</h1>
                     </div>
                     <p className="bg-primary-200 text-primary-500 place-content-center my-2 px-5 rounded-full font-medium">
-                      2024
+                      {year}
                     </p>
                   </div>
                   <div className="flex">

@@ -1,5 +1,5 @@
 import { ResponsiveBar } from "@nivo/bar";
-import { DataPolisi as data } from "../model/dataPolisi";
+import { DataPolisi as data } from "../../model/dataPolisi";
 
 const BarChart = () => {
   return (
@@ -13,23 +13,9 @@ const BarChart = () => {
       valueScale={{ type: "linear" }}
       indexScale={{ type: "band", round: true }}
       colors={{ scheme: "purple_orange" }}
-      fill={[
-        {
-          match: {
-            id: "fries",
-          },
-          id: "dots",
-        },
-        {
-          match: {
-            id: "sandwich",
-          },
-          id: "lines",
-        },
-      ]}
       borderColor={{
         from: "color",
-        modifiers: [["darker", "1.5"]],
+        modifiers: [["darker", "5"]],
       }}
       axisTop={null}
       axisRight={null}
@@ -57,6 +43,15 @@ const BarChart = () => {
       labelTextColor={{
         from: "color",
         modifiers: [["brighter", "5"]],
+      }}
+      theme={{
+        legends: {
+          text: {
+            textTransform: "capitalize",
+            fontSize: "1rem",
+            fontWeight: 600,
+          },
+        },
       }}
       legends={[
         {
