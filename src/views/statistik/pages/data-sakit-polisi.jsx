@@ -9,6 +9,7 @@ import BarChartRawat from "../diagram/BarChart/BarChartRawat";
 import LineChart from "../diagram/LineChart";
 import { calculateTotals } from "../model/dataPolisi";
 import { calculateTotals as calculateBpjsTotals } from "../model/dataPegawaiRawat";
+import Header from "../../../components/header";
 
 const currentYear = new Date().getFullYear();
 
@@ -51,6 +52,13 @@ export default function DataSakitPolisi() {
         <div className="fixed z-50">
           <Sidebar />
         </div>
+
+        <Header
+          title="Pendaftaran pelayanan Pasien"
+          userName="Rifki Rusdi Satma Putra"
+          userStatus="Kepala Polisi"
+          profilePicture="logo.png"
+        />
 
         <div className="container mx-auto pl-5 py-7">
           {/* Filter */}

@@ -40,6 +40,7 @@ export default function Statistik() {
           <Sidebar />
         </div>
         <Header
+          title="Pendaftaran pelayanan Pasien"
           userName="Rifki Rusdi Satma Putra"
           userStatus="Kepala Polisi"
           profilePicture="logo.png"
