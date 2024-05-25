@@ -5,14 +5,15 @@ import PieChartTotalRawat from "../diagram/PieChart/PieChartTotalRawat";
 import Sidebar from "../../../components/statistik/sidebar";
 import BarChart from "../diagram/BarChart/BarChart";
 import BarChartSektor from "../diagram/BarChart/BarChartSektor";
+import BarChartRawat from "../diagram/BarChart/BarChartRawat";
 import LineChart from "../diagram/LineChart";
 import { calculateTotals } from "../model/dataPolisi";
-import { calculateTotals as calculateRawatTotals } from "../model/dataPegawaiRawat";
+import { calculateTotals as calculateBpjsTotals } from "../model/dataPegawaiRawat";
 
 const currentYear = new Date().getFullYear();
 
 export default function DataSakitPolisi() {
-  const percentages = calculateRawatTotals();
+  const percentages = calculateBpjsTotals();
 
   const [year, setYear] = useState(currentYear);
   const [month, setMonth] = useState(new Date().getMonth() + 1);
@@ -219,8 +220,8 @@ export default function DataSakitPolisi() {
                       <h1>Satuan Kerja Tertinggi</h1>
                     </div>
                   </div>
-                  <div className="h-36 w-64 mt-2">
-                    <BarChartSektor />
+                  <div className="h-[9.5rem] w-80">
+                    <BarChartRawat />
                   </div>
                 </div>
               </div>

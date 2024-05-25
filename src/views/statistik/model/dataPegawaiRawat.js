@@ -80,3 +80,32 @@ export const calculateTotals = () => {
 
   return percentages;
 };
+
+export const calculateRawatTotals = () => {
+  const totals = {
+    rawatJalan: 0,
+    rawatInap: 0,
+    lainnya: 0,
+  };
+
+  DataPegawaiRawat.forEach((item) => {
+    const jenisperawatan = item.jenisperawatan.toLowerCase();
+    if (jenisperawatan === "rawat jalan") {
+      totals.rawatJalan += 1;
+    } else if (jenisperawatan === "rawat inap") {
+      totals.rawatInap += 1;
+    } else {
+      totals.lainnya += 1;
+    }
+  });
+
+  const totalCases = totals.rawatJalan + totals.rawatInap + totals.lainnya;
+
+  const percentages = {
+    rawatJalan: ((totals.rawatJalan / totalCases) * 100).toFixed(0),
+    rawatInap: ((totals.rawatInap / totalCases) * 100).toFixed(0),
+    lainnya: ((totals.lainnya / totalCases) * 100).toFixed(0),
+  };
+
+  return percentages;
+};

@@ -66,6 +66,7 @@ const BarChart = () => {
           itemHeight: 20,
           itemDirection: "left-to-right",
           itemOpacity: 0.85,
+          symbolShape: "circle",
           symbolSize: 20,
           effects: [
             {
