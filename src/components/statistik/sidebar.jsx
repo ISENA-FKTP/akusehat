@@ -33,7 +33,7 @@ export default function Sidebar() {
   return (
     <>
       <div
-        className={`bg-primary-600 h-screen fixed left-0 py-5 pt-8 font-poppins ${
+        className={`bg-primary-600 h-screen left-0 py-5 pt-8 font-poppins ${
           open ? "w-72" : "w-20"
         } duration-300 relative`}
       >
