@@ -11,6 +11,7 @@ import { BsPeopleFill } from "react-icons/bs";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { GiMedicines } from "react-icons/gi";
 import { FaVirus } from "react-icons/fa6";
+import Header from "../../components/header";
 
 const currentYear = new Date().getFullYear();
 
@@ -38,7 +39,7 @@ export default function Statistik() {
         <div className="fixed z-50">
           <Sidebar />
         </div>
-
+        <Header />
         <div className="container mx-auto pl-5">
           {/* Filter */}
           <div className="flex pt-7 gap-3 place-content-end">
