@@ -39,7 +39,11 @@ export default function Statistik() {
         <div className="fixed z-50">
           <Sidebar />
         </div>
-        <Header />
+        <Header
+          userName="Rifki Rusdi Satma Putra"
+          userStatus="Kepala Polisi"
+          profilePicture="logo.png"
+        />
         <div className="container mx-auto pl-5">
           {/* Filter */}
           <div className="flex pt-7 gap-3 place-content-end">
