@@ -6,6 +6,7 @@ import BarChartPoliGigi from "../diagram/BarChart/BarChartPoliGigi";
 import { calculateTotals } from "../model/dataKunjunganKlinik";
 import PieChartTotalPengunjungKlinik from "../diagram/PieChart/PieChartTotalPengunjungKlinik";
 import PieChatStatusPasien from "../diagram/PieChart/PieChartStatusPasienKlinik";
+import BarChartRawat from "../diagram/BarChart/BarChartPengunjungPoli";
 
 const currentYear = new Date().getFullYear();
 
@@ -124,42 +125,63 @@ export default function DataPengunjungKlinik() {
               </div>
             </div>
 
-            {/* Pie Chart Total Pasien */}
-            <div className="pb-7">
-              <div className="shadow-lg py-2 px-5 rounded-lg bg-white relative">
-                <div className="absolute inset-0 flex items-center justify-center h-[19rem] text-center">
-                  <div>
-                    <h1 className="text-3xl text-primary-950 font-semibold">
-                      {totalVisits}
-                    </h1>
-                    <p className="text-secondary-400 font-semibold">Total</p>
+            <div>
+              <div className="flex gap-3">
+                {/* Pie Chart Total Pasien */}
+                <div className="pb-3">
+                  <div className="shadow-lg py-2 px-5 rounded-lg bg-white relative">
+                    <div className="absolute inset-0 flex items-center justify-center h-[19rem] text-center">
+                      <div>
+                        <h1 className="text-3xl text-primary-950 font-semibold">
+                          {totalVisits}
+                        </h1>
+                        <p className="text-secondary-400 font-semibold">
+                          Total
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex place-content-between">
+                      <div className="font-semibold">
+                        <h1 className="text-secondary-400">Jenis Data</h1>
+                        <h1>Total Pengunjung</h1>
+                      </div>
+                    </div>
+                    <div className="flex z-50">
+                      <div className="h-56 w-44 mt-2">
+                        <PieChartTotalPengunjungKlinik colors={colorsSektor} />
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div className="flex place-content-between">
-                  <div className="font-semibold">
-                    <h1 className="text-secondary-400">Jenis Data</h1>
-                    <h1>Total Pengunjung</h1>
-                  </div>
-                </div>
-                <div className="flex z-50">
-                  <div className="h-56 w-44 mt-2">
-                    <PieChartTotalPengunjungKlinik colors={colorsSektor} />
+
+                {/* Pie Chart Polisi */}
+                <div className="w-72">
+                  <div className="shadow-lg py-2 rounded-lg bg-white">
+                    <div className="flex pl-5">
+                      <div className="font-semibold">
+                        <h1 className="text-secondary-400">Jenis Data</h1>
+                        <h1>Status Pasien Klinik</h1>
+                      </div>
+                    </div>
+                    <div className="h-56 mb-2">
+                      <PieChatStatusPasien colors={colorsPenyakit} />
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            {/* Pie Chart Polisi */}
-            <div className="w-72">
-              <div className="shadow-lg py-2 rounded-lg bg-white">
-                <div className="flex pl-5">
-                  <div className="font-semibold">
-                    <h1 className="text-secondary-400">Jenis Data</h1>
-                    <h1>Status Pasien Klinik</h1>
+              {/* Bar Chart */}
+              <div className="w-[32.2rem]">
+                <div className="shadow-lg py-2 px-5 rounded-lg bg-white">
+                  <div className="flex">
+                    <div className="font-semibold">
+                      <h1 className="text-secondary-400">Jenis Data</h1>
+                      <h1>Satuan Kerja Tertinggi</h1>
+                    </div>
                   </div>
-                </div>
-                <div className="h-56 mb-2">
-                  <PieChatStatusPasien colors={colorsPenyakit} />
+                  <div className="h-[5.2rem]">
+                    <BarChartRawat colors={colorsPenyakit} />
+                  </div>
                 </div>
               </div>
             </div>

@@ -21,8 +21,8 @@ export default function Statistik() {
   const { totalJumlahObat, totalObatKeluar } = calculateTotals();
 
   const total = totalJumlahObat + totalObatKeluar;
-  const persen_obat_masuk = ((totalJumlahObat / total) * 100).toFixed(2);
-  const persen_obat_keluar = ((totalObatKeluar / total) * 100).toFixed(2);
+  const persen_obat_masuk = ((totalJumlahObat / total) * 100).toFixed(1);
+  const persen_obat_keluar = ((totalObatKeluar / total) * 100).toFixed(1);
 
   const handleYearChange = (e) => {
     setYear(e.target.value);

@@ -17,7 +17,7 @@ export const DataKunjunganKlinik = [
   },
   {
     uuid: "9i0j1k2l",
-    politujuan: "Poli Mata",
+    politujuan: "Poli Umum",
     perawatan: "Pemeriksaan Mata",
     jeniskunjungan: "Sehat",
     keluhan: "Penglihatan Kabur",
@@ -25,7 +25,7 @@ export const DataKunjunganKlinik = [
   },
   {
     uuid: "3m4n5o6p",
-    politujuan: "Poli Anak",
+    politujuan: "Poli Umum",
     perawatan: "Pemeriksaan Anak",
     jeniskunjungan: "Sehat",
     keluhan: "Batuk Ringan",
@@ -49,7 +49,7 @@ export const DataKunjunganKlinik = [
   },
   {
     uuid: "5y6z7a8b",
-    politujuan: "Poli Mata",
+    politujuan: "Poli Umum",
     perawatan: "Pemeriksaan Mata",
     jeniskunjungan: "Sakit",
     keluhan: "Mata Merah dan Gatal",
@@ -57,7 +57,7 @@ export const DataKunjunganKlinik = [
   },
   {
     uuid: "9c0d1e2f",
-    politujuan: "Poli Anak",
+    politujuan: "Poli Umum",
     perawatan: "Pemeriksaan Anak",
     jeniskunjungan: "Sehat",
     keluhan: "Imunisasi Rutin",
@@ -94,4 +94,19 @@ export const calculateTotals = () => {
   }
 
   return { totalHealthy, totalSick };
+};
+
+export const calculateTotalsPoli = () => {
+  let poliUmumCount = 0;
+  let poliGigiCount = 0;
+
+  for (const data of DataKunjunganKlinik) {
+    if (data.politujuan === "Poli Umum") {
+      poliUmumCount++;
+    } else if (data.politujuan === "Poli Gigi") {
+      poliGigiCount++;
+    }
+  }
+
+  return { poliUmumCount, poliGigiCount };
 };
