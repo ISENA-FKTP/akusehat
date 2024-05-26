@@ -136,7 +136,7 @@ export default function DataSakitPolisi() {
                   <div className="flex place-content-between px-5">
                     <div className="font-semibold">
                       <h1 className="text-secondary-400">Jenis Data</h1>
-                      <h1>Jumlah Sakit Kesatuan Polisi</h1>
+                      <h1>Kenaikan Jumlah Sakit Polisi</h1>
                     </div>
                   </div>
                   <div className="h-96 w-[26rem] mt-2">

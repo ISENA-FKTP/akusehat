@@ -24,7 +24,7 @@ const PieChart = ({ colors }) => {
       activeOuterRadiusOffset={8}
       borderColor={{ theme: "background" }}
       enableArcLinkLabels={false}
-      innerRadius={0.5}
+      innerRadius={0.6}
       arcLinkLabelsSkipAngle={10}
       arcLinkLabelsTextColor="#333333"
       arcLinkLabelsThickness={2}
@@ -35,6 +35,7 @@ const PieChart = ({ colors }) => {
         from: "color",
         modifiers: [["brighter", 5]],
       }}
+      valueFormat={(value) => `${value}%`}
     />
   );
 };

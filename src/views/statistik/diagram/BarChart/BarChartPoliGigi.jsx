@@ -3,7 +3,7 @@ import {
   getTop10Penyakit,
   dataSakitKlinik,
   calculateTotals,
-} from "../../model/dataSakitPoliUmum";
+} from "../../model/dataSakitPoliGigi";
 import PropTypes from "prop-types";
 
 const BarChart = ({ colors }) => {
