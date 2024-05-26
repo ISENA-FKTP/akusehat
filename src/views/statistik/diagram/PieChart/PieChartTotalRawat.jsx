@@ -1,7 +1,12 @@
 import { ResponsivePie } from "@nivo/pie";
 import { calculateTotals } from "../../model/dataPegawaiRawat";
+import PropTypes from "prop-types";
 
-const PieChart = () => {
+const PieChart = ({ colors }) => {
+  PieChart.propTypes = {
+    colors: PropTypes.arrayOf(PropTypes.string),
+  };
+
   const percentages = calculateTotals();
 
   const data = [
@@ -23,7 +28,7 @@ const PieChart = () => {
       arcLinkLabelsSkipAngle={10}
       arcLinkLabelsTextColor="#333333"
       arcLinkLabelsThickness={2}
-      colors={{ scheme: "purple_orange" }}
+      colors={colors}
       arcLinkLabelsColor={{ from: "color", modifiers: [] }}
       arcLabelsSkipAngle={10}
       arcLabelsTextColor={{
