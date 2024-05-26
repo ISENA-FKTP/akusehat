@@ -69,34 +69,6 @@ export const dataSakitKlinik = [
     suhu: 36,
     pasienId: 10,
   },
-  {
-    uuid: "j5m45o0j-4m6k-3m7j-hm3m-0m7j0l7l0l7l",
-    jenispenyakit: "Covid-19",
-    kesadaran: "Sadar",
-    suhu: 36,
-    pasienId: 10,
-  },
-  {
-    uuid: "j5m45o0j-4m6k-3m7j-hm3m-0m7j0l7l0l7l",
-    jenispenyakit: "Covid-19",
-    kesadaran: "Sadar",
-    suhu: 36,
-    pasienId: 10,
-  },
-  {
-    uuid: "j5m45o0j-4m6k-3m7j-hm3m-0m7j0l7l0l7l",
-    jenispenyakit: "Covid-19",
-    kesadaran: "Sadar",
-    suhu: 36,
-    pasienId: 10,
-  },
-  {
-    uuid: "h3k23m8h-2k4i-1k5h-fk1k-8k5h8j5j8j5j",
-    jenispenyakit: "Asma",
-    kesadaran: "Sadar",
-    suhu: 39,
-    pasienId: 8,
-  },
 ];
 
 export const calculateTotals = (diagnosas) => {

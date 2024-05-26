@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Sidebar from "../../../components/statistik/sidebar";
 import Header from "../../../components/header";
-import BarChart from "../diagram/BarChart/BarChartPenyakitTerbanyak";
+import BarChart from "../diagram/BarChart/BarChartPoliUmum";
 
 const currentYear = new Date().getFullYear();
 
