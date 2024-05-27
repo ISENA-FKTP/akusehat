@@ -10,7 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@headlessui/react": "^2.0.4",
     "@nivo/bar": "^0.87.0",
     "@nivo/line": "^0.87.0",
     "@nivo/pie": "^0.87.0",
