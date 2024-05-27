@@ -1,6 +1,5 @@
-import Header from "../../../components/header_dash";
+import Profil from "../../../components/klinik/Profile";
 import Sidebar_Klinik from "../../../components/klinik/sidebar_klinik";
-import React from "react";
 
 
 export default function Dashboard() {
@@ -10,13 +9,12 @@ export default function Dashboard() {
       <div className="fixed z-50">
         <Sidebar_Klinik />
         </div>
-        <Header
-        title="Pendaftaran pelayanan Pasien"
-        userName="Rifki Rusdi Satma Putra"
-        userStatus="Kepala Polisi"
-        profilePicture="logo.png"
-        />
-        
+       <Profil
+                 title="Pendaftaran Pelayanan Pasien"
+                 userName="Muhamad Halimudin Nova"
+                 userStatus="Dokter Poli Umum"
+                 profilePicture="logo.png"
+                />
         <div className="flex-1 relative">
           <div className="absolute inset-0">
             <img 
@@ -24,6 +22,7 @@ export default function Dashboard() {
               alt="Background" 
               className="object-cover w-full h-full op"
               />
+              
           </div>
           <div className="absolute inset-0 bg-black bg-opacity-55"></div>
           <div className="absolute inset-0 bg-primary-950 bg-opacity-20"></div>
