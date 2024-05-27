@@ -8,11 +8,7 @@ import Administrasi from "./views/klinik/pages/administrasi";
 import Dokter from "./views/klinik/pages/dokter";
 import Laporan from "./views/klinik/pages/laporan";
 import Klinik from "./views/klinik";
-import LoginAdmin from "./views/loginpage/LoginAdmin";
-import LoginDokter from "./views/loginpage/LoginDokter";
-import LoginApoteker from "./views/loginpage/LoginApoteker";
-import LoginPawas from "./views/loginpage/LoginPawas";
-import LoginStatistik from "./views/loginpage/LoginStatistik";
+import TambahObat from "./views/apoteker/pages/tambahObat";
 
 function App() {
   return (
@@ -30,11 +26,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/dokter" element={<Dokter />} />
         <Route path="/laporan" element={<Laporan />} />
-        <Route path="/adminlog" element={<LoginAdmin />} />
-        <Route path="/dokterlog" element={<LoginDokter />} />
-        <Route path="/apotekerlog" element={<LoginApoteker />} />
-        <Route path="/pawaslog" element={<LoginPawas />} />
-        <Route path="/statistiklog" element={<LoginStatistik />} />
+        <Route path="/tambah-obat" element={<TambahObat />} />
       </Routes>
     </Router>
   );
