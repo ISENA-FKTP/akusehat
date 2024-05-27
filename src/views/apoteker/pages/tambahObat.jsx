@@ -90,7 +90,7 @@ const TambahObat = () => {
                     {({ active }) => (
                       <div
                         className={`${
-                          active ? 'bg-warning-300 text-white' : 'text-black'
+                          active ? 'bg-secondary-400 text-white' : 'text-black'
                         } px-4 py-2 cursor-pointer`}
                         onClick={() => setFormData({ ...formData, category })}
                       >
@@ -108,13 +108,13 @@ const TambahObat = () => {
               <Menu.Button className="shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline">
                 {formData.type || 'Pilih Jenis'}
               </Menu.Button>
-              <Menu.Items className="absolute mt-1 w-full bg-white border border-gray-200 rounded-md shadow-lg z-10">
-                {['OTC', 'Prescription', 'Herbal'].map((type) => (
+              <Menu.Items className="absolute mt-1 w-full bg-whites border border-gray-200 rounded-md shadow-lg z-10">
+                {['Tablet', 'Syrup', 'Krim'].map((type) => (
                   <Menu.Item key={type}>
                     {({ active }) => (
                       <div
                         className={`${
-                          active ? 'bg-blue-500 text-white' : 'text-black'
+                          active ? 'bg-secondary-400 text-white' : 'text-black'
                         } px-4 py-2 cursor-pointer`}
                         onClick={() => setFormData({ ...formData, type })}
                       >
