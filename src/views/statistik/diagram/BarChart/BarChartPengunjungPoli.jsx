@@ -1,5 +1,5 @@
 import { ResponsiveBar } from "@nivo/bar";
-import { calculateRawatTotals } from "../../model/dataPegawaiRawat";
+import { calculateTotalsPoli } from "../../model/dataKunjunganKlinik";
 import PropTypes from "prop-types";
 
 const BarChart = ({ colors }) => {
@@ -7,18 +7,28 @@ const BarChart = ({ colors }) => {
     colors: PropTypes.arrayOf(PropTypes.string),
   };
 
-  const totals = calculateRawatTotals();
+  const totals = calculateTotalsPoli();
 
   const updatedTotals = {
     ...totals,
   };
 
+  const totalValue = Object.values(updatedTotals).reduce(
+    (sum, value) => sum + value,
+    0
+  );
+
+  const percentageLabels = Object.keys(updatedTotals).reduce((acc, key) => {
+    acc[key] = ((updatedTotals[key] / totalValue) * 100).toFixed(1) + "%";
+    return acc;
+  }, {});
+
   return (
     <ResponsiveBar
-      data={[updatedTotals]} // Menggunakan data yang sudah diperbarui
+      data={[updatedTotals]}
       keys={Object.keys(updatedTotals)}
       indexBy="id"
-      margin={{ top: 10, right: 10, bottom: 70, left: 10 }}
+      margin={{ top: 10, right: 10, bottom: 40, left: 10 }}
       padding={0.15}
       valueScale={{ type: "linear" }}
       indexScale={{ type: "band", round: true }}
@@ -40,12 +50,15 @@ const BarChart = ({ colors }) => {
           dataFrom: "keys",
           data: [
             {
-              id: "rawatJalan",
-              label: "Rawat Jalan",
+              id: "poliUmumCount",
+              label: `Poli Umum [${percentageLabels.poliUmumCount}]`,
               color: colors[0],
             },
-            { id: "rawatInap", label: "Rawat Inap", color: colors[1] },
-            { id: "lainnya", label: "Lainnya", color: colors[2] },
+            {
+              id: "poliGigiCount",
+              label: `Poli Gigi [${percentageLabels.poliGigiCount}]`,
+              color: colors[1],
+            },
           ],
           anchor: "bottom",
           direction: "row",
@@ -53,7 +66,7 @@ const BarChart = ({ colors }) => {
           translateX: 0,
           translateY: 30,
           itemsSpacing: 0,
-          itemWidth: 100,
+          itemWidth: 150,
           itemHeight: 20,
           symbolShape: "circle",
           itemDirection: "left-to-right",

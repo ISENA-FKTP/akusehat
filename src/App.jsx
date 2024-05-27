@@ -21,12 +21,12 @@ function App() {
           element={<DataPengunjungKlinik />}
         />
         <Route path="/data-obat-klinik" element={<DataObatKlinik />} />
-        <Route path="/" element={<Klinik/>} />
-        <Route path="/administrasi" element={<Administrasi/>} />
-        <Route path="/dashboard" element={<Dashboard/>} />
-        <Route path="/dokter" element={<Dokter/>} />
-        <Route path="/laporan" element={<Laporan/>} />
-        <Route path="/tambah-obat" element={<TambahObat/>} />
+        <Route path="/" element={<Klinik />} />
+        <Route path="/administrasi" element={<Administrasi />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dokter" element={<Dokter />} />
+        <Route path="/laporan" element={<Laporan />} />
+        <Route path="/tambah-obat" element={<TambahObat />} />
       </Routes>
     </Router>
   );

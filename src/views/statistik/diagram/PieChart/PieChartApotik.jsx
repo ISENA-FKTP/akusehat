@@ -1,12 +1,23 @@
 import { ResponsivePie } from "@nivo/pie";
 import { calculateTotals } from "../../model/dataObat";
+import PropTypes from "prop-types";
 
-const PieChart = () => {
+const PieChart = ({ colors }) => {
+  PieChart.propTypes = {
+    colors: PropTypes.arrayOf(PropTypes.string),
+  };
   const { totalJumlahObat, totalObatKeluar } = calculateTotals();
+  const totalObat = totalObatKeluar + totalJumlahObat;
 
   const data = [
-    { id: "Total Jumlah Obat", value: totalJumlahObat },
-    { id: "Total Obat Keluar", value: totalObatKeluar },
+    {
+      id: "Total Jumlah Obat",
+      value: ((totalJumlahObat / totalObat) * 100).toFixed(1),
+    },
+    {
+      id: "Total Obat Keluar",
+      value: ((totalObatKeluar / totalObat) * 100).toFixed(1),
+    },
   ];
 
   return (
@@ -22,12 +33,21 @@ const PieChart = () => {
       arcLinkLabelsSkipAngle={10}
       arcLinkLabelsTextColor="#333333"
       arcLinkLabelsThickness={2}
-      colors={{ scheme: "purple_orange" }}
+      colors={colors}
       arcLinkLabelsColor={{ from: "color", modifiers: [] }}
       arcLabelsSkipAngle={10}
       arcLabelsTextColor={{
         from: "color",
         modifiers: [["brighter", 5]],
+      }}
+      valueFormat={(value) => `${value}%`}
+      theme={{
+        labels: {
+          text: {
+            fontSize: 10,
+            fontWeight: 600,
+          },
+        },
       }}
     />
   );

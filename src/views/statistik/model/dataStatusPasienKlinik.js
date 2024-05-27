@@ -1,0 +1,228 @@
+export const DataStatusPasienKlinik = [
+  {
+    uuid: "5fd6a5c5-1d17-4b52-b03b-3c6f12e301c1",
+    nobpjs: 123456789,
+    nama: "John Doe",
+    statuspeserta: "Polisi",
+    tgllahir: "1990-05-15",
+    gender: "Laki-laki",
+    ppkumum: "RS Polri",
+    nohp: 81234567890,
+    norm: 987654321,
+    role: "admin",
+    userId: 1,
+  },
+  {
+    uuid: "7e3d28d9-7b6b-41f5-8a04-14468d69a087",
+    nobpjs: 987654321,
+    nama: "Jane Doe",
+    statuspeserta: "PNS",
+    tgllahir: "1985-10-20",
+    gender: "Perempuan",
+    ppkumum: "RSUD Kota",
+    nohp: 89876543210,
+    norm: 123456789,
+    role: "user",
+    userId: 2,
+  },
+  {
+    uuid: "3bf3e327-4d3b-49ad-bc33-8286a22c12d5",
+    nobpjs: 2468101214,
+    nama: "Alice Smith",
+    statuspeserta: "Keluarga",
+    tgllahir: "1978-03-25",
+    gender: "Perempuan",
+    ppkumum: "RS Swasta",
+    nohp: 87654321098,
+    norm: 135792468,
+    role: "user",
+    userId: 3,
+  },
+  {
+    uuid: "f7cdaa20-ee1c-40b4-8279-fc5eb5f996c3",
+    nobpjs: 135791113,
+    nama: "Bob Johnson",
+    statuspeserta: "Peserta Mandiri",
+    tgllahir: "1982-12-10",
+    gender: "Laki-laki",
+    ppkumum: "RS Mandiri",
+    nohp: 85432109876,
+    norm: 246813579,
+    role: "user",
+    userId: 4,
+  },
+  {
+    uuid: "c3e51b81-1b6d-4b1a-a294-f9ee3fffb55c",
+    nobpjs: 2468013579,
+    nama: "Mary Smith",
+    statuspeserta: "Polisi",
+    tgllahir: "1988-07-12",
+    gender: "Perempuan",
+    ppkumum: "RS Polri",
+    nohp: 81234567890,
+    norm: 654321987,
+    role: "admin",
+    userId: 5,
+  },
+  {
+    uuid: "abde9e3c-0e62-4fb4-b8b3-0533b5e7dc90",
+    nobpjs: 369258147,
+    nama: "Michael Johnson",
+    statuspeserta: "PNS",
+    tgllahir: "1976-04-30",
+    gender: "Laki-laki",
+    ppkumum: "RSUD Kota",
+    nohp: 89876543210,
+    norm: 987654321,
+    role: "user",
+    userId: 6,
+  },
+  {
+    uuid: "f294e88d-7e8d-4b7b-b481-7e432e18d624",
+    nobpjs: 123987456,
+    nama: "Emily Taylor",
+    statuspeserta: "Keluarga",
+    tgllahir: "1995-11-08",
+    gender: "Perempuan",
+    ppkumum: "RS Swasta",
+    nohp: 87654321098,
+    norm: 369258147,
+    role: "user",
+    userId: 7,
+  },
+  {
+    uuid: "ba0ef0a9-af59-468f-9e68-520fd4f63fd9",
+    nobpjs: 789456123,
+    nama: "Christopher Brown",
+    statuspeserta: "Peserta Mandiri",
+    tgllahir: "1980-09-25",
+    gender: "Laki-laki",
+    ppkumum: "RS Mandiri",
+    nohp: 85432109876,
+    norm: 753951468,
+    role: "user",
+    userId: 8,
+  },
+  {
+    uuid: "d98e238c-605e-4b69-8f71-9f6a9f1f10c3",
+    nobpjs: 963258741,
+    nama: "David Lee",
+    statuspeserta: "Polisi",
+    tgllahir: "1983-08-18",
+    gender: "Laki-laki",
+    ppkumum: "RS Polri",
+    nohp: 81234567890,
+    norm: 987654321,
+    role: "admin",
+    userId: 9,
+  },
+  {
+    uuid: "ef146857-80f5-4ef8-9f19-0f6d5b90e01b",
+    nobpjs: 741852963,
+    nama: "Sarah Kim",
+    statuspeserta: "PNS",
+    tgllahir: "1992-12-05",
+    gender: "Perempuan",
+    ppkumum: "RSUD Kota",
+    nohp: 89876543210,
+    norm: 123456789,
+    role: "user",
+    userId: 10,
+  },
+  {
+    uuid: "b33f7f40-6d69-4f89-ae44-f019b462191a",
+    nobpjs: 258963147,
+    nama: "Jessica Miller",
+    statuspeserta: "Keluarga",
+    tgllahir: "1987-06-22",
+    gender: "Perempuan",
+    ppkumum: "RS Swasta",
+    nohp: 87654321098,
+    norm: 135792468,
+    role: "user",
+    userId: 11,
+  },
+  {
+    uuid: "c7a4b518-9d42-44d1-8979-2dbb17a50b84",
+    nobpjs: 159357486,
+    nama: "Ryan Clark",
+    statuspeserta: "Peserta Mandiri",
+    tgllahir: "1984-02-15",
+    gender: "Laki-laki",
+    ppkumum: "RS Mandiri",
+    nohp: 85432109876,
+    norm: 246813579,
+    role: "user",
+    userId: 12,
+  },
+  {
+    uuid: "c6e19a08-2a5e-4b48-b0de-df1b5d378a75",
+    nobpjs: 369258147,
+    nama: "Michael Johnson",
+    statuspeserta: "PNS",
+    tgllahir: "1976-04-30",
+    gender: "Laki-laki",
+    ppkumum: "RSUD Kota",
+    nohp: 89876543210,
+    norm: 987654321,
+    role: "user",
+    userId: 13,
+  },
+  {
+    uuid: "f675f1ef-064f-4a8a-8a46-28e2d7b0df8e",
+    nobpjs: 963852741,
+    nama: "Kimberly Harris",
+    statuspeserta: "Polisi",
+    tgllahir: "1989-11-25",
+    gender: "Perempuan",
+    ppkumum: "RS Polri",
+    nohp: 81234567890,
+    norm: 654321987,
+    role: "admin",
+    userId: 14,
+  },
+  {
+    uuid: "e39d2b90-007b-40b2-a453-62886221cfe9",
+    nobpjs: 753951468,
+    nama: "Christopher Brown",
+    statuspeserta: "Peserta Mandiri",
+    tgllahir: "1980-09-25",
+    gender: "Laki-laki",
+    ppkumum: "RS Mandiri",
+    nohp: 85432109876,
+    norm: 753951468,
+    role: "user",
+    userId: 15,
+  },
+];
+
+export const calculateTotals = () => {
+  const jumlahStatusPasien = {
+    totalPolisi: 0,
+    totalPNS: 0,
+    totalKeluarga: 0,
+    totalPesertaMandiri: 0,
+  };
+
+  DataStatusPasienKlinik.forEach((pasien) => {
+    const status = pasien.statuspeserta;
+    switch (status) {
+      case "Polisi":
+        jumlahStatusPasien.totalPolisi++;
+        break;
+      case "PNS":
+        jumlahStatusPasien.totalPNS++;
+        break;
+      case "Keluarga":
+        jumlahStatusPasien.totalKeluarga++;
+        break;
+      case "Peserta Mandiri":
+        jumlahStatusPasien.totalPesertaMandiri++;
+        break;
+      default:
+        break;
+    }
+  });
+
+  return jumlahStatusPasien;
+};

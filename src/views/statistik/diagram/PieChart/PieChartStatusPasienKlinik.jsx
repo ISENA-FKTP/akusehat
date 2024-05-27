@@ -1,35 +1,50 @@
 import { ResponsivePie } from "@nivo/pie";
-import { calculateTotals } from "../../model/dataPolisi";
 import PropTypes from "prop-types";
+import { calculateTotals } from "../../model/dataStatusPasienKlinik";
 
 const PieChart = ({ colors }) => {
   PieChart.propTypes = {
     colors: PropTypes.arrayOf(PropTypes.string),
   };
 
-  const { totalJumlahPolda, totalObatPolres } = calculateTotals();
+  const { totalPolisi, totalPNS, totalKeluarga, totalPesertaMandiri } =
+    calculateTotals();
 
-  const totalPolicePercentage = (
-    (totalJumlahPolda / (totalJumlahPolda + totalObatPolres)) *
+  const totalVisits =
+    totalPolisi + totalPNS + totalKeluarga + totalPesertaMandiri;
+
+  const totalPolisiPercentage = ((totalPolisi / totalVisits) * 100).toFixed(1);
+  const totalPNSPercentage = ((totalPNS / totalVisits) * 100).toFixed(1);
+  const totalKeluargaPercentage = ((totalKeluarga / totalVisits) * 100).toFixed(
+    1
+  );
+  const totalPesertaMandiriPercentage = (
+    (totalPesertaMandiri / totalVisits) *
     100
   ).toFixed(1);
-  const totalObatPercentage = 100 - totalPolicePercentage;
 
   const data = [
-    { id: `Polda (${totalJumlahPolda})`, value: totalPolicePercentage },
-    { id: `Polres (${totalObatPolres})`, value: totalObatPercentage },
+    { id: `Polisi (${totalPolisi})`, value: parseFloat(totalPolisiPercentage) },
+    { id: `PNS (${totalPNS})`, value: parseFloat(totalPNSPercentage) },
+    {
+      id: `Keluarga (${totalKeluarga})`,
+      value: parseFloat(totalKeluargaPercentage),
+    },
+    {
+      id: `Peserta Mandiri (${totalPesertaMandiri})`,
+      value: parseFloat(totalPesertaMandiriPercentage),
+    },
   ];
 
   return (
     <ResponsivePie
       data={data}
-      margin={{ top: -50, right: 10, bottom: 10, left: 10 }}
+      margin={{ top: 10, right: 100, bottom: 10, left: 10 }}
       sortByValue={true}
       cornerRadius={3}
       activeOuterRadiusOffset={8}
       borderColor={{ theme: "background" }}
       enableArcLinkLabels={false}
-      innerRadius={0.7}
       arcLinkLabelsSkipAngle={10}
       arcLinkLabelsTextColor="#333333"
       arcLinkLabelsThickness={2}
@@ -44,13 +59,13 @@ const PieChart = ({ colors }) => {
       legends={[
         {
           anchor: "bottom",
-          direction: "row",
+          direction: "column",
           justify: false,
-          translateX: 10,
-          translateY: -45,
+          translateX: 130,
+          translateY: 0,
           itemsSpacing: 0,
-          itemWidth: 120,
-          itemHeight: 0,
+          itemWidth: 0,
+          itemHeight: 50,
           itemTextColor: "#999",
           itemDirection: "top-to-bottom",
           itemOpacity: 1,
