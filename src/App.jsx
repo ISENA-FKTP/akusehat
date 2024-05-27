@@ -8,6 +8,7 @@ import Administrasi from "./views/klinik/pages/administrasi";
 import Dokter from "./views/klinik/pages/dokter";
 import Laporan from "./views/klinik/pages/laporan";
 import Klinik from "./views/klinik";
+import TambahObat from "./views/apoteker/pages/tambahObat";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard/>} />
         <Route path="/dokter" element={<Dokter/>} />
         <Route path="/laporan" element={<Laporan/>} />
+        <Route path="/tambah-obat" element={<TambahObat/>} />
       </Routes>
     </Router>
   );
