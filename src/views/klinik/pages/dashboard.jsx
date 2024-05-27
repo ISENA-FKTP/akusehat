@@ -1,3 +1,4 @@
+import Header from "../../../components/header_dash";
 import Sidebar_Klinik from "../../../components/klinik/sidebar_klinik";
 import React from "react";
 
@@ -6,8 +7,16 @@ export default function Dashboard() {
   return (
     <>
       {" "}
-      <div className="flex">
+      <div className="fixed z-50">
         <Sidebar_Klinik />
+        </div>
+        <Header
+        title="Pendaftaran pelayanan Pasien"
+        userName="Rifki Rusdi Satma Putra"
+        userStatus="Kepala Polisi"
+        profilePicture="logo.png"
+        />
+        
         <div className="flex-1 relative">
           <div className="absolute inset-0">
             <img 
@@ -41,14 +50,14 @@ export default function Dashboard() {
                 <div>
                 <div class="flex-row">
                 <button class="text-white bg-secondary-500 px-5 py-2 rounded-md hover:bg-secondary-500">
-                  Get Started
+                  Mulai
                 </button>
                 </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+      
 
     </>
   );
