@@ -1,5 +1,5 @@
 import { ResponsivePie } from "@nivo/pie";
-import { calculateTotals } from "../../model/dataPolisi";
+import { calculateTotals } from "../../model/dataKunjunganKlinik";
 import PropTypes from "prop-types";
 
 const PieChart = ({ colors }) => {
@@ -7,17 +7,21 @@ const PieChart = ({ colors }) => {
     colors: PropTypes.arrayOf(PropTypes.string),
   };
 
-  const { totalJumlahPolda, totalObatPolres } = calculateTotals();
+  const { totalHealthy, totalSick } = calculateTotals();
 
-  const totalPolicePercentage = (
-    (totalJumlahPolda / (totalJumlahPolda + totalObatPolres)) *
-    100
-  ).toFixed(1);
-  const totalObatPercentage = 100 - totalPolicePercentage;
+  const totalVisits = totalHealthy + totalSick;
+
+  const totalHealthyPercentage = ((totalHealthy / totalVisits) * 100).toFixed(
+    1
+  );
+  const totalSickPercentage = ((totalSick / totalVisits) * 100).toFixed(1);
 
   const data = [
-    { id: `Polda (${totalJumlahPolda})`, value: totalPolicePercentage },
-    { id: `Polres (${totalObatPolres})`, value: totalObatPercentage },
+    {
+      id: `Sehat (${totalHealthy})`,
+      value: parseFloat(totalHealthyPercentage),
+    },
+    { id: `Sakit (${totalSick})`, value: parseFloat(totalSickPercentage) },
   ];
 
   return (
@@ -49,7 +53,7 @@ const PieChart = ({ colors }) => {
           translateX: 10,
           translateY: -45,
           itemsSpacing: 0,
-          itemWidth: 120,
+          itemWidth: 80,
           itemHeight: 0,
           itemTextColor: "#999",
           itemDirection: "top-to-bottom",

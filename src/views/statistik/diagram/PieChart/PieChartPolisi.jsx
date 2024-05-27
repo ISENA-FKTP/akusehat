@@ -1,9 +1,14 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { ResponsivePie } from "@nivo/pie";
+import PropTypes from "prop-types";
 
-const PieChart = () => {
+const PieChart = ({ colors }) => {
   const [data, setData] = useState([]);
+
+  PieChart.propTypes = {
+    colors: PropTypes.arrayOf(PropTypes.string),
+  };
 
   useEffect(() => {
     axios
@@ -26,9 +31,14 @@ const PieChart = () => {
           return acc;
         }, []);
 
+        const total = aggregatedData.reduce((sum, item) => sum + item.value, 0);
+
         const sortedData = aggregatedData.sort((a, b) => b.value - a.value);
 
-        const topFiveData = sortedData.slice(0, 5);
+        const topFiveData = sortedData.slice(0, 5).map((item) => ({
+          ...item,
+          value: ((item.value / total) * 100).toFixed(1),
+        }));
 
         setData(topFiveData);
       })
@@ -49,12 +59,21 @@ const PieChart = () => {
       arcLinkLabelsSkipAngle={10}
       arcLinkLabelsTextColor="#333333"
       arcLinkLabelsThickness={2}
-      colors={{ scheme: "purple_orange" }}
+      colors={colors}
       arcLinkLabelsColor={{ from: "color", modifiers: [] }}
       arcLabelsSkipAngle={10}
       arcLabelsTextColor={{
         from: "color",
         modifiers: [["darker", 5]],
+      }}
+      valueFormat={(value) => `${value}%`}
+      theme={{
+        labels: {
+          text: {
+            fontSize: 14,
+            fontWeight: 600,
+          },
+        },
       }}
       legends={[
         {

@@ -1,40 +1,38 @@
 import { ResponsiveBar } from "@nivo/bar";
-import { calculateSektorTotals } from "../../model/dataSektor";
+import {
+  getTop10Penyakit,
+  dataSakitKlinik,
+  calculateTotals,
+} from "../../model/dataSakitPoliGigi";
 import PropTypes from "prop-types";
 
 const BarChart = ({ colors }) => {
   BarChart.propTypes = {
     colors: PropTypes.arrayOf(PropTypes.string),
   };
+  const totals = calculateTotals(dataSakitKlinik);
 
-  const totals = calculateSektorTotals();
+  const top10Penyakit = getTop10Penyakit(totals);
 
-  const data = Object.keys(totals).map((key) => ({
-    sektor: key,
-    total: totals[key],
+  const highestTotal = top10Penyakit[top10Penyakit.length - 1][1];
+
+  const data = top10Penyakit.map(([jenisPenyakit, total]) => ({
+    sektor: jenisPenyakit,
+    total: total,
+    color: total === highestTotal ? colors[0] : "#FEC27E",
   }));
-
-  const sortedData = [...data].sort((b, a) => b.total - a.total);
-
-  const top5Sectors = sortedData.slice(0, 5).map((item) => item.sektor);
-
-  const colorBySector = {
-    [top5Sectors[4]]: colors[0],
-  };
-
-  const getColor = (bar) => colorBySector[bar.indexValue] || "#FEC27E";
 
   return (
     <ResponsiveBar
-      data={sortedData} // Menggunakan data yang telah diurutkan
+      data={data}
       keys={["total"]}
       indexBy="sektor"
-      margin={{ top: 20, right: 10, bottom: 60, left: 100 }}
+      margin={{ top: 20, right: 10, bottom: 60, left: 120 }}
       padding={0.15}
       groupMode="grouped"
       valueScale={{ type: "linear" }}
       indexScale={{ type: "band", round: true }}
-      colors={getColor}
+      colors={({ data }) => data.color}
       layout="horizontal"
       borderColor={{
         from: "color",
@@ -46,7 +44,7 @@ const BarChart = ({ colors }) => {
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 0,
-        legend: "Jumlah Anggota Sektor Polisi",
+        legend: "Jumlah Kasus Penyakit",
         legendPosition: "middle",
         legendOffset: 40,
         truncateTickAt: 0,

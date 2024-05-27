@@ -89,6 +89,15 @@ export const DataSektor = [
     role: "Data Analyst",
     userId: 10,
   },
+  {
+    uuid: "j0k1l2m3-n4o5-6p7q-8r9s-0t1u2v3w4x5",
+    namapegawai: "Oliver Thomas",
+    nrp: 567891,
+    pangkat: "IPTU",
+    satuankerja: "Metro Jaya",
+    role: "Data Analyst",
+    userId: 10,
+  },
 ];
 
 export const calculateSektorTotals = () => {

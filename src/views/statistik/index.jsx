@@ -21,8 +21,8 @@ export default function Statistik() {
   const { totalJumlahObat, totalObatKeluar } = calculateTotals();
 
   const total = totalJumlahObat + totalObatKeluar;
-  const persen_obat_masuk = ((totalJumlahObat / total) * 100).toFixed(2);
-  const persen_obat_keluar = ((totalObatKeluar / total) * 100).toFixed(2);
+  const persen_obat_masuk = ((totalJumlahObat / total) * 100).toFixed(1);
+  const persen_obat_keluar = ((totalObatKeluar / total) * 100).toFixed(1);
 
   const handleYearChange = (e) => {
     setYear(e.target.value);
@@ -32,6 +32,15 @@ export default function Statistik() {
     setMonth(e.target.value);
   };
 
+  const colorsPenyakit = [
+    "#5726FF",
+    "#FACC15",
+    "#FCE073",
+    "#DDD4FF",
+    "#0099FF",
+  ];
+  const colorsSektor = ["#5726FF", "#FD9A28"];
+
   return (
     <>
       <div className="bg-[#E0F1EE] font-primary ">
@@ -40,7 +49,7 @@ export default function Statistik() {
           <Sidebar />
         </div>
         <Header
-          title="Pendaftaran pelayanan Pasien"
+          title="Statistik Data Laporan"
           userName="Rifki Rusdi Satma Putra"
           userStatus="Kepala Polisi"
           profilePicture="logo.png"
@@ -160,7 +169,7 @@ export default function Statistik() {
                   </p>
                 </div>
                 <div className="h-96 w-96 mb-2 ">
-                  <PieChartPolisi />
+                  <PieChartPolisi colors={colorsPenyakit} />
                 </div>
               </div>
             </div>
@@ -178,7 +187,7 @@ export default function Statistik() {
                   </p>
                 </div>
                 <div className="h-96 w-96 mt-2 ">
-                  <BarChart />
+                  <BarChart colors={colorsSektor} />
                 </div>
               </div>
             </div>
@@ -216,7 +225,7 @@ export default function Statistik() {
                   </div>
                   <div className="flex">
                     <div className="h-[151px] w-44 mt-2 ">
-                      <PieChartApotik />
+                      <PieChartApotik colors={colorsSektor} />
                     </div>
                     <div className="place-content-center text-base font-semibold ">
                       <div className="flex gap-4 place-content-center mb-3">
