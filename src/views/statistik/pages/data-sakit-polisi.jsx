@@ -45,6 +45,16 @@ export default function DataSakitPolisi() {
     }
   };
 
+  const colorsPenyakit = [
+    "#5726FF",
+    "#FACC15",
+    "#FCE073",
+    "#DDD4FF",
+    "#0099FF",
+  ];
+
+  const colorsSektor = ["#5726FF", "#FD9A28"];
+
   return (
     <>
       <div className="bg-[#E0F1EE] font-primary">
@@ -54,7 +64,7 @@ export default function DataSakitPolisi() {
         </div>
 
         <Header
-          title="Pendaftaran pelayanan Pasien"
+          title="Statistik Data Sakit Polisi"
           userName="Rifki Rusdi Satma Putra"
           userStatus="Kepala Polisi"
           profilePicture="logo.png"
@@ -114,7 +124,7 @@ export default function DataSakitPolisi() {
                   </div>
                 </div>
                 <div className="h-96 w-[26rem] mt-2">
-                  <BarChart />
+                  <BarChart colors={colorsSektor} />
                 </div>
               </div>
             </div>
@@ -126,7 +136,7 @@ export default function DataSakitPolisi() {
                   <div className="flex place-content-between px-5">
                     <div className="font-semibold">
                       <h1 className="text-secondary-400">Jenis Data</h1>
-                      <h1>Jumlah Sakit Kesatuan Polisi</h1>
+                      <h1>Kenaikan Jumlah Sakit Polisi</h1>
                     </div>
                   </div>
                   <div className="h-96 w-[26rem] mt-2">
@@ -155,7 +165,7 @@ export default function DataSakitPolisi() {
                 </div>
                 <div className="flex z-50">
                   <div className="h-96 w-72 mt-2">
-                    <PieChartTotalPolisi />
+                    <PieChartTotalPolisi colors={colorsSektor} />
                   </div>
                 </div>
               </div>
@@ -173,7 +183,7 @@ export default function DataSakitPolisi() {
                   </div>
                 </div>
                 <div className="h-96 mb-2">
-                  <PieChartPolisi />
+                  <PieChartPolisi colors={colorsPenyakit} />
                 </div>
               </div>
             </div>
@@ -188,13 +198,13 @@ export default function DataSakitPolisi() {
                   </div>
                 </div>
                 <div className="h-96 w-[26rem] mt-2">
-                  <BarChartSektor />
+                  <BarChartSektor colors={colorsPenyakit} />
                 </div>
               </div>
             </div>
 
             <div>
-              {/* Pie Chart Apotik */}
+              {/* Pie Chart Total Rawat */}
               <div className="pb-3 w-96">
                 <div className="shadow-lg py-2 px-5 rounded-lg bg-white relative">
                   <div className="absolute inset-0 flex items-center left-[5rem] h-[17.8rem] text-center">
@@ -210,7 +220,7 @@ export default function DataSakitPolisi() {
                   </div>
                   <div className="flex">
                     <div className="h-40 w-64 mt-2">
-                      <PieChartTotalRawat />
+                      <PieChartTotalRawat colors={colorsSektor} />
                     </div>
                     <div className="place-content-center text-base font-semibold">
                       <p>{renderTreatmentText()}</p>
@@ -229,7 +239,7 @@ export default function DataSakitPolisi() {
                     </div>
                   </div>
                   <div className="h-[9.5rem] w-80">
-                    <BarChartRawat />
+                    <BarChartRawat colors={colorsPenyakit} />
                   </div>
                 </div>
               </div>

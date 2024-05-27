@@ -8,7 +8,7 @@ const Header = ({title, userName, userStatus, profilePicture }) => {
 
   return (
     <div className="bg-primary-600 text-white font-primary">
-      <div className="flex h-20 shadow-lg place-content-between container mx-auto">
+      <div className="flex h-20 place-content-between container mx-auto">
         <h1 className="font-medium text-xl pl-24 left-0 place-content-center">
           {title}
         </h1>

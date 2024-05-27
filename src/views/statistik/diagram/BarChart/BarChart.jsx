@@ -1,7 +1,12 @@
 import { ResponsiveBar } from "@nivo/bar";
 import { DataPolisi as data } from "../../model/dataPolisi";
+import PropTypes from "prop-types";
 
-const BarChart = () => {
+const BarChart = ({ colors }) => {
+  BarChart.propTypes = {
+    colors: PropTypes.arrayOf(PropTypes.string),
+  };
+
   return (
     <ResponsiveBar
       data={data}
@@ -12,7 +17,7 @@ const BarChart = () => {
       groupMode="grouped"
       valueScale={{ type: "linear" }}
       indexScale={{ type: "band", round: true }}
-      colors={{ scheme: "purple_orange" }}
+      colors={colors}
       borderColor={{
         from: "color",
         modifiers: [["darker", "5"]],
