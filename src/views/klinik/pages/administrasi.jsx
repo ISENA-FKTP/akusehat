@@ -47,7 +47,23 @@ const FormComponent = () => {
       }
     });
   };
-
+  const handleCancel = () => {
+    MySwal.fire({
+      title: 'Apakah Anda yakin?',
+      text: "Anda akan membatalkan perubahan ini!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Ya, batalkan!',
+      cancelButtonText: 'Tidak, kembali!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        cancelData();
+      }
+    });
+  };
+  
   const saveData = () => {
     MySwal.fire(
       'Tersimpan!',
@@ -55,6 +71,16 @@ const FormComponent = () => {
       'success'
     );
   };
+  
+  const cancelData = () => {
+    MySwal.fire(
+      'Dibatalkan!',
+      'Perubahan telah dibatalkan.',
+      'error'
+    );
+  };
+
+ 
 
   return (
     <div className="bg-white shadow-2xl flex flex-col mx-52 p-6 mt-40 rounded absolute left-28" style={{ width: '60%', height: 'auto' }}>
@@ -95,8 +121,14 @@ const FormComponent = () => {
       </div>
       
       <div className="flex space-x-5 mt-6 mx-72">
-        <button onClick={handleSave} className="text-white px-3 py-2 rounded-md transition duration-300 bg-success-600">Simpan</button>
-        <button className="text-white px-6 rounded-md transition duration-300 bg-error-700">Batal</button>
+        <button onClick={handleSave} className="text-white px-3 py-1 rounded-md transition duration-300 bg-success-600">Simpan</button>
+        <button 
+          type="button"
+          className="bg-gray-500 bg-error-700 text-white px-4 py-1 rounded hover:bg-gray-600"
+          onClick={handleCancel}
+          >
+          Batal
+          </button>
       </div>
     </div>
   );

@@ -23,11 +23,36 @@ const handleSave = () => {
   });
 };
 
+const handleCancel = () => {
+  MySwal.fire({
+    title: 'Apakah Anda yakin?',
+    text: "Anda akan membatalkan perubahan ini!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Ya, batalkan!',
+    cancelButtonText: 'Tidak, kembali!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      cancelData();
+    }
+  });
+};
+
 const saveData = () => {
   MySwal.fire(
     'Tersimpan!',
     'Data Anda telah disimpan.',
     'success'
+  );
+};
+
+const cancelData = () => {
+  MySwal.fire(
+    'Dibatalkan!',
+    'Perubahan telah dibatalkan.',
+    'error'
   );
 };
 
@@ -126,14 +151,29 @@ export default function KajianAwal() {
                         style={{ width: '51%' }}
                       />
                     </div>
+                    <div className="flex space-x-4">
+                       <button 
+                         type="button"
+                         className="bg-blue-500 bg-success-600 text-white px-4 py-1 my-[60px] rounded hover:bg-blue-600"
+                         onClick={handleSave}
+                       >
+                         Simpan
+                       </button>
+                       <button 
+                         type="button"
+                         className="bg-gray-500 bg-error-600 text-white px-4 py-1 my-[60px] rounded hover:bg-gray-600"
+                         onClick={handleCancel}
+                       >
+                         Batal
+                       </button>
+                    </div>
                   </form>
                 </div>
               </div>
               
-              
               <div className="h-10 w-[470px] bg-primary-600 shadow-lg rounded-t-lg absolute left-98 right-40 my-72">
                 <h1 className="text-white font-primary-Poppins font-bold text-xl justify-center flex items-center my-1">Keadaan Fisik</h1>
-                <div className="h-60 w-[470px] border border-primary-600 mx-18 -my-8 shadow-lg rounded-b-lg absolute">
+                <div className="h-72 w-[470px] border border-primary-600 mx-18 -my-8 shadow-lg rounded-b-lg absolute">
                   <form className="-space-y-10 grid-cols-1 w-full mx-auto absolute left-10 right-24">
                     <div className="flex items-center space-x-5">
                       <label className="text-black font-secondary-Karla font-bold py-14 w-40">
@@ -179,11 +219,27 @@ export default function KajianAwal() {
                         placeholder=""
                       />
                     </div>
+                    <div className="flex space-x-4">
+                       <button 
+                         type="button"
+                         className="bg-blue-500 bg-success-600 text-white px-4 py-1 my-[60px] rounded hover:bg-blue-600"
+                         onClick={handleSave}
+                       >
+                         Simpan
+                       </button>
+                       <button 
+                         type="button"
+                         className="bg-gray-500 bg-error-700 text-white px-4 py-1 my-[60px] rounded hover:bg-gray-600"
+                         onClick={handleCancel}
+                       >
+                         Batal
+                       </button>
+                    </div>
                   </form>
                 </div>
               </div>
               
-              <div className="h-10 w-[470px] grid-cols-1 mx-[335px] my-[550px] bg-primary-600 shadow-lg rounded-t-lg absolute left-96">
+              <div className="h-10 w-[470px] grid-cols-1 mx-[335px] my-[600px] bg-primary-600 shadow-lg rounded-t-lg absolute left-96">
                 <h1 className="text-white font-primary-Poppins font-bold text-xl justify-center flex items-center my-1">Tekanan Darah</h1>
                 <div className="h-64 w-[470px] border border-primary-600 shadow-lg rounded-b-lg">
                   <form className="space-y-3 p-4 mx-6">
@@ -219,10 +275,25 @@ export default function KajianAwal() {
                         className="p-1 h-9 rounded-md text-left bg-white border border-black focus:outline-none w-[235px]"
                       />
                     </div>
+                    <div className="flex space-x-4">
+                       <button 
+                         type="button"
+                         className="bg-blue-500 bg-success-600 text-white px-4 py-1 my-[10px] rounded hover:bg-blue-600"
+                         onClick={handleSave}
+                       >
+                         Simpan
+                       </button>
+                       <button 
+                         type="button"
+                         className="bg-gray-500 bg-error-700 text-white px-4 py-1 my-[10px] rounded hover:bg-gray-600"
+                         onClick={handleCancel}
+                       >
+                         Batal
+                       </button>
+                    </div>
                   </form>
                 </div>
               </div>
-              
               
             </div>
           </div>
