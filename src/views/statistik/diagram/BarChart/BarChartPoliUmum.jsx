@@ -2,6 +2,7 @@ import { ResponsiveBar } from "@nivo/bar";
 import {
   getTop10Penyakit,
   calculateTotals,
+  dataSakitKlinik,
 } from "../../model/dataSakitPoliUmum";
 import PropTypes from "prop-types";
 
@@ -9,7 +10,7 @@ const BarChart = ({ colors }) => {
   BarChart.propTypes = {
     colors: PropTypes.arrayOf(PropTypes.string),
   };
-  const totals = calculateTotals();
+  const totals = calculateTotals(dataSakitKlinik);
 
   const top10Penyakit = getTop10Penyakit(totals);
 

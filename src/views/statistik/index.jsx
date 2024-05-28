@@ -3,7 +3,7 @@ import PieChartPolisi from "./diagram/PieChart/PieChartPolisi";
 import PieChartApotik from "./diagram/PieChart/PieChartApotik";
 import Sidebar from "../../components/statistik/sidebar";
 import BarChart from "./diagram/BarChart/BarChart";
-import LineChart from "./diagram/LineChart";
+import LineChart from "./diagram/LineChart/LineChart";
 import { FaCircleArrowUp } from "react-icons/fa6";
 import { FaCircleArrowDown } from "react-icons/fa6";
 import { calculateTotals } from "./model/dataObat";

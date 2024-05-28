@@ -152,3 +152,47 @@ export const calculateObatTerpakai = () => {
 
   return top10Obat;
 };
+
+export const calculateByYearAndMonth = (year, showNextSixMonths) => {
+  const filteredData = DataObat.filter((item) => {
+    const date = new Date(item.tglkadaluarsa);
+    const itemYear = date.getFullYear();
+    const itemMonth = date.getMonth() + 1;
+    if (showNextSixMonths) {
+      return itemYear === year && itemMonth > 6;
+    } else {
+      return itemYear === year && itemMonth <= 6;
+    }
+  });
+
+  const result = Array(12).fill(0);
+
+  filteredData.forEach((item) => {
+    const date = new Date(item.tglkadaluarsa);
+    const month = date.getMonth();
+
+    result[month] += item.jumlahobat;
+  });
+
+  const monthNames = [
+    "Januari",
+    "Februari",
+    "Maret",
+    "April",
+    "Mei",
+    "Juni",
+    "Juli",
+    "Agustus",
+    "September",
+    "Oktober",
+    "November",
+    "Desember",
+  ];
+
+  const formattedResult = result.map((jumlahobat, index) => ({
+    bulan: monthNames[index],
+    jumlahobat,
+  }));
+
+  return formattedResult;
+};

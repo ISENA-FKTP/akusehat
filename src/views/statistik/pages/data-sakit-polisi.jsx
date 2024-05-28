@@ -6,7 +6,7 @@ import Sidebar from "../../../components/statistik/sidebar";
 import BarChart from "../diagram/BarChart/BarChart";
 import BarChartSektor from "../diagram/BarChart/BarChartSektor";
 import BarChartRawat from "../diagram/BarChart/BarChartRawat";
-import LineChart from "../diagram/LineChart";
+import LineChart from "../diagram/LineChart/LineChart";
 import { calculateTotals } from "../model/dataPolisi";
 import { calculateTotals as calculateBpjsTotals } from "../model/dataPegawaiRawat";
 import Header from "../../../components/header";
