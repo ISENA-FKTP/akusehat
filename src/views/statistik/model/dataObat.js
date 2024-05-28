@@ -59,6 +59,66 @@ export const DataObat = [
     totalobatkeluar: 15,
     userId: 2,
   },
+  {
+    uuid: "c3e9a7f1-4d6e-4e3a-8b2f-1a2c6d7f9e8b",
+    namaobat: "Lisinopril",
+    jumlahobat: 75,
+    tglkadaluarsa: "2025-07-31",
+    nobatch: 678901,
+    jenisobat: "Tablet",
+    hargaobat: 9000,
+    kategori: "Hipertensi",
+    totalobatkeluar: 12,
+    userId: 3,
+  },
+  {
+    uuid: "e4b8a6f2-2d5e-4f7b-8c3e-6d2e4b7c8a9e",
+    namaobat: "Atorvastatin",
+    jumlahobat: 110,
+    tglkadaluarsa: "2026-01-31",
+    nobatch: 234567,
+    jenisobat: "Tablet",
+    hargaobat: 12000,
+    kategori: "Kolesterol",
+    totalobatkeluar: 25,
+    userId: 1,
+  },
+  {
+    uuid: "d7c3f5e1-3b4d-4f9a-9e8b-2a0c4d6e7b8f",
+    namaobat: "Simvastatin",
+    jumlahobat: 95,
+    tglkadaluarsa: "2024-08-31",
+    nobatch: 456789,
+    jenisobat: "Tablet",
+    hargaobat: 11000,
+    kategori: "Kolesterol",
+    totalobatkeluar: 18,
+    userId: 2,
+  },
+  {
+    uuid: "a8d7b4e1-1f6a-4e8b-9c2e-5d4b7c6e8a9f",
+    namaobat: "Omeprazole",
+    jumlahobat: 130,
+    tglkadaluarsa: "2025-05-31",
+    nobatch: 789123,
+    jenisobat: "Kapsul",
+    hargaobat: 6000,
+    kategori: "Pencernaan",
+    totalobatkeluar: 22,
+    userId: 3,
+  },
+  {
+    uuid: "b3d6e4a7-2d5b-4f8a-8e3b-7c9e1a2d4f5b",
+    namaobat: "Ranitidine",
+    jumlahobat: 85,
+    tglkadaluarsa: "2024-12-31",
+    nobatch: 567891,
+    jenisobat: "Tablet",
+    hargaobat: 8000,
+    kategori: "Pencernaan",
+    totalobatkeluar: 14,
+    userId: 1,
+  },
 ];
 
 export const calculateTotals = () => {
@@ -71,4 +131,24 @@ export const calculateTotals = () => {
   });
 
   return { totalJumlahObat, totalObatKeluar };
+};
+
+export const calculateTotalObat = () => {
+  let totalJumlahObat = 0;
+
+  DataObat.forEach((item) => {
+    totalJumlahObat += item.jumlahobat;
+  });
+
+  return totalJumlahObat;
+};
+
+export const calculateObatTerpakai = () => {
+  const sortedData = [...DataObat].sort(
+    (a, b) => b.totalobatkeluar - a.totalobatkeluar
+  );
+
+  const top10Obat = sortedData.slice(0, 10);
+
+  return top10Obat;
 };

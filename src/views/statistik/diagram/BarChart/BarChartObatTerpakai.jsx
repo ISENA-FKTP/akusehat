@@ -1,24 +1,23 @@
 import { ResponsiveBar } from "@nivo/bar";
-import {
-  getTop10Penyakit,
-  calculateTotals,
-} from "../../model/dataSakitPoliUmum";
+import { calculateObatTerpakai } from "../../model/dataObat";
 import PropTypes from "prop-types";
 
 const BarChart = ({ colors }) => {
   BarChart.propTypes = {
     colors: PropTypes.arrayOf(PropTypes.string),
   };
-  const totals = calculateTotals();
 
-  const top10Penyakit = getTop10Penyakit(totals);
+  const setiapObatKeluar = calculateObatTerpakai();
 
-  const highestTotal = top10Penyakit[top10Penyakit.length - 1][1];
+  setiapObatKeluar.sort((a, b) => a.totalobatkeluar - b.totalobatkeluar);
 
-  const data = top10Penyakit.map(([jenisPenyakit, total]) => ({
-    sektor: jenisPenyakit,
-    total: total,
-    color: total === highestTotal ? colors[0] : "#FEC27E",
+  const highestTotal =
+    setiapObatKeluar[setiapObatKeluar.length - 1].totalobatkeluar;
+
+  const data = setiapObatKeluar.map((obat) => ({
+    sektor: obat.namaobat,
+    total: obat.totalobatkeluar,
+    color: obat.totalobatkeluar === highestTotal ? colors[0] : "#FEC27E",
   }));
 
   return (
@@ -43,7 +42,7 @@ const BarChart = ({ colors }) => {
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 0,
-        legend: "Jumlah Kasus Penyakit",
+        legend: "Jumlah Obat Keluar",
         legendPosition: "middle",
         legendOffset: 40,
         truncateTickAt: 0,

@@ -239,9 +239,9 @@ export const dataSakitKlinik = [
   },
 ];
 
-export const calculateTotals = (diagnosas) => {
+export const calculateTotals = (dataSakitKlinik) => {
   const totals = {};
-  diagnosas.forEach((diagnosa) => {
+  dataSakitKlinik.forEach((diagnosa) => {
     const jenisPenyakit = diagnosa.jenispenyakit;
     totals[jenisPenyakit] = (totals[jenisPenyakit] || 0) + 1;
   });
