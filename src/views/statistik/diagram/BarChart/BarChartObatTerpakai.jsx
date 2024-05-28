@@ -25,7 +25,7 @@ const BarChart = ({ colors }) => {
       data={data}
       keys={["total"]}
       indexBy="sektor"
-      margin={{ top: 20, right: 10, bottom: 60, left: 100 }}
+      margin={{ top: 20, right: 10, bottom: 50, left: 80 }}
       padding={0.15}
       groupMode="grouped"
       valueScale={{ type: "linear" }}

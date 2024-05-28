@@ -5,8 +5,8 @@ import PropTypes from "prop-types";
 const LineChart = ({ showNextSixMonths, startMonthIndex, endMonthIndex }) => {
   LineChart.propTypes = {
     showNextSixMonths: PropTypes.bool,
-    startMonthIndex: PropTypes.bool,
-    endMonthIndex: PropTypes.bool,
+    startMonthIndex: PropTypes.number,
+    endMonthIndex: PropTypes.number,
   };
 
   const currentYear = new Date().getFullYear();
