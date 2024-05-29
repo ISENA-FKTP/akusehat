@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PieChartPolisi from "./diagram/PieChart/PieChartPolisi";
 import PieChartApotik from "./diagram/PieChart/PieChartApotik";
 import Sidebar from "../../components/statistik/sidebar";
@@ -12,24 +12,46 @@ import { FaPeopleGroup } from "react-icons/fa6";
 import { GiMedicines } from "react-icons/gi";
 import { FaVirus } from "react-icons/fa6";
 import Header from "../../components/header";
+import axios from "axios";
 
 const currentYear = new Date().getFullYear();
 
 export default function Statistik() {
   const [year, setYear] = useState(currentYear);
-  const [month, setMonth] = useState(new Date().getMonth() + 1);
   const { totalJumlahObat, totalObatKeluar } = calculateTotals();
+  const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
 
   const total = totalJumlahObat + totalObatKeluar;
   const persen_obat_masuk = ((totalJumlahObat / total) * 100).toFixed(1);
   const persen_obat_keluar = ((totalObatKeluar / total) * 100).toFixed(1);
 
-  const handleYearChange = (e) => {
-    setYear(e.target.value);
+  useEffect(() => {
+    // Fetch data from API
+    axios
+      .get("https://65fcf9c49fc4425c6530ec6c.mockapi.io/dataShoe")
+      .then((response) => {
+        const data = response.data;
+        setData(data);
+        filterDataByYear(data, year);
+      })
+      .catch((error) => console.error("Error fetching data: ", error));
+  }, [year]);
+
+  useEffect(() => {
+    filterDataByYear(data, year);
+  }, [year, data]);
+
+  const filterDataByYear = (data, year) => {
+    const filtered = data.filter(
+      (item) => new Date(item.tanggal).getFullYear() === parseInt(year)
+    );
+    setFilteredData(filtered);
   };
 
-  const handleMonthChange = (e) => {
-    setMonth(e.target.value);
+  const handleYearChange = (e) => {
+    const selectedYear = e.target.value;
+    setYear(selectedYear);
   };
 
   const colorsPenyakit = [
@@ -75,23 +97,6 @@ export default function Statistik() {
                     </option>
                   );
                 })}
-              </select>
-            </div>
-            <div>
-              <label htmlFor="month" className="mr-2">
-                Bulan:
-              </label>
-              <select
-                id="month"
-                value={month}
-                onChange={handleMonthChange}
-                className="p-2 rounded-md"
-              >
-                {Array.from({ length: 12 }, (_, i) => (
-                  <option key={i + 1} value={i + 1}>
-                    {new Date(0, i).toLocaleString("id-ID", { month: "long" })}
-                  </option>
-                ))}
               </select>
             </div>
           </div>
@@ -169,7 +174,7 @@ export default function Statistik() {
                   </p>
                 </div>
                 <div className="h-96 w-96 mb-2 ">
-                  <PieChartPolisi colors={colorsPenyakit} />
+                  <PieChartPolisi data={filteredData} colors={colorsPenyakit} />
                 </div>
               </div>
             </div>
@@ -187,7 +192,7 @@ export default function Statistik() {
                   </p>
                 </div>
                 <div className="h-96 w-96 mt-2 ">
-                  <BarChart colors={colorsSektor} />
+                  <BarChart colors={colorsSektor} year={year} />
                 </div>
               </div>
             </div>

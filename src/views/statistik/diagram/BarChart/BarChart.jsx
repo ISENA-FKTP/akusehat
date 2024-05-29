@@ -1,16 +1,26 @@
-import { ResponsiveBar } from "@nivo/bar";
-import { DataPolisi as data } from "../../model/dataPolisi";
 import PropTypes from "prop-types";
-
-const BarChart = ({ colors }) => {
+import { ResponsiveBar } from "@nivo/bar";
+import { DataPolisi } from "../../model/dataPolisi";
+const BarChart = ({ colors, year }) => {
   BarChart.propTypes = {
+    year: PropTypes.string,
     colors: PropTypes.arrayOf(PropTypes.string),
   };
+
+  const filteredData = DataPolisi.filter(
+    (data) => new Date(data.tanggal).getFullYear() === parseInt(year)
+  );
+
+  const data = filteredData.map(({ bulan, polda, polres }) => ({
+    bulan,
+    "Jumlah Polda": polda,
+    "Jumlah Polres": polres,
+  }));
 
   return (
     <ResponsiveBar
       data={data}
-      keys={["polda", "polres"]}
+      keys={["Jumlah Polda", "Jumlah Polres"]}
       indexBy="bulan"
       margin={{ top: 20, right: 10, bottom: 100, left: 55 }}
       padding={0.15}
@@ -53,7 +63,7 @@ const BarChart = ({ colors }) => {
         legends: {
           text: {
             textTransform: "capitalize",
-            fontSize: "1rem",
+            fontSize: "12px",
             fontWeight: 600,
           },
         },
@@ -67,7 +77,7 @@ const BarChart = ({ colors }) => {
           translateX: 20,
           translateY: 75,
           itemsSpacing: 10,
-          itemWidth: 113,
+          itemWidth: 153,
           itemHeight: 20,
           itemDirection: "left-to-right",
           itemOpacity: 0.85,

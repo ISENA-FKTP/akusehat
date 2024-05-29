@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PieChartPolisi from "../diagram/PieChart/PieChartPolisi";
 import PieChartTotalPolisi from "../diagram/PieChart/PieChartTotalPolisi";
 import PieChartTotalRawat from "../diagram/PieChart/PieChartTotalRawat";
@@ -10,6 +10,7 @@ import LineChart from "../diagram/LineChart/LineChart";
 import { calculateTotals } from "../model/dataPolisi";
 import { calculateTotals as calculateBpjsTotals } from "../model/dataPegawaiRawat";
 import Header from "../../../components/header";
+import axios from "axios";
 
 const currentYear = new Date().getFullYear();
 
@@ -18,13 +19,39 @@ export default function DataSakitPolisi() {
 
   const [year, setYear] = useState(currentYear);
   const [month, setMonth] = useState(new Date().getMonth() + 1);
+  const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
 
   const { totalJumlahPolda, totalObatPolres } = calculateTotals();
 
   const totalJumlahSemua = totalJumlahPolda + totalObatPolres;
 
+  useEffect(() => {
+    // Fetch data from API
+    axios
+      .get("https://65fcf9c49fc4425c6530ec6c.mockapi.io/dataShoe")
+      .then((response) => {
+        const data = response.data;
+        setData(data);
+        filterDataByYear(data, year);
+      })
+      .catch((error) => console.error("Error fetching data: ", error));
+  }, [year]);
+
+  useEffect(() => {
+    filterDataByYear(data, year);
+  }, [year, data]);
+
+  const filterDataByYear = (data, year) => {
+    const filtered = data.filter(
+      (item) => new Date(item.tanggal).getFullYear() === parseInt(year)
+    );
+    setFilteredData(filtered);
+  };
+
   const handleYearChange = (e) => {
-    setYear(e.target.value);
+    const selectedYear = e.target.value;
+    setYear(selectedYear);
   };
 
   const handleMonthChange = (e) => {
@@ -183,7 +210,7 @@ export default function DataSakitPolisi() {
                   </div>
                 </div>
                 <div className="h-96 mb-2">
-                  <PieChartPolisi colors={colorsPenyakit} />
+                  <PieChartPolisi data={filteredData} colors={colorsPenyakit} />
                 </div>
               </div>
             </div>

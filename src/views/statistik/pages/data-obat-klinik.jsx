@@ -5,7 +5,10 @@ import BarChartObatTerpakai from "../diagram/BarChart/BarChartObatTerpakai";
 import PieChartTotalObat from "../diagram/PieChart/PieChartTotalObat";
 import { calculateTotalObat } from "../model/dataObat";
 import LineChart from "../diagram/LineChart/LineChartObat";
-import { IoMdArrowDropleft, IoMdArrowDropright } from "react-icons/io";
+import {
+  MdOutlineKeyboardDoubleArrowRight,
+  MdOutlineKeyboardDoubleArrowLeft,
+} from "react-icons/md";
 import BarChart from "../diagram/BarChart/BarChartDataObat";
 
 const currentYear = new Date().getFullYear();
@@ -158,14 +161,13 @@ export default function DataObatKlinik() {
                     </div>
                     {/* Button untuk menampilkan 6 bulan sisanya */}
                     <button
-                      className="w-24 p-2 mt-8 bg-secondary-400 text-sm text-white rounded-md flex gap-4 place-items-center"
+                      className=" p-2 mt-8 bg-secondary-400 text-sm text-white rounded-md flex gap-4 place-items-center hover:bg-secondary-700"
                       onClick={handleToggleMonthsForLine}
                     >
-                      {showNextSixMonthsForLine ? "7-12" : "1-6"}{" "}
                       {showNextSixMonthsForLine ? (
-                        <IoMdArrowDropright />
+                        <MdOutlineKeyboardDoubleArrowRight />
                       ) : (
-                        <IoMdArrowDropleft />
+                        <MdOutlineKeyboardDoubleArrowLeft />
                       )}
                     </button>
                   </div>
@@ -192,14 +194,13 @@ export default function DataObatKlinik() {
                   </div>
                   {/* Button untuk menampilkan 6 bulan sisanya */}
                   <button
-                    className="w-24 p-2 mt-8 bg-secondary-400 text-sm text-white rounded-md flex gap-4 place-items-center"
+                    className=" p-2 mt-8 bg-secondary-400 text-sm text-white rounded-md flex gap-4 place-items-center hover:bg-secondary-700"
                     onClick={handleToggleMonthsForBar}
                   >
-                    {showNextSixMonthsForBar ? "7-12" : "1-6"}{" "}
                     {showNextSixMonthsForBar ? (
-                      <IoMdArrowDropright />
+                      <MdOutlineKeyboardDoubleArrowRight />
                     ) : (
-                      <IoMdArrowDropleft />
+                      <MdOutlineKeyboardDoubleArrowLeft />
                     )}
                   </button>
                 </div>
