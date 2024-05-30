@@ -8,15 +8,16 @@ import BarChartSektor from "../diagram/BarChart/BarChartSektor";
 import BarChartRawat from "../diagram/BarChart/BarChartRawat";
 import LineChart from "../diagram/LineChart/LineChart";
 import { calculateTotals } from "../model/dataPolisi";
-import { calculateTotals as calculateBpjsTotals } from "../model/dataPegawaiRawat";
+import {
+  DataPegawaiRawat,
+  calculateTotals as calculateBpjsTotals,
+} from "../model/dataPegawaiRawat";
 import Header from "../../../components/header";
 import axios from "axios";
 
 const currentYear = new Date().getFullYear();
 
 export default function DataSakitPolisi() {
-  const percentages = calculateBpjsTotals();
-
   const [year, setYear] = useState(currentYear);
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
@@ -24,6 +25,12 @@ export default function DataSakitPolisi() {
   const { totalJumlahPolda, totalObatPolres } = calculateTotals();
 
   const totalJumlahSemua = totalJumlahPolda + totalObatPolres;
+
+  const filteredDataPegawai = DataPegawaiRawat.filter(
+    (data) => new Date(data.awalsakit).getFullYear() === parseInt(year)
+  );
+
+  const percentages = calculateBpjsTotals(filteredDataPegawai);
 
   useEffect(() => {
     axios
@@ -205,7 +212,10 @@ export default function DataSakitPolisi() {
                   </div>
                 </div>
                 <div className="h-96 w-[26rem] mt-2">
-                  <BarChartSektor colors={colorsPenyakit} />
+                  <BarChartSektor
+                    colors={colorsPenyakit}
+                    year={year.toString()}
+                  />
                 </div>
               </div>
             </div>
@@ -227,7 +237,10 @@ export default function DataSakitPolisi() {
                   </div>
                   <div className="flex">
                     <div className="h-40 w-64 mt-2">
-                      <PieChartTotalRawat colors={colorsSektor} />
+                      <PieChartTotalRawat
+                        colors={colorsSektor}
+                        year={year.toString()}
+                      />
                     </div>
                     <div className="place-content-center text-base font-semibold">
                       <p>{renderTreatmentText()}</p>
@@ -246,7 +259,10 @@ export default function DataSakitPolisi() {
                     </div>
                   </div>
                   <div className="h-[9.5rem] w-80">
-                    <BarChartRawat colors={colorsPenyakit} />
+                    <BarChartRawat
+                      colors={colorsPenyakit}
+                      year={year.toString()}
+                    />
                   </div>
                 </div>
               </div>

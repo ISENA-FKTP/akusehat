@@ -1,18 +1,25 @@
 import { ResponsivePie } from "@nivo/pie";
-import { calculateTotals } from "../../model/dataPegawaiRawat";
+import {
+  calculateTotals,
+  DataPegawaiRawat,
+} from "../../model/dataPegawaiRawat";
 import PropTypes from "prop-types";
 
-const PieChart = ({ colors }) => {
+const PieChart = ({ colors, year }) => {
   PieChart.propTypes = {
+    year: PropTypes.string,
     colors: PropTypes.arrayOf(PropTypes.string),
   };
 
-  const percentages = calculateTotals();
+  const filteredData = DataPegawaiRawat.filter(
+    (data) => new Date(data.awalsakit).getFullYear() === parseInt(year)
+  );
+
+  const percentages = calculateTotals(filteredData);
 
   const data = [
     { id: "BPJS", value: percentages.bpjs },
     { id: "Non-BPJS", value: percentages.nonBpjs },
-    { id: "Lainnya", value: percentages.lainnya },
   ];
 
   return (
