@@ -18,7 +18,6 @@ export default function DataSakitPolisi() {
   const percentages = calculateBpjsTotals();
 
   const [year, setYear] = useState(currentYear);
-  const [month, setMonth] = useState(new Date().getMonth() + 1);
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
 
@@ -27,7 +26,6 @@ export default function DataSakitPolisi() {
   const totalJumlahSemua = totalJumlahPolda + totalObatPolres;
 
   useEffect(() => {
-    // Fetch data from API
     axios
       .get("https://65fcf9c49fc4425c6530ec6c.mockapi.io/dataShoe")
       .then((response) => {
@@ -52,10 +50,6 @@ export default function DataSakitPolisi() {
   const handleYearChange = (e) => {
     const selectedYear = e.target.value;
     setYear(selectedYear);
-  };
-
-  const handleMonthChange = (e) => {
-    setMonth(e.target.value);
   };
 
   const renderTreatmentText = () => {
@@ -120,23 +114,6 @@ export default function DataSakitPolisi() {
                 })}
               </select>
             </div>
-            <div>
-              <label htmlFor="month" className="mr-2">
-                Bulan:
-              </label>
-              <select
-                id="month"
-                value={month}
-                onChange={handleMonthChange}
-                className="p-2 rounded-md"
-              >
-                {Array.from({ length: 12 }, (_, i) => (
-                  <option key={i + 1} value={i + 1}>
-                    {new Date(0, i).toLocaleString("id-ID", { month: "long" })}
-                  </option>
-                ))}
-              </select>
-            </div>
           </div>
 
           {/* Statistik */}
@@ -151,7 +128,7 @@ export default function DataSakitPolisi() {
                   </div>
                 </div>
                 <div className="h-96 w-[26rem] mt-2">
-                  <BarChart colors={colorsSektor} />
+                  <BarChart colors={colorsSektor} year={year.toString()} />
                 </div>
               </div>
             </div>
@@ -167,7 +144,7 @@ export default function DataSakitPolisi() {
                     </div>
                   </div>
                   <div className="h-96 w-[26rem] mt-2">
-                    <LineChart />
+                    <LineChart year={year.toString()} />
                   </div>
                 </div>
               </div>
@@ -192,7 +169,10 @@ export default function DataSakitPolisi() {
                 </div>
                 <div className="flex z-50">
                   <div className="h-96 w-72 mt-2">
-                    <PieChartTotalPolisi colors={colorsSektor} />
+                    <PieChartTotalPolisi
+                      colors={colorsSektor}
+                      year={year.toString()}
+                    />
                   </div>
                 </div>
               </div>

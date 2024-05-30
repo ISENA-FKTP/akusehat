@@ -1,17 +1,24 @@
 import { ResponsiveLine } from "@nivo/line";
 import { DataPolisi } from "../../model/dataPolisi";
+import PropTypes from "prop-types";
 
-const DataPeningkatanSakitPolisi = [
-  {
-    id: "Peningkatan Sakit Polisi",
-    data: DataPolisi.map((item) => ({
-      x: item.bulan,
-      y: item.polda + item.polres,
-    })),
-  },
-];
+const LineChart = ({ year }) => {
+  LineChart.propTypes = {
+    year: PropTypes.string,
+  };
+  const filteredData = DataPolisi.filter(
+    (data) => new Date(data.tanggal).getFullYear() === parseInt(year)
+  );
 
-const LineChart = () => {
+  const DataPeningkatanSakitPolisi = [
+    {
+      id: "Peningkatan Sakit Polisi",
+      data: filteredData.map((item) => ({
+        x: item.bulan,
+        y: item.polda + item.polres,
+      })),
+    },
+  ];
   return (
     <ResponsiveLine
       data={DataPeningkatanSakitPolisi}

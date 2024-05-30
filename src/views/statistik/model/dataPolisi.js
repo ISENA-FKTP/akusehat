@@ -13,19 +13,19 @@ export const DataPolisi = [
   },
   {
     bulan: "Maret",
-    tanggal: "2022-03-01",
+    tanggal: "2024-03-01",
     polda: 32,
     polres: 67,
   },
   {
     bulan: "April",
-    tanggal: "2022-04-01",
+    tanggal: "2024-04-01",
     polda: 180,
     polres: 128,
   },
   {
     bulan: "Mei",
-    tanggal: "2022-05-01",
+    tanggal: "2024-05-01",
     polda: 153,
     polres: 117,
   },
@@ -48,6 +48,18 @@ export const calculateTotals = () => {
   let totalObatPolres = 0;
 
   for (const data of DataPolisi) {
+    totalJumlahPolda += data.polda;
+    totalObatPolres += data.polres;
+  }
+
+  return { totalJumlahPolda, totalObatPolres };
+};
+
+export const calculateTotalsPasien = (DataSet) => {
+  let totalJumlahPolda = 0;
+  let totalObatPolres = 0;
+
+  for (const data of DataSet) {
     totalJumlahPolda += data.polda;
     totalObatPolres += data.polres;
   }

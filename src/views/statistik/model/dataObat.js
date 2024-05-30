@@ -10,6 +10,7 @@ export const DataObat = [
     kategori: "Obat Umum",
     totalobatkeluar: 20,
     userId: 1,
+    tanggal: "2024-05-29",
   },
   {
     uuid: "d5f5e1b7-4e29-4e8a-9bb3-9e1c6d2f8a2c",
@@ -22,6 +23,7 @@ export const DataObat = [
     kategori: "Antibiotik",
     totalobatkeluar: 10,
     userId: 2,
+    tanggal: "2024-05-29",
   },
   {
     uuid: "f8a6e3b4-4f59-47a5-8a2e-8c4d5a7e2b9f",
@@ -34,6 +36,7 @@ export const DataObat = [
     kategori: "Obat Umum",
     totalobatkeluar: 30,
     userId: 1,
+    tanggal: "2024-05-29",
   },
   {
     uuid: "a6b5c3d1-3f2a-4e5b-9c8a-7f2b4c5d8e9f",
@@ -46,6 +49,7 @@ export const DataObat = [
     kategori: "Diabetes",
     totalobatkeluar: 40,
     userId: 3,
+    tanggal: "2024-05-29",
   },
   {
     uuid: "b4e6f2a1-1d9f-4e8b-9a8e-6d2c7b4a9e5c",
@@ -58,6 +62,7 @@ export const DataObat = [
     kategori: "Hipertensi",
     totalobatkeluar: 15,
     userId: 2,
+    tanggal: "2023-05-29",
   },
   {
     uuid: "c3e9a7f1-4d6e-4e3a-8b2f-1a2c6d7f9e8b",
@@ -70,6 +75,7 @@ export const DataObat = [
     kategori: "Hipertensi",
     totalobatkeluar: 12,
     userId: 3,
+    tanggal: "2023-05-29",
   },
   {
     uuid: "e4b8a6f2-2d5e-4f7b-8c3e-6d2e4b7c8a9e",
@@ -82,6 +88,7 @@ export const DataObat = [
     kategori: "Kolesterol",
     totalobatkeluar: 25,
     userId: 1,
+    tanggal: "2023-05-29",
   },
   {
     uuid: "d7c3f5e1-3b4d-4f9a-9e8b-2a0c4d6e7b8f",
@@ -94,6 +101,7 @@ export const DataObat = [
     kategori: "Kolesterol",
     totalobatkeluar: 18,
     userId: 2,
+    tanggal: "2023-05-29",
   },
   {
     uuid: "a8d7b4e1-1f6a-4e8b-9c2e-5d4b7c6e8a9f",
@@ -106,6 +114,7 @@ export const DataObat = [
     kategori: "Pencernaan",
     totalobatkeluar: 22,
     userId: 3,
+    tanggal: "2023-05-29",
   },
   {
     uuid: "b3d6e4a7-2d5b-4f8a-8e3b-7c9e1a2d4f5b",
@@ -118,6 +127,7 @@ export const DataObat = [
     kategori: "Pencernaan",
     totalobatkeluar: 14,
     userId: 1,
+    tanggal: "2023-05-29",
   },
 ];
 

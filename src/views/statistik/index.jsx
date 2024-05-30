@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import PieChartPolisi from "./diagram/PieChart/PieChartPolisi";
-import PieChartApotik from "./diagram/PieChart/PieChartApotik";
+import PieChartApotik, {
+  TotalObatYear,
+} from "./diagram/PieChart/PieChartApotik";
 import Sidebar from "../../components/statistik/sidebar";
 import BarChart from "./diagram/BarChart/BarChart";
 import LineChart from "./diagram/LineChart/LineChart";
 import { FaCircleArrowUp } from "react-icons/fa6";
 import { FaCircleArrowDown } from "react-icons/fa6";
-import { calculateTotals } from "./model/dataObat";
 import { BsPeopleFill } from "react-icons/bs";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { GiMedicines } from "react-icons/gi";
@@ -18,16 +19,23 @@ const currentYear = new Date().getFullYear();
 
 export default function Statistik() {
   const [year, setYear] = useState(currentYear);
-  const { totalJumlahObat, totalObatKeluar } = calculateTotals();
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
 
+  const { totalJumlahObat, totalObatKeluar } = TotalObatYear(year);
   const total = totalJumlahObat + totalObatKeluar;
-  const persen_obat_masuk = ((totalJumlahObat / total) * 100).toFixed(1);
-  const persen_obat_keluar = ((totalObatKeluar / total) * 100).toFixed(1);
+  let persen_obat_masuk = 0;
+  let persen_obat_keluar = 0;
+
+  if (total === 0) {
+    persen_obat_masuk = 0;
+    persen_obat_keluar = 0;
+  } else {
+    persen_obat_masuk = ((totalJumlahObat / total) * 100).toFixed(1);
+    persen_obat_keluar = ((totalObatKeluar / total) * 100).toFixed(1);
+  }
 
   useEffect(() => {
-    // Fetch data from API
     axios
       .get("https://65fcf9c49fc4425c6530ec6c.mockapi.io/dataShoe")
       .then((response) => {
@@ -192,7 +200,7 @@ export default function Statistik() {
                   </p>
                 </div>
                 <div className="h-96 w-96 mt-2 ">
-                  <BarChart colors={colorsSektor} year={year} />
+                  <BarChart colors={colorsSektor} year={year.toString()} />
                 </div>
               </div>
             </div>
@@ -211,7 +219,7 @@ export default function Statistik() {
                     </p>
                   </div>
                   <div className="h-[149px] w-96 mt-2 ">
-                    <LineChart />
+                    <LineChart year={year.toString()} />
                   </div>
                 </div>
               </div>
@@ -230,7 +238,10 @@ export default function Statistik() {
                   </div>
                   <div className="flex">
                     <div className="h-[151px] w-44 mt-2 ">
-                      <PieChartApotik colors={colorsSektor} />
+                      <PieChartApotik
+                        colors={colorsSektor}
+                        year={year.toString()}
+                      />
                     </div>
                     <div className="place-content-center text-base font-semibold ">
                       <div className="flex gap-4 place-content-center mb-3">

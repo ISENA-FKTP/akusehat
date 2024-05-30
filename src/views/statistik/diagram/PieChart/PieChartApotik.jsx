@@ -1,12 +1,43 @@
 import { ResponsivePie } from "@nivo/pie";
-import { calculateTotals } from "../../model/dataObat";
+import { DataObat } from "../../model/dataObat";
 import PropTypes from "prop-types";
 
-const PieChart = ({ colors }) => {
+const calculateTotals = (DataObat) => {
+  let totalJumlahObat = 0;
+  let totalObatKeluar = 0;
+
+  DataObat.forEach((item) => {
+    totalJumlahObat += item.jumlahobat;
+    totalObatKeluar += item.totalobatkeluar;
+  });
+
+  return { totalJumlahObat, totalObatKeluar };
+};
+
+export const TotalObatYear = (year) => {
+  const filteredData = DataObat.filter(
+    (data) => new Date(data.tanggal).getFullYear() === parseInt(year)
+  );
+
+  const { totalJumlahObat, totalObatKeluar } = calculateTotals(filteredData);
+
+  return {
+    totalJumlahObat,
+    totalObatKeluar,
+  };
+};
+
+const PieChart = ({ colors, year }) => {
   PieChart.propTypes = {
     colors: PropTypes.arrayOf(PropTypes.string),
+    year: PropTypes.string,
   };
-  const { totalJumlahObat, totalObatKeluar } = calculateTotals();
+
+  const filteredData = DataObat.filter(
+    (data) => new Date(data.tanggal).getFullYear() === parseInt(year)
+  );
+
+  const { totalJumlahObat, totalObatKeluar } = calculateTotals(filteredData);
   const totalObat = totalObatKeluar + totalJumlahObat;
 
   const data = [
