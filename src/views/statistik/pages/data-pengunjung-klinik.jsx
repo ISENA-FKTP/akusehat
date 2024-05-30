@@ -12,14 +12,9 @@ const currentYear = new Date().getFullYear();
 
 export default function DataPengunjungKlinik() {
   const [year, setYear] = useState(currentYear);
-  const [month, setMonth] = useState(new Date().getMonth() + 1);
 
   const handleYearChange = (e) => {
     setYear(e.target.value);
-  };
-
-  const handleMonthChange = (e) => {
-    setMonth(e.target.value);
   };
 
   const { totalHealthy, totalSick } = calculateTotals();
@@ -74,28 +69,11 @@ export default function DataPengunjungKlinik() {
                 })}
               </select>
             </div>
-            <div>
-              <label htmlFor="month" className="mr-2">
-                Bulan:
-              </label>
-              <select
-                id="month"
-                value={month}
-                onChange={handleMonthChange}
-                className="p-2 rounded-md"
-              >
-                {Array.from({ length: 12 }, (_, i) => (
-                  <option key={i + 1} value={i + 1}>
-                    {new Date(0, i).toLocaleString("id-ID", { month: "long" })}
-                  </option>
-                ))}
-              </select>
-            </div>
           </div>
 
           {/* Statistik */}
           <div className="flex gap-3 place-content-center pt-7">
-            {/* Bar Chart */}
+            {/* Bar Chart Penyakit Terbanyak*/}
             <div className="">
               <div className="shadow-lg py-2 px-5 rounded-lg bg-white">
                 <div className="flex">
@@ -105,7 +83,7 @@ export default function DataPengunjungKlinik() {
                   </div>
                 </div>
                 <div className="h-96 w-[20rem] mt-2">
-                  <BarChartPoliUmum colors={colorsPenyakit} />
+                  <BarChartPoliUmum colors={colorsPenyakit} year={year} />
                 </div>
               </div>
             </div>
@@ -120,7 +98,7 @@ export default function DataPengunjungKlinik() {
                   </div>
                 </div>
                 <div className="h-96 w-[20rem] mt-2">
-                  <BarChartPoliGigi colors={colorsPenyakit} />
+                  <BarChartPoliGigi colors={colorsPenyakit} year={year} />
                 </div>
               </div>
             </div>
