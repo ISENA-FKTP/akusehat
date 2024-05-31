@@ -8,10 +8,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import Sidebar_Klinik from "../../../components/klinik/sidebar_klinik";
 import Header from "../../../components/header";
+import { useNavigate } from "react-router-dom";
 
 const MySwal = withReactContent(Swal);
 
 const FormComponent = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     nrp_or_bpjs: "",
     name: "",
@@ -67,7 +69,11 @@ const FormComponent = () => {
   };
 
   const saveData = () => {
-    MySwal.fire("Tersimpan!", "Data Anda telah disimpan.", "success");
+    MySwal.fire("Tersimpan!", "Data Anda telah disimpan.", "success").then(
+      () => {
+        navigate("/kajianawal");
+      }
+    );
   };
 
   const cancelData = () => {

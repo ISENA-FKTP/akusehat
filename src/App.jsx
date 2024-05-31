@@ -1,9 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Dashboard from "./views/klinik/pages/dashboard";
 import Administrasi from "./views/klinik/pages/administrasi";
 import Dokter from "./views/klinik/pages/dokter";
 import Laporan from "./views/klinik/pages/laporan";
 import KajianAwal from "./views/klinik/pages/kajianawal";
+import Dashboard from "./views/klinik";
 
 function App() {
   return (
