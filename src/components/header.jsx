@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
-const Header = ({title, userName, userStatus, profilePicture }) => {
+const Header = ({ title, userName, userStatus, profilePicture }) => {
   Header.propTypes = {
+    title: PropTypes.string,
     userName: PropTypes.string,
     userStatus: PropTypes.string,
     profilePicture: PropTypes.string,
