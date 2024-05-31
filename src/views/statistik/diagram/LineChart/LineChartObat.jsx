@@ -1,18 +1,16 @@
 import { ResponsiveLine } from "@nivo/line";
-import { calculateByYearAndMonth } from "../../model/dataObat";
+import { DataObat, calculateByYearAndMonth } from "../../model/dataObat";
 import PropTypes from "prop-types";
 
-const LineChart = ({ showNextSixMonths, startMonthIndex, endMonthIndex }) => {
-  LineChart.propTypes = {
-    showNextSixMonths: PropTypes.bool,
-    startMonthIndex: PropTypes.number,
-    endMonthIndex: PropTypes.number,
-  };
+const LineChart = ({
+  showNextSixMonths,
+  startMonthIndex,
+  endMonthIndex,
+  year,
+}) => {
+  const dataYear = calculateByYearAndMonth(year, showNextSixMonths, DataObat);
 
-  const currentYear = new Date().getFullYear();
-  const data2024 = calculateByYearAndMonth(currentYear, showNextSixMonths);
-
-  const dataToShow = data2024.slice(startMonthIndex, endMonthIndex);
+  const dataToShow = dataYear.slice(startMonthIndex, endMonthIndex);
 
   const DataPeningkatanSakitPolisi = [
     {
@@ -65,6 +63,13 @@ const LineChart = ({ showNextSixMonths, startMonthIndex, endMonthIndex }) => {
       useMesh={true}
     />
   );
+};
+
+LineChart.propTypes = {
+  showNextSixMonths: PropTypes.bool,
+  startMonthIndex: PropTypes.number,
+  endMonthIndex: PropTypes.number,
+  year: PropTypes.number.isRequired,
 };
 
 export default LineChart;

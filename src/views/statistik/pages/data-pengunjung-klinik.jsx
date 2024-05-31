@@ -3,7 +3,10 @@ import Sidebar from "../../../components/statistik/sidebar";
 import Header from "../../../components/header";
 import BarChartPoliUmum from "../diagram/BarChart/BarChartPoliUmum";
 import BarChartPoliGigi from "../diagram/BarChart/BarChartPoliGigi";
-import { calculateTotals } from "../model/dataKunjunganKlinik";
+import {
+  DataKunjunganKlinik,
+  calculateTotals,
+} from "../model/dataKunjunganKlinik";
 import PieChartTotalPengunjungKlinik from "../diagram/PieChart/PieChartTotalPengunjungKlinik";
 import PieChatStatusPasien from "../diagram/PieChart/PieChartStatusPasienKlinik";
 import BarChartRawat from "../diagram/BarChart/BarChartPengunjungPoli";
@@ -13,11 +16,15 @@ const currentYear = new Date().getFullYear();
 export default function DataPengunjungKlinik() {
   const [year, setYear] = useState(currentYear);
 
+  const filteredData = DataKunjunganKlinik.filter(
+    (data) => new Date(data.tanggal).getFullYear() === parseInt(year)
+  );
+
   const handleYearChange = (e) => {
     setYear(e.target.value);
   };
 
-  const { totalHealthy, totalSick } = calculateTotals();
+  const { totalHealthy, totalSick } = calculateTotals(filteredData);
 
   const totalVisits = totalHealthy + totalSick;
 
@@ -126,7 +133,10 @@ export default function DataPengunjungKlinik() {
                     </div>
                     <div className="flex z-50">
                       <div className="h-56 w-44 mt-2">
-                        <PieChartTotalPengunjungKlinik colors={colorsSektor} />
+                        <PieChartTotalPengunjungKlinik
+                          colors={colorsSektor}
+                          year={year}
+                        />
                       </div>
                     </div>
                   </div>
@@ -142,7 +152,10 @@ export default function DataPengunjungKlinik() {
                       </div>
                     </div>
                     <div className="h-56 mb-2">
-                      <PieChatStatusPasien colors={colorsPenyakit} />
+                      <PieChatStatusPasien
+                        colors={colorsPenyakit}
+                        year={year}
+                      />
                     </div>
                   </div>
                 </div>
@@ -158,7 +171,7 @@ export default function DataPengunjungKlinik() {
                     </div>
                   </div>
                   <div className="h-[5.2rem]">
-                    <BarChartRawat colors={colorsPenyakit} />
+                    <BarChartRawat colors={colorsPenyakit} year={year} />
                   </div>
                 </div>
               </div>

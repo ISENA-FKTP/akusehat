@@ -1,20 +1,33 @@
 import { ResponsivePie } from "@nivo/pie";
-import { calculateTotals } from "../../model/dataKunjunganKlinik";
+import {
+  DataKunjunganKlinik,
+  calculateTotals,
+} from "../../model/dataKunjunganKlinik";
 import PropTypes from "prop-types";
 
-const PieChart = ({ colors }) => {
+const PieChart = ({ colors, year }) => {
   PieChart.propTypes = {
+    year: PropTypes.string,
     colors: PropTypes.arrayOf(PropTypes.string),
   };
 
-  const { totalHealthy, totalSick } = calculateTotals();
+  const filteredData = DataKunjunganKlinik.filter(
+    (data) => new Date(data.tanggal).getFullYear() === parseInt(year)
+  );
+
+  const { totalHealthy, totalSick } = calculateTotals(filteredData);
 
   const totalVisits = totalHealthy + totalSick;
 
-  const totalHealthyPercentage = ((totalHealthy / totalVisits) * 100).toFixed(
-    1
-  );
-  const totalSickPercentage = ((totalSick / totalVisits) * 100).toFixed(1);
+  let totalHealthyPercentage = 0;
+  let totalSickPercentage = 0;
+
+  if (totalVisits !== 0) {
+    totalHealthyPercentage = ((totalHealthy / totalVisits) * 100).toFixed(1);
+    totalSickPercentage = ((totalSick / totalVisits) * 100).toFixed(1);
+  } else {
+    console.error("Tidak ada data kunjungan untuk tahun yang dipilih.");
+  }
 
   const data = [
     {

@@ -15,7 +15,6 @@ const currentYear = new Date().getFullYear();
 
 export default function DataObatKlinik() {
   const [year, setYear] = useState(currentYear);
-  const [month, setMonth] = useState(new Date().getMonth() + 1);
   const [showNextSixMonthsForLine, setShowNextSixMonthsForLine] =
     useState(false);
   const [showNextSixMonthsForBar, setShowNextSixMonthsForBar] = useState(false);
@@ -32,9 +31,6 @@ export default function DataObatKlinik() {
     setYear(e.target.value);
   };
 
-  const handleMonthChange = (e) => {
-    setMonth(e.target.value);
-  };
   const startMonthIndexLine = showNextSixMonthsForLine ? 6 : 0;
   const endMonthIndexLine = showNextSixMonthsForLine ? 12 : 6;
 
@@ -91,23 +87,6 @@ export default function DataObatKlinik() {
                 })}
               </select>
             </div>
-            <div>
-              <label htmlFor="month" className="mr-2">
-                Bulan:
-              </label>
-              <select
-                id="month"
-                value={month}
-                onChange={handleMonthChange}
-                className="p-2 rounded-md"
-              >
-                {Array.from({ length: 12 }, (_, i) => (
-                  <option key={i + 1} value={i + 1}>
-                    {new Date(0, i).toLocaleString("id-ID", { month: "long" })}
-                  </option>
-                ))}
-              </select>
-            </div>
           </div>
 
           {/* Statistik */}
@@ -156,7 +135,7 @@ export default function DataObatKlinik() {
                     <div className="flex place-content-between px-5">
                       <div className="font-semibold">
                         <h1 className="text-secondary-400">Jenis Data</h1>
-                        <h1>Kenaikan Jumlah Sakit Polisi</h1>
+                        <h1>Total Sisa Persediaan Obat </h1>
                       </div>
                     </div>
                     {/* Button untuk menampilkan 6 bulan sisanya */}
@@ -171,11 +150,12 @@ export default function DataObatKlinik() {
                       )}
                     </button>
                   </div>
-                  <div className="h-96 mt-2">
+                  <div className="h-[24.6rem] mt-2">
                     <LineChart
                       showNextSixMonths={showNextSixMonthsForLine}
                       startMonthIndex={startMonthIndexLine}
                       endMonthIndex={endMonthIndexLine}
+                      year={year}
                     />
                   </div>
                 </div>
@@ -210,6 +190,7 @@ export default function DataObatKlinik() {
                     showNextSixMonths={showNextSixMonthsForBar}
                     startMonthIndex={startMonthIndexBar}
                     endMonthIndex={endMonthIndexBar}
+                    year={year}
                   />
                 </div>
               </div>
