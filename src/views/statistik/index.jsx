@@ -88,6 +88,7 @@ export default function Statistik() {
           userStatus="Kepala Polisi"
           profilePicture="logo.png"
         />
+
         <div className="container mx-auto pl-5 pt-20 lg:pt-0">
           {/* Filter */}
           <div className="flex pt-7 gap-3 place-content-end pr-5">
@@ -113,7 +114,7 @@ export default function Statistik() {
             </div>
           </div>
 
-          {/* Informasi */}
+          {/* Statistik */}
           <div className="lg:flex pt-7 gap-3 place-content-center flex-wrap pr-5 lg:pr-0">
             {/* Polisi Sakit */}
             <div className="flex bg-white px-5 py-3 rounded-lg shadow-lg mb-3 lg:mb-0">

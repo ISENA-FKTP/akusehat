@@ -102,9 +102,9 @@ export default function DataSakitPolisi() {
           profilePicture="logo.png"
         />
 
-        <div className="container mx-auto pl-5 py-7 pt-20 lg:pt-0">
+        <div className="container mx-auto pl-5 pt-20 lg:pt-0">
           {/* Filter */}
-          <div className="flex gap-3 place-content-end">
+          <div className="flex pt-7 gap-3 place-content-end pr-5">
             <div>
               <label htmlFor="year" className="mr-2">
                 Tahun:
@@ -128,7 +128,7 @@ export default function DataSakitPolisi() {
           </div>
 
           {/* Statistik */}
-          <div className="flex gap-3 place-content-center pt-7">
+          <div className="lg:flex gap-3 place-content-center pt-7 mr-5 lg:mr-0 ">
             {/* Bar Chart */}
             <div className="">
               <div className="shadow-lg py-2 px-5 rounded-lg bg-white">
@@ -138,7 +138,7 @@ export default function DataSakitPolisi() {
                     <h1>Jumlah Sakit Kesatuan Polisi</h1>
                   </div>
                 </div>
-                <div className="h-96 w-[26rem] mt-2">
+                <div className="h-96 lg:w-[26rem] mt-2">
                   <BarChart colors={colorsSektor} year={year.toString()} />
                 </div>
               </div>
@@ -146,7 +146,7 @@ export default function DataSakitPolisi() {
 
             {/* Line Chart */}
             <div className="flex-col">
-              <div className="pb-3">
+              <div className="lg:py-0 py-5 lg:pb-3">
                 <div className="shadow-lg py-2 px-5 rounded-lg bg-white">
                   <div className="flex place-content-between px-5">
                     <div className="font-semibold">
@@ -154,7 +154,7 @@ export default function DataSakitPolisi() {
                       <h1>Kenaikan Jumlah Sakit Polisi</h1>
                     </div>
                   </div>
-                  <div className="h-96 w-[26rem] mt-2">
+                  <div className="h-96 lg:w-[26rem] mt-2">
                     <LineChart year={year.toString()} />
                   </div>
                 </div>
@@ -162,7 +162,7 @@ export default function DataSakitPolisi() {
             </div>
 
             {/* Pie Chart Total Pasien */}
-            <div className="pb-7">
+            <div className="pb-5 lg:pb-7">
               <div className="shadow-lg py-2 px-5 rounded-lg bg-white relative">
                 <div className="absolute inset-0 flex items-center justify-center h-[29rem] text-center">
                   <div>
@@ -179,7 +179,7 @@ export default function DataSakitPolisi() {
                   </div>
                 </div>
                 <div className="flex z-50">
-                  <div className="h-96 w-72 mt-2">
+                  <div className="h-96 lg:w-72 w-full px-5 lg:px-0 mt-2">
                     <PieChartTotalPolisi
                       colors={colorsSektor}
                       year={year.toString()}
@@ -190,9 +190,9 @@ export default function DataSakitPolisi() {
             </div>
           </div>
 
-          <div className="flex gap-3 place-content-center">
+          <div className="lg:flex gap-3 place-content-center">
             {/* Pie Chart Polisi */}
-            <div className="w-[26rem]">
+            <div className="lg:w-[26rem] mr-5 lg:mr-0">
               <div className="shadow-lg py-2 rounded-lg bg-white">
                 <div className="flex pl-5">
                   <div className="font-semibold">
@@ -207,7 +207,7 @@ export default function DataSakitPolisi() {
             </div>
 
             {/* Bar Chart */}
-            <div className="">
+            <div className="pt-5 lg:pt-0 pr-5 lg:pr-0">
               <div className="shadow-lg py-2 px-5 rounded-lg bg-white">
                 <div className="flex">
                   <div className="font-semibold">
@@ -215,7 +215,7 @@ export default function DataSakitPolisi() {
                     <h1>Satuan Kerja Tertinggi</h1>
                   </div>
                 </div>
-                <div className="h-96 w-[26rem] mt-2">
+                <div className="h-96 lg:w-[26rem] mt-2">
                   <BarChartSektor
                     colors={colorsPenyakit}
                     year={year.toString()}
@@ -226,7 +226,7 @@ export default function DataSakitPolisi() {
 
             <div>
               {/* Pie Chart Total Rawat */}
-              <div className="pb-3 w-96">
+              <div className="lg:pb-3 pb-5 w-96 pt-5 lg:pt-0">
                 <div className="shadow-lg py-2 px-5 rounded-lg bg-white relative">
                   <div className="absolute inset-0 flex items-center left-[5rem] h-[17.8rem] text-center">
                     <h1 className="text-xl text-primary-950 font-semibold">
@@ -240,7 +240,7 @@ export default function DataSakitPolisi() {
                     </div>
                   </div>
                   <div className="flex">
-                    <div className="h-40 w-64 mt-2">
+                    <div className="h-40 lg:w-64 mt-2">
                       <PieChartTotalRawat
                         colors={colorsSektor}
                         year={year.toString()}
@@ -254,7 +254,7 @@ export default function DataSakitPolisi() {
               </div>
 
               {/* Bar Chart */}
-              <div className="">
+              <div className="lg:pr-0 pr-5 mb-10">
                 <div className="shadow-lg py-2 px-5 rounded-lg bg-white">
                   <div className="flex">
                     <div className="font-semibold">
@@ -262,7 +262,7 @@ export default function DataSakitPolisi() {
                       <h1>Satuan Kerja Tertinggi</h1>
                     </div>
                   </div>
-                  <div className="h-[9.5rem] w-80">
+                  <div className="h-[9.5rem] lg:w-80">
                     <BarChartRawat
                       colors={colorsPenyakit}
                       year={year.toString()}
