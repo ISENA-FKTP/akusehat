@@ -54,7 +54,11 @@ export default function DataObatKlinik() {
       <div className="bg-[#E0F1EE] font-primary">
         {/* Sidebar */}
         <div className="fixed z-50">
-          <Sidebar />
+          <Sidebar
+            userName="Rifki Rusdi Satma Putra"
+            userStatus="Kepala Polisi"
+            profilePicture="logo.png"
+          />
         </div>
 
         <Header
@@ -64,7 +68,7 @@ export default function DataObatKlinik() {
           profilePicture="logo.png"
         />
 
-        <div className="container mx-auto pl-5 py-7">
+        <div className="container mx-auto pl-5 py-7 pt-20 lg:pt-0">
           {/* Filter */}
           <div className="flex gap-3 place-content-end">
             <div>

@@ -76,7 +76,11 @@ export default function Statistik() {
       <div className="bg-[#E0F1EE] font-primary ">
         {/* Sidebar */}
         <div className="fixed z-50">
-          <Sidebar />
+          <Sidebar
+            userName="Rifki Rusdi Satma Putra"
+            userStatus="Kepala Polisi"
+            profilePicture="logo.png"
+          />
         </div>
         <Header
           title="Statistik Data Laporan"
@@ -84,9 +88,9 @@ export default function Statistik() {
           userStatus="Kepala Polisi"
           profilePicture="logo.png"
         />
-        <div className="container mx-auto pl-5">
+        <div className="container mx-auto pl-5 pt-20 lg:pt-0">
           {/* Filter */}
-          <div className="flex pt-7 gap-3 place-content-end">
+          <div className="flex pt-7 gap-3 place-content-end pr-5">
             <div>
               <label htmlFor="year" className="mr-2">
                 Tahun:
@@ -110,9 +114,9 @@ export default function Statistik() {
           </div>
 
           {/* Informasi */}
-          <div className="flex pt-7 gap-3 place-content-center">
+          <div className="lg:flex pt-7 gap-3 place-content-center flex-wrap pr-5 lg:pr-0">
             {/* Polisi Sakit */}
-            <div className="flex bg-white px-5 py-3 rounded-lg shadow-lg">
+            <div className="flex bg-white px-5 py-3 rounded-lg shadow-lg mb-3 lg:mb-0">
               <div className="text-white bg-primary-600 rounded-md">
                 <BsPeopleFill size={75} className="p-2" />
               </div>
@@ -123,7 +127,7 @@ export default function Statistik() {
             </div>
 
             {/* Pengunjung Klinik */}
-            <div className="flex bg-white px-4 py-3 rounded-lg shadow-lg">
+            <div className="flex bg-white px-4 py-3 rounded-lg shadow-lg mb-3 lg:mb-0">
               <div className="text-white bg-primary-600 rounded-md place-content-center">
                 <FaPeopleGroup size={70} className="p-2" />
               </div>
@@ -134,7 +138,7 @@ export default function Statistik() {
             </div>
 
             {/* Obat Masuk */}
-            <div className="flex bg-white px-4 py-3 rounded-lg shadow-lg">
+            <div className="flex bg-white px-4 py-3 rounded-lg shadow-lg mb-3 lg:mb-0">
               <div className="text-white bg-primary-600 rounded-md">
                 <GiMedicines size={70} className="p-2" />
               </div>
@@ -145,7 +149,7 @@ export default function Statistik() {
             </div>
 
             {/* Obat Keluar */}
-            <div className="flex bg-white px-4 py-3 rounded-lg shadow-lg">
+            <div className="flex bg-white px-4 py-3 rounded-lg shadow-lg mb-3 lg:mb-0">
               <div className="text-white bg-primary-600 rounded-md">
                 <GiMedicines size={70} className="p-2" />
               </div>
@@ -156,7 +160,7 @@ export default function Statistik() {
             </div>
 
             {/* Jenis Penyakit */}
-            <div className="flex bg-white px-4 py-3 rounded-lg shadow-lg">
+            <div className="flex bg-white px-4 py-3 rounded-lg shadow-lg mb-3 lg:mb-0">
               <div className="text-white bg-primary-600 rounded-md">
                 <FaVirus size={70} className="p-2" />
               </div>
@@ -168,9 +172,9 @@ export default function Statistik() {
           </div>
 
           {/* Statistik */}
-          <div className="flex gap-3 place-content-center">
+          <div className="lg:flex gap-3 place-content-center mr-5 lg:mr-0">
             {/* Pie Chart Polisi */}
-            <div className="py-7">
+            <div className="lg:py-7 py-3">
               <div className="shadow-lg py-2 rounded-lg bg-white">
                 <div className="flex place-content-between pl-5">
                   <div className="font-semibold">
@@ -181,15 +185,15 @@ export default function Statistik() {
                     {year}
                   </p>
                 </div>
-                <div className="h-96 w-96 mb-2 ">
+                <div className="h-96 w-96 mb-2 lg:px-0 px-2 ">
                   <PieChartPolisi data={filteredData} colors={colorsPenyakit} />
                 </div>
               </div>
             </div>
 
             {/* Bar Chart */}
-            <div className="py-7">
-              <div className="shadow-lg py-2 px-5 rounded-lg bg-white">
+            <div className="lg:py-7 py-3">
+              <div className="shadow-lg py-2 lg:px-5 rounded-lg bg-white">
                 <div className="flex place-content-between px-5">
                   <div className="font-semibold">
                     <h1 className="text-secondary-400">Jenis Data</h1>
@@ -199,16 +203,16 @@ export default function Statistik() {
                     {year}
                   </p>
                 </div>
-                <div className="h-96 w-96 mt-2 ">
+                <div className="h-96 w-96 mt-2 lg:px-0 px-2">
                   <BarChart colors={colorsSektor} year={year.toString()} />
                 </div>
               </div>
             </div>
 
             {/* Line Chart */}
-            <div className="flex-col">
+            <div className="lg:flex-col">
               <div className="pt-7 pb-3">
-                <div className="shadow-lg py-2 px-5 rounded-lg bg-white">
+                <div className="shadow-lg py-2 lg:px-5 rounded-lg bg-white">
                   <div className="flex place-content-between px-5">
                     <div className="font-semibold">
                       <h1 className="text-secondary-400">Jenis Data</h1>
@@ -218,7 +222,7 @@ export default function Statistik() {
                       {year}
                     </p>
                   </div>
-                  <div className="h-[149px] w-96 mt-2 ">
+                  <div className="lg:h-[149px] lg:px-0 px-2 h-60 w-96 mt-2 ">
                     <LineChart year={year.toString()} />
                   </div>
                 </div>
@@ -226,7 +230,7 @@ export default function Statistik() {
 
               {/* Pie Chaart Apotik */}
               <div className="pb-7">
-                <div className="shadow-lg py-2 px-5 rounded-lg bg-white">
+                <div className="shadow-lg py-2 lg:px-5 rounded-lg bg-white">
                   <div className="flex place-content-between px-5">
                     <div className="font-semibold">
                       <h1 className="text-secondary-400">Jenis Data</h1>
@@ -252,7 +256,7 @@ export default function Statistik() {
                           {persen_obat_masuk}% Obat Masuk ({totalJumlahObat})
                         </p>
                       </div>
-                      <div className="flex gap-4">
+                      <div className="flex gap-4 lg:px-0 px-2">
                         <div className="text-error-600 place-content-center">
                           <FaCircleArrowDown />
                         </div>
