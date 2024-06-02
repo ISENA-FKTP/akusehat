@@ -3,7 +3,7 @@ import Sidebar from "../../../components/statistik/sidebar";
 import Header from "../../../components/header";
 import BarChartObatTerpakai from "../diagram/BarChart/BarChartObatTerpakai";
 import PieChartTotalObat from "../diagram/PieChart/PieChartTotalObat";
-import { calculateTotalObat } from "../model/dataObat";
+import { DataObat, calculateTotalObat } from "../model/dataObat";
 import LineChart from "../diagram/LineChart/LineChartObat";
 import {
   MdOutlineKeyboardDoubleArrowRight,
@@ -37,7 +37,11 @@ export default function DataObatKlinik() {
   const startMonthIndexBar = showNextSixMonthsForBar ? 6 : 0;
   const endMonthIndexBar = showNextSixMonthsForBar ? 12 : 6;
 
-  const totalObat = calculateTotalObat();
+  const filteredData = DataObat.filter(
+    (data) => new Date(data.tanggal).getFullYear() === parseInt(year)
+  );
+
+  const totalObat = calculateTotalObat(filteredData);
 
   const colorsPenyakit = [
     "#5726FF",
@@ -112,8 +116,8 @@ export default function DataObatKlinik() {
                 </div>
               </div>
               <div className="flex z-50">
-                <div className="h-96 lg:w-[13rem w-full px-5 lg:px-0 mt-2">
-                  <PieChartTotalObat colors={colorsSektor} />
+                <div className="h-96 lg:w-[13rem] w-full px-5 lg:px-0 mt-2">
+                  <PieChartTotalObat colors={colorsSektor} year={year} />
                 </div>
               </div>
             </div>
@@ -127,7 +131,7 @@ export default function DataObatKlinik() {
                 </div>
               </div>
               <div className="h-96 lg:w-[18rem] mt-2">
-                <BarChartObatTerpakai colors={colorsPenyakit} />
+                <BarChartObatTerpakai colors={colorsPenyakit} year={year} />
               </div>
             </div>
 

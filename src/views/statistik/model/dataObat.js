@@ -131,7 +131,7 @@ export const DataObat = [
   },
 ];
 
-export const calculateTotals = () => {
+export const calculateTotals = (DataObat) => {
   let totalJumlahObat = 0;
   let totalObatKeluar = 0;
 
@@ -143,7 +143,7 @@ export const calculateTotals = () => {
   return { totalJumlahObat, totalObatKeluar };
 };
 
-export const calculateTotalObat = () => {
+export const calculateTotalObat = (DataObat) => {
   let totalJumlahObat = 0;
 
   DataObat.forEach((item) => {
@@ -153,7 +153,7 @@ export const calculateTotalObat = () => {
   return totalJumlahObat;
 };
 
-export const calculateObatTerpakai = () => {
+export const calculateObatTerpakai = (DataObat) => {
   const sortedData = [...DataObat].sort(
     (a, b) => b.totalobatkeluar - a.totalobatkeluar
   );

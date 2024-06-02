@@ -1,24 +1,36 @@
 import { ResponsiveBar } from "@nivo/bar";
-import { calculateObatTerpakai } from "../../model/dataObat";
+import { DataObat, calculateObatTerpakai } from "../../model/dataObat";
 import PropTypes from "prop-types";
 
-const BarChart = ({ colors }) => {
+const BarChart = ({ colors, year }) => {
   BarChart.propTypes = {
+    year: PropTypes.string,
     colors: PropTypes.arrayOf(PropTypes.string),
   };
 
-  const setiapObatKeluar = calculateObatTerpakai();
+  const filteredData = DataObat.filter(
+    (data) => new Date(data.tanggal).getFullYear() === parseInt(year)
+  );
+  const setiapObatKeluar = calculateObatTerpakai(filteredData);
 
   setiapObatKeluar.sort((a, b) => a.totalobatkeluar - b.totalobatkeluar);
 
   const highestTotal =
-    setiapObatKeluar[setiapObatKeluar.length - 1].totalobatkeluar;
+    setiapObatKeluar.length > 0
+      ? setiapObatKeluar[setiapObatKeluar.length - 1].totalobatkeluar
+      : 0;
 
   const data = setiapObatKeluar.map((obat) => ({
     sektor: obat.namaobat,
     total: obat.totalobatkeluar,
     color: obat.totalobatkeluar === highestTotal ? colors[0] : "#FEC27E",
   }));
+
+  const dataWithZeroTotal = data.filter((obat) => obat.total === 0);
+
+  if (dataWithZeroTotal.length > 0) {
+    console.log("Ada data dengan total 0:", dataWithZeroTotal);
+  }
 
   return (
     <ResponsiveBar
