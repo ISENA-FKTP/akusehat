@@ -1,5 +1,6 @@
 import { ResponsivePie } from "@nivo/pie";
 import PropTypes from "prop-types";
+import { useState, useEffect } from "react";
 import {
   DataStatusPasienKlinik,
   calculateTotals,
@@ -44,6 +45,29 @@ const PieChart = ({ colors, year }) => {
     },
   ];
 
+  const [legendTranslateX, setLegendTranslateX] = useState(130);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 640px)");
+    const handleMediaQueryChange = (e) => {
+      if (e.matches) {
+        setLegendTranslateX(150);
+      } else {
+        setLegendTranslateX(130);
+      }
+    };
+
+    mediaQuery.addEventListener("change", handleMediaQueryChange);
+
+    if (mediaQuery.matches) {
+      setLegendTranslateX(150);
+    }
+
+    return () => {
+      mediaQuery.removeEventListener("change", handleMediaQueryChange);
+    };
+  }, []);
+
   return (
     <ResponsivePie
       data={data}
@@ -69,7 +93,7 @@ const PieChart = ({ colors, year }) => {
           anchor: "bottom",
           direction: "column",
           justify: false,
-          translateX: 130,
+          translateX: legendTranslateX,
           translateY: 0,
           itemsSpacing: 0,
           itemWidth: 0,

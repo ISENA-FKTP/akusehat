@@ -62,15 +62,15 @@ export default function DataObatKlinik() {
         </div>
 
         <Header
-          title="Statistik Data Sakit Polisi"
+          title="Statistik Obat Apotek"
           userName="Rifki Rusdi Satma Putra"
           userStatus="Kepala Polisi"
           profilePicture="logo.png"
         />
 
-        <div className="container mx-auto pl-5 py-7 pt-20 lg:pt-0">
+        <div className="container mx-auto pl-5 pt-20 lg:pt-0">
           {/* Filter */}
-          <div className="flex gap-3 place-content-end">
+          <div className="flex gap-3 place-content-end pt-7 pr-5">
             <div>
               <label htmlFor="year" className="mr-2">
                 Tahun:
@@ -94,7 +94,7 @@ export default function DataObatKlinik() {
           </div>
 
           {/* Statistik */}
-          <div className="flex gap-3 place-content-center pt-7">
+          <div className="lg:flex gap-3 place-content-center pt-7 mr-5 lg:mr-0">
             {/* Pie Chart Total Pasien */}
             <div className="h-[30rem] shadow-lg py-2 px-5 rounded-lg bg-white relative">
               <div className="absolute inset-0 flex items-center justify-center h-[29rem] text-center">
@@ -112,28 +112,28 @@ export default function DataObatKlinik() {
                 </div>
               </div>
               <div className="flex z-50">
-                <div className="h-96 w-[13rem] mt-2">
+                <div className="h-96 lg:w-[13rem w-full px-5 lg:px-0 mt-2">
                   <PieChartTotalObat colors={colorsSektor} />
                 </div>
               </div>
             </div>
 
             {/* Bar Chart */}
-            <div className="h-[30rem] shadow-lg py-2 px-5 rounded-lg bg-white">
+            <div className="h-[30rem] shadow-lg py-2 my-5 lg:my-0 px-5 rounded-lg bg-white">
               <div className="flex">
                 <div className="font-semibold">
                   <h1 className="text-secondary-400">Jenis Data</h1>
                   <h1>Obat Terbanyak Terpakai</h1>
                 </div>
               </div>
-              <div className="h-96 w-[18rem] mt-2">
+              <div className="h-96 lg:w-[18rem] mt-2">
                 <BarChartObatTerpakai colors={colorsPenyakit} />
               </div>
             </div>
 
             {/* Line Chart */}
             <div className="flex-col">
-              <div className="pb-3 w-[21rem]">
+              <div className="lg:pb-3 pb-0 lg:w-[21rem]">
                 <div className="shadow-lg py-2 px-5 rounded-lg bg-white">
                   <div className="flex place-content-between">
                     <div className="flex place-content-between px-5">
@@ -167,8 +167,8 @@ export default function DataObatKlinik() {
             </div>
 
             {/* Bar Chart */}
-            <div className="w-[21rem]">
-              <div className="shadow-lg py-2 px-5 rounded-lg bg-white">
+            <div className="lg:w-[21rem] my-5 lg:my-0">
+              <div className="shadow-lg py-2 px-5 lg rounded-lg bg-white">
                 <div className="flex place-content-between">
                   <div className="flex place-content-between px-5">
                     <div className="font-semibold">
@@ -188,7 +188,7 @@ export default function DataObatKlinik() {
                     )}
                   </button>
                 </div>
-                <div className="h-96  mt-2">
+                <div className="h-96 mt-2">
                   <BarChart
                     colors={colorsSektor}
                     showNextSixMonths={showNextSixMonthsForBar}

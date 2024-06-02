@@ -51,15 +51,15 @@ export default function DataPengunjungKlinik() {
         </div>
 
         <Header
-          title="Statistik Data Sakit Polisi"
+          title="Statistik Data Kunjungan Klinik"
           userName="Rifki Rusdi Satma Putra"
           userStatus="Kepala Polisi"
           profilePicture="logo.png"
         />
 
-        <div className="container mx-auto pl-5 py-7 pt-20 lg:pt-0">
+        <div className="container mx-auto pl-5 pt-20 lg:pt-0">
           {/* Filter */}
-          <div className="flex gap-3 place-content-end">
+          <div className="flex gap-3 place-content-end pt-7 pr-5">
             <div>
               <label htmlFor="year" className="mr-2">
                 Tahun:
@@ -83,7 +83,7 @@ export default function DataPengunjungKlinik() {
           </div>
 
           {/* Statistik */}
-          <div className="flex gap-3 place-content-center pt-7">
+          <div className="lg:flex gap-3 place-content-center pt-7 mr-5 lg:mr-0">
             {/* Bar Chart Penyakit Terbanyak*/}
             <div className="">
               <div className="shadow-lg py-2 px-5 rounded-lg bg-white">
@@ -100,7 +100,7 @@ export default function DataPengunjungKlinik() {
             </div>
 
             {/* Bar Chart */}
-            <div className="">
+            <div className="my-5 lg:my-0">
               <div className="shadow-lg py-2 px-5 rounded-lg bg-white">
                 <div className="flex">
                   <div className="font-semibold">
@@ -115,13 +115,13 @@ export default function DataPengunjungKlinik() {
             </div>
 
             <div>
-              <div className="flex gap-3">
+              <div className="lg:flex gap-3">
                 {/* Pie Chart Total Pasien */}
-                <div className="pb-3">
+                <div className="lg:pb-3 pb-5">
                   <div className="shadow-lg py-2 px-5 rounded-lg bg-white relative">
-                    <div className="absolute inset-0 flex items-center justify-center h-[19rem] text-center">
+                    <div className="absolute inset-0 flex items-center justify-center lg:h-[19rem] text-center">
                       <div>
-                        <h1 className="text-3xl text-primary-950 font-semibold">
+                        <h1 className="lg:text-3xl text-5xl text-primary-950 font-semibold">
                           {totalVisits}
                         </h1>
                         <p className="text-secondary-400 font-semibold">
@@ -136,7 +136,7 @@ export default function DataPengunjungKlinik() {
                       </div>
                     </div>
                     <div className="flex z-50">
-                      <div className="h-56 w-44 mt-2">
+                      <div className="lg:h-56 h-96 lg:w-44 w-full px-8 lg:px-0 mt-2">
                         <PieChartTotalPengunjungKlinik
                           colors={colorsSektor}
                           year={year}
@@ -147,7 +147,7 @@ export default function DataPengunjungKlinik() {
                 </div>
 
                 {/* Pie Chart Polisi */}
-                <div className="w-72">
+                <div className="lg:w-72">
                   <div className="shadow-lg py-2 rounded-lg bg-white">
                     <div className="flex pl-5">
                       <div className="font-semibold">
@@ -166,7 +166,7 @@ export default function DataPengunjungKlinik() {
               </div>
 
               {/* Bar Chart */}
-              <div className="w-[32.2rem]">
+              <div className="lg:w-[32.2rem] py-5 lg:py-0 lg:pb-10">
                 <div className="shadow-lg py-2 px-5 rounded-lg bg-white">
                   <div className="flex">
                     <div className="font-semibold">
