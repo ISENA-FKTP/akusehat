@@ -33,11 +33,7 @@ export default function Manage() {
         <SearchBar />
         <TambahButton />
         <div className="card">
-          <DataTable
-            value={data}
-            stripedRows
-            tableStyle={{ minWidth: "50rem" }}
-          >
+          <DataTable value={data}>
             {kolom.map((col) => (
               <Column key={col.field} field={col.field} header={col.header} />
             ))}
