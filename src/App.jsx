@@ -11,6 +11,7 @@ import DataSakitPolisi from "./views/statistik/pages/data-sakit-polisi";
 import DataPengunjungKlinik from "./views/statistik/pages/data-pengunjung-klinik";
 import DataObatKlinik from "./views/statistik/pages/data-obat-klinik";
 import TambahObat from "./views/apoteker/pages/tambahObat";
+import Manage from "./views/manage";
 
 function App() {
   return (
@@ -37,6 +38,10 @@ function App() {
         <Route path="/dokter" element={<Dokter />} />
         <Route path="/laporan" element={<Laporan />} />
         <Route path="/kajianawal" element={<KajianAwal />} />
+
+        <Route 
+        path="/manage"
+        element={<Manage/>} />
       </Routes>
     </Router>
   );
