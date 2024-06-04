@@ -38,6 +38,16 @@
         "category": "Obat Cair",
         "type": "Tablet",
         "price": 5000
+      },
+      {
+        "medicineName": "Sakatonik ABC",
+        "quantity": 100,
+        "entryDate": "2023-05-01",
+        "expiryDate": "2024-05-01",
+        "batchNo": "B12345",
+        "category": "Obat Padat",
+        "type": "Tablet",
+        "price": 5000
       }
   ]
   
