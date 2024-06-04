@@ -13,7 +13,7 @@ export default function Sidebar() {
   const location = useLocation();
 
   const Menus = [
-    { title: "Dashboard", path: "/" },
+    { title: "Dashboard", path: "/apotek/dashboard-apotek" },
     {
       title: "Tambah Obat",
       path: "/apotek/tambah-obat",

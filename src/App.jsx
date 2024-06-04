@@ -11,12 +11,14 @@ import DataSakitPolisi from "./views/statistik/pages/data-sakit-polisi";
 import DataPengunjungKlinik from "./views/statistik/pages/data-pengunjung-klinik";
 import DataObatKlinik from "./views/statistik/pages/data-obat-klinik";
 import TambahObat from "./views/apoteker/pages/tambahObat";
+import DashboardApotek from "./views/apoteker/pages/DashboardApotek";
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/apotek/tambah-obat" element={<TambahObat />} />
+        <Route path="/apotek/dashboard-apotek" element={<DashboardApotek />} />
 
         <Route path="/statistik" element={<Statistik />} />
         <Route
