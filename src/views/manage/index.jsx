@@ -3,9 +3,10 @@ import Sidebar from "../../components/manage/sidebar";
 import Header from "../../components/header";
 import SearchBar from "../../components/manage/searchBar";
 import TambahButton from "../../components/manage/tambahButton";
-import { DataSakit, kolom } from "./model/dataSakit";
+import { DataSakit, kolom, headData } from "./model/dataSakit";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
+import Tabel from "../../components/manage/tabel";
 
 export default function Manage() {
   const [data, setData] = useState([]);
@@ -32,13 +33,7 @@ export default function Manage() {
         </div>
         <SearchBar />
         <TambahButton />
-        <div className="card">
-          <DataTable value={data}>
-            {kolom.map((col) => (
-              <Column key={col.field} field={col.field} header={col.header} />
-            ))}
-          </DataTable>
-        </div>
+        <Tabel table_head={headData} table_row={data}/>
       </main>
     </div>
   );

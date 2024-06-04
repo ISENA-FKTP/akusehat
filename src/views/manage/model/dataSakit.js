@@ -94,6 +94,22 @@ export const DataSakit = {
   }
 };
 
+export const headData = [
+  "No", 
+  "NRP",
+  "Nama",
+  "Pangkat",
+  "Satuan Kerja",
+  "Jenis Sakit",
+  "Jenis Perawatan",
+  "Sumber Biaya",
+  "Awal Sakit",
+  "Lama Cuti",
+  "WFH",
+  "Keterangan",
+  ""
+]; 
+
 export const kolom = [
   {
     field: "No",
