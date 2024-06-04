@@ -259,7 +259,7 @@ export default function DataSakitPolisi() {
                   <div className="flex">
                     <div className="font-semibold">
                       <h1 className="text-secondary-400">Jenis Data</h1>
-                      <h1>Satuan Kerja Tertinggi</h1>
+                      <h1>Jenis Perawatan</h1>
                     </div>
                   </div>
                   <div className="h-[9.5rem] lg:w-80">
