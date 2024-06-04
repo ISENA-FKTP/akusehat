@@ -18,7 +18,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/apotek/tambah-obat" element={<TambahObat />} />
-        <Route path="/apotek/dashboard-apotek" element={<DashboardApotek />} />
+        <Route path="/apotek" element={<DashboardApotek />} />
 
         <Route path="/statistik" element={<Statistik />} />
         <Route
