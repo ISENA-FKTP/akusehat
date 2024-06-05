@@ -13,10 +13,7 @@ export default function Sidebar_Klinik() {
   const location = useLocation();
 
   const Menus = [
-    { title: "Dashboard", 
-      path: "/dashboard",
-      Icon: <MdSpaceDashboard />,
-    },
+    { title: "Dashboard", path: "/", Icon: <MdSpaceDashboard /> },
     {
       title: "Administrasi",
       path: "/administrasi",
@@ -37,7 +34,6 @@ export default function Sidebar_Klinik() {
   return (
     <>
       <div
-      
         className={`bg-primary-600 h-screen fixed left-0 py-5 pt-8 font-poppins ${
           open ? "w-72" : "w-20"
         } duration-300 relative`}
