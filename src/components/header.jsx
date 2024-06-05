@@ -16,6 +16,8 @@ const Header = ({ title, userName, userStatus, profilePicture }) => {
     profilePicture: PropTypes.string,
   };
 
+  
+
   return (
     <div className="bg-primary-600 text-white font-primary fixed w-full lg:static z-40">
       <div className="flex h-20 place-content-between container mx-auto">

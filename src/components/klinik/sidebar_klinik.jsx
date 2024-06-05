@@ -12,6 +12,7 @@ export default function Sidebar_Klinik() {
   const navigate = useNavigate();
   const location = useLocation();
 
+
   const Menus = [
     { title: "Dashboard", path: "/", Icon: <MdSpaceDashboard /> },
     {
