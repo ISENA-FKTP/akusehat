@@ -1,5 +1,5 @@
+// Import useEffect dan useState dari React
 import { useState } from "react";
-
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Swal from "sweetalert2";
@@ -9,20 +9,26 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import Sidebar_Klinik from "../../../components/klinik/sidebar_klinik";
 import Header from "../../../components/header";
 import { useNavigate } from "react-router-dom";
+import { createPasien } from "../model/api";
+import PropTypes from "prop-types";
 
 const MySwal = withReactContent(Swal);
 
-const FormComponent = () => {
+const FormComponent = ({ token }) => {
+  FormComponent.propTypes = {
+    token: PropTypes.string,
+  };
+
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    nrp_or_bpjs: "",
-    name: "",
-    status: "",
-    dob: null,
+    nobpjs: "",
+    nama: "",
+    statuspeserta: "",
+    tgllahir: null,
     gender: "",
-    ppk: "",
-    phone: "",
-    medical_record: "",
+    ppkumum: "",
+    nohp: "",
+    norm: "",
   });
 
   const handleChange = (e) => {
@@ -31,7 +37,7 @@ const FormComponent = () => {
   };
 
   const handleDateChange = (date) => {
-    setFormData({ ...formData, dob: date });
+    setFormData({ ...formData, tgllahir: date });
   };
 
   const handleSave = () => {
@@ -68,12 +74,18 @@ const FormComponent = () => {
     });
   };
 
-  const saveData = () => {
-    MySwal.fire("Tersimpan!", "Data Anda telah disimpan.", "success").then(
-      () => {
-        navigate("/kajianawal");
-      }
-    );
+  const saveData = async () => {
+    try {
+      await createPasien(formData, token); // Gunakan token dalam pemanggilan API
+      MySwal.fire("Tersimpan!", "Data Anda telah disimpan.", "success").then(
+        () => {
+          navigate("/kajianawal");
+        }
+      );
+    } catch (error) {
+      MySwal.fire("Gagal!", "Data Anda gagal disimpan.", "error");
+      console.error("Error saving data:", error);
+    }
   };
 
   const cancelData = () => {
@@ -92,18 +104,18 @@ const FormComponent = () => {
         {[
           {
             label: "NRP/No.BPJS",
-            name: "nrp_or_bpjs",
+            name: "nobpjs",
             placeholder: "Masukkan NRP atau No. BPJS",
           },
-          { label: "Nama", name: "name", placeholder: "Masukkan nama" },
+          { label: "Nama", name: "nama", placeholder: "Masukkan nama" },
           {
             label: "Status Pasien",
-            name: "status",
+            name: "statuspeserta",
             placeholder: "Masukkan status pasien",
           },
           {
             label: "Tanggal Lahir",
-            name: "dob",
+            name: "tgllahir",
             placeholder: "Pilih tanggal lahir",
           },
           {
@@ -111,15 +123,19 @@ const FormComponent = () => {
             name: "gender",
             placeholder: "Masukkan jenis kelamin",
           },
-          { label: "PPK Umum", name: "ppk", placeholder: "Masukkan PPK umum" },
+          {
+            label: "PPK Umum",
+            name: "ppkumum",
+            placeholder: "Masukkan PPK umum",
+          },
           {
             label: "No.Handphone",
-            name: "phone",
+            name: "nohp",
             placeholder: "Masukkan nomor handphone",
           },
           {
             label: "No.Rekam Medis",
-            name: "medical_record",
+            name: "norm",
             placeholder: "Masukkan nomor rekam medis",
           },
         ].map((field, index) => (
@@ -127,9 +143,9 @@ const FormComponent = () => {
             <label className="text-black font-secondary-Karla font-bold w-48 mx-1">
               {field.label}:
             </label>
-            {field.name === "dob" ? (
+            {field.name === "tgllahir" ? (
               <DatePicker
-                selected={formData.dob}
+                selected={formData.tgllahir}
                 onChange={handleDateChange}
                 dateFormat="dd/MM/yyyy"
                 placeholderText={field.placeholder}

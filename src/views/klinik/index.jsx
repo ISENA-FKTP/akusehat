@@ -1,13 +1,48 @@
-import { useNavigate } from "react-router-dom";
 import Sidebar_Klinik from "../../components/klinik/sidebar_klinik";
 import Header from "../../components/header";
+import { useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
   const navigate = useNavigate();
+  const [username, setUsername] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const refreshToken = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          throw new Error("Token not found in local storage");
+        }
+
+        const response = await axios.get(
+          "https://backend-isenafktp.onrender.com/token",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const decoded = jwtDecode(token);
+        setUsername(decoded.username);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error refreshing token:", error);
+        setLoading(false);
+        if (error.response && error.response.status === 401) {
+          navigate("/");
+        }
+      }
+    };
+
+    refreshToken();
+  }, [navigate]);
 
   return (
     <>
-      {" "}
       <div className="fixed z-50">
         <Sidebar_Klinik />
       </div>
@@ -45,9 +80,9 @@ export default function Dashboard() {
             <div className="text-white text-1xl font-primary-Poppins mb-10 ">
               <p className="leading-relaxed">
                 ISENA-FKTP adalah platform digital inovatif untuk pengelolaan
-                data apotik dan riwayat kesehatan personel<p></p>
+                data apotik dan riwayat kesehatan personel <br />
                 kepolisian di Polda NTB. Kami menawarkan fitur lengkap untuk
-                mengelola stok obat, resep, serta mencatat<p></p>
+                mengelola stok obat, resep, serta mencatat <br />
                 dan memantau riwayat medis dengan mudah dan aman.
               </p>
             </div>
@@ -55,7 +90,7 @@ export default function Dashboard() {
               <div className="flex-row">
                 <button
                   className="text-white bg-secondary-500 px-10 py-2 rounded-md hover:bg-secondary-600"
-                  onClick={() => navigate("/administrasi")}
+                  onClick={() => navigate("/dashboard")}
                 >
                   Mulai
                 </button>
