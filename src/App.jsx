@@ -16,9 +16,11 @@ import DataSakitPolisi from "./views/statistik/pages/data-sakit-polisi";
 import DataPengunjungKlinik from "./views/statistik/pages/data-pengunjung-klinik";
 import DataObatKlinik from "./views/statistik/pages/data-obat-klinik";
 import TambahObat from "./views/apoteker/pages/tambahObat";
+import DashboardApotek from "./views/apoteker/pages/DashboardApotek";
 import Manage from "./views/manage";
 import HomeVisit from "./views/manage/pages/homevisit";
 import RekamMedis from "./views/manage/pages/rekammedis";
+
 
 function App() {
   return (
@@ -38,6 +40,7 @@ function App() {
         <Route path="/pawaslog" element={<LoginPawas />} />
         <Route path="/statistiklog" element={<LoginStatistik />} />
         <Route path="/apotek/tambah-obat" element={<TambahObat />} />
+        <Route path="/apotek" element={<DashboardApotek />} />
 
         {/* Statistik */}
         <Route path="/statistik" element={<Statistik />} />

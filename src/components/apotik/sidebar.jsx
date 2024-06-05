@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { GiMedicines } from "react-icons/gi";
-import { MdSick } from "react-icons/md";
 import { GoHomeFill } from "react-icons/go";
-import { FaPeopleGroup } from "react-icons/fa6";
 import { IoMdArrowDropleft } from "react-icons/io";
+import { MdOutlineNotificationsActive } from "react-icons/md";
+import { MdLibraryBooks } from "react-icons/md";
+import { BsCapsulePill } from "react-icons/bs";
+
 
 export default function Sidebar() {
   const [open, setOpen] = useState(true);
@@ -12,21 +13,21 @@ export default function Sidebar() {
   const location = useLocation();
 
   const Menus = [
-    { title: "Dashboard", path: "/" },
+    { title: "Dashboard", path: "/apotek" },
     {
       title: "Tambah Obat",
       path: "/apotek/tambah-obat",
-      icon: <MdSick />,
+      icon: <BsCapsulePill/>,
     },
     {
       title: "Pengingat",
       path: "/apotek/pengingat",
-      icon: <FaPeopleGroup />,
+      icon: <MdOutlineNotificationsActive />,
     },
     {
       title: "Laporan",
       path: "/apotek/laporan",
-      icon: <GiMedicines />,
+      icon: <MdLibraryBooks/>,
     },
   ];
 
