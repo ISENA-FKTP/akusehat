@@ -7,8 +7,8 @@ import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const [username, setUsername] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [, setUsername] = useState("");
+  const [, setLoading] = useState(true);
 
   useEffect(() => {
     const refreshToken = async () => {
@@ -18,14 +18,11 @@ export default function Dashboard() {
           throw new Error("Token not found in local storage");
         }
 
-        const response = await axios.get(
-          "https://backend-isenafktp.onrender.com/token",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        await axios.get("https://backend-isenafktp.onrender.com/token", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         const decoded = jwtDecode(token);
         setUsername(decoded.username);
         setLoading(false);

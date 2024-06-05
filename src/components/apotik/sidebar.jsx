@@ -12,20 +12,20 @@ export default function Sidebar() {
   const location = useLocation();
 
   const Menus = [
-    { title: "Dashboard", path: "/statistik" },
+    { title: "Dashboard", path: "/" },
     {
-      title: "Data Sakit Polisi",
-      path: "/statistik/data-sakit-polisi",
+      title: "Tambah Obat",
+      path: "/apotek/tambah-obat",
       icon: <MdSick />,
     },
     {
-      title: "Data Pengunjung Klinik",
-      path: "/statistik/data-pengunjung-klinik",
+      title: "Pengingat",
+      path: "/apotek/pengingat",
       icon: <FaPeopleGroup />,
     },
     {
-      title: "Data Obat Klinik",
-      path: "/statistik/data-obat-klinik",
+      title: "Laporan",
+      path: "/apotek/laporan",
       icon: <GiMedicines />,
     },
   ];
