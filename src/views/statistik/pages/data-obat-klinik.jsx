@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Sidebar from "../../../components/statistik/sidebar";
 import Header from "../../../components/header";
 import BarChartObatTerpakai from "../diagram/BarChart/BarChartObatTerpakai";
@@ -18,6 +18,9 @@ export default function DataObatKlinik() {
   const [showNextSixMonthsForLine, setShowNextSixMonthsForLine] =
     useState(false);
   const [showNextSixMonthsForBar, setShowNextSixMonthsForBar] = useState(false);
+  const [sortBy, setSortBy] = useState("most");
+  const [sortedMedicines, setSortedMedicines] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleToggleMonthsForLine = () => {
     setShowNextSixMonthsForLine(!showNextSixMonthsForLine);
@@ -53,6 +56,31 @@ export default function DataObatKlinik() {
 
   const colorsSektor = ["#5726FF", "#FD9A28"];
 
+  useEffect(() => {
+    fetch("/data/medicine.json")
+      .then((response) => response.json())
+      .then((data) => {
+        const sorted =
+          sortBy === "most"
+            ? [...data].sort((a, b) => b.quantity - a.quantity)
+            : [...data].sort((a, b) => a.quantity - b.quantity);
+        setSortedMedicines(sorted);
+      })
+      .catch((error) => console.error("Error fetching medicines:", error));
+  }, [sortBy]);
+
+  const handleSortChange = (e) => {
+    setSortBy(e.target.value);
+  };
+
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const filteredMedicines = sortedMedicines.filter((medicine) =>
+    medicine.medicineName.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <>
       <div className="bg-[#E0F1EE] font-primary">
@@ -74,7 +102,7 @@ export default function DataObatKlinik() {
 
         <div className="container mx-auto pl-5 pt-20 lg:pt-0">
           {/* Filter */}
-          <div className="flex gap-3 place-content-end pt-7 pr-5">
+          <div className="flex place-content-end pt-7 pr-5">
             <div>
               <label htmlFor="year" className="mr-2">
                 Tahun:
@@ -83,7 +111,7 @@ export default function DataObatKlinik() {
                 id="year"
                 value={year}
                 onChange={handleYearChange}
-                className="p-2 rounded-md"
+                className="px-2 rounded-md"
               >
                 {[...Array(10)].map((_, i) => {
                   const y = currentYear - i;
@@ -203,6 +231,99 @@ export default function DataObatKlinik() {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+        {/* Data Obat */}
+        <div className="container mx-auto pb-10 pl-3">
+          <h1 className="text-2xl font-bold mt-4 mb-2 ">
+            Data Seluruh Obat Apotek
+          </h1>
+          <h2 className="text-xl font-semibold mb-4 text-secondary-700">
+            Seluruh data terkait obat di apotek
+          </h2>
+          <div className="flex justify-between mb-4">
+            <div>
+              <label htmlFor="sort">Urutkan berdasarkan:</label>
+              <select
+                id="sort"
+                value={sortBy}
+                onChange={handleSortChange}
+                className="ml-2  border border-primary-600 rounded-md shadow-sm "
+              >
+                <option value="most">Paling Banyak</option>
+                <option value="least">Paling Sedikit</option>
+              </select>
+            </div>
+            <div>
+              <input
+                type="text"
+                placeholder="Cari obat..."
+                value={searchTerm}
+                onChange={handleSearch}
+                className="ml-2 px-2 py-1 border rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="table-auto w-full">
+              <thead>
+                <tr>
+                  <th className="  px-4 py-2 bg-primary-600 text-white rounded-tl-lg">
+                    Nama Obat
+                  </th>
+                  <th className="  px-4 py-2 bg-primary-600 text-white">
+                    Jumlah
+                  </th>
+                  <th className="  px-4 py-2 bg-primary-600 text-white">
+                    Kategori
+                  </th>
+                  <th className="  px-4 py-2 bg-primary-600 text-white">
+                    Jenis
+                  </th>
+                  <th className="  px-4 py-2 bg-primary-600 text-white">
+                    Entry Date
+                  </th>
+                  <th className="  px-4 py-2 bg-primary-600 text-white">
+                    Expiry Date
+                  </th>
+                  <th className="  px-4 py-2 bg-primary-600 text-white rounded-tr-lg">
+                    Harga (Rp)
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredMedicines.map((medicine, index) => (
+                  <tr
+                    key={index}
+                    className={
+                      index % 2 === 0 ? "bg-primary-50" : "bg-primary-100"
+                    }
+                  >
+                    <td className="border border-primary-600 px-4 py-2 text-center">
+                      {medicine.medicineName}
+                    </td>
+                    <td className="border border-primary-600 px-4 py-2 text-center">
+                      {medicine.quantity}
+                    </td>
+                    <td className="border border-primary-600 px-4 py-2 text-center">
+                      {medicine.category}
+                    </td>
+                    <td className="border border-primary-600 px-4 py-2 text-center">
+                      {medicine.type}
+                    </td>
+                    <td className="border border-primary-600 px-4 py-2 text-center">
+                      {medicine.entryDate}
+                    </td>
+                    <td className="border border-primary-600 px-4 py-2 text-center">
+                      {medicine.expiryDate}
+                    </td>
+                    <td className="border border-primary-600 px-4 py-2 text-center">
+                      {medicine.price}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
