@@ -11,6 +11,7 @@ import {
 } from "react-icons/md";
 import BarChart from "../diagram/BarChart/BarChartDataObat";
 import { IoSearch } from "react-icons/io5";
+import { apotek } from "../model/data/apotek";
 
 const currentYear = new Date().getFullYear();
 
@@ -58,16 +59,11 @@ export default function DataObatKlinik() {
   const colorsSektor = ["#5726FF", "#FD9A28"];
 
   useEffect(() => {
-    fetch("/data/medicine.json")
-      .then((response) => response.json())
-      .then((data) => {
-        const sorted =
-          sortBy === "most"
-            ? [...data].sort((a, b) => b.quantity - a.quantity)
-            : [...data].sort((a, b) => a.quantity - b.quantity);
-        setSortedMedicines(sorted);
-      })
-      .catch((error) => console.error("Error fetching medicines:", error));
+    const sorted =
+      sortBy === "most"
+        ? [...apotek].sort((a, b) => b.quantity - a.quantity)
+        : [...apotek].sort((a, b) => a.quantity - b.quantity);
+    setSortedMedicines(sorted);
   }, [sortBy]);
 
   const handleSortChange = (e) => {
@@ -263,39 +259,45 @@ export default function DataObatKlinik() {
               </select>
             </div>
             <div className="flex items-center mt-9 lg:mt-0">
-              <IoSearch className="text-xl mr-2" />
-              <input
-                type="text"
-                placeholder="Cari obat..."
-                value={searchTerm}
-                onChange={handleSearch}
-                className="lg:px-2 lg:w-auto w-40 py-1 border rounded-md focus:outline-none focus:ring-blue-500 focus:border-primary-600"
-              />
+              <div className="relative">
+                <span className="absolute inset-y-0 left-0 flex items-center pl-2">
+                  <IoSearch className="text-xl text-gray-500" />
+                </span>
+                <input
+                  type="text"
+                  placeholder="Cari obat..."
+                  value={searchTerm}
+                  onChange={handleSearch}
+                  className="lg:px-2 lg:w-auto w-40 py-1 pl-8 border rounded-md focus:outline-none focus:ring-blue-500 focus:border-primary-600 placeholder:ml-5"
+                  style={{ paddingLeft: "2rem" }}
+                />
+              </div>
             </div>
           </div>
           <div className="overflow-x-auto pr-5 lg:pr-0">
             <table className="table-auto w-full">
               <thead>
                 <tr>
-                  <th className="  px-4 py-2 bg-primary-600 text-white rounded-tl-lg">
+                  <th className="px-4 py-2 bg-primary-600 text-white rounded-tl-lg">
+                    No
+                  </th>
+                  <th className="px-4 py-2 bg-primary-600 text-white">
                     Nama Obat
                   </th>
-                  <th className="  px-4 py-2 bg-primary-600 text-white">
+                  <th className="px-4 py-2 bg-primary-600 text-white">
                     Jumlah
                   </th>
-                  <th className="  px-4 py-2 bg-primary-600 text-white">
+                  <th className="px-4 py-2 bg-primary-600 text-white">
                     Kategori
                   </th>
-                  <th className="  px-4 py-2 bg-primary-600 text-white">
-                    Jenis
-                  </th>
-                  <th className="  px-4 py-2 bg-primary-600 text-white">
+                  <th className="px-4 py-2 bg-primary-600 text-white">Jenis</th>
+                  <th className="px-4 py-2 bg-primary-600 text-white">
                     Entry Date
                   </th>
-                  <th className="  px-4 py-2 bg-primary-600 text-white">
+                  <th className="px-4 py-2 bg-primary-600 text-white">
                     Expiry Date
                   </th>
-                  <th className="  px-4 py-2 bg-primary-600 text-white rounded-tr-lg">
+                  <th className="px-4 py-2 bg-primary-600 text-white rounded-tr-lg">
                     Harga (Rp)
                   </th>
                 </tr>
@@ -308,6 +310,9 @@ export default function DataObatKlinik() {
                       index % 2 === 0 ? "bg-primary-50" : "bg-primary-100"
                     }
                   >
+                    <td className="border border-primary-600 px-4 py-2 text-center">
+                      {index + 1}
+                    </td>
                     <td className="border border-primary-600 px-4 py-2 text-center">
                       {medicine.medicineName}
                     </td>
