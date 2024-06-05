@@ -46,7 +46,7 @@ export default function DataPengunjungKlinik() {
           <Sidebar
             userName="Rifki Rusdi Satma Putra"
             userStatus="Kepala Polisi"
-            profilePicture="logo.png"
+            profilePicture="/logo.png"
           />
         </div>
 

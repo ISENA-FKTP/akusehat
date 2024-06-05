@@ -10,6 +10,7 @@ import {
   MdOutlineKeyboardDoubleArrowLeft,
 } from "react-icons/md";
 import BarChart from "../diagram/BarChart/BarChartDataObat";
+import { IoSearch } from "react-icons/io5";
 
 const currentYear = new Date().getFullYear();
 
@@ -89,7 +90,7 @@ export default function DataObatKlinik() {
           <Sidebar
             userName="Rifki Rusdi Satma Putra"
             userStatus="Kepala Polisi"
-            profilePicture="logo.png"
+            profilePicture="/logo.png"
           />
         </div>
 
@@ -145,7 +146,10 @@ export default function DataObatKlinik() {
               </div>
               <div className="flex z-50">
                 <div className="h-96 lg:w-[13rem] w-full px-5 lg:px-0 mt-2">
-                  <PieChartTotalObat colors={colorsSektor} year={year} />
+                  <PieChartTotalObat
+                    colors={colorsSektor}
+                    year={year.toString()}
+                  />
                 </div>
               </div>
             </div>
@@ -159,7 +163,10 @@ export default function DataObatKlinik() {
                 </div>
               </div>
               <div className="h-96 lg:w-[18rem] mt-2">
-                <BarChartObatTerpakai colors={colorsPenyakit} year={year} />
+                <BarChartObatTerpakai
+                  colors={colorsPenyakit}
+                  year={year.toString()}
+                />
               </div>
             </div>
 
@@ -191,7 +198,7 @@ export default function DataObatKlinik() {
                       showNextSixMonths={showNextSixMonthsForLine}
                       startMonthIndex={startMonthIndexLine}
                       endMonthIndex={endMonthIndexLine}
-                      year={year}
+                      year={year.toString()}
                     />
                   </div>
                 </div>
@@ -226,19 +233,20 @@ export default function DataObatKlinik() {
                     showNextSixMonths={showNextSixMonthsForBar}
                     startMonthIndex={startMonthIndexBar}
                     endMonthIndex={endMonthIndexBar}
-                    year={year}
+                    year={year.toString()}
                   />
                 </div>
               </div>
             </div>
           </div>
         </div>
+
         {/* Data Obat */}
-        <div className="container mx-auto pb-10 pl-3">
+        <div className="container mx-auto pb-10 lg:pl-3 pl-5">
           <h1 className="text-2xl font-bold mt-4 mb-2 ">
             Data Seluruh Obat Apotek
           </h1>
-          <h2 className="text-xl font-semibold mb-4 text-secondary-700">
+          <h2 className="text-xl font-semibold mb-4 text-secondary-500">
             Seluruh data terkait obat di apotek
           </h2>
           <div className="flex justify-between mb-4">
@@ -248,23 +256,24 @@ export default function DataObatKlinik() {
                 id="sort"
                 value={sortBy}
                 onChange={handleSortChange}
-                className="ml-2  border border-primary-600 rounded-md shadow-sm "
+                className="lg:ml-2 mt-2 lg:mt-0 border border-primary-600 rounded-md shadow-sm "
               >
                 <option value="most">Paling Banyak</option>
                 <option value="least">Paling Sedikit</option>
               </select>
             </div>
-            <div>
+            <div className="flex items-center mt-9 lg:mt-0">
+              <IoSearch className="text-xl mr-2" />
               <input
                 type="text"
                 placeholder="Cari obat..."
                 value={searchTerm}
                 onChange={handleSearch}
-                className="ml-2 px-2 py-1 border rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                className="lg:px-2 lg:w-auto w-40 py-1 border rounded-md focus:outline-none focus:ring-blue-500 focus:border-primary-600"
               />
             </div>
           </div>
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto pr-5 lg:pr-0">
             <table className="table-auto w-full">
               <thead>
                 <tr>
