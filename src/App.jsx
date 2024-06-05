@@ -16,6 +16,9 @@ import DataSakitPolisi from "./views/statistik/pages/data-sakit-polisi";
 import DataPengunjungKlinik from "./views/statistik/pages/data-pengunjung-klinik";
 import DataObatKlinik from "./views/statistik/pages/data-obat-klinik";
 import TambahObat from "./views/apoteker/pages/tambahObat";
+import Manage from "./views/manage";
+import HomeVisit from "./views/manage/pages/homevisit";
+import RekamMedis from "./views/manage/pages/rekammedis";
 
 function App() {
   return (
@@ -50,6 +53,13 @@ function App() {
           path="/statistik/data-obat-klinik"
           element={<DataObatKlinik />}
         />
+
+        <Route 
+        path="/manage/data-home-visit"
+        element={<HomeVisit/>} />
+        <Route 
+        path="/manage/data-rekam-medis"
+        element={<RekamMedis/>} />
       </Routes>
     </Router>
   );
