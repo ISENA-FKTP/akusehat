@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
-import Sidebar from "../../components/manage/sidebar";
-import Header from "../../components/header";
-import SearchBar from "../../components/manage/searchBar";
-import TambahButton from "../../components/manage/tambahButton";
-import { DataSakit, headData } from "./model/dataSakit";
-import Tabel from "../../components/manage/tabel";
+import Sidebar from "../../../components/manage/sidebar";
+import Header from "../../../components/header";
+import SearchBar from "../../../components/manage/searchBar";
+import TambahButton from "../../../components/manage/tambahButton";
+import { DataHomeVisit, headData } from "../model/dataHomeVisit";
+import TabelHoemVisit from "../../../components/manage/tabel-home-visit";
 
-export default function Manage() {
+export default function HomeVisit() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    DataSakit.getDataSakit().then((data) => setData(data));
+    DataHomeVisit.getDataHomeVisit().then((data) => setData(data));
   }, []);
 
   return (
@@ -20,7 +20,7 @@ export default function Manage() {
         <Sidebar />
       </div>
       <Header
-        title="Data Sakit Polisi"
+        title="Data Home Visit Polisi"
         userName="Rifki Rusdi Satma Putra"
         userStatus="Kepala Polisi"
         profilePicture="logo.png"
@@ -31,7 +31,7 @@ export default function Manage() {
         </div>
         <SearchBar />
         <TambahButton />
-        <Tabel table_head={headData} table_row={data}/>
+        <TabelHoemVisit table_head={headData} table_row={data}/>
       </main>
     </div>
   );
