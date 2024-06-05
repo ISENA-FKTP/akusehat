@@ -42,7 +42,7 @@ const Login = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 h-screen">
       {/* Bagian Kiri: Gambar Cover */}
-      <div className="hidden md:flex items-center justify-center bg-gradient-to-br from-yellow-300 to-yellow-500">
+      <div className="hidden md:flex items-center justify-center bg-[#]">
         <img
           src={coverImage}
           alt="Cover"
