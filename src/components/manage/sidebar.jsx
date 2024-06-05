@@ -14,7 +14,7 @@ export default function Sidebar() {
   const Menus = [
     {
       title: "Data Sakit Polisi",
-      path: "/manage/data-sakit-polisi",
+      path: "/manage/",
       icon: <MdSick />,
     },
     {
