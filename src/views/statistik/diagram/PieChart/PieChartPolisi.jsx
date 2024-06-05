@@ -1,20 +1,10 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { ResponsivePie } from "@nivo/pie";
 import PropTypes from "prop-types";
+import { ResponsivePie } from "@nivo/pie";
 
-const PieChart = ({ colors }) => {
-  const [data, setData] = useState([]);
-
-  PieChart.propTypes = {
-    colors: PropTypes.arrayOf(PropTypes.string),
-  };
-
-  useEffect(() => {
-    axios
-      .get("https://65fcf9c49fc4425c6530ec6c.mockapi.io/dataShoe")
-      .then((response) => {
-        const aggregatedData = response.data.reduce((acc, curr) => {
+const PieChartPolisi = ({ data, colors }) => {
+  const processedData =
+    data.length > 0
+      ? data.reduce((acc, curr) => {
           const existingItem = acc.find(
             (item) => item.id.toLowerCase() === curr.jenispenyakit.toLowerCase()
           );
@@ -24,32 +14,25 @@ const PieChart = ({ colors }) => {
             acc.push({
               id: curr.jenispenyakit,
               label: curr.jenispenyakit,
-              suhu: curr.suhu,
               value: 1,
             });
           }
           return acc;
-        }, []);
+        }, [])
+      : [];
 
-        const total = aggregatedData.reduce((sum, item) => sum + item.value, 0);
-
-        const sortedData = aggregatedData.sort((a, b) => b.value - a.value);
-
-        const topFiveData = sortedData.slice(0, 5).map((item) => ({
-          ...item,
-          value: ((item.value / total) * 100).toFixed(1),
-        }));
-
-        setData(topFiveData);
-      })
-      .catch((error) => {
-        console.error("Error fetching data: ", error);
-      });
-  }, []);
+  const total = processedData.reduce((sum, item) => sum + item.value, 0);
+  const topFiveData = processedData
+    .sort((a, b) => b.value - a.value)
+    .slice(0, 5)
+    .map((item) => ({
+      ...item,
+      value: ((item.value / total) * 100).toFixed(1),
+    }));
 
   return (
     <ResponsivePie
-      data={data}
+      data={topFiveData}
       margin={{ top: 10, right: 50, bottom: 50, left: 50 }}
       sortByValue={true}
       cornerRadius={3}
@@ -104,4 +87,9 @@ const PieChart = ({ colors }) => {
   );
 };
 
-export default PieChart;
+PieChartPolisi.propTypes = {
+  data: PropTypes.array.isRequired,
+  colors: PropTypes.arrayOf(PropTypes.string),
+};
+
+export default PieChartPolisi;

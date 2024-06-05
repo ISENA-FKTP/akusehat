@@ -1,8 +1,5 @@
 import { ResponsivePie } from "@nivo/pie";
-import {
-  DataKunjunganKlinik,
-  calculateTotals,
-} from "../../model/dataKunjunganKlinik";
+import { DataObat, calculateTotals } from "../../model/dataObat";
 import PropTypes from "prop-types";
 
 const PieChart = ({ colors, year }) => {
@@ -11,30 +8,22 @@ const PieChart = ({ colors, year }) => {
     colors: PropTypes.arrayOf(PropTypes.string),
   };
 
-  const filteredData = DataKunjunganKlinik.filter(
+  const filteredData = DataObat.filter(
     (data) => new Date(data.tanggal).getFullYear() === parseInt(year)
   );
 
-  const { totalHealthy, totalSick } = calculateTotals(filteredData);
-
-  const totalVisits = totalHealthy + totalSick;
-
-  let totalHealthyPercentage = 0;
-  let totalSickPercentage = 0;
-
-  if (totalVisits !== 0) {
-    totalHealthyPercentage = ((totalHealthy / totalVisits) * 100).toFixed(1);
-    totalSickPercentage = ((totalSick / totalVisits) * 100).toFixed(1);
-  } else {
-    console.error("Tidak ada data kunjungan untuk tahun yang dipilih.");
-  }
+  const { totalJumlahObat, totalObatKeluar } = calculateTotals(filteredData);
+  const totalObat = totalObatKeluar + totalJumlahObat;
 
   const data = [
     {
-      id: `Sehat (${totalHealthy})`,
-      value: parseFloat(totalHealthyPercentage),
+      id: "Sisa Obat",
+      value: ((totalJumlahObat / totalObat) * 100).toFixed(1),
     },
-    { id: `Sakit (${totalSick})`, value: parseFloat(totalSickPercentage) },
+    {
+      id: "Obat Keluar",
+      value: ((totalObatKeluar / totalObat) * 100).toFixed(1),
+    },
   ];
 
   return (

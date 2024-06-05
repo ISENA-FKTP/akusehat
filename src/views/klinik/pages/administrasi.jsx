@@ -1,4 +1,4 @@
-// Import useEffect dan useState dari React
+
 import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -9,6 +9,7 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import Sidebar_Klinik from "../../../components/klinik/sidebar_klinik";
 import Header from "../../../components/header";
 import { useNavigate } from "react-router-dom";
+
 import { createPasien } from "../model/api";
 import PropTypes from "prop-types";
 
@@ -37,6 +38,7 @@ const FormComponent = ({ token }) => {
   };
 
   const handleDateChange = (date) => {
+
     setFormData({ ...formData, tgllahir: date });
   };
 
@@ -74,6 +76,7 @@ const FormComponent = ({ token }) => {
     });
   };
 
+
   const saveData = async () => {
     try {
       await createPasien(formData, token); // Gunakan token dalam pemanggilan API
@@ -104,6 +107,7 @@ const FormComponent = ({ token }) => {
         {[
           {
             label: "NRP/No.BPJS",
+
             name: "nobpjs",
             placeholder: "Masukkan NRP atau No. BPJS",
           },

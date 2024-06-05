@@ -11,6 +11,7 @@ export const DataStatusPasienKlinik = [
     norm: 987654321,
     role: "admin",
     userId: 1,
+    tanggal: "2023-05-31",
   },
   {
     uuid: "7e3d28d9-7b6b-41f5-8a04-14468d69a087",
@@ -24,6 +25,7 @@ export const DataStatusPasienKlinik = [
     norm: 123456789,
     role: "user",
     userId: 2,
+    tanggal: "2023-05-31",
   },
   {
     uuid: "3bf3e327-4d3b-49ad-bc33-8286a22c12d5",
@@ -37,6 +39,7 @@ export const DataStatusPasienKlinik = [
     norm: 135792468,
     role: "user",
     userId: 3,
+    tanggal: "2022-05-31",
   },
   {
     uuid: "f7cdaa20-ee1c-40b4-8279-fc5eb5f996c3",
@@ -50,6 +53,7 @@ export const DataStatusPasienKlinik = [
     norm: 246813579,
     role: "user",
     userId: 4,
+    tanggal: "2022-05-31",
   },
   {
     uuid: "c3e51b81-1b6d-4b1a-a294-f9ee3fffb55c",
@@ -63,6 +67,7 @@ export const DataStatusPasienKlinik = [
     norm: 654321987,
     role: "admin",
     userId: 5,
+    tanggal: "2024-05-31",
   },
   {
     uuid: "abde9e3c-0e62-4fb4-b8b3-0533b5e7dc90",
@@ -76,6 +81,7 @@ export const DataStatusPasienKlinik = [
     norm: 987654321,
     role: "user",
     userId: 6,
+    tanggal: "2024-05-31",
   },
   {
     uuid: "f294e88d-7e8d-4b7b-b481-7e432e18d624",
@@ -89,6 +95,7 @@ export const DataStatusPasienKlinik = [
     norm: 369258147,
     role: "user",
     userId: 7,
+    tanggal: "2024-05-31",
   },
   {
     uuid: "ba0ef0a9-af59-468f-9e68-520fd4f63fd9",
@@ -102,6 +109,7 @@ export const DataStatusPasienKlinik = [
     norm: 753951468,
     role: "user",
     userId: 8,
+    tanggal: "2024-05-31",
   },
   {
     uuid: "d98e238c-605e-4b69-8f71-9f6a9f1f10c3",
@@ -115,6 +123,7 @@ export const DataStatusPasienKlinik = [
     norm: 987654321,
     role: "admin",
     userId: 9,
+    tanggal: "2024-05-31",
   },
   {
     uuid: "ef146857-80f5-4ef8-9f19-0f6d5b90e01b",
@@ -128,6 +137,7 @@ export const DataStatusPasienKlinik = [
     norm: 123456789,
     role: "user",
     userId: 10,
+    tanggal: "2024-05-31",
   },
   {
     uuid: "b33f7f40-6d69-4f89-ae44-f019b462191a",
@@ -141,6 +151,7 @@ export const DataStatusPasienKlinik = [
     norm: 135792468,
     role: "user",
     userId: 11,
+    tanggal: "2024-05-31",
   },
   {
     uuid: "c7a4b518-9d42-44d1-8979-2dbb17a50b84",
@@ -154,6 +165,7 @@ export const DataStatusPasienKlinik = [
     norm: 246813579,
     role: "user",
     userId: 12,
+    tanggal: "2024-05-31",
   },
   {
     uuid: "c6e19a08-2a5e-4b48-b0de-df1b5d378a75",
@@ -167,6 +179,7 @@ export const DataStatusPasienKlinik = [
     norm: 987654321,
     role: "user",
     userId: 13,
+    tanggal: "2024-05-31",
   },
   {
     uuid: "f675f1ef-064f-4a8a-8a46-28e2d7b0df8e",
@@ -180,6 +193,7 @@ export const DataStatusPasienKlinik = [
     norm: 654321987,
     role: "admin",
     userId: 14,
+    tanggal: "2024-05-31",
   },
   {
     uuid: "e39d2b90-007b-40b2-a453-62886221cfe9",
@@ -193,10 +207,11 @@ export const DataStatusPasienKlinik = [
     norm: 753951468,
     role: "user",
     userId: 15,
+    tanggal: "2023-05-31",
   },
 ];
 
-export const calculateTotals = () => {
+export const calculateTotals = (DataStatusPasienKlinik) => {
   const jumlahStatusPasien = {
     totalPolisi: 0,
     totalPNS: 0,

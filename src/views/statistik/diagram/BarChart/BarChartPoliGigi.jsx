@@ -6,21 +6,39 @@ import {
 } from "../../model/dataSakitPoliGigi";
 import PropTypes from "prop-types";
 
-const BarChart = ({ colors }) => {
+const BarChart = ({ colors, year }) => {
   BarChart.propTypes = {
+    year: PropTypes.string,
     colors: PropTypes.arrayOf(PropTypes.string),
   };
-  const totals = calculateTotals(dataSakitKlinik);
 
-  const top10Penyakit = getTop10Penyakit(totals);
+  const filteredData = dataSakitKlinik.filter(
+    (data) => new Date(data.tanggal).getFullYear() === parseInt(year)
+  );
 
-  const highestTotal = top10Penyakit[top10Penyakit.length - 1][1];
+  let data = [];
 
-  const data = top10Penyakit.map(([jenisPenyakit, total]) => ({
-    sektor: jenisPenyakit,
-    total: total,
-    color: total === highestTotal ? colors[0] : "#FEC27E",
-  }));
+  if (filteredData.length > 0) {
+    const totals = calculateTotals(filteredData);
+
+    const top10Penyakit = getTop10Penyakit(totals);
+
+    const highestTotal = top10Penyakit[top10Penyakit.length - 1][1];
+
+    data = top10Penyakit.map(([jenisPenyakit, total]) => ({
+      sektor: jenisPenyakit,
+      total: total,
+      color: total === highestTotal ? colors[0] : "#FEC27E",
+    }));
+  } else {
+    data = [
+      {
+        sektor: "Data tidak tersedia",
+        total: 0,
+        color: "#FEC27E",
+      },
+    ];
+  }
 
   return (
     <ResponsiveBar

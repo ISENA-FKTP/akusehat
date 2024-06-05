@@ -1,14 +1,23 @@
 import { ResponsivePie } from "@nivo/pie";
 import PropTypes from "prop-types";
-import { calculateTotals } from "../../model/dataStatusPasienKlinik";
+import { useState, useEffect } from "react";
+import {
+  DataStatusPasienKlinik,
+  calculateTotals,
+} from "../../model/dataStatusPasienKlinik";
 
-const PieChart = ({ colors }) => {
+const PieChart = ({ colors, year }) => {
   PieChart.propTypes = {
+    year: PropTypes.string,
     colors: PropTypes.arrayOf(PropTypes.string),
   };
 
+  const filteredData = DataStatusPasienKlinik.filter(
+    (data) => new Date(data.tanggal).getFullYear() === parseInt(year)
+  );
+
   const { totalPolisi, totalPNS, totalKeluarga, totalPesertaMandiri } =
-    calculateTotals();
+    calculateTotals(filteredData);
 
   const totalVisits =
     totalPolisi + totalPNS + totalKeluarga + totalPesertaMandiri;
@@ -36,6 +45,29 @@ const PieChart = ({ colors }) => {
     },
   ];
 
+  const [legendTranslateX, setLegendTranslateX] = useState(130);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 640px)");
+    const handleMediaQueryChange = (e) => {
+      if (e.matches) {
+        setLegendTranslateX(150);
+      } else {
+        setLegendTranslateX(130);
+      }
+    };
+
+    mediaQuery.addEventListener("change", handleMediaQueryChange);
+
+    if (mediaQuery.matches) {
+      setLegendTranslateX(150);
+    }
+
+    return () => {
+      mediaQuery.removeEventListener("change", handleMediaQueryChange);
+    };
+  }, []);
+
   return (
     <ResponsivePie
       data={data}
@@ -61,7 +93,7 @@ const PieChart = ({ colors }) => {
           anchor: "bottom",
           direction: "column",
           justify: false,
-          translateX: 130,
+          translateX: legendTranslateX,
           translateY: 0,
           itemsSpacing: 0,
           itemWidth: 0,

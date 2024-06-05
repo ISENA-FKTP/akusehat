@@ -7,6 +7,7 @@ export const DataSektor = [
     satuankerja: "Ditreskrimum",
     role: "Investigator",
     userId: 1,
+    tanggal: "2023-05-30",
   },
   {
     uuid: "b2c3d4e5-f6g7-8h9i-0j1k-2l3m4n5o6p7",
@@ -16,6 +17,7 @@ export const DataSektor = [
     satuankerja: "Ditnarkoba",
     role: "Analyst",
     userId: 2,
+    tanggal: "2023-05-30",
   },
   {
     uuid: "c3d4e5f6-g7h8-9i0j-1k2l-3m4n5o6p7q8",
@@ -25,6 +27,7 @@ export const DataSektor = [
     satuankerja: "Ditlantas",
     role: "Traffic Officer",
     userId: 3,
+    tanggal: "2023-05-30",
   },
   {
     uuid: "d4e5f6g7-h8i9-0j1k-2l3m-4n5o6p7q8r9",
@@ -34,6 +37,7 @@ export const DataSektor = [
     satuankerja: "Ditreskrimum",
     role: "Detective",
     userId: 4,
+    tanggal: "2024-05-30",
   },
   {
     uuid: "e5f6g7h8-i9j0-1k2l-3m4n-5o6p7q8r9s0",
@@ -43,6 +47,7 @@ export const DataSektor = [
     satuankerja: "Ditreskrimum",
     role: "Field Agent",
     userId: 5,
+    tanggal: "2022-05-30",
   },
   {
     uuid: "f6g7h8i9-j0k1-2l3m-4n5o-6p7q8r9s0t1",
@@ -52,6 +57,7 @@ export const DataSektor = [
     satuankerja: "Ditnarkoba",
     role: "Field Investigator",
     userId: 6,
+    tanggal: "2024-05-30",
   },
   {
     uuid: "g7h8i9j0-k1l2-3m4n-5o6p-7q8r9s0t1u2",
@@ -61,6 +67,7 @@ export const DataSektor = [
     satuankerja: "Ditlantas",
     role: "Traffic Manager",
     userId: 7,
+    tanggal: "2024-05-30",
   },
   {
     uuid: "h8i9j0k1-l2m3-4n5o-6p7q-8r9s0t1u2v3",
@@ -70,6 +77,7 @@ export const DataSektor = [
     satuankerja: "Ditreskrimsus",
     role: "Cyber Crime Investigator",
     userId: 8,
+    tanggal: "2024-05-30",
   },
   {
     uuid: "i9j0k1l2-m3n4-5o6p-7q8r-9s0t1u2v3w4",
@@ -79,6 +87,7 @@ export const DataSektor = [
     satuankerja: "Ditreskrimsus",
     role: "Forensic Expert",
     userId: 9,
+    tanggal: "2024-05-30",
   },
   {
     uuid: "j0k1l2m3-n4o5-6p7q-8r9s-0t1u2v3w4x5",
@@ -88,6 +97,7 @@ export const DataSektor = [
     satuankerja: "Ditreskrimsus",
     role: "Data Analyst",
     userId: 10,
+    tanggal: "2024-05-30",
   },
   {
     uuid: "j0k1l2m3-n4o5-6p7q-8r9s-0t1u2v3w4x5",
@@ -97,10 +107,11 @@ export const DataSektor = [
     satuankerja: "Metro Jaya",
     role: "Data Analyst",
     userId: 10,
+    tanggal: "2024-05-30",
   },
 ];
 
-export const calculateSektorTotals = () => {
+export const calculateSektorTotals = (DataSektor) => {
   const totals = {};
 
   DataSektor.forEach((pegawai) => {

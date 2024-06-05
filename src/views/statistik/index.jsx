@@ -1,35 +1,65 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PieChartPolisi from "./diagram/PieChart/PieChartPolisi";
-import PieChartApotik from "./diagram/PieChart/PieChartApotik";
+import PieChartApotik, {
+  TotalObatYear,
+} from "./diagram/PieChart/PieChartApotik";
 import Sidebar from "../../components/statistik/sidebar";
 import BarChart from "./diagram/BarChart/BarChart";
-import LineChart from "./diagram/LineChart";
+import LineChart from "./diagram/LineChart/LineChart";
 import { FaCircleArrowUp } from "react-icons/fa6";
 import { FaCircleArrowDown } from "react-icons/fa6";
-import { calculateTotals } from "./model/dataObat";
 import { BsPeopleFill } from "react-icons/bs";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { GiMedicines } from "react-icons/gi";
 import { FaVirus } from "react-icons/fa6";
 import Header from "../../components/header";
+import axios from "axios";
 
 const currentYear = new Date().getFullYear();
 
 export default function Statistik() {
   const [year, setYear] = useState(currentYear);
-  const [month, setMonth] = useState(new Date().getMonth() + 1);
-  const { totalJumlahObat, totalObatKeluar } = calculateTotals();
+  const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
 
+  const { totalJumlahObat, totalObatKeluar } = TotalObatYear(year);
   const total = totalJumlahObat + totalObatKeluar;
-  const persen_obat_masuk = ((totalJumlahObat / total) * 100).toFixed(1);
-  const persen_obat_keluar = ((totalObatKeluar / total) * 100).toFixed(1);
+  let persen_obat_masuk = 0;
+  let persen_obat_keluar = 0;
 
-  const handleYearChange = (e) => {
-    setYear(e.target.value);
+  if (total === 0) {
+    persen_obat_masuk = 0;
+    persen_obat_keluar = 0;
+  } else {
+    persen_obat_masuk = ((totalJumlahObat / total) * 100).toFixed(1);
+    persen_obat_keluar = ((totalObatKeluar / total) * 100).toFixed(1);
+  }
+
+  useEffect(() => {
+    axios
+      .get("https://65fcf9c49fc4425c6530ec6c.mockapi.io/dataShoe")
+      .then((response) => {
+        const data = response.data;
+        setData(data);
+        filterDataByYear(data, year);
+      })
+      .catch((error) => console.error("Error fetching data: ", error));
+  }, [year]);
+
+  useEffect(() => {
+    filterDataByYear(data, year);
+  }, [year, data]);
+
+  const filterDataByYear = (data, year) => {
+    const filtered = data.filter(
+      (item) => new Date(item.tanggal).getFullYear() === parseInt(year)
+    );
+    setFilteredData(filtered);
   };
 
-  const handleMonthChange = (e) => {
-    setMonth(e.target.value);
+  const handleYearChange = (e) => {
+    const selectedYear = e.target.value;
+    setYear(selectedYear);
   };
 
   const colorsPenyakit = [
@@ -46,7 +76,11 @@ export default function Statistik() {
       <div className="bg-[#E0F1EE] font-primary ">
         {/* Sidebar */}
         <div className="fixed z-50">
-          <Sidebar />
+          <Sidebar
+            userName="Rifki Rusdi Satma Putra"
+            userStatus="Kepala Polisi"
+            profilePicture="logo.png"
+          />
         </div>
         <Header
           title="Statistik Data Laporan"
@@ -54,9 +88,10 @@ export default function Statistik() {
           userStatus="Kepala Polisi"
           profilePicture="logo.png"
         />
-        <div className="container mx-auto pl-5">
+
+        <div className="container mx-auto pl-5 pt-20 lg:pt-0">
           {/* Filter */}
-          <div className="flex pt-7 gap-3 place-content-end">
+          <div className="flex pt-7 gap-3 place-content-end pr-5">
             <div>
               <label htmlFor="year" className="mr-2">
                 Tahun:
@@ -77,29 +112,12 @@ export default function Statistik() {
                 })}
               </select>
             </div>
-            <div>
-              <label htmlFor="month" className="mr-2">
-                Bulan:
-              </label>
-              <select
-                id="month"
-                value={month}
-                onChange={handleMonthChange}
-                className="p-2 rounded-md"
-              >
-                {Array.from({ length: 12 }, (_, i) => (
-                  <option key={i + 1} value={i + 1}>
-                    {new Date(0, i).toLocaleString("id-ID", { month: "long" })}
-                  </option>
-                ))}
-              </select>
-            </div>
           </div>
 
-          {/* Informasi */}
-          <div className="flex pt-7 gap-3 place-content-center">
+          {/* Statistik */}
+          <div className="lg:flex pt-7 gap-3 place-content-center flex-wrap pr-5 lg:pr-0">
             {/* Polisi Sakit */}
-            <div className="flex bg-white px-5 py-3 rounded-lg shadow-lg">
+            <div className="flex bg-white px-5 py-3 rounded-lg shadow-lg mb-3 lg:mb-0">
               <div className="text-white bg-primary-600 rounded-md">
                 <BsPeopleFill size={75} className="p-2" />
               </div>
@@ -110,7 +128,7 @@ export default function Statistik() {
             </div>
 
             {/* Pengunjung Klinik */}
-            <div className="flex bg-white px-4 py-3 rounded-lg shadow-lg">
+            <div className="flex bg-white px-4 py-3 rounded-lg shadow-lg mb-3 lg:mb-0">
               <div className="text-white bg-primary-600 rounded-md place-content-center">
                 <FaPeopleGroup size={70} className="p-2" />
               </div>
@@ -121,7 +139,7 @@ export default function Statistik() {
             </div>
 
             {/* Obat Masuk */}
-            <div className="flex bg-white px-4 py-3 rounded-lg shadow-lg">
+            <div className="flex bg-white px-4 py-3 rounded-lg shadow-lg mb-3 lg:mb-0">
               <div className="text-white bg-primary-600 rounded-md">
                 <GiMedicines size={70} className="p-2" />
               </div>
@@ -132,7 +150,7 @@ export default function Statistik() {
             </div>
 
             {/* Obat Keluar */}
-            <div className="flex bg-white px-4 py-3 rounded-lg shadow-lg">
+            <div className="flex bg-white px-4 py-3 rounded-lg shadow-lg mb-3 lg:mb-0">
               <div className="text-white bg-primary-600 rounded-md">
                 <GiMedicines size={70} className="p-2" />
               </div>
@@ -143,7 +161,7 @@ export default function Statistik() {
             </div>
 
             {/* Jenis Penyakit */}
-            <div className="flex bg-white px-4 py-3 rounded-lg shadow-lg">
+            <div className="flex bg-white px-4 py-3 rounded-lg shadow-lg mb-3 lg:mb-0">
               <div className="text-white bg-primary-600 rounded-md">
                 <FaVirus size={70} className="p-2" />
               </div>
@@ -155,9 +173,9 @@ export default function Statistik() {
           </div>
 
           {/* Statistik */}
-          <div className="flex gap-3 place-content-center">
+          <div className="lg:flex gap-3 place-content-center mr-5 lg:mr-0">
             {/* Pie Chart Polisi */}
-            <div className="py-7">
+            <div className="lg:py-7 py-3">
               <div className="shadow-lg py-2 rounded-lg bg-white">
                 <div className="flex place-content-between pl-5">
                   <div className="font-semibold">
@@ -168,15 +186,15 @@ export default function Statistik() {
                     {year}
                   </p>
                 </div>
-                <div className="h-96 w-96 mb-2 ">
-                  <PieChartPolisi colors={colorsPenyakit} />
+                <div className="h-96 w-96 mb-2 lg:px-0 px-2 ">
+                  <PieChartPolisi data={filteredData} colors={colorsPenyakit} />
                 </div>
               </div>
             </div>
 
             {/* Bar Chart */}
-            <div className="py-7">
-              <div className="shadow-lg py-2 px-5 rounded-lg bg-white">
+            <div className="lg:py-7 py-3">
+              <div className="shadow-lg py-2 lg:px-5 rounded-lg bg-white">
                 <div className="flex place-content-between px-5">
                   <div className="font-semibold">
                     <h1 className="text-secondary-400">Jenis Data</h1>
@@ -186,16 +204,16 @@ export default function Statistik() {
                     {year}
                   </p>
                 </div>
-                <div className="h-96 w-96 mt-2 ">
-                  <BarChart colors={colorsSektor} />
+                <div className="h-96 w-96 mt-2 lg:px-0 px-2">
+                  <BarChart colors={colorsSektor} year={year.toString()} />
                 </div>
               </div>
             </div>
 
             {/* Line Chart */}
-            <div className="flex-col">
+            <div className="lg:flex-col">
               <div className="pt-7 pb-3">
-                <div className="shadow-lg py-2 px-5 rounded-lg bg-white">
+                <div className="shadow-lg py-2 lg:px-5 rounded-lg bg-white">
                   <div className="flex place-content-between px-5">
                     <div className="font-semibold">
                       <h1 className="text-secondary-400">Jenis Data</h1>
@@ -205,15 +223,15 @@ export default function Statistik() {
                       {year}
                     </p>
                   </div>
-                  <div className="h-[149px] w-96 mt-2 ">
-                    <LineChart />
+                  <div className="lg:h-[149px] lg:px-0 px-2 h-60 w-96 mt-2 ">
+                    <LineChart year={year.toString()} />
                   </div>
                 </div>
               </div>
 
               {/* Pie Chaart Apotik */}
               <div className="pb-7">
-                <div className="shadow-lg py-2 px-5 rounded-lg bg-white">
+                <div className="shadow-lg py-2 lg:px-5 rounded-lg bg-white">
                   <div className="flex place-content-between px-5">
                     <div className="font-semibold">
                       <h1 className="text-secondary-400">Jenis Data</h1>
@@ -225,7 +243,10 @@ export default function Statistik() {
                   </div>
                   <div className="flex">
                     <div className="h-[151px] w-44 mt-2 ">
-                      <PieChartApotik colors={colorsSektor} />
+                      <PieChartApotik
+                        colors={colorsSektor}
+                        year={year.toString()}
+                      />
                     </div>
                     <div className="place-content-center text-base font-semibold ">
                       <div className="flex gap-4 place-content-center mb-3">
@@ -236,7 +257,7 @@ export default function Statistik() {
                           {persen_obat_masuk}% Obat Masuk ({totalJumlahObat})
                         </p>
                       </div>
-                      <div className="flex gap-4">
+                      <div className="flex gap-4 lg:px-0 px-2">
                         <div className="text-error-600 place-content-center">
                           <FaCircleArrowDown />
                         </div>

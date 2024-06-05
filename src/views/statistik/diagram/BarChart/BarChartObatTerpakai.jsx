@@ -1,5 +1,5 @@
 import { ResponsiveBar } from "@nivo/bar";
-import { DataSektor, calculateSektorTotals } from "../../model/dataSektor";
+import { DataObat, calculateObatTerpakai } from "../../model/dataObat";
 import PropTypes from "prop-types";
 
 const BarChart = ({ colors, year }) => {
@@ -8,38 +8,41 @@ const BarChart = ({ colors, year }) => {
     colors: PropTypes.arrayOf(PropTypes.string),
   };
 
-  const filteredData = DataSektor.filter(
+  const filteredData = DataObat.filter(
     (data) => new Date(data.tanggal).getFullYear() === parseInt(year)
   );
+  const setiapObatKeluar = calculateObatTerpakai(filteredData);
 
-  const totals = calculateSektorTotals(filteredData);
+  setiapObatKeluar.sort((a, b) => a.totalobatkeluar - b.totalobatkeluar);
 
-  const data = Object.keys(totals).map((key) => ({
-    sektor: key,
-    total: totals[key],
+  const highestTotal =
+    setiapObatKeluar.length > 0
+      ? setiapObatKeluar[setiapObatKeluar.length - 1].totalobatkeluar
+      : 0;
+
+  const data = setiapObatKeluar.map((obat) => ({
+    sektor: obat.namaobat,
+    total: obat.totalobatkeluar,
+    color: obat.totalobatkeluar === highestTotal ? colors[0] : "#FEC27E",
   }));
 
-  const sortedData = [...data].sort((b, a) => b.total - a.total);
+  const dataWithZeroTotal = data.filter((obat) => obat.total === 0);
 
-  const top5Sectors = sortedData.slice(0, 5).map((item) => item.sektor);
-
-  const colorBySector = {
-    [top5Sectors[4]]: colors[0],
-  };
-
-  const getColor = (bar) => colorBySector[bar.indexValue] || "#FEC27E";
+  if (dataWithZeroTotal.length > 0) {
+    console.log("Ada data dengan total 0:", dataWithZeroTotal);
+  }
 
   return (
     <ResponsiveBar
-      data={sortedData} // Menggunakan data yang telah diurutkan
+      data={data}
       keys={["total"]}
       indexBy="sektor"
-      margin={{ top: 20, right: 10, bottom: 60, left: 100 }}
+      margin={{ top: 20, right: 10, bottom: 50, left: 80 }}
       padding={0.15}
       groupMode="grouped"
       valueScale={{ type: "linear" }}
       indexScale={{ type: "band", round: true }}
-      colors={getColor}
+      colors={({ data }) => data.color}
       layout="horizontal"
       borderColor={{
         from: "color",
@@ -51,7 +54,7 @@ const BarChart = ({ colors, year }) => {
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 0,
-        legend: "Jumlah Anggota Sektor Polisi",
+        legend: "Jumlah Obat Keluar",
         legendPosition: "middle",
         legendOffset: 40,
         truncateTickAt: 0,
