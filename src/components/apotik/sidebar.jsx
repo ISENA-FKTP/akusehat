@@ -1,40 +1,40 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { TbReportAnalytics } from "react-icons/tb";
-import { FaReadme } from "react-icons/fa6";
 import { GoHomeFill } from "react-icons/go";
-import { FaUserDoctor } from "react-icons/fa6";
 import { IoMdArrowDropleft } from "react-icons/io";
-import { MdSpaceDashboard } from "react-icons/md";
+import { MdOutlineNotificationsActive } from "react-icons/md";
+import { MdLibraryBooks } from "react-icons/md";
+import { BsCapsulePill } from "react-icons/bs";
 
-export default function Sidebar_Klinik() {
+
+export default function Sidebar() {
   const [open, setOpen] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
 
   const Menus = [
-    { title: "Dashboard", path: "/", Icon: <MdSpaceDashboard /> },
+    { title: "Dashboard", path: "/apotek" },
     {
-      title: "Administrasi",
-      path: "/administrasi",
-      icon: <FaReadme />,
+      title: "Tambah Obat",
+      path: "/apotek/tambah-obat",
+      icon: <BsCapsulePill/>,
     },
     {
-      title: "Dokter",
-      path: "/dokter",
-      icon: <FaUserDoctor />,
+      title: "Pengingat",
+      path: "/apotek/pengingat",
+      icon: <MdOutlineNotificationsActive />,
     },
     {
       title: "Laporan",
-      path: "/laporan",
-      icon: <TbReportAnalytics />,
+      path: "/apotek/laporan",
+      icon: <MdLibraryBooks/>,
     },
   ];
 
   return (
     <>
       <div
-        className={`bg-primary-600 h-screen fixed left-0 py-5 pt-8 font-poppins ${
+        className={`bg-primary-600 h-screen left-0 py-5 pt-8 font-poppins ${
           open ? "w-72" : "w-20"
         } duration-300 relative`}
       >

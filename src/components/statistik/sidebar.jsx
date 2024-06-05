@@ -28,20 +28,20 @@ export default function Sidebar({ userName, userStatus, profilePicture }) {
   };
 
   const Menus = [
-    { title: "Dashboard", path: "/" },
+    { title: "Dashboard", path: "/statistik" },
     {
       title: "Data Sakit Polisi",
-      path: "/data-sakit-polisi",
+      path: "/statistik/data-sakit-polisi",
       icon: <MdSick />,
     },
     {
       title: "Data Pengunjung Klinik",
-      path: "/data-pengunjung-klinik",
+      path: "/statistik/data-pengunjung-klinik",
       icon: <FaPeopleGroup />,
     },
     {
       title: "Data Obat Klinik",
-      path: "/data-obat-klinik",
+      path: "/statistik/data-obat-klinik",
       icon: <GiMedicines />,
     },
   ];

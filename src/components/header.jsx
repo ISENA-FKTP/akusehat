@@ -8,6 +8,7 @@ const Header = ({ title, userName, userStatus, profilePicture }) => {
     return text;
   };
 
+
   Header.propTypes = {
     title: PropTypes.string,
     userName: PropTypes.string,
