@@ -21,7 +21,6 @@ import Manage from "./views/manage";
 import HomeVisit from "./views/manage/pages/homevisit";
 import RekamMedis from "./views/manage/pages/rekammedis";
 
-
 function App() {
   return (
     <Router>
@@ -56,13 +55,9 @@ function App() {
           path="/statistik/data-obat-klinik"
           element={<DataObatKlinik />}
         />
-
-        <Route 
-        path="/manage/data-home-visit"
-        element={<HomeVisit/>} />
-        <Route 
-        path="/manage/data-rekam-medis"
-        element={<RekamMedis/>} />
+        <Route path="/manage" element={<Manage />} />
+        <Route path="/manage/data-home-visit" element={<HomeVisit />} />
+        <Route path="/manage/data-rekam-medis" element={<RekamMedis />} />
       </Routes>
     </Router>
   );
