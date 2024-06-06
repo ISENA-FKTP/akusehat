@@ -17,25 +17,34 @@ const Login = () => {
         // "https://backend-isenafktp.onrender.com/login",
         "http://localhost:5000/login",
         {
-          username: username,
-          password: password,
+          username,
+          password,
         }
       );
 
-      const token = response.data.accessToken;
-      const decoded = jwtDecode(token);
+      console.log("Login response:", response.data); // Debug: Cek respons dari endpoint login
+
+      const { accessToken, refreshToken } = response.data;
+      console.log("Access Token:", accessToken); // Debug: Cek akses token
+      console.log("Refresh Token:", refreshToken); // Debug: Cek refresh token
+
+      const decoded = jwtDecode(accessToken);
+      console.log("Decoded Token:", decoded); // Debug: Cek hasil dekode token
 
       if (decoded.role === "admin") {
-        localStorage.setItem("token", token);
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("refreshToken", refreshToken);
         navigate("/dashboard");
       } else {
         setMsg("Akses Ditolak, Silahkan Masukan Akun Administrasi.");
       }
     } catch (error) {
       if (error.response) {
+        console.log("Error response:", error.response.data); // Debug: Cek respons dari server jika terjadi error
         setMsg(error.response.data.msg);
       } else {
         console.error("Error:", error.message);
+        setMsg("Login gagal, silakan coba lagi.");
       }
     }
   };
@@ -43,7 +52,7 @@ const Login = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 h-screen">
       {/* Bagian Kiri: Gambar Cover */}
-      <div className="hidden md:flex items-center justify-center bg-[#]">
+      <div className="hidden md:flex items-center justify-center bg-gray-200">
         <img
           src={coverImage}
           alt="Cover"
