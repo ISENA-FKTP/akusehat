@@ -58,16 +58,23 @@ export default function DataPengunjungKlinik() {
     ),
   }));
 
+  const sortStatus = (a, b, order) => {
+    const indexA = order.indexOf(a.statuspeserta);
+    const indexB = order.indexOf(b.statuspeserta);
+    return indexA - indexB;
+  };
+
   useEffect(() => {
+    const statusOrder = ["PNS", "Polisi", "Mandiri", "Keluarga"];
     const sorted =
       sortBy === "most"
-        ? [...combinedData].sort((a, b) => b.quantity - a.quantity)
-        : [...combinedData].sort((a, b) => a.quantity - b.quantity);
+        ? [...combinedData].sort((a, b) => sortStatus(b, a, statusOrder))
+        : [...combinedData].sort((a, b) => sortStatus(a, b, statusOrder));
     setSortedData(sorted);
   }, [combinedData, sortBy]);
 
-  const handleSortChange = (e) => {
-    setSortBy(e.target.value);
+  const handleSortChange = (event) => {
+    setSortBy(event.target.value);
   };
 
   const handleSearch = (e) => {
@@ -108,7 +115,7 @@ export default function DataPengunjungKlinik() {
           title="Statistik Data Kunjungan Klinik"
           userName="Rifki Rusdi Satma Putra"
           userStatus="Kepala Polisi"
-          profilePicture="logo.png"
+          profilePicture="/logo.png"
         />
 
         <div className="container mx-auto pl-5 pt-20 lg:pt-0">

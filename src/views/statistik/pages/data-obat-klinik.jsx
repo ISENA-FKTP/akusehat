@@ -94,7 +94,7 @@ export default function DataObatKlinik() {
           title="Statistik Obat Apotek"
           userName="Rifki Rusdi Satma Putra"
           userStatus="Kepala Polisi"
-          profilePicture="logo.png"
+          profilePicture="/logo.png"
         />
 
         <div className="container mx-auto pl-5 pt-20 lg:pt-0">

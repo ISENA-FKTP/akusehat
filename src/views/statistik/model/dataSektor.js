@@ -1,6 +1,6 @@
 export const DataSektor = [
   {
-    uuid: "a1b2c3d4-e5f6-7g8h-9i0j-k1l2m3n4o5p6",
+    uuid: "1a2b3c4d-5678-90ab-cdef-1234567890ab",
     namapegawai: "John Doe",
     nrp: 123456,
     pangkat: "AKBP",
@@ -8,9 +8,10 @@ export const DataSektor = [
     role: "Investigator",
     userId: 1,
     tanggal: "2023-05-30",
+    pangkatNrp: "AKBP/123456",
   },
   {
-    uuid: "b2c3d4e5-f6g7-8h9i-0j1k-2l3m4n5o6p7",
+    uuid: "2b3c4d5e-6789-01ab-cdef-234567890abc",
     namapegawai: "Jane Smith",
     nrp: 654321,
     pangkat: "Kompol",
@@ -18,9 +19,10 @@ export const DataSektor = [
     role: "Analyst",
     userId: 2,
     tanggal: "2023-05-30",
+    pangkatNrp: "Kompol/654321",
   },
   {
-    uuid: "c3d4e5f6-g7h8-9i0j-1k2l-3m4n5o6p7q8",
+    uuid: "3c4d5e6f-7890-12ab-cdef-34567890abcd",
     namapegawai: "Mike Johnson",
     nrp: 789012,
     pangkat: "AKP",
@@ -28,9 +30,10 @@ export const DataSektor = [
     role: "Traffic Officer",
     userId: 3,
     tanggal: "2023-05-30",
+    pangkatNrp: "AKP/789012",
   },
   {
-    uuid: "d4e5f6g7-h8i9-0j1k-2l3m-4n5o6p7q8r9",
+    uuid: "4d5e6f7g-8901-23ab-cdef-4567890abcde",
     namapegawai: "Emily Davis",
     nrp: 345678,
     pangkat: "IPTU",
@@ -38,9 +41,10 @@ export const DataSektor = [
     role: "Detective",
     userId: 4,
     tanggal: "2024-05-30",
+    pangkatNrp: "IPTU/345678",
   },
   {
-    uuid: "e5f6g7h8-i9j0-1k2l-3m4n-5o6p7q8r9s0",
+    uuid: "5e6f7g8h-9012-34ab-cdef-567890abcdef",
     namapegawai: "Robert Brown",
     nrp: 901234,
     pangkat: "IPDA",
@@ -48,9 +52,10 @@ export const DataSektor = [
     role: "Field Agent",
     userId: 5,
     tanggal: "2022-05-30",
+    pangkatNrp: "IPDA/901234",
   },
   {
-    uuid: "f6g7h8i9-j0k1-2l3m-4n5o-6p7q8r9s0t1",
+    uuid: "6f7g8h9i-0123-45ab-cdef-678901abcdef",
     namapegawai: "Laura Wilson",
     nrp: 567890,
     pangkat: "AKBP",
@@ -58,9 +63,10 @@ export const DataSektor = [
     role: "Field Investigator",
     userId: 6,
     tanggal: "2024-05-30",
+    pangkatNrp: "AKBP/567890",
   },
   {
-    uuid: "g7h8i9j0-k1l2-3m4n-5o6p-7q8r9s0t1u2",
+    uuid: "7g8h9i0j-1234-56ab-cdef-789012abcdef",
     namapegawai: "David Martinez",
     nrp: 234567,
     pangkat: "AKP",
@@ -68,9 +74,10 @@ export const DataSektor = [
     role: "Traffic Manager",
     userId: 7,
     tanggal: "2024-05-30",
+    pangkatNrp: "AKP/234567",
   },
   {
-    uuid: "h8i9j0k1-l2m3-4n5o-6p7q-8r9s0t1u2v3",
+    uuid: "8h9i0j1k-2345-67ab-cdef-890123abcdef",
     namapegawai: "Sophia Taylor",
     nrp: 345679,
     pangkat: "AKBP",
@@ -78,9 +85,10 @@ export const DataSektor = [
     role: "Cyber Crime Investigator",
     userId: 8,
     tanggal: "2024-05-30",
+    pangkatNrp: "AKBP/345679",
   },
   {
-    uuid: "i9j0k1l2-m3n4-5o6p-7q8r-9s0t1u2v3w4",
+    uuid: "9i0j1k2l-3456-78ab-cdef-901234abcdef",
     namapegawai: "James Anderson",
     nrp: 456789,
     pangkat: "Kompol",
@@ -88,9 +96,10 @@ export const DataSektor = [
     role: "Forensic Expert",
     userId: 9,
     tanggal: "2024-05-30",
+    pangkatNrp: "Kompol/456789",
   },
   {
-    uuid: "j0k1l2m3-n4o5-6p7q-8r9s-0t1u2v3w4x5",
+    uuid: "0j1k2l3m-4567-89ab-cdef-012345abcdef",
     namapegawai: "Oliver Thomas",
     nrp: 567891,
     pangkat: "IPTU",
@@ -98,16 +107,7 @@ export const DataSektor = [
     role: "Data Analyst",
     userId: 10,
     tanggal: "2024-05-30",
-  },
-  {
-    uuid: "j0k1l2m3-n4o5-6p7q-8r9s-0t1u2v3w4x5",
-    namapegawai: "Oliver Thomas",
-    nrp: 567891,
-    pangkat: "IPTU",
-    satuankerja: "Metro Jaya",
-    role: "Data Analyst",
-    userId: 10,
-    tanggal: "2024-05-30",
+    pangkatNrp: "IPTU/567891",
   },
 ];
 
@@ -124,7 +124,7 @@ export const calculateSektorTotals = (DataSektor) => {
 
   const totalsArray = Object.entries(totals);
 
-  totalsArray.sort((b, a) => b[1] - a[1]);
+  totalsArray.sort((a, b) => b[1] - a[1]); // Corrected sorting to descending order
 
   const top5Totals = totalsArray.slice(0, 5);
 
