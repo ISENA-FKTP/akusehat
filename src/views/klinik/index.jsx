@@ -6,7 +6,7 @@ import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 
 export default function Dashboard() {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [token, setToken] = useState('');
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -20,11 +20,13 @@ export default function Dashboard() {
       const response = await axios.get('http://localhost:5000/token');
       setToken(response.data.accessToken);
       const decoded = jwtDecode(response.data.accessToken);
-      setUsername(decoded.username);
+      setEmail(decoded.email);
+      setLoading(false);
     } catch (error) {
       console.error('Error refreshing token:', error);
+      setLoading(false);
       if(error.response){
-        navigate("/dashboard");
+        navigate("/");
       }
     }
   }
@@ -36,7 +38,7 @@ export default function Dashboard() {
       </div>
       <Header
         title="Pendaftaran Pelayanan Pasien"
-        userName={username}
+        userName={email}
         userStatus="Dokter Poli Umum"
         profilePicture="logo.png"
       />
