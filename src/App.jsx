@@ -20,6 +20,7 @@ import DashboardApotek from "./views/apoteker/pages/DashboardApotek";
 import Manage from "./views/manage";
 import HomeVisit from "./views/manage/pages/homevisit";
 import RekamMedis from "./views/manage/pages/rekammedis";
+import Pengingat from "./views/apoteker/pages/Pengingat";
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
         <Route path="/statistiklog" element={<LoginStatistik />} />
         <Route path="/apotek/tambah-obat" element={<TambahObat />} />
         <Route path="/apotek" element={<DashboardApotek />} />
+        <Route path="/apotek/pengingat" element={<Pengingat />} />
 
         {/* Statistik */}
         <Route path="/statistik" element={<Statistik />} />

@@ -3,6 +3,7 @@ import "tailwindcss/tailwind.css";
 import Sidebar from "../../../components/apotik/sidebar";
 import Header from "../../../components/header";
 import { useState } from "react";
+import Swal from 'sweetalert2';
 
 const TambahObat = () => {
   const [formData, setFormData] = useState({
@@ -26,7 +27,21 @@ const TambahObat = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
+    Swal.fire({
+      title: "Simpan Data?",
+      text: "Apakah Anda yakin ingin menyimpan data obat ini?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Ya, Simpan!",
+      cancelButtonText: "Batal",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        console.log(formData); // You can perform further actions like sending data to the server
+        Swal.fire("Data obat telah disimpan!", "", "success");
+      }
+    });
   };
 
   return (
