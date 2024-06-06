@@ -9,13 +9,26 @@ const api = axios.create({
   },
 });
 
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
 export const getPasiens = async () => {
   try {
     const response = await api.get("/");
     return response.data;
   } catch (error) {
     console.error("Error fetching pasiens:", error);
-    throw error;
+    throw new Error("Failed to fetch pasiens. Please try again later.");
   }
 };
 
@@ -25,7 +38,7 @@ export const createPasien = async (pasienData) => {
     return response.data;
   } catch (error) {
     console.error("Error creating pasien:", error);
-    throw error;
+    throw new Error("Failed to create pasien. Please try again later.");
   }
 };
 
@@ -35,7 +48,7 @@ export const updatePasien = async (pasienId, pasienData) => {
     return response.data;
   } catch (error) {
     console.error("Error updating pasien:", error);
-    throw error;
+    throw new Error("Failed to update pasien. Please try again later.");
   }
 };
 
@@ -45,6 +58,6 @@ export const deletePasien = async (pasienId) => {
     return response.data;
   } catch (error) {
     console.error("Error deleting pasien:", error);
-    throw error;
+    throw new Error("Failed to delete pasien. Please try again later.");
   }
 };

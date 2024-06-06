@@ -1,6 +1,6 @@
 export const DataKunjunganKlinik = [
   {
-    uuid: "1a2b3c4d",
+    uuid: "a1b2c3d4-e5f6-7890-ab12-cd34ef56gh78",
     politujuan: "Poli Umum",
     perawatan: "Pemeriksaan Umum",
     jeniskunjungan: "Sehat",
@@ -9,7 +9,7 @@ export const DataKunjunganKlinik = [
     tanggal: "2024-05-31",
   },
   {
-    uuid: "5e6f7g8h",
+    uuid: "b2c3d4e5-f6a7-8901-bc23-de45fg67hi89",
     politujuan: "Poli Gigi",
     perawatan: "Pencabutan Gigi",
     jeniskunjungan: "Sakit",
@@ -18,7 +18,7 @@ export const DataKunjunganKlinik = [
     tanggal: "2023-05-31",
   },
   {
-    uuid: "9i0j1k2l",
+    uuid: "c3d4e5f6-a7b8-9012-cd34-ef56gh78ij90",
     politujuan: "Poli Umum",
     perawatan: "Pemeriksaan Mata",
     jeniskunjungan: "Sehat",
@@ -27,7 +27,7 @@ export const DataKunjunganKlinik = [
     tanggal: "2023-05-31",
   },
   {
-    uuid: "3m4n5o6p",
+    uuid: "d4e5f6a7-b8c9-0123-de45-fg67hi89jk01",
     politujuan: "Poli Umum",
     perawatan: "Pemeriksaan Anak",
     jeniskunjungan: "Sehat",
@@ -36,7 +36,7 @@ export const DataKunjunganKlinik = [
     tanggal: "2023-05-31",
   },
   {
-    uuid: "7q8r9s0t",
+    uuid: "e5f6a7b8-c9d0-1234-ef56-gh78ij90kl12",
     politujuan: "Poli Umum",
     perawatan: "Pemeriksaan Umum",
     jeniskunjungan: "Sakit",
@@ -45,7 +45,7 @@ export const DataKunjunganKlinik = [
     tanggal: "2022-05-31",
   },
   {
-    uuid: "1u2v3w4x",
+    uuid: "f6a7b8c9-d0e1-2345-gh78-ij90kl12mn34",
     politujuan: "Poli Gigi",
     perawatan: "Pembersihan Gigi",
     jeniskunjungan: "Sehat",
@@ -54,7 +54,7 @@ export const DataKunjunganKlinik = [
     tanggal: "2024-05-31",
   },
   {
-    uuid: "5y6z7a8b",
+    uuid: "g7h8i9j0-k1l2-3456-mn78-op90qr12st34",
     politujuan: "Poli Umum",
     perawatan: "Pemeriksaan Mata",
     jeniskunjungan: "Sakit",
@@ -63,7 +63,7 @@ export const DataKunjunganKlinik = [
     tanggal: "2024-05-31",
   },
   {
-    uuid: "9c0d1e2f",
+    uuid: "h9i0j1k2-l3m4-5678-no90-qr12st34uv56",
     politujuan: "Poli Umum",
     perawatan: "Pemeriksaan Anak",
     jeniskunjungan: "Sehat",
@@ -72,7 +72,7 @@ export const DataKunjunganKlinik = [
     tanggal: "2024-05-31",
   },
   {
-    uuid: "3g4h5i6j",
+    uuid: "i1j2k3l4-m5n6-7890-op12-qr34st56uv78",
     politujuan: "Poli Umum",
     perawatan: "Pemeriksaan Umum",
     jeniskunjungan: "Sakit",
@@ -81,7 +81,7 @@ export const DataKunjunganKlinik = [
     tanggal: "2024-05-31",
   },
   {
-    uuid: "7k8l9m0n",
+    uuid: "j3k4l5m6-n7o8-9012-pq34-uv56wx78yz90",
     politujuan: "Poli Gigi",
     perawatan: "Pemeriksaan Gigi",
     jeniskunjungan: "Sehat",
