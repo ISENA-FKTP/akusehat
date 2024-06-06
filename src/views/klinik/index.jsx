@@ -1,35 +1,26 @@
 import Sidebar_Klinik from "../../components/klinik/sidebar_klinik";
 import Header from "../../components/header";
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { jwtDecode } from 'jwt-decode';
-import { useNavigate } from 'react-router-dom';
+
+import { useState, useEffect } from "react";
+import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
-  const [email, setEmail] = useState('');
-  const [token, setToken] = useState('');
-  const [loading, setLoading] = useState(true);
+  const [username, setUsername] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
-    refreshToken();
-  }, []);
+    const token = localStorage.getItem("accessToken");
+    console.log("Access Token:", token); // Debug token akses
 
-  const refreshToken = async () => {
-    try {
-      const response = await axios.get('http://localhost:5000/token');
-      setToken(response.data.accessToken);
-      const decoded = jwtDecode(response.data.accessToken);
-      setEmail(decoded.email);
-      setLoading(false);
-    } catch (error) {
-      console.error('Error refreshing token:', error);
-      setLoading(false);
-      if(error.response){
-        navigate("/");
-      }
+    if (token) {
+      const decoded = jwtDecode(token);
+      console.log("Decoded Token:", decoded); // Debug token yang telah didekode
+      setUsername(decoded.username);
+    } else {
+      navigate("/");
     }
-  }
+  }, [navigate]);
 
   return (
     <>
@@ -38,7 +29,7 @@ export default function Dashboard() {
       </div>
       <Header
         title="Pendaftaran Pelayanan Pasien"
-        userName={email}
+        userName={username}
         userStatus="Dokter Poli Umum"
         profilePicture="logo.png"
       />
@@ -80,7 +71,7 @@ export default function Dashboard() {
               <div className="flex-row">
                 <button
                   className="text-white bg-secondary-500 px-10 py-2 rounded-md hover:bg-secondary-600"
-                  onClick={() => navigate("/dashboard")}
+                  onClick={() => navigate("/administrasi")}
                 >
                   Mulai
                 </button>
