@@ -14,6 +14,9 @@ import { GiMedicines } from "react-icons/gi";
 import { FaVirus } from "react-icons/fa6";
 import Header from "../../components/header";
 import axios from "axios";
+import { DataSektor } from "./model/dataSektor";
+import { IoSearch } from "react-icons/io5";
+import { DataPegawaiRawat } from "./model/dataPegawaiRawat";
 
 const currentYear = new Date().getFullYear();
 
@@ -21,6 +24,9 @@ export default function Statistik() {
   const [year, setYear] = useState(currentYear);
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
+  const [sortBy, setSortBy] = useState("most");
+  const [sortedData, setSortedData] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const { totalJumlahObat, totalObatKeluar } = TotalObatYear(year);
   const total = totalJumlahObat + totalObatKeluar;
@@ -70,6 +76,31 @@ export default function Statistik() {
     "#0099FF",
   ];
   const colorsSektor = ["#5726FF", "#FD9A28"];
+
+  const combinedData = DataSektor.map((polisi) => ({
+    ...polisi,
+    rawat: DataPegawaiRawat.find((rawat) => rawat.uuid === polisi.uuid),
+  }));
+
+  useEffect(() => {
+    const sorted =
+      sortBy === "most"
+        ? [...combinedData].sort((a, b) => b.rawat.lamacuti - a.rawat.lamacuti)
+        : [...combinedData].sort((a, b) => a.rawat.lamacuti - b.rawat.lamacuti);
+    setSortedData(sorted);
+  }, [combinedData, sortBy]);
+
+  const handleSortChange = (e) => {
+    setSortBy(e.target.value);
+  };
+
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const filteredPolisi = sortedData.filter((entry) =>
+    entry.namapegawai.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <>
@@ -270,6 +301,125 @@ export default function Statistik() {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+        {/* Data Pengunjung */}
+        <div className="container mx-auto pb-10 lg:pl-3 pl-5">
+          <h1 className="text-2xl font-bold mt-4 mb-2 ">
+            Data Seluruh Pengunjung Klinik
+          </h1>
+          <h2 className="text-xl font-semibold mb-4 text-secondary-500">
+            Seluruh data terkait pengunjung di klinik
+          </h2>
+          <div className="flex justify-between mb-4">
+            <div>
+              <label htmlFor="sort">Urutkan berdasarkan:</label>
+              <select
+                id="sort"
+                value={sortBy}
+                onChange={handleSortChange}
+                className="lg:ml-2 mt-2 lg:mt-0 border border-primary-600 rounded-md shadow-sm "
+              >
+                <option value="most">Cuti Terbanyak</option>
+                <option value="least">Cuti Tersedikit</option>
+              </select>
+            </div>
+            <div className="flex items-center mt-9 lg:mt-0">
+              <div className="relative">
+                <span className="absolute inset-y-0 left-0 flex items-center pl-2">
+                  <IoSearch className="text-xl text-gray-500" />
+                </span>
+                <input
+                  type="text"
+                  placeholder="Cari pengunjung..."
+                  value={searchTerm}
+                  onChange={handleSearch}
+                  className="lg:px-2 lg:w-auto w-40 py-1 pl-8 border rounded-md focus:outline-none focus:ring-blue-500 focus:border-primary-600 placeholder:ml-5"
+                  style={{ paddingLeft: "2rem" }}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="overflow-x-auto pr-5 lg:pr-0">
+            <table className="table-auto w-full">
+              <thead>
+                <tr>
+                  <th className="px-4 py-2 bg-primary-600 text-white rounded-tl-lg">
+                    No
+                  </th>
+                  <th className="px-4 py-2 bg-primary-600 text-white">Nama</th>
+                  <th className="px-4 py-2 bg-primary-600 text-white">
+                    Pangkat/NRP
+                  </th>
+                  <th className="px-4 py-2 bg-primary-600 text-white">
+                    Satuan Kerja
+                  </th>
+                  <th className="px-4 py-2 bg-primary-600 text-white">
+                    Jenis Sakit
+                  </th>
+                  <th className="px-4 py-2 bg-primary-600 text-white">
+                    Jenis Perawatan
+                  </th>
+                  <th className="px-4 py-2 bg-primary-600 text-white">
+                    Sumber Biaya
+                  </th>
+                  <th className="px-4 py-2 bg-primary-600 text-white">
+                    Awal Sakit
+                  </th>
+                  <th className="px-4 py-2 bg-primary-600 text-white">
+                    Lama Cuti
+                  </th>
+                  <th className="px-4 py-2 bg-primary-600 text-white ">WFH</th>
+                  <th className="px-4 py-2 bg-primary-600 text-white rounded-tr-lg">
+                    Keterangan
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredPolisi.map((entry, index) => (
+                  <tr
+                    key={index}
+                    className={
+                      index % 2 === 0 ? "bg-primary-50" : "bg-primary-100"
+                    }
+                  >
+                    <td className="border border-primary-600 px-4 py-2 text-center">
+                      {index + 1}
+                    </td>
+                    <td className="border border-primary-600 px-4 py-2 text-center">
+                      {entry.namapegawai}
+                    </td>
+                    <td className="border border-primary-600 px-4 py-2 text-center">
+                      {entry.pangkat + "/" + entry.nrp}
+                    </td>
+                    <td className="border border-primary-600 px-4 py-2 text-center">
+                      {entry.satuankerja}
+                    </td>
+                    <td className="border border-primary-600 px-4 py-2 text-center">
+                      {entry.rawat.jenispenyakit}
+                    </td>
+                    <td className="border border-primary-600 px-4 py-2 text-center">
+                      {entry.rawat.jenisperawatan}
+                    </td>
+                    <td className="border border-primary-600 px-4 py-2 text-center">
+                      {entry.rawat.sumberbiaya}
+                    </td>
+                    <td className="border border-primary-600 px-4 py-2 text-center">
+                      {entry.rawat.awalsakit}
+                    </td>
+                    <td className="border border-primary-600 px-4 py-2 text-center">
+                      {entry.rawat.lamacuti}
+                    </td>
+                    <td className="border border-primary-600 px-4 py-2 text-center">
+                      {entry.rawat.WFH}
+                    </td>
+                    <td className="border border-primary-600 px-4 py-2 text-center">
+                      {entry.rawat.keterangan}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>

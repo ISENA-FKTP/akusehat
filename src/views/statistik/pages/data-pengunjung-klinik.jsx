@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Sidebar from "../../../components/statistik/sidebar";
 import Header from "../../../components/header";
 import BarChartPoliUmum from "../diagram/BarChart/BarChartPoliUmum";
@@ -10,11 +10,19 @@ import {
 import PieChartTotalPengunjungKlinik from "../diagram/PieChart/PieChartTotalPengunjungKlinik";
 import PieChatStatusPasien from "../diagram/PieChart/PieChartStatusPasienKlinik";
 import BarChartRawat from "../diagram/BarChart/BarChartPengunjungPoli";
+import { IoSearch } from "react-icons/io5";
+import { dataPasien } from "../model/data/dataPasien";
+import { dataDiagnosa } from "../model/data/dataDiagnosa";
+import { dataObatPasien } from "../model/data/dataTerapi";
+import { dataPemeriksaan } from "../model/data/dataPemeriksaan";
 
 const currentYear = new Date().getFullYear();
 
 export default function DataPengunjungKlinik() {
   const [year, setYear] = useState(currentYear);
+  const [sortBy, setSortBy] = useState("most");
+  const [sortedData, setSortedData] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const filteredData = DataKunjunganKlinik.filter(
     (data) => new Date(data.tanggal).getFullYear() === parseInt(year)
@@ -38,6 +46,59 @@ export default function DataPengunjungKlinik() {
 
   const colorsSektor = ["#5726FF", "#FD9A28"];
 
+  const combinedData = dataPasien.map((pasien) => ({
+    ...pasien,
+    diagnosa: dataDiagnosa.find((diagnosa) => diagnosa.uuid === pasien.uuid),
+    kunjungan: DataKunjunganKlinik.find(
+      (kunjungan) => kunjungan.uuid === pasien.uuid
+    ),
+    obatpasien: dataObatPasien.find((obat) => obat.uuid === pasien.uuid),
+    pemeriksaan: dataPemeriksaan.find(
+      (pemeriksaan) => pemeriksaan.uuid === pasien.uuid
+    ),
+  }));
+
+  const sortStatus = (a, b, order) => {
+    const indexA = order.indexOf(a.statuspeserta);
+    const indexB = order.indexOf(b.statuspeserta);
+    return indexA - indexB;
+  };
+
+  useEffect(() => {
+    const statusOrder = ["PNS", "Polisi", "Mandiri", "Keluarga"];
+    const sorted =
+      sortBy === "most"
+        ? [...combinedData].sort((a, b) => sortStatus(b, a, statusOrder))
+        : [...combinedData].sort((a, b) => sortStatus(a, b, statusOrder));
+    setSortedData(sorted);
+  }, [combinedData, sortBy]);
+
+  const handleSortChange = (event) => {
+    setSortBy(event.target.value);
+  };
+
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const filteredKlinik = sortedData.filter((entry) =>
+    entry.nama.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const calculateAge = (dateOfBirth) => {
+    const birthDate = new Date(dateOfBirth);
+    const currentDate = new Date();
+    let age = currentDate.getFullYear() - birthDate.getFullYear();
+    const monthDifference = currentDate.getMonth() - birthDate.getMonth();
+    if (
+      monthDifference < 0 ||
+      (monthDifference === 0 && currentDate.getDate() < birthDate.getDate())
+    ) {
+      age--;
+    }
+    return age;
+  };
+
   return (
     <>
       <div className="bg-[#E0F1EE] font-primary">
@@ -46,7 +107,7 @@ export default function DataPengunjungKlinik() {
           <Sidebar
             userName="Rifki Rusdi Satma Putra"
             userStatus="Kepala Polisi"
-            profilePicture="logo.png"
+            profilePicture="/logo.png"
           />
         </div>
 
@@ -54,7 +115,7 @@ export default function DataPengunjungKlinik() {
           title="Statistik Data Kunjungan Klinik"
           userName="Rifki Rusdi Satma Putra"
           userStatus="Kepala Polisi"
-          profilePicture="logo.png"
+          profilePicture="/logo.png"
         />
 
         <div className="container mx-auto pl-5 pt-20 lg:pt-0">
@@ -66,7 +127,7 @@ export default function DataPengunjungKlinik() {
               </label>
               <select
                 id="year"
-                value={year}
+                value={year.toString()}
                 onChange={handleYearChange}
                 className="p-2 rounded-md"
               >
@@ -94,7 +155,10 @@ export default function DataPengunjungKlinik() {
                   </div>
                 </div>
                 <div className="h-96 w-[20rem] mt-2">
-                  <BarChartPoliUmum colors={colorsPenyakit} year={year} />
+                  <BarChartPoliUmum
+                    colors={colorsPenyakit}
+                    year={year.toString()}
+                  />
                 </div>
               </div>
             </div>
@@ -109,7 +173,10 @@ export default function DataPengunjungKlinik() {
                   </div>
                 </div>
                 <div className="h-96 w-[20rem] mt-2">
-                  <BarChartPoliGigi colors={colorsPenyakit} year={year} />
+                  <BarChartPoliGigi
+                    colors={colorsPenyakit}
+                    year={year.toString()}
+                  />
                 </div>
               </div>
             </div>
@@ -139,7 +206,7 @@ export default function DataPengunjungKlinik() {
                       <div className="lg:h-56 h-96 lg:w-44 w-full px-8 lg:px-0 mt-2">
                         <PieChartTotalPengunjungKlinik
                           colors={colorsSektor}
-                          year={year}
+                          year={year.toString()}
                         />
                       </div>
                     </div>
@@ -158,7 +225,7 @@ export default function DataPengunjungKlinik() {
                     <div className="h-56 mb-2">
                       <PieChatStatusPasien
                         colors={colorsPenyakit}
-                        year={year}
+                        year={year.toString()}
                       />
                     </div>
                   </div>
@@ -175,11 +242,136 @@ export default function DataPengunjungKlinik() {
                     </div>
                   </div>
                   <div className="h-[5.2rem]">
-                    <BarChartRawat colors={colorsPenyakit} year={year} />
+                    <BarChartRawat
+                      colors={colorsPenyakit}
+                      year={year.toString()}
+                    />
                   </div>
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Data Pengunjung */}
+        <div className="container mx-auto pb-10 lg:pl-3 pl-5">
+          <h1 className="text-2xl font-bold mt-4 mb-2 ">
+            Data Seluruh Pengunjung Klinik
+          </h1>
+          <h2 className="text-xl font-semibold mb-4 text-secondary-500">
+            Seluruh data terkait pengunjung di klinik
+          </h2>
+          <div className="flex justify-between mb-4">
+            <div>
+              <label htmlFor="sort">Urutkan berdasarkan:</label>
+              <select
+                id="sort"
+                value={sortBy}
+                onChange={handleSortChange}
+                className="lg:ml-2 mt-2 lg:mt-0 border border-primary-600 rounded-md shadow-sm "
+              >
+                <option value="most">Paling Banyak</option>
+                <option value="least">Paling Sedikit</option>
+              </select>
+            </div>
+            <div className="flex items-center mt-9 lg:mt-0">
+              <div className="relative">
+                <span className="absolute inset-y-0 left-0 flex items-center pl-2">
+                  <IoSearch className="text-xl text-gray-500" />
+                </span>
+                <input
+                  type="text"
+                  placeholder="Cari pengunjung..."
+                  value={searchTerm}
+                  onChange={handleSearch}
+                  className="lg:px-2 lg:w-auto w-40 py-1 pl-8 border rounded-md focus:outline-none focus:ring-blue-500 focus:border-primary-600 placeholder:ml-5"
+                  style={{ paddingLeft: "2rem" }}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="overflow-x-auto pr-5 lg:pr-0">
+            <table className="table-auto w-full">
+              <thead>
+                <tr>
+                  <th className="px-4 py-2 bg-primary-600 text-white rounded-tl-lg">
+                    No
+                  </th>
+                  <th className="px-4 py-2 bg-primary-600 text-white">
+                    No. Rekam Medis
+                  </th>
+                  <th className="px-4 py-2 bg-primary-600 text-white">Poli</th>
+                  <th className="px-4 py-2 bg-primary-600 text-white">
+                    Nama Lengkap
+                  </th>
+                  <th className="px-4 py-2 bg-primary-600 text-white">Usia</th>
+                  <th className="px-4 py-2 bg-primary-600 text-white">
+                    Jenis Kelamin
+                  </th>
+                  <th className="px-4 py-2 bg-primary-600 text-white">
+                    Status Pasien
+                  </th>
+                  <th className="px-4 py-2 bg-primary-600 text-white">
+                    Diagnosa
+                  </th>
+                  <th className="px-4 py-2 bg-primary-600 text-white">
+                    Terapi
+                  </th>
+                  <th className="px-4 py-2 bg-primary-600 text-white rounded-tr-lg">
+                    Rujuk (Ya/Tidak)
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredKlinik.map((entry, index) => (
+                  <tr
+                    key={index}
+                    className={
+                      index % 2 === 0 ? "bg-primary-50" : "bg-primary-100"
+                    }
+                  >
+                    <td className="border border-primary-600 px-4 py-2 text-center">
+                      {index + 1}
+                    </td>
+                    <td className="border border-primary-600 px-4 py-2 text-center">
+                      {entry.norm}
+                    </td>
+                    <td className="border border-primary-600 px-4 py-2 text-center">
+                      {entry.kunjungan.politujuan}
+                    </td>
+                    <td className="border border-primary-600 px-4 py-2 text-center">
+                      {entry.nama}
+                    </td>
+                    <td className="border border-primary-600 px-4 py-2 text-center">
+                      {calculateAge(entry.tgllahir)} tahun
+                    </td>
+                    <td className="border border-primary-600 px-4 py-2 text-center">
+                      {entry.gender}
+                    </td>
+                    <td className="border border-primary-600 px-4 py-2 text-center">
+                      {entry.statuspeserta}
+                    </td>
+                    <td className="border border-primary-600 px-4 py-2 text-center">
+                      {entry.diagnosa.jenispenyakit}
+                    </td>
+                    <td className="border border-primary-600 px-4 py-2 text-center">
+                      {entry.obatpasien && (
+                        <>
+                          <div>{entry.obatpasien.jenisobat1}</div>
+                          <div>{entry.obatpasien.jenisobat2}</div>
+                          <div>{entry.obatpasien.jenisobat3}</div>
+                          <div>{entry.obatpasien.jenisobat4}</div>
+                          <div>{entry.obatpasien.jenisobat5}</div>
+                        </>
+                      )}
+                    </td>
+                    <td className="border border-primary-600 px-4 py-2 text-center">
+                      {entry.pemeriksaan.statuspulang}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>

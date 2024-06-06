@@ -1,25 +1,19 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { createPasients, getPasients } from "../model/useApi";
+import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 import Sidebar_Klinik from "../../../components/klinik/sidebar_klinik";
 import Header from "../../../components/header";
-import { useNavigate } from "react-router-dom";
-
-import { createPasien } from "../model/api";
-import PropTypes from "prop-types";
 
 const MySwal = withReactContent(Swal);
 
-const FormComponent = ({ token }) => {
-  FormComponent.propTypes = {
-    token: PropTypes.string,
-  };
-
+const FormComponent = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     nobpjs: "",
@@ -32,13 +26,27 @@ const FormComponent = ({ token }) => {
     norm: "",
   });
 
+  const [patients, setPatients] = useState([]); // State untuk menyimpan data pasien
+
+  useEffect(() => {
+    const fetchPatients = async () => {
+      try {
+        const data = await getPasients();
+        setPatients(data); // Mengambil dan menyimpan data pasien
+      } catch (error) {
+        console.error("Error fetching patients:", error);
+      }
+    };
+
+    fetchPatients();
+  }, []);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
   const handleDateChange = (date) => {
-
     setFormData({ ...formData, tgllahir: date });
   };
 
@@ -76,10 +84,13 @@ const FormComponent = ({ token }) => {
     });
   };
 
-
   const saveData = async () => {
     try {
-      await createPasien(formData, token); // Gunakan token dalam pemanggilan API
+      const token = localStorage.getItem("accessToken");
+      if (!token) {
+        throw new Error("Access token is not available");
+      }
+      await createPasients(formData, token);
       MySwal.fire("Tersimpan!", "Data Anda telah disimpan.", "success").then(
         () => {
           navigate("/kajianawal");
@@ -107,7 +118,6 @@ const FormComponent = ({ token }) => {
         {[
           {
             label: "NRP/No.BPJS",
-
             name: "nobpjs",
             placeholder: "Masukkan NRP atau No. BPJS",
           },
@@ -189,6 +199,21 @@ const FormComponent = ({ token }) => {
 };
 
 export default function Administrasi() {
+  const [token, setToken] = useState("");
+  const [username, setUsername] = useState("");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      const decoded = jwtDecode(token);
+      setUsername(decoded.username);
+      setToken(token);
+    } else {
+      navigate("/");
+    }
+  }, [navigate]);
+
   return (
     <>
       <div className="fixed z-50">
@@ -196,7 +221,7 @@ export default function Administrasi() {
       </div>
       <Header
         title="Pendaftaran Pelayanan Pasien"
-        userName="Muhamad Halimudin Nova"
+        userName={username}
         userStatus="Dokter Poli Umum"
         profilePicture="logo.png"
       />
@@ -255,7 +280,7 @@ export default function Administrasi() {
               </form>
             </div>
           </div>
-          <FormComponent />
+          <FormComponent token={token} />
         </div>
       </div>
     </>
