@@ -5,13 +5,20 @@ import SearchBar from "../../components/manage/searchBar";
 import TambahButton from "../../components/manage/tambahButton";
 import { DataSakit, headData } from "./model/dataSakit";
 import Tabel from "../../components/manage/tabel";
+import { useNavigate } from "react-router-dom";
 
 export default function Manage() {
   const [data, setData] = useState([]);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     DataSakit.getDataSakit().then((data) => setData(data));
   }, []);
+
+  const tambahDataHandler = () => {
+    navigate("/manage/data-sakit/tambah-data");
+  };
 
   return (
     <div className=" font-primary">
@@ -30,7 +37,7 @@ export default function Manage() {
           <h1>Data Juni 2024</h1>
         </div>
         <SearchBar />
-        <TambahButton />
+        <TambahButton onClicked={tambahDataHandler} />
         <Tabel table_head={headData} table_row={data}/>
       </main>
     </div>
