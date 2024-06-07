@@ -6,6 +6,8 @@ import { AiOutlineCalendar, AiOutlineClockCircle } from "react-icons/ai";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Header from "../../../components/header";
+import SelectWithInput from "../../../components/klinik/Makanan";
+import SelectWithInputObat from "../../../components/klinik/obat";
 
 const MySwal = withReactContent(Swal);
 
@@ -82,6 +84,7 @@ export default function Dokter() {
     setDiagnosa(newDiagnosa);
   };
 
+  
 
   return (
     <>
@@ -281,8 +284,8 @@ export default function Dokter() {
                 <label className="text-black font-secondary-Karla font-bold w-40">
                   Dosis :
                 </label>
-                <input
-                  type="text"
+                <textarea
+                  type="Text"
                   name="Dosis"
                   placeholder=" Keterangan....."
                   className="p-1 h-24 rounded-md text-left bg-white border border-black focus:outline-none w-full"
@@ -292,7 +295,7 @@ export default function Dokter() {
                 <label className="text-black font-secondary-Karla font-bold w-40">
                   BMHP :
                 </label>
-                <input
+                <textarea
                   type="text"
                   name="BMHP"
                   placeholder=" Keterangan....."
@@ -327,17 +330,18 @@ export default function Dokter() {
               </h1>
             </div>
             <div className=" border border-primary-600 shadow-lg rounded-b-lg">
-              <form className="-space-y-10 w-full ml-10 left-10 right-24 pr-20 ">
-              <div className="flex items-center space-x-5 py-14">
+              <form className="-space-y-11 w-full ml-9 left-10 right-24 pr-20 ">
+              <div className="flex items-center space-x-6 py-14">
                 <label className="text-black font-secondary-Karla font-bold w-40">
                   Kasus KLL
                 </label>
                 <input
-                  type="text"
+                  type="checkbox"
                   name="Kasus KLL"
-                  className="p-2 rounded-md text-left bg-white border border-black focus:outline-none w-full"
+                  className="p-3 left-24 rounded-sm bg-white border border-black focus:outline-none "
                   placeholder="   "
                 />
+                <span className=" text-black font-bold font-secondary">Kecelakaan Lalu Lintas</span>
               </div>
 
                 <div className="flex items-center space-x-5">
@@ -401,77 +405,71 @@ export default function Dokter() {
         </div>
 
         <div>
-          <div className="h-10 bg-primary-600 shadow-lg rounded-t-lg py-4 justify-center flex items-center">
-            <h1 className="text-white font-primary-Poppins font-bold text-xl ">
-              Keadaan Fisik
-            </h1>
+  <div className="">
+    <div className=" bg-primary-600 shadow-lg rounded-t-lg py-2 justify-center flex items-center">
+      <h1 className="text-white font-primary-Poppins font-bold text-xl">
+        Riwayat Alergi
+      </h1>
+    </div>
+    <div className="h-96 border border-primary-600 -mt-8 shadow-lg rounded-lg">
+      <form className="-space-y-12 mx-6 sm:mx-12">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-5 py-12">
+          <SelectWithInput/>
           </div>
-          <div className="h-72 border border-primary-600 -my-8 shadow-lg rounded-b-lg">
-            <form className="-space-y-10 w-full ml-10 left-10 right-24 pr-20">
-              <div className="flex items-center space-x-5">
-                <label className="text-black font-secondary-Karla font-bold py-14 w-40">
-                  Berat Badan
-                </label>
-                <input
-                  type="text"
-                  name="berat_badan"
-                  className="p-1 h-9 w-full rounded-md text-left bg-white border border-black focus:outline-none"
-                  placeholder="   Kg"
-                />
-              </div>
-              <div className="flex items-center space-x-5">
-                <label className="text-black font-secondary-Karla font-bold w-40">
-                  Tinggi Badan
-                </label>
-                <input
-                  type="text"
-                  name="tinggi_badan"
-                  className="p-1 h-9 w-full rounded-md text-left bg-white border border-black focus:outline-none"
-                  placeholder="   Cm"
-                />
-              </div>
-              <div className="flex items-center space-x-5">
-                <label className="py-14 text-black font-secondary-Karla font-bold w-40">
-                  Lingkar Perut
-                </label>
-                <input
-                  type="text"
-                  name="lingkar_perut"
-                  className="p-1 h-9 w-full rounded-md text-left bg-white border border-black focus:outline-none"
-                  placeholder="   Cm"
-                />
-              </div>
-              <div className="flex items-center space-x-5">
-                <label className="py-2 text-black font-secondary-Karla font-bold w-40">
-                  IMT (BB/TB)
-                </label>
-                <input
-                  type="text"
-                  name="imt"
-                  className="p-1 h-9 w-full rounded-md text-left bg-white border border-black focus:outline-none"
-                  placeholder="   Kg/M2"
-                />
-              </div>
-              <div className="flex space-x-4">
-                <button
-                  type="button"
-                  className="bg-blue-500 bg-success-600 text-white px-4 py-1 my-[60px] rounded hover:bg-blue-600"
-                  onClick={handleSave}
-                >
-                  Simpan
-                </button>
-                <button
-                  type="button"
-                  className="bg-gray-500 bg-error-700 text-white px-4 py-1 my-[60px] rounded hover:bg-gray-600"
-                  onClick={handleCancel}
-                >
-                  Batal
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
 
+          <div className="flex items-center space-x-5 py-12">
+            <label className="text-black font-secondary-Karla font-bold w-40">
+              Udara :
+            </label>
+            <select
+              name="Udara"
+              className="p-1 rounded-md w-full border border-black font-secondary-Karla font-medium text-black focus:outline-none focus:border-blue-500"
+            >
+              <option value=""></option>
+              <option value="Tidak ada">Tidak ada</option>
+              <option value="Udara panas">Udara Panas</option>
+              <option value="Udara Dingin">Udara Dingin</option>
+              <option value="Udara Kotor">Udara Kotor</option>
+            </select>
+          </div>
+       
+        <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-5">
+          <SelectWithInputObat/>
+          </div>
+          
+          <div className="flex items-center space-x-5 py-24">
+            <label className="text-black font-secondary-Karla font-bold w-40">
+              Prognosa
+            </label>
+            <input
+              type="text"
+              name="Prognosa"
+              className="p-1 h-9 w-full rounded-md text-left bg-white border border-black focus:outline-none"
+              placeholder=" "
+            />
+          </div>
+       
+        <div className="flex space-x-4 ">
+          <button
+            type="button"
+            className="bg-blue-500 bg-success-600 text-white px-4 py-1 rounded hover:bg-blue-600"
+            onClick={handleSave}
+          >
+            Simpan
+          </button>
+          <button
+            type="button"
+            className="bbg-gray-500 bg-error-700 text-white px-4 py-1 rounded hover:bg-gray-600"
+            onClick={handleCancel}
+          >
+            Batal
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  </div>
+       
         <div>
           <div className="h-10 bg-primary-600 shadow-lg rounded-t-lg py-4 justify-center flex items-center">
             <h1 className="text-white font-primary-Poppins font-bold text-xl ">
@@ -566,96 +564,80 @@ export default function Dokter() {
           </div>
         </div>
 
+
         <div>
-          <div className="mb-5">
-            <div className="h-10 bg-primary-600 shadow-lg rounded-t-lg py-4 justify-center flex items-center">
-              <h1 className="text-white font-primary-Poppins font-bold text-xl   ">
-                Riwayat Alergi
-              </h1>
-            </div>
-            <div className="h-72 border border-primary-600 -mt-8 shadow-lg rounded-lg">
-              <form className="-space-y-10 mx-12">
-                <div className="flex items-center space-x-5">
-                  <label className="text-black font-secondary-Karla font-bold py-14 w-40">
-                    Makanan :
-                  </label>
-                  <select
-                    name="Perawatan"
-                    className="p-1 rounded-md w-full border border-black font-secondary-Karla font-medium text-black focus:outline-none focus:border-blue-500"
-                  >
-                    <option value=""></option>
-                    <option value="rawat jalan">Tidak ada</option>
-                    <option value="rawat inap">Seafood</option>
-                    <option value="Promotif Preventif">Gandum</option>
-                    <option value="rawat jalan">Susu Sapi</option>
-                    <option value="rawat inap">Kacang-Kacangan</option>
-                    <option value="Promotif Preventif">Makanan Lainnya</option>
-                  </select>
-                </div>
-                <div className="flex items-center space-x-5">
-                  <label className="text-black font-secondary-Karla font-bold w-40">
-                    Udara :
-                  </label>
-                  <select
-                    name="Perawatan"
-                    className="p-1 rounded-md w-full border border-black font-secondary-Karla font-medium text-black focus:outline-none focus:border-blue-500"
-                  >
-                    <option value=""></option>
-                    <option value="rawat jalan">Tidak ada</option>
-                    <option value="rawat inap">Udara Panas</option>
-                    <option value="Promotif Preventif">Udara Dingin</option>
-                    <option value="Promotif Preventif">Udara Kotor</option>
-                  </select>
-                </div>
-                <div className="flex items-center space-x-5">
-                  <label className="py-14 text-black font-secondary-Karla font-bold w-40">
-                    Obat-Obatan :
-                  </label>
-                  <select
-                    name="Perawatan"
-                    className="p-1 rounded-md w-full border border-black font-secondary-Karla font-medium text-black focus:outline-none focus:border-blue-500"
-                  >
-                    <option value=""></option>
-                    <option value="rawat jalan">Antibiotik</option>
-                    <option value="rawat inap">Antiinflasi</option>
-                    <option value="Promotif Preventif">Non Steroid</option>
-                    <option value="rawat jalan">Kortikosteroid</option>
-                    <option value="rawat inap">Insulin</option>
-                    <option value="Promotif Preventif">
-                      Obat-Obatan lainnya
-                    </option>
-                  </select>
-                </div>
-                <div className="flex items-center space-x-5">
-                  <label className="py-2 text-black font-secondary-Karla font-bold w-40">
-                    Prognosa
-                  </label>
-                  <input
-                    type="text"
-                    name="Prognosa"
-                    className="p-1 h-9 w-full rounded-md text-left bg-white border border-black focus:outline-none"
-                    placeholder=" "
-                  />
-                </div>
-                <div className="flex space-x-4">
-                  <button
-                    type="button"
-                    className="bg-blue-500 bg-success-600 text-white px-4 py-1 my-[60px] rounded hover:bg-blue-600"
-                    onClick={handleSave}
-                  >
-                    Simpan
-                  </button>
-                  <button
-                    type="button"
-                    className="bg-gray-500 bg-error-700 text-white px-4 py-1 my-[60px] rounded hover:bg-gray-600"
-                    onClick={handleCancel}
-                  >
-                    Batal
-                  </button>
-                </div>
-              </form>
-            </div>
+          <div className="h-10 bg-primary-600 shadow-lg rounded-t-lg py-4 justify-center flex items-center">
+            <h1 className="text-white font-primary-Poppins font-bold text-xl ">
+              Keadaan Fisik
+            </h1>
           </div>
+          <div className=" border border-primary-600 -my-8 shadow-lg rounded-b-lg">
+            <form className="-space-y-10 w-full ml-10 left-10 right-24 pr-20">
+              <div className="flex items-center space-x-5">
+                <label className="text-black font-secondary-Karla font-bold py-14 w-40">
+                  Berat Badan
+                </label>
+                <input
+                  type="text"
+                  name="berat_badan"
+                  className="p-1 h-9 w-full rounded-md text-left bg-white border border-black focus:outline-none"
+                  placeholder="   Kg"
+                />
+              </div>
+              <div className="flex items-center space-x-5">
+                <label className="text-black font-secondary-Karla font-bold w-40">
+                  Tinggi Badan
+                </label>
+                <input
+                  type="text"
+                  name="tinggi_badan"
+                  className="p-1 h-9 w-full rounded-md text-left bg-white border border-black focus:outline-none"
+                  placeholder="   Cm"
+                />
+              </div>
+              <div className="flex items-center space-x-5">
+                <label className="py-14 text-black font-secondary-Karla font-bold w-40">
+                  Lingkar Perut
+                </label>
+                <input
+                  type="text"
+                  name="lingkar_perut"
+                  className="p-1 h-9 w-full rounded-md text-left bg-white border border-black focus:outline-none"
+                  placeholder="   Cm"
+                />
+              </div>
+              <div className="flex items-center space-x-5">
+                <label className="py-2 text-black font-secondary-Karla font-bold w-40">
+                  IMT (BB/TB)
+                </label>
+                <input
+                  type="text"
+                  name="imt"
+                  className="p-1 h-9 w-full rounded-md text-left bg-white border border-black focus:outline-none"
+                  placeholder="   Kg/M2"
+                />
+              </div>
+              <div className="flex space-x-4">
+                <button
+                  type="button"
+                  className="bg-blue-500 bg-success-600 text-white px-4 py-1 my-[60px] rounded hover:bg-blue-600"
+                  onClick={handleSave}
+                >
+                  Simpan
+                </button>
+                <button
+                  type="button"
+                  className="bg-gray-500 bg-error-700 text-white px-4 py-1 my-[60px] rounded hover:bg-gray-600"
+                  onClick={handleCancel}
+                >
+                  Batal
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        
 
           <div className="my-5">
             <div className="h-10 bg-primary-600 shadow-lg rounded-t-lg py-4 justify-center flex items-center">
@@ -729,7 +711,6 @@ export default function Dokter() {
             </div>
           </div>
         </div>
-      </div>
     </>
   );
 }
