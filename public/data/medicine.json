@@ -1,9 +1,9 @@
 [
     {
       "medicineName": "Paracetamol",
-      "quantity": 100,
+      "quantity": 90,
       "entryDate": "2023-05-01",
-      "expiryDate": "2024-05-01",
+      "expiryDate": "2024-07-01",
       "batchNo": "B12345",
       "category": "Obat Cair",
       "type": "Syrup",
@@ -13,7 +13,7 @@
       "medicineName": "Ibuprofen",
       "quantity": 200,
       "entryDate": "2023-06-01",
-      "expiryDate": "2025-06-01",
+      "expiryDate": "2024-08-01",
       "batchNo": "B67890",
       "category": "Obat Padat",
       "type": "Tablet",
@@ -23,7 +23,7 @@
         "medicineName": "Panadol",
         "quantity": 300,
         "entryDate": "2023-05-01",
-        "expiryDate": "2024-05-01",
+        "expiryDate": "2025-05-01",
         "batchNo": "B12345",
         "category": "Obat Cair",
         "type": "Syrup",
@@ -33,7 +33,7 @@
         "medicineName": "Aspirine",
         "quantity": 100,
         "entryDate": "2023-05-01",
-        "expiryDate": "2024-05-01",
+        "expiryDate": "2025-05-01",
         "batchNo": "B12345",
         "category": "Obat Cair",
         "type": "Tablet",
@@ -51,3 +51,4 @@
       }
   ]
   
+
