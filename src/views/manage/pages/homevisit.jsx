@@ -5,10 +5,17 @@ import SearchBar from "../../../components/manage/searchBar";
 import TambahButton from "../../../components/manage/tambahButton";
 import { DataHomeVisit, headData } from "../model/dataHomeVisit";
 import TabelHoemVisit from "../../../components/manage/tabel-home-visit";
+import { useNavigate } from "react-router-dom";
 
 export default function HomeVisit() {
   const [data, setData] = useState([]);
 
+  const navigate = useNavigate();
+  
+  const tambahDataHandler = () => {
+    navigate("/manage/data-home-visit/tambah-data");
+  };
+    
   useEffect(() => {
     DataHomeVisit.getDataHomeVisit().then((data) => setData(data));
   }, []);
@@ -30,7 +37,7 @@ export default function HomeVisit() {
           <h1>Data Juni 2024</h1>
         </div>
         <SearchBar />
-        <TambahButton />
+        <TambahButton onClicked={tambahDataHandler}/>
         <TabelHoemVisit table_head={headData} table_row={data}/>
       </main>
     </div>
