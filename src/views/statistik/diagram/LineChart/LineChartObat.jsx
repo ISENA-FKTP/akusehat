@@ -69,7 +69,7 @@ LineChart.propTypes = {
   showNextSixMonths: PropTypes.bool,
   startMonthIndex: PropTypes.number,
   endMonthIndex: PropTypes.number,
-  year: PropTypes.number.isRequired,
+  year: PropTypes.string,
 };
 
 export default LineChart;
