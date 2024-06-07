@@ -1,17 +1,27 @@
 import { ResponsiveLine } from "@nivo/line";
-import { DataPolisi } from "../model/dataPolisi";
+import { DataObat, calculateByYearAndMonth } from "../../model/dataObat";
+import PropTypes from "prop-types";
 
-const DataPeningkatanSakitPolisi = [
-  {
-    id: "Peningkatan Sakit Polisi",
-    data: DataPolisi.map((item) => ({
-      x: item.bulan,
-      y: item.polda + item.polres,
-    })),
-  },
-];
+const LineChart = ({
+  showNextSixMonths,
+  startMonthIndex,
+  endMonthIndex,
+  year,
+}) => {
+  const dataYear = calculateByYearAndMonth(year, showNextSixMonths, DataObat);
 
-const LineChart = () => {
+  const dataToShow = dataYear.slice(startMonthIndex, endMonthIndex);
+
+  const DataPeningkatanSakitPolisi = [
+    {
+      id: "Sisa Pesediaan Obat",
+      data: dataToShow.map((item) => ({
+        x: item.bulan,
+        y: item.jumlahobat,
+      })),
+    },
+  ];
+
   return (
     <ResponsiveLine
       data={DataPeningkatanSakitPolisi}
@@ -33,14 +43,12 @@ const LineChart = () => {
         tickRotation: 0,
         legendOffset: 36,
         legendPosition: "middle",
-        truncateTickAt: 0,
       }}
       axisLeft={{
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 0,
         legendPosition: "middle",
-        truncateTickAt: 0,
       }}
       enableGridX={false}
       colors={{ scheme: "purple_orange" }}
@@ -51,11 +59,17 @@ const LineChart = () => {
       pointLabel="data.yFormatted"
       pointLabelYOffset={-12}
       enableArea={true}
-      areaBaselineValue={60}
       enableTouchCrosshair={true}
       useMesh={true}
     />
   );
+};
+
+LineChart.propTypes = {
+  showNextSixMonths: PropTypes.bool,
+  startMonthIndex: PropTypes.number,
+  endMonthIndex: PropTypes.number,
+  year: PropTypes.number.isRequired,
 };
 
 export default LineChart;

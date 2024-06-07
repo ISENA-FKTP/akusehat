@@ -1,13 +1,21 @@
 import { ResponsiveBar } from "@nivo/bar";
-import { calculateRawatTotals } from "../../model/dataPegawaiRawat";
+import {
+  DataPegawaiRawat,
+  calculateRawatTotals,
+} from "../../model/dataPegawaiRawat";
 import PropTypes from "prop-types";
 
-const BarChart = ({ colors }) => {
+const BarChart = ({ colors, year }) => {
   BarChart.propTypes = {
+    year: PropTypes.string,
     colors: PropTypes.arrayOf(PropTypes.string),
   };
 
-  const totals = calculateRawatTotals();
+  const filteredData = DataPegawaiRawat.filter(
+    (data) => new Date(data.awalsakit).getFullYear() === parseInt(year)
+  );
+
+  const totals = calculateRawatTotals(filteredData);
 
   const updatedTotals = {
     ...totals,
@@ -15,7 +23,7 @@ const BarChart = ({ colors }) => {
 
   return (
     <ResponsiveBar
-      data={[updatedTotals]} // Menggunakan data yang sudah diperbarui
+      data={[updatedTotals]}
       keys={Object.keys(updatedTotals)}
       indexBy="id"
       margin={{ top: 10, right: 10, bottom: 70, left: 10 }}

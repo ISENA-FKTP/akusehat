@@ -1,30 +1,29 @@
-import PropTypes from "prop-types";
 import { ResponsiveBar } from "@nivo/bar";
-import { DataPolisi } from "../../model/dataPolisi";
-const BarChart = ({ colors, year }) => {
-  BarChart.propTypes = {
-    year: PropTypes.string,
-    colors: PropTypes.arrayOf(PropTypes.string),
-  };
+import PropTypes from "prop-types";
+import { DataObat, calculateByYearAndMonthForBar } from "../../model/dataObat";
 
-  const filteredData = DataPolisi.filter(
-    (data) => new Date(data.tanggal).getFullYear() === parseInt(year)
+const BarChart = ({
+  colors,
+  showNextSixMonths,
+  startMonthIndex,
+  endMonthIndex,
+  year,
+}) => {
+  const data2024 = calculateByYearAndMonthForBar(
+    year,
+    showNextSixMonths,
+    DataObat
   );
 
-  const data = filteredData.map(({ bulan, polda, polres }) => ({
-    bulan,
-    "Jumlah Polda": polda,
-    "Jumlah Polres": polres,
-  }));
+  const data = data2024.slice(startMonthIndex, endMonthIndex);
 
   return (
     <ResponsiveBar
       data={data}
-      keys={["Jumlah Polda", "Jumlah Polres"]}
+      keys={["Total Obat", "Obat Keluar"]}
       indexBy="bulan"
-      margin={{ top: 20, right: 10, bottom: 100, left: 55 }}
-      padding={0.15}
-      groupMode="grouped"
+      margin={{ top: 20, right: 10, bottom: 100, left: 25 }}
+      padding={0.55}
       valueScale={{ type: "linear" }}
       indexScale={{ type: "band", round: true }}
       colors={colors}
@@ -38,22 +37,13 @@ const BarChart = ({ colors, year }) => {
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 0,
-        legend: "Kesatuan Polisi",
-        legendPosition: "middle",
-        legendOffset: 36,
-        truncateTickAt: 0,
       }}
       axisLeft={{
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 0,
-        legend: "Total Polisi",
-        legendPosition: "middle",
-        legendOffset: -50,
-        truncateTickAt: 0,
       }}
       enableLabel={true}
-      enableTotals={false}
       labelSkipHeight={12}
       labelTextColor={{
         from: "color",
@@ -77,7 +67,7 @@ const BarChart = ({ colors, year }) => {
           translateX: 20,
           translateY: 75,
           itemsSpacing: 10,
-          itemWidth: 153,
+          itemWidth: 113,
           itemHeight: 20,
           itemDirection: "left-to-right",
           itemOpacity: 0.85,
@@ -95,11 +85,16 @@ const BarChart = ({ colors, year }) => {
       ]}
       role="application"
       ariaLabel="Nivo bar chart demo"
-      barAriaLabel={(e) =>
-        e.id + ": " + e.formattedValue + " in country: " + e.indexValue
-      }
     />
   );
+};
+
+BarChart.propTypes = {
+  colors: PropTypes.arrayOf(PropTypes.string),
+  showNextSixMonths: PropTypes.bool.isRequired,
+  startMonthIndex: PropTypes.number,
+  endMonthIndex: PropTypes.number,
+  year: PropTypes.string,
 };
 
 export default BarChart;

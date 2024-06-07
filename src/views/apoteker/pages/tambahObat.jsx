@@ -8,6 +8,7 @@ const TambahObat = () => {
   const [formData, setFormData] = useState({
     medicineName: "",
     quantity: "",
+    entryDate: "",
     expiryDate: "",
     batchNo: "",
     category: "",
@@ -35,16 +36,16 @@ const TambahObat = () => {
         <Sidebar />
       </div>
       <Header
-        title="Statistik Data Laporan"
+        title="Tambah Obat Baru"
         userName="Rifki Rusdi Satma Putra"
-        userStatus="Kepala Polisi"
+        userStatus="Apoteker"
         profilePicture="/logo.png"
       />
-      <div className="max-w-lg mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold mb-6">Tambah Obat</h2>
+      <div className="max-w-2xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
+        <h2 className="text-2xl font-bold mb-6">Masukkan Data Obat</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-black text-sm font-bold mb-2">
+            <label className="block text-black text-base font-bold mb-2">
               Nama Obat
             </label>
             <input
@@ -52,12 +53,12 @@ const TambahObat = () => {
               name="medicineName"
               value={formData.medicineName}
               onChange={handleChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border rounded w-full py-2 px-4 text-black leading-tight focus:outline-none focus:shadow-outline"
               required
             />
           </div>
           <div className="mb-4">
-            <label className="block text-black text-sm font-bold mb-2">
+            <label className="block text-black text-base font-bold mb-2">
               Jumlah Obat
             </label>
             <input
@@ -65,12 +66,27 @@ const TambahObat = () => {
               name="quantity"
               value={formData.quantity}
               onChange={handleChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border rounded w-full py-2 px-4 text-black leading-tight focus:outline-none focus:shadow-outline"
               required
             />
           </div>
           <div className="mb-4 relative">
-            <label className="block text-black text-sm font-bold mb-2">
+            <label className="block text-black text-base font-bold mb-2">
+              Tanggal Masuk Obat
+            </label>
+            <div className="flex items-center">
+              <input
+                type="date"
+                name="entryDate"
+                value={formData.entryDate}
+                onChange={handleChange}
+                className="shadow appearance-none border rounded w-full py-2 px-4 text-black leading-tight focus:outline-none focus:shadow-outline"
+                required
+              />
+            </div>
+          </div>
+          <div className="mb-4 relative">
+            <label className="block text-black text-base font-bold mb-2">
               Tanggal Kadaluarsa
             </label>
             <div className="flex items-center">
@@ -79,13 +95,13 @@ const TambahObat = () => {
                 name="expiryDate"
                 value={formData.expiryDate}
                 onChange={handleChange}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline"
+                className="shadow appearance-none border rounded w-full py-2 px-4 text-black leading-tight focus:outline-none focus:shadow-outline"
                 required
               />
             </div>
           </div>
           <div className="mb-4">
-            <label className="block text-black text-sm font-bold mb-2">
+            <label className="block text-black text-base font-bold mb-2">
               No Batch
             </label>
             <input
@@ -93,16 +109,16 @@ const TambahObat = () => {
               name="batchNo"
               value={formData.batchNo}
               onChange={handleChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border rounded w-full py-2 px-4 text-black leading-tight focus:outline-none focus:shadow-outline"
               required
             />
           </div>
           <div className="mb-4">
-            <label className="block text-black text-sm font-bold mb-2">
+            <label className="block text-black text-base font-bold mb-2">
               Kategori
             </label>
             <Menu as="div" className="relative">
-              <Menu.Button className="shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline">
+              <Menu.Button className="shadow appearance-none border rounded w-full py-2 px-4 text-left text-black leading-tight focus:outline-none focus:shadow-outline">
                 {formData.category || "Pilih Kategori"}
               </Menu.Button>
               <Menu.Items className="absolute mt-1 w-full bg-white border border-gray-200 rounded-md shadow-lg z-10">
@@ -129,14 +145,14 @@ const TambahObat = () => {
             </Menu>
           </div>
           <div className="mb-4">
-            <label className="block text-black text-sm font-bold mb-2">
+            <label className="block text-black text-base font-bold mb-2">
               Jenis
             </label>
             <Menu as="div" className="relative">
-              <Menu.Button className="shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline">
+              <Menu.Button className="shadow appearance-none border rounded w-full py-2 px-4 text-left text-black leading-tight focus:outline-none focus:shadow-outline">
                 {formData.type || "Pilih Jenis"}
               </Menu.Button>
-              <Menu.Items className="absolute mt-1 w-full bg-whites border border-gray-200 rounded-md shadow-lg z-10">
+              <Menu.Items className="absolute mt-1 w-full bg-white border border-gray-200 rounded-md shadow-lg z-10">
                 {["Tablet", "Syrup", "Krim"].map((type) => (
                   <Menu.Item key={type}>
                     {({ active }) => (
@@ -155,7 +171,7 @@ const TambahObat = () => {
             </Menu>
           </div>
           <div className="mb-4">
-            <label className="block text-black text-sm font-bold mb-2">
+            <label className="block text-black text-base font-bold mb-2">
               Harga
             </label>
             <input
@@ -163,14 +179,14 @@ const TambahObat = () => {
               name="price"
               value={formData.price}
               onChange={handleChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border rounded w-full py-2 px-4 text-black leading-tight focus:outline-none focus:shadow-outline"
               required
             />
           </div>
           <div className="flex justify-center">
             <button
               type="submit"
-              className="bg-secondary-500 hover:bg-secondary-400 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline text-xs"
+              className="bg-secondary-500 hover:bg-secondary-400 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline text-sm"
             >
               Simpan
             </button>

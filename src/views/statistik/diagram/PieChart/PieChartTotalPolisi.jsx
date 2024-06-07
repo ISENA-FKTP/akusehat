@@ -1,18 +1,29 @@
 import { ResponsivePie } from "@nivo/pie";
-import { calculateTotals } from "../../model/dataPolisi";
+import { DataPolisi, calculateTotalsPasien } from "../../model/dataPolisi";
 import PropTypes from "prop-types";
 
-const PieChart = ({ colors }) => {
+const PieChart = ({ colors, year }) => {
   PieChart.propTypes = {
+    year: PropTypes.string,
     colors: PropTypes.arrayOf(PropTypes.string),
   };
 
-  const { totalJumlahPolda, totalObatPolres } = calculateTotals();
+  const filteredData = DataPolisi.filter(
+    (data) => new Date(data.tanggal).getFullYear() === parseInt(year)
+  );
 
-  const totalPolicePercentage = (
-    (totalJumlahPolda / (totalJumlahPolda + totalObatPolres)) *
-    100
-  ).toFixed(1);
+  const { totalJumlahPolda, totalObatPolres } =
+    calculateTotalsPasien(filteredData);
+
+  let totalPolicePercentage = 0;
+  if (totalJumlahPolda === 0 || totalObatPolres === 0) {
+    totalPolicePercentage = 0;
+  } else {
+    totalPolicePercentage = (
+      (totalJumlahPolda / (totalJumlahPolda + totalObatPolres)) *
+      100
+    ).toFixed(2);
+  }
   const totalObatPercentage = 100 - totalPolicePercentage;
 
   const data = [
