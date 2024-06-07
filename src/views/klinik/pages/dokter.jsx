@@ -84,7 +84,7 @@ export default function Dokter() {
     setDiagnosa(newDiagnosa);
   };
 
-  
+
 
   return (
     <>
@@ -235,51 +235,51 @@ export default function Dokter() {
 
         <div>
           <div className="h-10 bg-primary-600 shadow-lg rounded-t-lg py-4 justify-center flex items-center">
-            <h1 className="text-white font-primary-Poppins font-bold text-xl ">
+            <h1 className="text-white font-primary-Poppins font-bold text-xl space-y-7">
               Obat
             </h1>
           </div>
           <div className=" border border-primary-600 shadow-lg rounded-b-lg">
-          <form className="space-y-3 p-4 mx-6">
-              <div className="flex[30%] space-x-[130px]">
-                    <label className="text-black font-secondary-Karla font-bold w-24 flex[30%]">Jenis Obat</label>
-                    {jenisObat.map((item, index) => (
-                      <div key={index} className="flex flex-col items-start space-y-2">
-                        <div className="flex items-center mt-1">
-                          <input
-                            type="text"
-                            value={item}
-                            onChange={(e) => {
-                              const newJenisObat = [...jenisObat];
-                              newJenisObat[index] = e.target.value;
-                              setJenisObat(newJenisObat);
-                            }}
-                            className="p-2 rounded-md border border-black font-secondary-Karla font-medium text-black focus:outline-none focus:border-blue-500 w-[310px]"
-                            placeholder="Keterangan....."
-                          />
-                        </div>
-                        <div className="flex space-x-2 mt-2">
-                          <button
-                            type="button"
-                            onClick={() => removeJenisObat(index)}
-                            className="bg-error-600 text-white px-3 py-1 rounded hover:bg-red-600"
-                          >
-                            Hapus
-                          </button>
-                          {index === jenisObat.length - 1 && jenisObat.length < 5 && (
-                            <button
-                              type="button"
-                              onClick={addJenisObat}
-                              className="bg-success-600 text-white px-3 py-1 rounded hover:bg-blue-600"
-                            >
-                              Tambah
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                    ))}
+            <form className="space-y-3 p-4 mx-6">
+              <div className="flex[30%] space-x-[130px] -space-y-8">
+                <label className="text-black font-secondary-Karla font-bold w-24 flex[30%]">Jenis Obat</label>
+                {jenisObat.map((item, index) => (
+                  <div key={index} className="flex flex-col items-start -space-y-7">
+                    <div className="flex flex-col my-9">
+                      <input
+                        type="text"
+                        value={item}
+                        onChange={(e) => {
+                          const newJenisObat = [...jenisObat];
+                          newJenisObat[index] = e.target.value;
+                          setJenisObat(newJenisObat);
+                        }}
+                        className="p-2  rounded-md border border-black font-secondary-Karla font-medium text-black focus:outline-none focus:border-blue-500 w-[310px]"
+                        placeholder="Keterangan....."
+                      />
+                    </div>
+                    <div className="flex space-x-2">
+                      <button
+                        type="button"
+                        onClick={() => removeJenisObat(index)}
+                        className="bg-error-600 text-white px-3 py-1 rounded hover:bg-red-600"
+                      >
+                        Hapus
+                      </button>
+                      {index === jenisObat.length - 1 && jenisObat.length < 5 && (
+                        <button
+                          type="button"
+                          onClick={addJenisObat}
+                          className="bg-success-600 text-white px-3 py-1 rounded hover:bg-blue-600"
+                        >
+                          Tambah
+                        </button>
+                      )}
+                    </div>
                   </div>
-              
+                ))}
+              </div>
+
               <div className="flex items-center space-x-5">
                 <label className="text-black font-secondary-Karla font-bold w-40">
                   Dosis :
@@ -331,18 +331,18 @@ export default function Dokter() {
             </div>
             <div className=" border border-primary-600 shadow-lg rounded-b-lg">
               <form className="-space-y-11 w-full ml-9 left-10 right-24 pr-20 ">
-              <div className="flex items-center space-x-6 py-14">
-                <label className="text-black font-secondary-Karla font-bold w-40">
-                  Kasus KLL
-                </label>
-                <input
-                  type="checkbox"
-                  name="Kasus KLL"
-                  className="p-3 left-24 rounded-sm bg-white border border-black focus:outline-none "
-                  placeholder="   "
-                />
-                <span className=" text-black font-bold font-secondary">Kecelakaan Lalu Lintas</span>
-              </div>
+                <div className="flex items-center space-x-6 py-14">
+                  <label className="text-black font-secondary-Karla font-bold w-40">
+                    Kasus KLL
+                  </label>
+                  <input
+                    type="checkbox"
+                    name="Kasus KLL"
+                    className="p-3 left-24 rounded-sm bg-white border border-black focus:outline-none "
+                    placeholder="   "
+                  />
+                  <span className=" text-black font-bold font-secondary">Kecelakaan Lalu Lintas</span>
+                </div>
 
                 <div className="flex items-center space-x-5">
                   <label className="text-black font-secondary-Karla font-bold w-44 ">
@@ -405,71 +405,71 @@ export default function Dokter() {
         </div>
 
         <div>
-  <div className="">
-    <div className=" bg-primary-600 shadow-lg rounded-t-lg py-2 justify-center flex items-center">
-      <h1 className="text-white font-primary-Poppins font-bold text-xl">
-        Riwayat Alergi
-      </h1>
-    </div>
-    <div className="h-96 border border-primary-600 -mt-8 shadow-lg rounded-lg">
-      <form className="-space-y-12 mx-6 sm:mx-12">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-5 py-12">
-          <SelectWithInput/>
-          </div>
+          <div className="">
+            <div className=" bg-primary-600 shadow-lg rounded-t-lg py-2 justify-center flex items-center">
+              <h1 className="text-white font-primary-Poppins font-bold text-xl">
+                Riwayat Alergi
+              </h1>
+            </div>
+            <div className="h-96 border border-primary-600 -mt-8 shadow-lg rounded-lg">
+              <form className="-space-y-12 mx-6 sm:mx-12">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-5 py-12">
+                  <SelectWithInput />
+                </div>
 
-          <div className="flex items-center space-x-5 py-12">
-            <label className="text-black font-secondary-Karla font-bold w-40">
-              Udara :
-            </label>
-            <select
-              name="Udara"
-              className="p-1 rounded-md w-full border border-black font-secondary-Karla font-medium text-black focus:outline-none focus:border-blue-500"
-            >
-              <option value=""></option>
-              <option value="Tidak ada">Tidak ada</option>
-              <option value="Udara panas">Udara Panas</option>
-              <option value="Udara Dingin">Udara Dingin</option>
-              <option value="Udara Kotor">Udara Kotor</option>
-            </select>
+                <div className="flex items-center space-x-5 py-12">
+                  <label className="text-black font-secondary-Karla font-bold w-40">
+                    Udara :
+                  </label>
+                  <select
+                    name="Udara"
+                    className="p-1 rounded-md w-full border border-black font-secondary-Karla font-medium text-black focus:outline-none focus:border-blue-500"
+                  >
+                    <option value=""></option>
+                    <option value="Tidak ada">Tidak ada</option>
+                    <option value="Udara panas">Udara Panas</option>
+                    <option value="Udara Dingin">Udara Dingin</option>
+                    <option value="Udara Kotor">Udara Kotor</option>
+                  </select>
+                </div>
+
+                <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-5">
+                  <SelectWithInputObat />
+                </div>
+
+                <div className="flex items-center space-x-5 py-24">
+                  <label className="text-black font-secondary-Karla font-bold w-40">
+                    Prognosa
+                  </label>
+                  <input
+                    type="text"
+                    name="Prognosa"
+                    className="p-1 h-9 w-full rounded-md text-left bg-white border border-black focus:outline-none"
+                    placeholder=" "
+                  />
+                </div>
+
+                <div className="flex space-x-4 ">
+                  <button
+                    type="button"
+                    className="bg-blue-500 bg-success-600 text-white px-4 py-1 rounded hover:bg-blue-600"
+                    onClick={handleSave}
+                  >
+                    Simpan
+                  </button>
+                  <button
+                    type="button"
+                    className="bbg-gray-500 bg-error-700 text-white px-4 py-1 rounded hover:bg-gray-600"
+                    onClick={handleCancel}
+                  >
+                    Batal
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
-       
-        <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-5">
-          <SelectWithInputObat/>
-          </div>
-          
-          <div className="flex items-center space-x-5 py-24">
-            <label className="text-black font-secondary-Karla font-bold w-40">
-              Prognosa
-            </label>
-            <input
-              type="text"
-              name="Prognosa"
-              className="p-1 h-9 w-full rounded-md text-left bg-white border border-black focus:outline-none"
-              placeholder=" "
-            />
-          </div>
-       
-        <div className="flex space-x-4 ">
-          <button
-            type="button"
-            className="bg-blue-500 bg-success-600 text-white px-4 py-1 rounded hover:bg-blue-600"
-            onClick={handleSave}
-          >
-            Simpan
-          </button>
-          <button
-            type="button"
-            className="bbg-gray-500 bg-error-700 text-white px-4 py-1 rounded hover:bg-gray-600"
-            onClick={handleCancel}
-          >
-            Batal
-          </button>
         </div>
-      </form>
-    </div>
-  </div>
-  </div>
-       
+
         <div>
           <div className="h-10 bg-primary-600 shadow-lg rounded-t-lg py-4 justify-center flex items-center">
             <h1 className="text-white font-primary-Poppins font-bold text-xl ">
@@ -637,80 +637,80 @@ export default function Dokter() {
           </div>
         </div>
 
-        
 
-          <div className="my-5">
-            <div className="h-10 bg-primary-600 shadow-lg rounded-t-lg py-4 justify-center flex items-center">
-              <h1 className="text-white font-primary-Poppins font-bold text-xl">
-                Tekanan Darah
-              </h1>
-            </div>
-            <div className="h-64 border border-primary-600 shadow-lg rounded-b-lg">
-              <form className="space-y-3 py-4 ml-10 pr-10">
-                <div className="flex items-center space-x-5">
-                  <label className="text-black font-secondary-Karla font-bold w-40">
-                    Sistole
-                  </label>
-                  <input
-                    type="text"
-                    name="sistol"
-                    placeholder="   mmhg"
-                    className="p-1 h-9 mx-32 rounded-md text-left bg-white border border-black w-full"
-                  />
-                </div>
-                <div className="flex items-center space-x-5">
-                  <label className="text-black font-secondary-Karla font-bold w-40">
-                    Distole
-                  </label>
-                  <input
-                    type="text"
-                    name="distol"
-                    placeholder="   mmhg"
-                    className="p-1 h-9 rounded-md text-left bg-white border border-black focus:outline-none w-full"
-                  />
-                </div>
-                <div className="flex items-center space-x-5">
-                  <label className="text-black font-secondary-Karla font-bold w-40">
-                    Respiratory
-                  </label>
-                  <input
-                    type="text"
-                    name="respiratory"
-                    placeholder="   /Menit"
-                    className="p-1 h-9 rounded-md text-left bg-white border border-black focus:outline-none w-full"
-                  />
-                </div>
-                <div className="flex items-center space-x-5">
-                  <label className="text-black font-secondary-Karla font-bold w-40">
-                    Heart Rate
-                  </label>
-                  <input
-                    type="text"
-                    name="heart_rate"
-                    placeholder="   Bpm"
-                    className="p-1 h-9 rounded-md text-left bg-white border border-black focus:outline-none w-full"
-                  />
-                </div>
-                <div className="flex space-x-4">
-                  <button
-                    type="button"
-                    className="bg-blue-500 bg-success-600 text-white px-4 py-1 rounded hover:bg-blue-600"
-                    onClick={handleSave}
-                  >
-                    Simpan
-                  </button>
-                  <button
-                    type="button"
-                    className="bg-gray-500 bg-error-700 text-white px-4 py-1 rounded hover:bg-gray-600"
-                    onClick={handleCancel}
-                  >
-                    Batal
-                  </button>
-                </div>
-              </form>
-            </div>
+
+        <div className="my-5">
+          <div className="h-10 bg-primary-600 shadow-lg rounded-t-lg py-4 justify-center flex items-center">
+            <h1 className="text-white font-primary-Poppins font-bold text-xl">
+              Tekanan Darah
+            </h1>
+          </div>
+          <div className="h-64 border border-primary-600 shadow-lg rounded-b-lg">
+            <form className="space-y-3 py-4 ml-10 pr-10">
+              <div className="flex items-center space-x-5">
+                <label className="text-black font-secondary-Karla font-bold w-40">
+                  Sistole
+                </label>
+                <input
+                  type="text"
+                  name="sistol"
+                  placeholder="   mmhg"
+                  className="p-1 h-9 mx-32 rounded-md text-left bg-white border border-black w-full"
+                />
+              </div>
+              <div className="flex items-center space-x-5">
+                <label className="text-black font-secondary-Karla font-bold w-40">
+                  Distole
+                </label>
+                <input
+                  type="text"
+                  name="distol"
+                  placeholder="   mmhg"
+                  className="p-1 h-9 rounded-md text-left bg-white border border-black focus:outline-none w-full"
+                />
+              </div>
+              <div className="flex items-center space-x-5">
+                <label className="text-black font-secondary-Karla font-bold w-40">
+                  Respiratory
+                </label>
+                <input
+                  type="text"
+                  name="respiratory"
+                  placeholder="   /Menit"
+                  className="p-1 h-9 rounded-md text-left bg-white border border-black focus:outline-none w-full"
+                />
+              </div>
+              <div className="flex items-center space-x-5">
+                <label className="text-black font-secondary-Karla font-bold w-40">
+                  Heart Rate
+                </label>
+                <input
+                  type="text"
+                  name="heart_rate"
+                  placeholder="   Bpm"
+                  className="p-1 h-9 rounded-md text-left bg-white border border-black focus:outline-none w-full"
+                />
+              </div>
+              <div className="flex space-x-4">
+                <button
+                  type="button"
+                  className="bg-blue-500 bg-success-600 text-white px-4 py-1 rounded hover:bg-blue-600"
+                  onClick={handleSave}
+                >
+                  Simpan
+                </button>
+                <button
+                  type="button"
+                  className="bg-gray-500 bg-error-700 text-white px-4 py-1 rounded hover:bg-gray-600"
+                  onClick={handleCancel}
+                >
+                  Batal
+                </button>
+              </div>
+            </form>
           </div>
         </div>
+      </div>
     </>
   );
 }
