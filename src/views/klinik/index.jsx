@@ -11,11 +11,11 @@ export default function Dashboard() {
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
-    console.log("Access Token:", token); // Debug token akses
+    console.log("Access Token:", token);
 
     if (token) {
       const decoded = jwtDecode(token);
-      console.log("Decoded Token:", decoded); // Debug token yang telah didekode
+      console.log("Decoded Token:", decoded);
       setUsername(decoded.username);
     } else {
       navigate("/");

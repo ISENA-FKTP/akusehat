@@ -1,8 +1,8 @@
 import { useState } from "react";
 import coverImage from "./cover.png";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import axiosInstance from "../klinik/model/axiosConifg";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -13,23 +13,19 @@ const Login = () => {
   const Auth = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        // "https://backend-isenafktp.onrender.com/login",
-        "http://localhost:5000/login",
-        {
-          username,
-          password,
-        }
-      );
+      const response = await axiosInstance.post("/login", {
+        username,
+        password,
+      });
 
-      console.log("Login response:", response.data); // Debug: Cek respons dari endpoint login
+      console.log("Login response:", response.data);
 
       const { accessToken, refreshToken } = response.data;
-      console.log("Access Token:", accessToken); // Debug: Cek akses token
-      console.log("Refresh Token:", refreshToken); // Debug: Cek refresh token
+      console.log("Access Token:", accessToken);
+      console.log("Refresh Token:", refreshToken);
 
       const decoded = jwtDecode(accessToken);
-      console.log("Decoded Token:", decoded); // Debug: Cek hasil dekode token
+      console.log("Decoded Token:", decoded);
 
       if (decoded.role === "admin") {
         localStorage.setItem("accessToken", accessToken);
@@ -40,7 +36,7 @@ const Login = () => {
       }
     } catch (error) {
       if (error.response) {
-        console.log("Error response:", error.response.data); // Debug: Cek respons dari server jika terjadi error
+        console.log("Error response:", error.response.data);
         setMsg(error.response.data.msg);
       } else {
         console.error("Error:", error.message);
@@ -65,7 +61,7 @@ const Login = () => {
         <div className="w-4/6 max-w-2xl p-10 bg-white shadow-2xl rounded-lg">
           <div className="grid grid-cols-2 md:grid-cols-5 gap-2 mb-6">
             <Link to="/adminlog" className="flex-1">
-            <button className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-success-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+              <button className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-success-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                 Admin
               </button>
             </Link>
@@ -163,6 +159,7 @@ const Login = () => {
               >
                 Masuk
               </button>
+              {msg && <p>{msg}</p>}
             </div>
           </form>
         </div>

@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
+import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { createPasients, getPasients } from "../model/useApi";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import Sidebar_Klinik from "../../../components/klinik/sidebar_klinik";
 import Header from "../../../components/header";
+import axiosInstance from "../model/axiosConifg";
 
 const MySwal = withReactContent(Swal);
 
@@ -26,31 +27,19 @@ const FormComponent = () => {
     norm: "",
   });
 
-  const [patients, setPatients] = useState([]); // State untuk menyimpan data pasien
-
-  useEffect(() => {
-    const fetchPatients = async () => {
-      try {
-        const data = await getPasients();
-        setPatients(data); // Mengambil dan menyimpan data pasien
-      } catch (error) {
-        console.error("Error fetching patients:", error);
-      }
-    };
-
-    fetchPatients();
-  }, []);
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+    console.log(`Updated ${name}: ${value}`);
   };
 
   const handleDateChange = (date) => {
     setFormData({ ...formData, tgllahir: date });
+    console.log(`Updated tgllahir: ${date}`);
   };
 
   const handleSave = () => {
+    console.log("Handle save clicked");
     MySwal.fire({
       title: "Apakah Anda yakin?",
       text: "Anda tidak akan dapat mengembalikan ini!",
@@ -68,6 +57,7 @@ const FormComponent = () => {
   };
 
   const handleCancel = () => {
+    console.log("Handle cancel clicked");
     MySwal.fire({
       title: "Apakah Anda yakin?",
       text: "Anda akan membatalkan perubahan ini!",
@@ -86,18 +76,36 @@ const FormComponent = () => {
 
   const saveData = async () => {
     try {
-      const token = localStorage.getItem("accessToken");
-      if (!token) {
-        throw new Error("Access token is not available");
-      }
-      await createPasients(formData, token);
+      console.log("Saving data with formData:", formData);
+      await axiosInstance.post("/pasiens", formData);
+
       MySwal.fire("Tersimpan!", "Data Anda telah disimpan.", "success").then(
         () => {
           navigate("/kajianawal");
         }
       );
     } catch (error) {
-      MySwal.fire("Gagal!", "Data Anda gagal disimpan.", "error");
+      if (error.response) {
+        // Penanganan kesalahan spesifik berdasarkan status respons
+        const { status, data } = error.response;
+        if (status === 401) {
+          MySwal.fire(
+            "Unauthorized!",
+            "Anda tidak memiliki izin akses.",
+            "error"
+          );
+        } else if (status === 403) {
+          MySwal.fire("Forbidden!", "Akses ditolak.", "error");
+        } else {
+          MySwal.fire(
+            "Gagal!",
+            `${data.message || "Data Anda gagal disimpan."}`,
+            "error"
+          );
+        }
+      } else {
+        MySwal.fire("Gagal!", "Data Anda gagal disimpan.", "error");
+      }
       console.error("Error saving data:", error);
     }
   };
@@ -199,20 +207,83 @@ const FormComponent = () => {
 };
 
 export default function Administrasi() {
-  const [token, setToken] = useState("");
+  const [, setLoading] = useState(true);
   const [username, setUsername] = useState("");
-  const navigate = useNavigate();
+  const [expire, setExpire] = useState("");
+  const [, setToken] = useState("");
+  const axiosJWT = axios.create();
 
   useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-    if (token) {
-      const decoded = jwtDecode(token);
+    refreshToken();
+  }, []);
+
+  const refreshToken = async () => {
+    try {
+      const refreshToken = localStorage.getItem("accessToken");
+      if (!refreshToken) {
+        console.log("Gagal Load Refresh Token");
+        return;
+      }
+      console.log("Refreshing token");
+      setToken(refreshToken);
+      const decoded = jwtDecode(refreshToken);
       setUsername(decoded.username);
-      setToken(token);
-    } else {
-      navigate("/");
+      setExpire(decoded.exp);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error refreshing token:", error);
     }
-  }, [navigate]);
+  };
+
+  axiosJWT.interceptors.request.use(
+    async (config) => {
+      const currentDate = new Date();
+      if (expire * 1000 < currentDate.getTime()) {
+        try {
+          console.log("Token expired, refreshing...");
+          const refreshToken = localStorage.getItem("accessToken");
+          if (!refreshToken) {
+            return Promise.reject("Token refresh tidak tersedia");
+          }
+
+          config.headers.Authorization = `Bearer ${refreshToken}`;
+          setToken(refreshToken);
+          const decoded = jwtDecode(refreshToken);
+          setUsername(decoded.username);
+          setExpire(decoded.exp);
+          setLoading(false);
+        } catch (error) {
+          console.error("Error refreshing token:", error);
+          return Promise.reject(error);
+        }
+      }
+      return config;
+    },
+    (error) => {
+      console.error("Request error:", error);
+      return Promise.reject(error);
+    }
+  );
+
+  axiosJWT.interceptors.response.use(
+    (response) => {
+      return response;
+    },
+    async (error) => {
+      if (error.response && error.response.status === 401) {
+        try {
+          console.log("Unauthorized, refreshing token...");
+          await refreshToken();
+          return axiosJWT.request(error.config);
+        } catch (refreshError) {
+          console.error("Error refreshing token:", refreshError);
+          return Promise.reject(error);
+        }
+      }
+      console.error("Response error:", error);
+      return Promise.reject(error);
+    }
+  );
 
   return (
     <>
@@ -280,7 +351,7 @@ export default function Administrasi() {
               </form>
             </div>
           </div>
-          <FormComponent token={token} />
+          <FormComponent />
         </div>
       </div>
     </>
