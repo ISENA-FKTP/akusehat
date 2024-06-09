@@ -5,11 +5,11 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { createPasients, getPasients } from "../model/useApi";
 import { useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
+import {jwtDecode} from "jwt-decode"; // Perbaikan impor jwtDecode
 import Sidebar_Klinik from "../../../components/klinik/sidebar_klinik";
 import Header from "../../../components/header";
+import axios from "axios";
 
 const MySwal = withReactContent(Swal);
 
@@ -24,22 +24,8 @@ const FormComponent = () => {
     ppkumum: "",
     nohp: "",
     norm: "",
+    role: "pasien",
   });
-
-  const [patients, setPatients] = useState([]); // State untuk menyimpan data pasien
-
-  useEffect(() => {
-    const fetchPatients = async () => {
-      try {
-        const data = await getPasients();
-        setPatients(data); // Mengambil dan menyimpan data pasien
-      } catch (error) {
-        console.error("Error fetching patients:", error);
-      }
-    };
-
-    fetchPatients();
-  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -62,7 +48,7 @@ const FormComponent = () => {
       cancelButtonText: "Tidak, batalkan!",
     }).then((result) => {
       if (result.isConfirmed) {
-        saveData();
+        postPasiens();
       }
     });
   };
@@ -84,21 +70,80 @@ const FormComponent = () => {
     });
   };
 
-  const saveData = async () => {
+  const [username, setUsername] = useState('');
+  const [expire, setExpire] = useState('');
+  const [token, setToken] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [msg, setMsg] = useState("");
+
+  useEffect(() => {
+    refreshToken();
+  }, []);
+
+  const refreshToken = async () => {
     try {
-      const token = localStorage.getItem("accessToken");
-      if (!token) {
-        throw new Error("Access token is not available");
-      }
-      await createPasients(formData, token);
-      MySwal.fire("Tersimpan!", "Data Anda telah disimpan.", "success").then(
-        () => {
-          navigate("/kajianawal");
-        }
-      );
+      const response = await axios.get('https://backend-isenafktp.onrender.com/token');
+      setToken(response.data.accessToken);
+      const decoded = jwtDecode(response.data.accessToken);
+      setUsername(decoded.username);
+      setExpire(decoded.exp);
+      setLoading(false);
     } catch (error) {
-      MySwal.fire("Gagal!", "Data Anda gagal disimpan.", "error");
-      console.error("Error saving data:", error);
+      console.error('Error refreshing token:', error);
+      setLoading(false);
+      if (error.response) {
+        navigate("/");
+      }
+    }
+  };
+
+  const axiosJWT = axios.create();
+
+  axiosJWT.interceptors.request.use(async (config) => {
+    const currentDate = new Date();
+    if (expire * 1000 < currentDate.getTime()) {
+      const response = await axios.get('https://backend-isenafktp.onrender.com/token');
+      config.headers.Authorization = `Bearer ${response.data.accessToken}`;
+      setToken(response.data.accessToken);
+      const decoded = jwtDecode(response.data.accessToken);
+      setUsername(decoded.username);
+      setExpire(decoded.exp);
+      setLoading(false);
+    }
+    return config;
+  }, (error) => {
+    return Promise.reject(error);
+  });
+
+  const postPasiens = async () => {
+    try {
+      const { nobpjs, nama, statuspeserta, tgllahir, gender, ppkumum, nohp, norm, role } = formData;
+
+      // Validasi apakah semua field telah diisi
+      if (!nobpjs || !nama || !statuspeserta || !tgllahir || !gender || !ppkumum || !nohp || !norm || !role) {
+        throw new Error("Silahkan lengkapi semua data pasien");
+      }
+
+      const response = await axiosJWT.post('https://backend-isenafktp.onrender.com/pasiens', {
+        nobpjs,
+        nama,
+        statuspeserta,
+        tgllahir,
+        gender,
+        ppkumum,
+        nohp,
+        norm,
+        role,
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      });
+      navigate('/administrasi');
+      console.log(response.data);
+    } catch (error) {
+      console.error('Error adding pasien:', error.response ? error.response.data : error.message);
+      setMsg(error.response ? error.response.data : error.message);
     }
   };
 
@@ -107,13 +152,8 @@ const FormComponent = () => {
   };
 
   return (
-    <div
-      className="bg-white shadow-xl flex flex-col place-content-center mx-80 p-6 mt-40 rounded-lg items-center"
-      style={{ width: "auto", height: "auto" }}
-    >
-      <h1 className="text-black font-primary-Poppins font-extrabold text-3xl mb-6 mx-72">
-        BIODATA
-      </h1>
+    <div className="bg-white shadow-xl flex flex-col place-content-center mx-80 p-6 mt-40 rounded-lg items-center" style={{ width: "auto", height: "auto" }}>
+      <h1 className="text-black font-primary-Poppins font-extrabold text-3xl mb-6 mx-72">BIODATA</h1>
       <div>
         {[
           {
@@ -152,11 +192,14 @@ const FormComponent = () => {
             name: "norm",
             placeholder: "Masukkan nomor rekam medis",
           },
+          {
+            label: "Role",
+            name: "role",
+            value: "pasien",
+          },
         ].map((field, index) => (
           <div className="flex items-center mb-1" key={index}>
-            <label className="text-black font-secondary-Karla font-bold w-48 mx-1">
-              {field.label}:
-            </label>
+            <label className="text-black font-secondary-Karla font-bold w-48 mx-1">{field.label}:</label>
             {field.name === "tgllahir" ? (
               <DatePicker
                 selected={formData.tgllahir}
@@ -180,19 +223,8 @@ const FormComponent = () => {
       </div>
 
       <div className="flex space-x-5 mt-6 mx-72">
-        <button
-          onClick={handleSave}
-          className="text-white px-3 py-1 rounded-md transition duration-300 bg-success-600"
-        >
-          Simpan
-        </button>
-        <button
-          type="button"
-          className="bg-gray-500 bg-error-700 text-white px-4 py-1 rounded hover:bg-gray-600"
-          onClick={handleCancel}
-        >
-          Batal
-        </button>
+        <button onClick={handleSave} className="text-white px-3 py-1 rounded-md transition duration-300 bg-success-600">Simpan</button>
+        <button type="button" className="bg-gray-500 bg-error-700 text-white px-4 py-1 rounded hover:bg-gray-600" onClick={handleCancel}>Batal</button>
       </div>
     </div>
   );
@@ -219,63 +251,32 @@ export default function Administrasi() {
       <div className="fixed z-50">
         <Sidebar_Klinik />
       </div>
-      <Header
-        title="Pendaftaran Pelayanan Pasien"
-        userName={username}
-        userStatus="Dokter Poli Umum"
-        profilePicture="logo.png"
-      />
+      <Header title="Pendaftaran Pelayanan Pasien" userName={username} userStatus="Dokter Poli Umum" profilePicture="logo.png" />
 
       <div className="flex relative flex-1">
         <div className="absolute inset-0">
           <div className="container">
-            <div
-              className="h-28 bg-primary-600 mx-18 shadow-lg flex items-center rounded justify-center my-6 absolute left-24"
-              style={{ width: "92%" }}
-            >
-              <h1 className="text-white font-secondary-Karla font-bold text-xl absolute left-6 py-24 pt-14">
-                Selamat Pagi Petugas Administrasi
-              </h1>
-              <h1 className="text-white font-secondary-Karla font-medium absolute left-6 py-0 pt-8">
-                Selamat Bertugas, Silahkan menambahkan Pasien Di Bawah
-              </h1>
+            <div className="h-28 bg-primary-600 mx-18 shadow-lg flex items-center rounded justify-center my-6 absolute left-24" style={{ width: "92%" }}>
+              <h1 className="text-white font-secondary-Karla font-bold text-xl absolute left-6 py-24 pt-14">Selamat Pagi Petugas Administrasi</h1>
+              <h1 className="text-white font-secondary-Karla font-medium absolute left-6 py-0 pt-8">Selamat Bertugas, Silahkan menambahkan Pasien Di Bawah</h1>
               <form className="h-12 rounded-md py-32 pt-10 absolute right-5">
                 <div className="flex items-center space-x-5">
-                  <select
-                    name="bpjsType"
-                    className="p-1 rounded-md mb-9 w-60 bg-primary-600 font-secondary-Karla font-medium text-white focus:outline-none focus:border-blue-500"
-                  >
+                  <select name="bpjsType" className="p-1 rounded-md mb-9 w-60 bg-primary-600 font-secondary-Karla font-medium text-white focus:outline-none focus:border-blue-500">
                     <option value="">BPJS</option>
                     <option value="nik">NIK</option>
                     <option value="nrp">NRP</option>
                     <option value="nip">NIP</option>
                   </select>
                   <div className="relative w-full">
-                    <input
-                      type="search"
-                      name="search"
-                      className="p-1 rounded-md bg-white focus:outline-none mb-10 w-full"
-                      placeholder="Cari.."
-                    />
-                    <FontAwesomeIcon
-                      icon={faSearch}
-                      className="absolute right-3 top-2.5 text-gray-500"
-                    />
+                    <input type="search" name="search" className="p-1 rounded-md bg-white focus:outline-none mb-10 w-full" placeholder="Cari.." />
+                    <FontAwesomeIcon icon={faSearch} className="absolute right-3 top-2.5 text-gray-500" />
                   </div>
                 </div>
               </form>
               <form className="h-12 rounded-md absolute right-5 -mb-14">
                 <div className="flex items-center space-x-5">
-                  <h1 className="text-white font-secondary-Karla font-medium mb-9 w-60">
-                    No. Pendaftaran
-                  </h1>
-                  <input
-                    type="search"
-                    name="search"
-                    className="p-1 rounded-md bg-white focus:outline-none mb-10"
-                    placeholder=""
-                    style={{ width: "100%" }}
-                  />
+                  <h1 className="text-white font-secondary-Karla font-medium mb-9 w-60">No. Pendaftaran</h1>
+                  <input type="search" name="search" className="p-1 rounded-md bg-white focus:outline-none mb-10" placeholder="" style={{ width: "100%" }} />
                 </div>
               </form>
             </div>
