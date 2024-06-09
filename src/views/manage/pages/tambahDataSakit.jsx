@@ -5,16 +5,10 @@ import SearchBar from "../../../components/manage/searchBar";
 import TambahButton from "../../../components/manage/tambahButton";
 import { DataRekamMedis, headData } from "../model/dataRekamMedis";
 import TabelRekamMedis from "../../../components/manage/tabel-rekam-medis";
-import { useNavigate } from "react-router-dom";
+import { FormDataSakit } from "../../../components/manage/formDataSakit";
 
-export default function RekamMedis() {
+export default function TambahDataSakit() {
   const [data, setData] = useState([]);
-
-  const navigate = useNavigate() ;
-  
-  const tambahDataHandler = () => {
-    navigate("/manage/data-rekam-medis/tambah-data");
-  };
 
   useEffect(() => {
     DataRekamMedis.getDataRekamMedis().then((data) => setData(data));
@@ -27,18 +21,13 @@ export default function RekamMedis() {
         <Sidebar />
       </div>
       <Header
-        title="Data Rekam Medis Polisi"
+        title="Tambah Data Sakit Polisi"
         userName="Rifki Rusdi Satma Putra"
         userStatus="Kepala Polisi"
         profilePicture="logo.png"
       />
-      <main className="mt-12 ml-32 mr-12 space-y-4  ">
-        <div>
-          <h1>Data Juni 2024</h1>
-        </div>
-        <SearchBar />
-        <TambahButton onClicked={tambahDataHandler}/>
-        <TabelRekamMedis table_head={headData} table_row={data}/>
+      <main className="mt-12 ml-32 mr-12 space-y-4 pb-10 ">
+        <FormDataSakit />
       </main>
     </div>
   );
