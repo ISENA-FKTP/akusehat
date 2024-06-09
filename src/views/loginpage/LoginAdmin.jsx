@@ -14,27 +14,37 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "https://backend-isenafktp.onrender.com/login",
+        // "https://backend-isenafktp.onrender.com/login",
+        "http://localhost:5000/login",
         {
-          username: username,
-          password: password,
+          username,
+          password,
         }
       );
 
-      const token = response.data.accessToken;
-      const decoded = jwtDecode(token);
+      console.log("Login response:", response.data); // Debug: Cek respons dari endpoint login
+
+      const { accessToken, refreshToken } = response.data;
+      console.log("Access Token:", accessToken); // Debug: Cek akses token
+      console.log("Refresh Token:", refreshToken); // Debug: Cek refresh token
+
+      const decoded = jwtDecode(accessToken);
+      console.log("Decoded Token:", decoded); // Debug: Cek hasil dekode token
 
       if (decoded.role === "admin") {
-        localStorage.setItem("token", token);
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("refreshToken", refreshToken);
         navigate("/dashboard");
       } else {
         setMsg("Akses Ditolak, Silahkan Masukan Akun Administrasi.");
       }
     } catch (error) {
       if (error.response) {
+        console.log("Error response:", error.response.data); // Debug: Cek respons dari server jika terjadi error
         setMsg(error.response.data.msg);
       } else {
         console.error("Error:", error.message);
+        setMsg("Login gagal, silakan coba lagi.");
       }
     }
   };
@@ -42,7 +52,7 @@ const Login = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 h-screen">
       {/* Bagian Kiri: Gambar Cover */}
-      <div className="hidden md:flex items-center justify-center bg-[#]">
+      <div className="hidden md:flex items-center justify-center bg-[#F4D03F]">
         <img
           src={coverImage}
           alt="Cover"
@@ -51,40 +61,40 @@ const Login = () => {
       </div>
 
       {/* Bagian Kanan: Formulir Login */}
-      <div className="flex items-center justify-center bg-gray-100">
+      <div className="flex items-center justify-center bg-[#f5f5f5]">
         <div className="w-4/6 max-w-2xl p-10 bg-white shadow-2xl rounded-lg">
           <div className="grid grid-cols-2 md:grid-cols-5 gap-2 mb-6">
             <Link to="/adminlog" className="flex-1">
-              <button className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+            <button className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-success-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                 Admin
               </button>
             </Link>
             <Link to="/dokterlog" className="flex-1">
-              <button className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-black hover:bg-primary-50">
+              <button className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                 Dokter
               </button>
             </Link>
             <Link to="/apotekerlog" className="flex-1">
-              <button className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-black hover:bg-primary-50">
+              <button className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                 Apoteker
               </button>
             </Link>
             <Link to="/pawaslog" className="flex-1">
-              <button className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-black hover:bg-primary-50">
+              <button className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                 Pegawai
               </button>
             </Link>
             <Link to="/statistiklog" className="flex-1">
-              <button className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-500 hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+              <button className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                 Manage
               </button>
             </Link>
           </div>
 
-          <h1 className="text-2xl font-bold text-center text-blue-600">
+          <h1 className="text-2xl font-bold text-center text-primary-500">
             Masukan Akun Administrasi Anda!
           </h1>
-          <p className="mb-6 text-center text-gray-600">
+          <p className="mb-2 text-center text-gray-600">
             Selamat Datang dan Selamat Mengelola Data Anda!
           </p>
 
