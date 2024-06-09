@@ -30,16 +30,13 @@ const FormComponent = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    console.log(`Updated ${name}: ${value}`);
   };
 
   const handleDateChange = (date) => {
     setFormData({ ...formData, tgllahir: date });
-    console.log(`Updated tgllahir: ${date}`);
   };
 
   const handleSave = () => {
-    console.log("Handle save clicked");
     MySwal.fire({
       title: "Apakah Anda yakin?",
       text: "Anda tidak akan dapat mengembalikan ini!",
@@ -57,7 +54,6 @@ const FormComponent = () => {
   };
 
   const handleCancel = () => {
-    console.log("Handle cancel clicked");
     MySwal.fire({
       title: "Apakah Anda yakin?",
       text: "Anda akan membatalkan perubahan ini!",
@@ -74,9 +70,11 @@ const FormComponent = () => {
     });
   };
 
+  const [username, setUsername] = useState("");
   const [expire, setExpire] = useState("");
   const [token, setToken] = useState("");
-  const [, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [msg, setMsg] = useState("");
 
   useEffect(() => {
     refreshToken();
@@ -89,6 +87,7 @@ const FormComponent = () => {
       );
       setToken(response.data.accessToken);
       const decoded = jwtDecode(response.data.accessToken);
+      setUsername(decoded.username);
       setExpire(decoded.exp);
       setLoading(false);
     } catch (error) {
@@ -112,6 +111,7 @@ const FormComponent = () => {
         config.headers.Authorization = `Bearer ${response.data.accessToken}`;
         setToken(response.data.accessToken);
         const decoded = jwtDecode(response.data.accessToken);
+        setUsername(decoded.username);
         setExpire(decoded.exp);
         setLoading(false);
       }
@@ -177,6 +177,7 @@ const FormComponent = () => {
         "Error adding pasien:",
         error.response ? error.response.data : error.message
       );
+      setMsg(error.response ? error.response.data : error.message);
     }
   };
 
@@ -282,83 +283,20 @@ const FormComponent = () => {
 };
 
 export default function Administrasi() {
-  const [, setLoading] = useState(true);
+  const [token, setToken] = useState("");
   const [username, setUsername] = useState("");
-  const [expire, setExpire] = useState("");
-  const [, setToken] = useState("");
-  const axiosJWT = axios.create();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    refreshToken();
-  }, []);
-
-  const refreshToken = async () => {
-    try {
-      const refreshToken = localStorage.getItem("accessToken");
-      if (!refreshToken) {
-        console.log("Gagal Load Refresh Token");
-        return;
-      }
-      console.log("Refreshing token");
-      setToken(refreshToken);
-      const decoded = jwtDecode(refreshToken);
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      const decoded = jwtDecode(token);
       setUsername(decoded.username);
-      setExpire(decoded.exp);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error refreshing token:", error);
+      setToken(token);
+    } else {
+      navigate("/");
     }
-  };
-
-  axiosJWT.interceptors.request.use(
-    async (config) => {
-      const currentDate = new Date();
-      if (expire * 1000 < currentDate.getTime()) {
-        try {
-          console.log("Token expired, refreshing...");
-          const refreshToken = localStorage.getItem("accessToken");
-          if (!refreshToken) {
-            return Promise.reject("Token refresh tidak tersedia");
-          }
-
-          config.headers.Authorization = `Bearer ${refreshToken}`;
-          setToken(refreshToken);
-          const decoded = jwtDecode(refreshToken);
-          setUsername(decoded.username);
-          setExpire(decoded.exp);
-          setLoading(false);
-        } catch (error) {
-          console.error("Error refreshing token:", error);
-          return Promise.reject(error);
-        }
-      }
-      return config;
-    },
-    (error) => {
-      console.error("Request error:", error);
-      return Promise.reject(error);
-    }
-  );
-
-  axiosJWT.interceptors.response.use(
-    (response) => {
-      return response;
-    },
-    async (error) => {
-      if (error.response && error.response.status === 401) {
-        try {
-          console.log("Unauthorized, refreshing token...");
-          await refreshToken();
-          return axiosJWT.request(error.config);
-        } catch (refreshError) {
-          console.error("Error refreshing token:", refreshError);
-          return Promise.reject(error);
-        }
-      }
-      console.error("Response error:", error);
-      return Promise.reject(error);
-    }
-  );
+  }, [navigate]);
 
   return (
     <>
@@ -426,7 +364,7 @@ export default function Administrasi() {
               </form>
             </div>
           </div>
-          <FormComponent />
+          <FormComponent token={token} />
         </div>
       </div>
     </>
