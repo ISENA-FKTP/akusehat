@@ -2,7 +2,7 @@ import { useState } from "react";
 import coverImage from "./cover.png";
 import { Link, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import axiosInstance from "../klinik/model/axiosConifg";
+import axios from "axios";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -13,10 +13,13 @@ const Login = () => {
   const Auth = async (e) => {
     e.preventDefault();
     try {
-      const response = await axiosInstance.post("/login", {
-        username,
-        password,
-      });
+      const response = await axios.post(
+        "https://backend-isenafktp.onrender.com/login",
+        {
+          username,
+          password,
+        }
+      );
 
       console.log("Login response:", response.data);
 
@@ -48,7 +51,7 @@ const Login = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 h-screen">
       {/* Bagian Kiri: Gambar Cover */}
-      <div className="hidden md:flex items-center justify-center bg-[#F4D03F]">
+      <div className="hidden md:flex items-center justify-center bg-">
         <img
           src={coverImage}
           alt="Cover"
@@ -57,7 +60,7 @@ const Login = () => {
       </div>
 
       {/* Bagian Kanan: Formulir Login */}
-      <div className="flex items-center justify-center bg-[#f5f5f5]">
+      <div className="flex items-center justify-center bg-gray-100">
         <div className="w-4/6 max-w-2xl p-10 bg-white shadow-2xl rounded-lg">
           <div className="grid grid-cols-2 md:grid-cols-5 gap-2 mb-6">
             <Link to="/adminlog" className="flex-1">

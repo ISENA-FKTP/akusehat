@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Swal from "sweetalert2";
@@ -7,10 +6,10 @@ import withReactContent from "sweetalert2-react-content";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
+import { jwtDecode } from "jwt-decode"; // Perbaikan impor jwtDecode
 import Sidebar_Klinik from "../../../components/klinik/sidebar_klinik";
 import Header from "../../../components/header";
-import axiosInstance from "../model/axiosConifg";
+import axios from "axios";
 
 const MySwal = withReactContent(Swal);
 
@@ -25,6 +24,7 @@ const FormComponent = () => {
     ppkumum: "",
     nohp: "",
     norm: "",
+    role: "pasien",
   });
 
   const handleChange = (e) => {
@@ -51,7 +51,7 @@ const FormComponent = () => {
       cancelButtonText: "Tidak, batalkan!",
     }).then((result) => {
       if (result.isConfirmed) {
-        saveData();
+        postPasiens();
       }
     });
   };
@@ -74,39 +74,109 @@ const FormComponent = () => {
     });
   };
 
-  const saveData = async () => {
-    try {
-      console.log("Saving data with formData:", formData);
-      await axiosInstance.post("/pasiens", formData);
+  const [expire, setExpire] = useState("");
+  const [token, setToken] = useState("");
+  const [, setLoading] = useState(true);
 
-      MySwal.fire("Tersimpan!", "Data Anda telah disimpan.", "success").then(
-        () => {
-          navigate("/kajianawal");
+  useEffect(() => {
+    refreshToken();
+  }, []);
+
+  const refreshToken = async () => {
+    try {
+      const response = await axios.get(
+        "https://backend-isenafktp.onrender.com/token"
+      );
+      setToken(response.data.accessToken);
+      const decoded = jwtDecode(response.data.accessToken);
+      setExpire(decoded.exp);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error refreshing token:", error);
+      setLoading(false);
+      if (error.response) {
+        navigate("/");
+      }
+    }
+  };
+
+  const axiosJWT = axios.create();
+
+  axiosJWT.interceptors.request.use(
+    async (config) => {
+      const currentDate = new Date();
+      if (expire * 1000 < currentDate.getTime()) {
+        const response = await axios.get(
+          "https://backend-isenafktp.onrender.com/token"
+        );
+        config.headers.Authorization = `Bearer ${response.data.accessToken}`;
+        setToken(response.data.accessToken);
+        const decoded = jwtDecode(response.data.accessToken);
+        setExpire(decoded.exp);
+        setLoading(false);
+      }
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
+
+  const postPasiens = async () => {
+    try {
+      const {
+        nobpjs,
+        nama,
+        statuspeserta,
+        tgllahir,
+        gender,
+        ppkumum,
+        nohp,
+        norm,
+        role,
+      } = formData;
+
+      // Validasi apakah semua field telah diisi
+      if (
+        !nobpjs ||
+        !nama ||
+        !statuspeserta ||
+        !tgllahir ||
+        !gender ||
+        !ppkumum ||
+        !nohp ||
+        !norm ||
+        !role
+      ) {
+        throw new Error("Silahkan lengkapi semua data pasien");
+      }
+
+      const response = await axiosJWT.post(
+        "https://backend-isenafktp.onrender.com/pasiens",
+        {
+          nobpjs,
+          nama,
+          statuspeserta,
+          tgllahir,
+          gender,
+          ppkumum,
+          nohp,
+          norm,
+          role,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
+      navigate("/administrasi");
+      console.log(response.data);
     } catch (error) {
-      if (error.response) {
-        // Penanganan kesalahan spesifik berdasarkan status respons
-        const { status, data } = error.response;
-        if (status === 401) {
-          MySwal.fire(
-            "Unauthorized!",
-            "Anda tidak memiliki izin akses.",
-            "error"
-          );
-        } else if (status === 403) {
-          MySwal.fire("Forbidden!", "Akses ditolak.", "error");
-        } else {
-          MySwal.fire(
-            "Gagal!",
-            `${data.message || "Data Anda gagal disimpan."}`,
-            "error"
-          );
-        }
-      } else {
-        MySwal.fire("Gagal!", "Data Anda gagal disimpan.", "error");
-      }
-      console.error("Error saving data:", error);
+      console.error(
+        "Error adding pasien:",
+        error.response ? error.response.data : error.message
+      );
     }
   };
 
@@ -159,6 +229,11 @@ const FormComponent = () => {
             label: "No.Rekam Medis",
             name: "norm",
             placeholder: "Masukkan nomor rekam medis",
+          },
+          {
+            label: "Role",
+            name: "role",
+            value: "pasien",
           },
         ].map((field, index) => (
           <div className="flex items-center mb-1" key={index}>
