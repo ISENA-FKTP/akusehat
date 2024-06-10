@@ -27,6 +27,7 @@ const DashboardApotek = () => {
       .catch(error => console.error('Error fetching medicines:', error));
   }, [sortBy]);
 
+
   const handleSortChange = (e) => {
     setSortBy(e.target.value);
   };
@@ -95,9 +96,11 @@ const DashboardApotek = () => {
   };
 
   const sortMedicines = (medicinesToSort) => {
+
     const sorted = sortBy === 'most'
       ? [...medicinesToSort].sort((a, b) => b.quantity - a.quantity)
       : [...medicinesToSort].sort((a, b) => a.quantity - b.quantity);
+
     setSortedMedicines(sorted);
   };
 
@@ -139,6 +142,8 @@ const DashboardApotek = () => {
         <Sidebar />
       </div>
       <div className="flex-1">
+        {" "}
+        {/* margin-left disesuaikan dengan lebar sidebar */}
         <Header
           title="Dashboard Apotek"
           userName="Rifki Rusdi Satma Putra"
@@ -183,8 +188,12 @@ const DashboardApotek = () => {
                   <th className="border px-4 py-2 bg-warning-400">Jumlah</th>
                   <th className="border px-4 py-2 bg-warning-400">Kategori</th>
                   <th className="border px-4 py-2 bg-warning-400">Jenis</th>
-                  <th className="border px-4 py-2 bg-warning-400">Entry Date</th>
-                  <th className="border px-4 py-2 bg-warning-400">Expiry Date</th>
+                  <th className="border px-4 py-2 bg-warning-400">
+                    Entry Date
+                  </th>
+                  <th className="border px-4 py-2 bg-warning-400">
+                    Expiry Date
+                  </th>
                   <th className="border px-4 py-2 bg-warning-400">Harga</th>
                   <th className="border px-4 py-2 bg-warning-400">Aksi</th>
                 </tr>
