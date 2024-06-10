@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaEdit } from 'react-icons/fa';
+import { FaEdit, FaTrash, FaPlus, FaMinus } from 'react-icons/fa';
 import Sidebar from "../../../components/apotik/sidebar";
 import Header from "../../../components/header";
 
@@ -9,21 +9,23 @@ const DashboardApotek = () => {
   const [sortBy, setSortBy] = useState('most');
   const [searchTerm, setSearchTerm] = useState('');
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isReduceModalOpen, setIsReduceModalOpen] = useState(false);
   const [currentMedicine, setCurrentMedicine] = useState(null);
 
-  const categories = ['Obat Cair', 'Obat Padat']; // Kategori yang tersedia
-  const types = ["Tablet", "Syrup"]; // Jenis obat yang tersedia
+  const categories = ['Alkes Habis Pakai', 'Obat Cair', 'Obat Padat', 'Obat Lainnya'];
+  const types = ["Tablet", "Syrup", 'Krim'];
 
   useEffect(() => {
-    // Fetch data saat komponen dimount
     fetch('/data/medicine.json')
       .then(response => response.json())
       .then(data => {
         setMedicines(data);
-        sortMedicines(data); // Mengurutkan data saat pertama kali diambil
+        sortMedicines(data);
       })
       .catch(error => console.error('Error fetching medicines:', error));
-  }, [sortBy]); // Diaktifkan kembali saat sortBy berubah
+  }, [sortBy]);
 
   const handleSortChange = (e) => {
     setSortBy(e.target.value);
@@ -43,6 +45,30 @@ const DashboardApotek = () => {
     setCurrentMedicine(null);
   };
 
+  const openDeleteModal = () => {
+    setIsDeleteModalOpen(true);
+  };
+
+  const closeDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+  };
+
+  const openAddModal = () => {
+    setIsAddModalOpen(true);
+  };
+
+  const closeAddModal = () => {
+    setIsAddModalOpen(false);
+  };
+
+  const openReduceModal = () => {
+    setIsReduceModalOpen(true);
+  };
+
+  const closeReduceModal = () => {
+    setIsReduceModalOpen(false);
+  };
+
   const handleEditChange = (e) => {
     const { name, value } = e.target;
     setCurrentMedicine(prevMedicine => ({
@@ -60,6 +86,14 @@ const DashboardApotek = () => {
     closeEditModal();
   };
 
+  const handleDelete = () => {
+    const updatedMedicines = medicines.filter(medicine => medicine.medicineName !== currentMedicine.medicineName);
+    setMedicines(updatedMedicines);
+    sortMedicines(updatedMedicines);
+    closeEditModal();  // Menutup modal edit
+    closeDeleteModal();  // Menutup modal hapus
+  };
+
   const sortMedicines = (medicinesToSort) => {
     const sorted = sortBy === 'most'
       ? [...medicinesToSort].sort((a, b) => b.quantity - a.quantity)
@@ -67,9 +101,37 @@ const DashboardApotek = () => {
     setSortedMedicines(sorted);
   };
 
-  const filteredMedicines = sortedMedicines.filter(medicine =>
+  const filteredMedicines = sortedMedicines.filter((medicine) =>
     medicine.medicineName.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const handleIncreaseQuantity = (medicineName) => {
+    setCurrentMedicine(medicines.find(medicine => medicine.medicineName === medicineName));
+    openAddModal();
+  };
+
+  const handleDecreaseQuantity = (medicineName) => {
+    setCurrentMedicine(medicines.find(medicine => medicine.medicineName === medicineName));
+    openReduceModal();
+  };
+
+  const handleAddQuantity = (quantityToAdd) => {
+    const updatedMedicines = medicines.map(medicine =>
+      medicine.medicineName === currentMedicine.medicineName ? { ...medicine, quantity: medicine.quantity + quantityToAdd } : medicine
+    );
+    setMedicines(updatedMedicines);
+    sortMedicines(updatedMedicines);
+    closeAddModal();
+  };
+
+  const handleReduceQuantity = (quantityToReduce) => {
+    const updatedMedicines = medicines.map(medicine =>
+      medicine.medicineName === currentMedicine.medicineName ? { ...medicine, quantity: Math.max(medicine.quantity - quantityToReduce, 0) } : medicine
+    );
+    setMedicines(updatedMedicines);
+    sortMedicines(updatedMedicines);
+    closeReduceModal();
+  };
 
   return (
     <div className="flex">
@@ -84,12 +146,21 @@ const DashboardApotek = () => {
           profilePicture="/logo.png"
         />
         <div className="container mx-auto">
-          <h1 className="text-2xl font-bold mt-4 mb-2">Data Seluruh Obat Apotek</h1>
-          <h2 className="text-xl font-semibold mb-4 text-secondary-700">Seluruh data terkait obat di apotek</h2>
+          <h1 className="text-2xl font-bold mt-4 mb-2">
+            Data Seluruh Obat Apotek
+          </h1>
+          <h2 className="text-xl font-semibold mb-4 text-secondary-700">
+            Seluruh data terkait obat di apotek
+          </h2>
           <div className="flex justify-between mb-4">
             <div>
               <label htmlFor="sort">Urutkan berdasarkan:</label>
-              <select id="sort" value={sortBy} onChange={handleSortChange} className="ml-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+              <select
+                id="sort"
+                value={sortBy}
+                onChange={handleSortChange}
+                className="ml-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              >
                 <option value="most">Paling Banyak</option>
                 <option value="least">Paling Sedikit</option>
               </select>
@@ -120,15 +191,28 @@ const DashboardApotek = () => {
               </thead>
               <tbody>
                 {filteredMedicines.map((medicine, index) => (
-                  <tr key={index} className={index % 2 === 0 ? 'bg-warning-100' : 'bg-warning-200'}>
-                    <td className="border px-4 py-2">{medicine.medicineName}</td>
+                  <tr
+                    key={index}
+                    className={
+                      index % 2 === 0 ? "bg-warning-100" : "bg-warning-200"
+                    }
+                  >
+                    <td className="border px-4 py-2">
+                      {medicine.medicineName}
+                    </td>
                     <td className="border px-4 py-2">{medicine.quantity}</td>
                     <td className="border px-4 py-2">{medicine.category}</td>
                     <td className="border px-4 py-2">{medicine.type}</td>
                     <td className="border px-4 py-2">{medicine.entryDate}</td>
                     <td className="border px-4 py-2">{medicine.expiryDate}</td>
                     <td className="border px-4 py-2">Rp{medicine.price}</td>
-                    <td className="border px-4 py-2 flex items-center justify-center">
+                    <td className="border px-4 py-2 flex items-center justify-center space-x-2">
+                      <button onClick={() => handleIncreaseQuantity(medicine.medicineName)} className="p-2 rounded-xl bg-primary-300">
+                        <FaPlus />
+                      </button>
+                      <button onClick={() => handleDecreaseQuantity(medicine.medicineName)} className="p-2 rounded-xl bg-primary-300">
+                        <FaMinus />
+                      </button>
                       <button onClick={() => openEditModal(medicine)} className="p-2 rounded-xl bg-primary-300">
                         <FaEdit />
                       </button>
@@ -145,8 +229,31 @@ const DashboardApotek = () => {
             handleEditChange={handleEditChange}
             handleSaveChanges={handleSaveChanges}
             closeEditModal={closeEditModal}
+            openDeleteModal={openDeleteModal}
             categories={categories}
             types={types}
+          />
+        )}
+        {isDeleteModalOpen && (
+          <DeleteModal 
+            handleDelete={handleDelete} 
+            closeDeleteModal={closeDeleteModal}
+          />
+        )}
+        {isAddModalOpen && (
+          <AddReduceModal 
+            type="Tambah" 
+            medicineName={currentMedicine.medicineName}
+            handleQuantityChange={handleAddQuantity} 
+            closeModal={closeAddModal}
+          />
+        )}
+        {isReduceModalOpen && (
+          <AddReduceModal 
+            type="Kurangi" 
+            medicineName={currentMedicine.medicineName}
+            handleQuantityChange={handleReduceQuantity} 
+            closeModal={closeReduceModal}
           />
         )}
       </div>
@@ -154,7 +261,48 @@ const DashboardApotek = () => {
   );
 };
 
-const EditModal = ({ medicine, handleEditChange, handleSaveChanges, closeEditModal, categories, types }) => {
+const AddReduceModal = ({ type, medicineName, handleQuantityChange, closeModal }) => {
+  const [quantity, setQuantity] = useState(1);
+
+  const handleChange = (e) => {
+    setQuantity(parseInt(e.target.value));
+  };
+
+  const handleSubmit = () => {
+    handleQuantityChange(quantity);
+  };
+
+  return (
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="bg-white p-6 rounded-md shadow-md w-1/3 max-h-screen overflow-y-auto">
+        <h2 className="text-2xl mb-4">{type} Obat</h2>
+        <p>{type} jumlah obat untuk {medicineName}:</p>
+        <input 
+          type="number" 
+          value={quantity} 
+          onChange={handleChange} 
+          className="mt-2 mb-4 w-full px-2 py-1 border rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+        />
+        <div className="flex justify-end mt-4">
+          <button 
+            onClick={closeModal} 
+            className="px-4 py-2 bg-primary-200 text-black rounded-md mr-2"
+          >
+            Batal
+          </button>
+          <button 
+            onClick={handleSubmit} 
+            className="px-4 py-2 bg-success-600 text-white rounded-md"
+          >
+            Simpan
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const EditModal = ({ medicine, handleEditChange, handleSaveChanges, closeEditModal, openDeleteModal, categories, types }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white p-6 rounded-md shadow-md w-1/2 max-h-screen overflow-y-auto">
@@ -235,18 +383,51 @@ const EditModal = ({ medicine, handleEditChange, handleSaveChanges, closeEditMod
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
           />
         </div>
-        <div className="flex justify-end">
+        <div className="flex justify-between">
           <button 
-            onClick={closeEditModal} 
-            className="px-4 py-2 bg-error-600 text-white rounded-md mr-2"
+            onClick={openDeleteModal} 
+            className="px-4 py-2 bg-error-600 text-white rounded-md flex items-center"
+          >
+            <FaTrash className="mr-2" /> Hapus
+          </button>
+          <div className="flex justify-end">
+            <button 
+              onClick={closeEditModal} 
+              className="px-4 py-2 bg-primary-200 text-black rounded-md mr-2"
+            >
+              Batal
+            </button>
+            <button 
+              onClick={handleSaveChanges} 
+              className="px-4 py-2 bg-success-600 text-white rounded-md"
+            >
+              Simpan
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const DeleteModal = ({ handleDelete, closeDeleteModal }) => {
+  return (
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="bg-white p-6 rounded-md shadow-md w-1/3 max-h-screen overflow-y-auto">
+        <h2 className="text-2xl mb-4">Konfirmasi Hapus</h2>
+        <p>Apakah Anda yakin ingin menghapus obat ini?</p>
+        <div className="flex justify-end mt-4">
+          <button 
+            onClick={closeDeleteModal} 
+            className="px-4 py-2 bg-primary-200 text-black rounded-md mr-2"
           >
             Batal
           </button>
           <button 
-            onClick={handleSaveChanges} 
-            className="px-4 py-2 bg-success-600 text-white rounded-md"
+            onClick={handleDelete} 
+            className="px-4 py-2 bg-error-600 text-white rounded-md"
           >
-            Simpan
+            Hapus
           </button>
         </div>
       </div>

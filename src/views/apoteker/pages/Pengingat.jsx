@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaEdit } from 'react-icons/fa';
+import { FaEdit,FaTrash, FaPlus, FaMinus } from 'react-icons/fa';
 import Sidebar from "../../../components/apotik/sidebar";
 import Header from "../../../components/header";
 
@@ -12,8 +12,8 @@ const Pengingat = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [currentMedicine, setCurrentMedicine] = useState(null);
 
-  const categories = ['Obat Cair', 'Obat Padat'];
-  const types = ['Tablet', 'Syrup'];
+  const categories = ['Alkes Habis Pakai', 'Obat Cair', 'Obat Padat', 'Obat Lainnya'];
+  const types = ['Tablet', 'Syrup', 'krim'];
 
   useEffect(() => {
     fetch('/data/medicine.json')
@@ -83,6 +83,26 @@ const Pengingat = () => {
     );
     setMedicines(updatedMedicines);
     closeEditModal();
+  };
+
+  const handleDelete = () => {
+    const updatedMedicines = medicines.filter(medicine => medicine.medicineName !== currentMedicine.medicineName);
+    setMedicines(updatedMedicines);
+    closeEditModal();
+  };
+
+  const handleIncreaseQuantity = (medicineName) => {
+    const updatedMedicines = medicines.map(medicine =>
+      medicine.medicineName === medicineName ? { ...medicine, quantity: medicine.quantity + 1 } : medicine
+    );
+    setMedicines(updatedMedicines);
+  };
+
+  const handleDecreaseQuantity = (medicineName) => {
+    const updatedMedicines = medicines.map(medicine =>
+      medicine.medicineName === medicineName && medicine.quantity > 0 ? { ...medicine, quantity: medicine.quantity - 1 } : medicine
+    );
+    setMedicines(updatedMedicines);
   };
 
   const filteredExpiringMedicines = expiringMedicines.filter(medicine =>
@@ -157,7 +177,13 @@ const Pengingat = () => {
                       <td className="border px-4 py-2">{medicine.entryDate}</td>
                       <td className="border px-4 py-2">{medicine.expiryDate}</td>
                       <td className="border px-4 py-2">Rp{medicine.price}</td>
-                      <td className="border px-4 py-2 flex items-center justify-center">
+                      <td className="border px-4 py-2 flex items-center justify-center space-x-2">
+                        <button onClick={() => handleIncreaseQuantity(medicine.medicineName)} className="p-2 rounded-xl bg-primary-300">
+                          <FaPlus />
+                        </button>
+                        <button onClick={() => handleDecreaseQuantity(medicine.medicineName)} className="p-2 rounded-xl bg-primary-300">
+                          <FaMinus />
+                        </button>
                         <button onClick={() => openEditModal(medicine)} className="p-2 rounded-xl bg-primary-300">
                           <FaEdit />
                         </button>
@@ -199,7 +225,13 @@ const Pengingat = () => {
                       <td className="border px-4 py-2">{medicine.entryDate}</td>
                       <td className="border px-4 py-2">{medicine.expiryDate}</td>
                       <td className="border px-4 py-2">Rp{medicine.price}</td>
-                      <td className="border px-4 py-2 flex items-center justify-center">
+                      <td className="border px-4 py-2 flex items-center justify-center space-x-2">
+                        <button onClick={() => handleIncreaseQuantity(medicine.medicineName)} className="p-2 rounded-xl bg-primary-300">
+                          <FaPlus />
+                        </button>
+                        <button onClick={() => handleDecreaseQuantity(medicine.medicineName)} className="p-2 rounded-xl bg-primary-300">
+                          <FaMinus />
+                        </button>
                         <button onClick={() => openEditModal(medicine)} className="p-2 rounded-xl bg-primary-300">
                           <FaEdit />
                         </button>
@@ -219,6 +251,7 @@ const Pengingat = () => {
           closeEditModal={closeEditModal}
           handleEditChange={handleEditChange}
           handleSaveChanges={handleSaveChanges}
+          handleDelete={handleDelete}
           categories={categories}
           types={types}
         />
@@ -227,7 +260,7 @@ const Pengingat = () => {
   );
 };
 
-const EditMedicineModal = ({ medicine, closeEditModal, handleEditChange, handleSaveChanges, categories, types }) => {
+const EditMedicineModal = ({ medicine, closeEditModal, handleEditChange, handleSaveChanges, handleDelete, categories, types }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white p-6 rounded-md shadow-md w-1/2 max-h-screen overflow-y-auto">
@@ -309,19 +342,27 @@ const EditMedicineModal = ({ medicine, closeEditModal, handleEditChange, handleS
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
           />
         </div>
-        <div className="flex justify-end">
+        <div className="flex justify-between">
           <button 
-            onClick={closeEditModal} 
-            className="px-4 py-2 bg-error-600 text-white rounded-md mr-2"
+            onClick={handleDelete} 
+            className="px-4 py-2 bg-error-600 text-white rounded-md mr-2 flex items-center"
           >
-            Batal
+            <FaTrash className='mr-2'/> Hapus
           </button>
-          <button 
-            onClick={handleSaveChanges} 
-            className="px-4 py-2 bg-success-600 text-white rounded-md"
-          >
-            Simpan
-          </button>
+          <div>
+            <button 
+              onClick={closeEditModal} 
+              className="px-4 py-2 bg-primary-200 text-black rounded-md mr-2"
+            >
+              Batal
+            </button>
+            <button 
+              onClick={handleSaveChanges} 
+              className="px-4 py-2 bg-success-600 text-white rounded-md"
+            >
+              Simpan
+            </button>
+          </div>
         </div>
       </div>
     </div>
