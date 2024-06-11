@@ -5,32 +5,45 @@ import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 
 const Login = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [msg, setMsg] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [msg, setMsg] = useState("");
   const navigate = useNavigate();
 
   const Auth = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('https://backend-isenafktp.onrender.com/login', {
-        username: username,
-        password: password
-      });
+      const response = await axios.post(
+        "https://backend-isenafktp.onrender.com/login",
+        {
+          username,
+          password,
+        }
+      );
 
-      const token = response.data.accessToken;
-      const decoded = jwtDecode(token);
+      console.log("Login response:", response.data); // Debug: Cek respons dari endpoint login
 
-      if (decoded.role === 'pawas') {
-        navigate('/kajiawal');
+      const { accessToken, refreshToken } = response.data;
+      console.log("Access Token:", accessToken); // Debug: Cek akses token
+      console.log("Refresh Token:", refreshToken); // Debug: Cek refresh token
+
+      const decoded = jwtDecode(accessToken);
+      console.log("Decoded Token:", decoded); // Debug: Cek hasil dekode token
+
+      if (decoded.role === "pawas") {
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("refreshToken", refreshToken);
+        navigate("/dashboard");
       } else {
-        setMsg('Akses Ditolak, Silahkan Masukan Akun Pegawai Pengawas.');
+        setMsg("Akses Ditolak, Silahkan Masukan Akun Administrasi.");
       }
     } catch (error) {
       if (error.response) {
+        console.log("Error response:", error.response.data); // Debug: Cek respons dari server jika terjadi error
         setMsg(error.response.data.msg);
       } else {
-        console.error('Error:', error.message);
+        console.error("Error:", error.message);
+        setMsg("Login gagal, silakan coba lagi.");
       }
     }
   };

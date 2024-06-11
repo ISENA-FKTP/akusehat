@@ -20,6 +20,9 @@ import DashboardApotek from "./views/apoteker/pages/DashboardApotek";
 import Manage from "./views/manage";
 import HomeVisit from "./views/manage/pages/homevisit";
 import RekamMedis from "./views/manage/pages/rekammedis";
+import TambahDataSakit from "./views/manage/pages/tambahDataSakit";
+import TambahDataHomeVisit from "./views/manage/pages/tambahDataHomeVisit";
+import TambahDataRekamMedis from "./views/manage/pages/tambahDataRekamMedis";
 import Pengingat from "./views/apoteker/pages/Pengingat";
 
 function App() {
@@ -57,9 +60,23 @@ function App() {
           path="/statistik/data-obat-klinik"
           element={<DataObatKlinik />}
         />
+
         <Route path="/manage" element={<Manage />} />
         <Route path="/manage/data-home-visit" element={<HomeVisit />} />
         <Route path="/manage/data-rekam-medis" element={<RekamMedis />} />
+        <Route
+          path="/manage/data-sakit/tambah-data"
+          element={<TambahDataSakit />}
+        />
+
+        <Route
+          path="/manage/data-home-visit/tambah-data"
+          element={<TambahDataHomeVisit />}
+        />
+        <Route
+          path="/manage/data-rekam-medis/tambah-data"
+          element={<TambahDataRekamMedis />}
+        />
       </Routes>
     </Router>
   );

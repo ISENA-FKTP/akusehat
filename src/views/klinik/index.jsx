@@ -1,22 +1,21 @@
 import Sidebar_Klinik from "../../components/klinik/sidebar_klinik";
 import Header from "../../components/header";
-
 import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
-    console.log("Access Token:", token); // Debug token akses
+    console.log("Access Token:", token);
 
     if (token) {
       const decoded = jwtDecode(token);
       console.log("Decoded Token:", decoded); // Debug token yang telah didekode
-      setUsername(decoded.username);
+      setEmail(decoded.email);
     } else {
       navigate("/");
     }
@@ -29,7 +28,7 @@ export default function Dashboard() {
       </div>
       <Header
         title="Pendaftaran Pelayanan Pasien"
-        userName={username}
+        userName={email}
         userStatus="Dokter Poli Umum"
         profilePicture="logo.png"
       />
