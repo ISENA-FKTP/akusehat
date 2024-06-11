@@ -5,15 +5,19 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { createPasients, getPasients } from "../model/useApi";
 import { useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
+import { jwtDecode } from "jwt-decode"; // Perbaikan impor jwtDecode
 import Sidebar_Klinik from "../../../components/klinik/sidebar_klinik";
 import Header from "../../../components/header";
+import axios from "axios";
+import PropTypes from "prop-types";
 
 const MySwal = withReactContent(Swal);
 
-const FormComponent = () => {
+const FormComponent = ({ token }) => {
+  FormComponent.propTypes = {
+    token: PropTypes.string,
+  };
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     nobpjs: "",
@@ -24,22 +28,8 @@ const FormComponent = () => {
     ppkumum: "",
     nohp: "",
     norm: "",
+    role: "pasien",
   });
-
-  const [patients, setPatients] = useState([]); // State untuk menyimpan data pasien
-
-  useEffect(() => {
-    const fetchPatients = async () => {
-      try {
-        const data = await getPasients();
-        setPatients(data); // Mengambil dan menyimpan data pasien
-      } catch (error) {
-        console.error("Error fetching patients:", error);
-      }
-    };
-
-    fetchPatients();
-  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -62,7 +52,7 @@ const FormComponent = () => {
       cancelButtonText: "Tidak, batalkan!",
     }).then((result) => {
       if (result.isConfirmed) {
-        saveData();
+        postPasiens();
       }
     });
   };
@@ -84,21 +74,84 @@ const FormComponent = () => {
     });
   };
 
-  const saveData = async () => {
-    try {
-      const token = localStorage.getItem("accessToken");
-      if (!token) {
-        throw new Error("Access token is not available");
+  const [, setMsg] = useState("");
+
+  const axiosJWT = axios.create();
+
+  axiosJWT.interceptors.request.use(
+    async (config) => {
+      const currentDate = new Date();
+      if (jwtDecode(token).exp * 1000 < currentDate.getTime()) {
+        const response = await axios.get(
+          "https://backend-isenafktp.onrender.com/token",
+          {
+            withCredentials: true,
+          }
+        );
+        config.headers.Authorization = `Bearer ${response.data.accessToken}`;
       }
-      await createPasients(formData, token);
-      MySwal.fire("Tersimpan!", "Data Anda telah disimpan.", "success").then(
-        () => {
-          navigate("/kajianawal");
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
+
+  const postPasiens = async () => {
+    try {
+      const {
+        nobpjs,
+        nama,
+        statuspeserta,
+        tgllahir,
+        gender,
+        ppkumum,
+        nohp,
+        norm,
+        role,
+      } = formData;
+
+      if (
+        !nobpjs ||
+        !nama ||
+        !statuspeserta ||
+        !tgllahir ||
+        !gender ||
+        !ppkumum ||
+        !nohp ||
+        !norm ||
+        !role
+      ) {
+        throw new Error("Silahkan lengkapi semua data pasien");
+      }
+
+      const response = await axiosJWT.post(
+        "https://backend-isenafktp.onrender.com/pasiens",
+        {
+          nobpjs,
+          nama,
+          statuspeserta,
+          tgllahir,
+          gender,
+          ppkumum,
+          nohp,
+          norm,
+          role,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
+      navigate("/administrasi");
+      console.log(response.data);
     } catch (error) {
-      MySwal.fire("Gagal!", "Data Anda gagal disimpan.", "error");
-      console.error("Error saving data:", error);
+      console.error(
+        "Error adding pasien:",
+        error.response ? error.response.data : error.message
+      );
+      setMsg(error.response ? error.response.data : error.message);
     }
   };
 
@@ -152,6 +205,11 @@ const FormComponent = () => {
             name: "norm",
             placeholder: "Masukkan nomor rekam medis",
           },
+          {
+            label: "Role",
+            name: "role",
+            value: "pasien",
+          },
         ].map((field, index) => (
           <div className="flex items-center mb-1" key={index}>
             <label className="text-black font-secondary-Karla font-bold w-48 mx-1">
@@ -204,14 +262,24 @@ export default function Administrasi() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-    if (token) {
-      const decoded = jwtDecode(token);
-      setUsername(decoded.username);
-      setToken(token);
-    } else {
-      navigate("/");
-    }
+    const fetchToken = async () => {
+      try {
+        const response = await axios.get(
+          "https://backend-isenafktp.onrender.com/token",
+          {
+            withCredentials: true,
+          }
+        );
+        const decoded = jwtDecode(response.data.accessToken);
+        setUsername(decoded.username);
+        setToken(response.data.accessToken);
+      } catch (error) {
+        console.error("Error fetching token:", error);
+        navigate("/");
+      }
+    };
+
+    fetchToken();
   }, [navigate]);
 
   return (
