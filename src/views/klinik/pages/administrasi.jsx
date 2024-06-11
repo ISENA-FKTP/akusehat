@@ -70,14 +70,15 @@ const FormComponent = () => {
     });
   };
 
-  const [username, setUsername] = useState("");
+  const [, setUsername] = useState("");
   const [expire, setExpire] = useState("");
   const [token, setToken] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [msg, setMsg] = useState("");
+  const [, setLoading] = useState(true);
+  const [, setMsg] = useState("");
 
   useEffect(() => {
     refreshToken();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const refreshToken = async () => {

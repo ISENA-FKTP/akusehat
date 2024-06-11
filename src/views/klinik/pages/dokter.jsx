@@ -114,14 +114,13 @@ export default function Dokter() {
           <div className="flex justify-around">
             <div className="flex items-center space-x-3">
               <div>
-              <button
-                type="button"
-                className=" bg-success-600 text-white p-3 rounded-md font-secondary-Karla font-medium focus:outline-none focus:ring-2 focus:ring-green-500 flex items-center space-x-1"
-                
-            >
-                <i className="fas fa-plus"></i>
-                <span>Penambahan Data</span>
-            </button>
+                <button
+                  type="button"
+                  className=" bg-success-600 text-white p-3 rounded-md font-secondary-Karla font-medium focus:outline-none focus:ring-2 focus:ring-green-500 flex items-center space-x-1"
+                >
+                  <i className="fas fa-plus"></i>
+                  <span>Tambah Data</span>
+                </button>
               </div>
               <label className="text-black font-secondary-Karla font-bold">
                 Poli
@@ -170,12 +169,14 @@ export default function Dokter() {
               <label className="text-black font-secondary-Karla font-bold">
                 Tanggal
               </label>
-              <input type="date" className="p-1 rounded-md border border-black font-secondary-Karla font-medium text-black focus:outline-none focus:border-blue-500" />
+              <input
+                type="date"
+                className="p-1 rounded-md border border-black font-secondary-Karla font-medium text-black focus:outline-none focus:border-blue-500"
+              />
             </div>
           </div>
         </form>
       </div>
-
 
       <div className=" bg-primary-600 mx-auto shadow-lg flex-none items-center text-center w-[80%] rounded ml-44 mt-5 py-10">
         <h1 className="text-white font-primary-Poppins flex justify-center font-bold text-2xl ">
@@ -184,7 +185,6 @@ export default function Dokter() {
       </div>
 
       <div className="grid grid-cols-2 mx-auto items-baseline container mr-44">
-
         <div className="grid grid-cols-1 mt-7 mx-auto ml-44 gap-7 items-baseline container w-[80%]">
           <div>
             <div className="h-10 w-full bg-primary-600 shadow-lg rounded-t-lg ">
@@ -205,7 +205,9 @@ export default function Dokter() {
                     <option value=""></option>
                     <option value="rawat jalan">Rawat Jalan</option>
                     <option value="rawat inap">Rawat Inap</option>
-                    <option value="Promotif Preventif">Promotif Preventif</option>
+                    <option value="Promotif Preventif">
+                      Promotif Preventif
+                    </option>
                   </select>
                 </div>
                 <div className="flex items-center space-x-5 mr-14">
@@ -305,8 +307,6 @@ export default function Dokter() {
               </form>
             </div>
 
-
-
             <div className="py-6">
               <div className="h-10 bg-primary-600 shadow-lg rounded-t-lg py-4 justify-center flex items-center">
                 <h1 className="text-white font-primary-Poppins font-bold text-xl ">
@@ -342,15 +342,16 @@ export default function Dokter() {
                           >
                             Hapus
                           </button>
-                          {index === diagnosa.length - 1 && diagnosa.length < 5 && (
-                            <button
-                              type="button"
-                              onClick={addDiagnosa}
-                              className="bg-success-600 text-white px-3 py-1 rounded hover:bg-blue-600"
-                            >
-                              Tambah
-                            </button>
-                          )}
+                          {index === diagnosa.length - 1 &&
+                            diagnosa.length < 5 && (
+                              <button
+                                type="button"
+                                onClick={addDiagnosa}
+                                className="bg-success-600 text-white px-3 py-1 rounded hover:bg-blue-600"
+                              >
+                                Tambah
+                              </button>
+                            )}
                         </div>
                       </div>
                     ))}
@@ -402,8 +403,6 @@ export default function Dokter() {
               </div>
             </div>
 
-
-
             <div>
               <div className="">
                 <div className="h-10 bg-primary-600 shadow-lg rounded-t-lg py-4 justify-center flex items-center">
@@ -413,7 +412,7 @@ export default function Dokter() {
                 </div>
                 <div className=" border border-primary-600 shadow-lg rounded-b-lg">
                   <form className="-space-y-12 w-full ml-9 left-10 right-24 pr-20 ">
-                    <div className="flex items-center space-x-6 py-14">
+                    <div className="flex items-center space-x-6 pb-14 pt-3">
                       <label className="text-black font-secondary-Karla font-bold w-40">
                         Kasus KLL
                       </label>
@@ -440,7 +439,9 @@ export default function Dokter() {
                         <option value="Dr. Ira Atmi Indiyanti">
                           Dr. Ira Atmi Indiyanti
                         </option>
-                        <option value="Dr. Lita Yuliati">Dr. Lita Yuliati</option>
+                        <option value="Dr. Lita Yuliati">
+                          Dr. Lita Yuliati
+                        </option>
                         <option value="Drg. Liem Frisca Anatasia">
                           Drg. Liem Frisca Anatasia
                         </option>
@@ -471,17 +472,17 @@ export default function Dokter() {
                         <option value="Rujukan">Rujukan</option>
                       </select>
                     </div>
-                    <div className="flex space-x-4 my-28">
+                    <div className="flex space-x-4 pt-20 pb-5">
                       <button
                         type="button"
-                        className="bg-blue-500 bg-success-600 text-white px-4 py-1 my-[60px] rounded hover:bg-blue-600"
+                        className="bg-blue-500 bg-success-600 text-white px-4 py-1  rounded hover:bg-blue-600"
                         onClick={handleSave}
                       >
                         Simpan
                       </button>
                       <button
                         type="button"
-                        className="bg-gray-500 bg-error-700 text-white px-4 py-1 my-[60px] rounded hover:bg-gray-600"
+                        className="bg-gray-500 bg-error-700 text-white px-4 py-1  rounded hover:bg-gray-600"
                         onClick={handleCancel}
                       >
                         Batal
@@ -588,10 +589,7 @@ export default function Dokter() {
                 </div>
               </form>
             </div>
-            <div>
-
-
-            </div>
+            <div></div>
             <div className="mt-5">
               <div className=" bg-primary-600 shadow-lg rounded-t-lg py-2 justify-center flex items-center">
                 <h1 className="text-white font-primary-Poppins font-bold text-xl">
@@ -656,7 +654,6 @@ export default function Dokter() {
               </div>
             </div>
           </div>
-
 
           <div className="">
             <div className="h-10 bg-primary-600 shadow-lg rounded-t-lg py-4 justify-center flex items-center">
@@ -731,7 +728,6 @@ export default function Dokter() {
           </div>
         </div>
       </div>
-
     </>
   );
 }
