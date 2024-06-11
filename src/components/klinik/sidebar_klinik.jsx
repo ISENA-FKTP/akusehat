@@ -34,7 +34,7 @@ export default function Sidebar_Klinik() {
 
   const handleLogout = async () => {
     try {
-      await axios.delete("http://localhost:5000/logout", {
+      await axios.delete("https://backend-isenafktp.onrender.com/logout", {
         withCredentials: true,
       });
       localStorage.removeItem("accessToken");

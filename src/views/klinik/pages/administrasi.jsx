@@ -82,9 +82,12 @@ const FormComponent = ({ token }) => {
     async (config) => {
       const currentDate = new Date();
       if (jwtDecode(token).exp * 1000 < currentDate.getTime()) {
-        const response = await axios.get("http://localhost:5000/token", {
-          withCredentials: true,
-        });
+        const response = await axios.get(
+          "https://backend-isenafktp.onrender.com/token",
+          {
+            withCredentials: true,
+          }
+        );
         config.headers.Authorization = `Bearer ${response.data.accessToken}`;
       }
       return config;
@@ -123,7 +126,7 @@ const FormComponent = ({ token }) => {
       }
 
       const response = await axiosJWT.post(
-        "http://localhost:5000/pasiens",
+        "https://backend-isenafktp.onrender.com/pasiens",
         {
           nobpjs,
           nama,
@@ -261,9 +264,12 @@ export default function Administrasi() {
   useEffect(() => {
     const fetchToken = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/token", {
-          withCredentials: true,
-        });
+        const response = await axios.get(
+          "https://backend-isenafktp.onrender.com/token",
+          {
+            withCredentials: true,
+          }
+        );
         const decoded = jwtDecode(response.data.accessToken);
         setUsername(decoded.username);
         setToken(response.data.accessToken);
