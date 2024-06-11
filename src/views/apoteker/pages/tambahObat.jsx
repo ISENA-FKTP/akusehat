@@ -3,7 +3,7 @@ import "tailwindcss/tailwind.css";
 import Sidebar from "../../../components/apotik/sidebar";
 import Header from "../../../components/header";
 import { useState } from "react";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 
 const TambahObat = () => {
   const [formData, setFormData] = useState({
@@ -38,7 +38,6 @@ const TambahObat = () => {
       cancelButtonText: "Batal",
     }).then((result) => {
       if (result.isConfirmed) {
-        console.log(formData); // You can perform further actions like sending data to the server
         Swal.fire("Data obat telah disimpan!", "", "success");
       }
     });
@@ -201,7 +200,7 @@ const TambahObat = () => {
           <div className="flex justify-center">
             <button
               type="submit"
-              className="bg-secondary-500 hover:bg-secondary-400 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline text-sm"
+              className="bg-success-500 hover:bg-success-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline text-sm"
             >
               Simpan
             </button>
