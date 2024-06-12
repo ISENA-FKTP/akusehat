@@ -23,16 +23,13 @@ const Login = () => {
 
       console.log("Login response:", response.data);
 
-      const { accessToken, refreshToken } = response.data;
+      const { accessToken } = response.data;
       console.log("Access Token:", accessToken);
-      console.log("Refresh Token:", refreshToken);
 
       const decoded = jwtDecode(accessToken);
       console.log("Decoded Token:", decoded);
 
       if (decoded.role === "admin") {
-        localStorage.setItem("accessToken", accessToken);
-        localStorage.setItem("refreshToken", refreshToken);
         navigate("/dashboard");
       } else {
         setMsg("Akses Ditolak, Silahkan Masukan Akun Administrasi.");
