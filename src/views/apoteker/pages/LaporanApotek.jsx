@@ -163,7 +163,7 @@ const LaporanApotek = () => {
                         <tr
                           key={index}
                           className={
-                            index % 2 === 0 ? "bg-warning-100" : "bg-warning-200"
+                            index % 2 === 0 ? "bg-primary-50" : "bg-primary-100"
                           }
                         >
                           <td className="border px-4 py-2">
@@ -180,7 +180,7 @@ const LaporanApotek = () => {
                           <td className="border px-4 py-2">Rp{medicine.price * medicine.quantity}</td>
                         </tr>
                       ))}
-                      <tr className="bg-warning-300 font-semibold">
+                      <tr className="bg- bg-primary-500 text-white font-semibold">
                         <td className="border px-4 py-2 text-left" colSpan="7">Total Harga Keseluruhan {category}</td>
                         <td className="border px-4 py-2">Rp{totalUsed}</td>
                         <td className="border px-4 py-2"></td>
@@ -202,7 +202,7 @@ const LaporanApotek = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr className="bg-warning-300 font-semibold">
+                <tr className="bg- bg-primary-500 text-white font-semibold">
                   <td className="border px-4 py-2">Rp{totalUsedOverall}</td>
                   <td className="border px-4 py-2">Rp{totalRemainingOverall}</td>
                 </tr>
