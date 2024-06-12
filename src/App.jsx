@@ -24,6 +24,7 @@ import TambahDataSakit from "./views/manage/pages/tambahDataSakit";
 import TambahDataHomeVisit from "./views/manage/pages/tambahDataHomeVisit";
 import TambahDataRekamMedis from "./views/manage/pages/tambahDataRekamMedis";
 import Pengingat from "./views/apoteker/pages/Pengingat";
+import LaporanApotek from "./views/apoteker/pages/LaporanApotek";
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
         <Route path="/apotek/tambah-obat" element={<TambahObat />} />
         <Route path="/apotek" element={<DashboardApotek />} />
         <Route path="/apotek/pengingat" element={<Pengingat />} />
+        <Route path="/apotek/laporan-apotek" element={<LaporanApotek />} />
 
         {/* Statistik */}
         <Route path="/statistik" element={<Statistik />} />

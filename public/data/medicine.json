@@ -1,54 +1,67 @@
 [
-    {
-      "medicineName": "Paracetamol",
-      "quantity": 90,
-      "entryDate": "2023-05-01",
-      "expiryDate": "2024-07-01",
-      "batchNo": "B12345",
-      "category": "Obat Cair",
-      "type": "Syrup",
-      "price": 5000
-    },
-    {
-      "medicineName": "Ibuprofen",
-      "quantity": 200,
-      "entryDate": "2023-06-01",
-      "expiryDate": "2024-08-01",
-      "batchNo": "B67890",
-      "category": "Obat Padat",
-      "type": "Tablet",
-      "price": 10000
-    },
-    {
-        "medicineName": "Panadol",
-        "quantity": 300,
-        "entryDate": "2023-05-01",
-        "expiryDate": "2025-05-01",
-        "batchNo": "B12345",
-        "category": "Obat Cair",
-        "type": "Syrup",
-        "price": 5000
-      },
-      {
-        "medicineName": "Aspirine",
-        "quantity": 100,
-        "entryDate": "2023-05-01",
-        "expiryDate": "2025-05-01",
-        "batchNo": "B12345",
-        "category": "Obat Cair",
-        "type": "Tablet",
-        "price": 5000
-      },
-      {
-        "medicineName": "Sakatonik ABC",
-        "quantity": 100,
-        "entryDate": "2023-05-01",
-        "expiryDate": "2024-05-01",
-        "batchNo": "B12345",
-        "category": "Obat Padat",
-        "type": "Tablet",
-        "price": 5000
-      }
-  ]
-  
-
+  {
+    "uuid": "123e4567-e89b-12d3-a456-426614174000",
+    "medicineName": "Paracetamol",
+    "quantity": 90,
+    "entryDate": "2023-05-01",
+    "expiryDate": "2024-07-01",
+    "batchNo": "B12345",
+    "category": "Obat Cair",
+    "type": "Syrup",
+    "price": 5000,
+    "userId": 1,
+    "usedMedicine" : "50"
+  },
+  {
+    "uuid": "123e4567-e89b-12d3-a456-426614174001",
+    "medicineName": "Ibuprofen",
+    "quantity": 200,
+    "entryDate": "2023-06-01",
+    "expiryDate": "2024-08-01",
+    "batchNo": "B67890",
+    "category": "Obat Padat",
+    "type": "Tablet",
+    "price": 10000,
+    "userId": 1,
+    "usedMedicine" : "50"
+  },
+  {
+    "uuid": "123e4567-e89b-12d3-a456-426614174002",
+    "medicineName": "Panadol",
+    "quantity": 300,
+    "entryDate": "2023-05-01",
+    "expiryDate": "2025-05-01",
+    "batchNo": "B12345",
+    "category": "Obat Cair",
+    "type": "Syrup",
+    "price": 5000,
+    "userId": 1,
+    "usedMedicine" : "50"
+  },
+  {
+    "uuid": "123e4567-e89b-12d3-a456-426614174003",
+    "medicineName": "Aspirine",
+    "quantity": 100,
+    "entryDate": "2023-05-01",
+    "expiryDate": "2025-05-01",
+    "batchNo": "B12345",
+    "category": "Obat Cair",
+    "type": "Tablet",
+    "price": 5000,
+    "userId": 1,
+    "usedMedicine" : "50"
+  },
+  {
+    "uuid": "123e4567-e89b-12d3-a456-426614174004",
+    "medicineName": "Sakatonik ABC",
+    "quantity": 100,
+    "entryDate": "2023-05-01",
+    "expiryDate": "2024-05-01",
+    "batchNo": "B12345",
+    "category": "Obat Padat",
+    "type": "Tablet",
+    "price": 5000,
+    "userId": 1,
+    "usedMedicine" : "50"
+  }
+]
