@@ -74,7 +74,36 @@ const FormComponent = ({ token }) => {
     });
   };
 
+  const [, setUsername] = useState("");
+  const [expire, setExpire] = useState("");
+  const [token, setToken] = useState("");
+  const [, setLoading] = useState(true);
   const [, setMsg] = useState("");
+
+  useEffect(() => {
+    refreshToken();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const refreshToken = async () => {
+    try {
+      const response = await axios.get(
+        "https://backend-isenafktp.onrender.com/token"
+      );
+      setToken(response.data.accessToken);
+      const decoded = jwtDecode(response.data.accessToken);
+      setUsername(decoded.username);
+      setExpire(decoded.exp);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error refreshing token:", error);
+      setLoading(false);
+      if (error.response) {
+        navigate("/");
+      }
+    }
+  };
+
 
   const axiosJWT = axios.create();
 
