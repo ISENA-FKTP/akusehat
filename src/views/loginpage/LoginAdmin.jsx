@@ -1,8 +1,8 @@
 import { useState } from "react";
 import coverImage from "./cover.png";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import axios from "axios";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -23,23 +23,20 @@ const Login = () => {
 
       console.log("Login response:", response.data);
 
-      const { accessToken, refreshToken } = response.data;
+      const { accessToken } = response.data;
       console.log("Access Token:", accessToken);
-      console.log("Refresh Token:", refreshToken);
 
       const decoded = jwtDecode(accessToken);
       console.log("Decoded Token:", decoded);
 
       if (decoded.role === "admin") {
-        localStorage.setItem("accessToken", accessToken);
-        localStorage.setItem("refreshToken", refreshToken);
         navigate("/dashboard");
       } else {
         setMsg("Akses Ditolak, Silahkan Masukan Akun Administrasi.");
       }
     } catch (error) {
       if (error.response) {
-        console.log("Error response:", error.response.data); // Debug: Cek respons dari server jika terjadi error
+        console.log("Error response:", error.response.data);
         setMsg(error.response.data.msg);
       } else {
         console.error("Error:", error.message);
@@ -162,6 +159,7 @@ const Login = () => {
               >
                 Masuk
               </button>
+              {msg && <p>{msg}</p>}
             </div>
           </form>
         </div>
