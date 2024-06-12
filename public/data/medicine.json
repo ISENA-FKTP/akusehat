@@ -9,7 +9,8 @@
     "category": "Obat Cair",
     "type": "Syrup",
     "price": 5000,
-    "userId": 1
+    "userId": 1,
+    "usedMedicine" : "50"
   },
   {
     "uuid": "123e4567-e89b-12d3-a456-426614174001",
@@ -21,7 +22,8 @@
     "category": "Obat Padat",
     "type": "Tablet",
     "price": 10000,
-    "userId": 1
+    "userId": 1,
+    "usedMedicine" : "50"
   },
   {
     "uuid": "123e4567-e89b-12d3-a456-426614174002",
@@ -33,7 +35,8 @@
     "category": "Obat Cair",
     "type": "Syrup",
     "price": 5000,
-    "userId": 1
+    "userId": 1,
+    "usedMedicine" : "50"
   },
   {
     "uuid": "123e4567-e89b-12d3-a456-426614174003",
@@ -45,7 +48,8 @@
     "category": "Obat Cair",
     "type": "Tablet",
     "price": 5000,
-    "userId": 1
+    "userId": 1,
+    "usedMedicine" : "50"
   },
   {
     "uuid": "123e4567-e89b-12d3-a456-426614174004",
@@ -57,6 +61,7 @@
     "category": "Obat Padat",
     "type": "Tablet",
     "price": 5000,
-    "userId": 1
+    "userId": 1,
+    "usedMedicine" : "50"
   }
 ]
