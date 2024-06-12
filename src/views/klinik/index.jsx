@@ -1,25 +1,41 @@
 import Sidebar_Klinik from "../../components/klinik/sidebar_klinik";
 import Header from "../../components/header";
-
 import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function Dashboard() {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-    console.log("Access Token:", token); // Debug token akses
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "https://backend-isenafktp.onrender.com/token",
+          {
+            withCredentials: true,
+          }
+        );
 
-    if (token) {
-      const decoded = jwtDecode(token);
-      console.log("Decoded Token:", decoded); // Debug token yang telah didekode
-      setUsername(decoded.username);
-    } else {
-      navigate("/");
-    }
+        const accessToken = response.data.accessToken;
+        console.log("Access Token:", accessToken);
+
+        if (accessToken) {
+          const decoded = jwtDecode(accessToken);
+          console.log("Decoded Token:", decoded);
+          setEmail(decoded.email);
+        } else {
+          navigate("/");
+        }
+      } catch (error) {
+        console.error("Error fetching token:", error);
+        navigate("/");
+      }
+    };
+
+    fetchData();
   }, [navigate]);
 
   return (
@@ -29,7 +45,7 @@ export default function Dashboard() {
       </div>
       <Header
         title="Pendaftaran Pelayanan Pasien"
-        userName={username}
+        userName={email}
         userStatus="Dokter Poli Umum"
         profilePicture="logo.png"
       />

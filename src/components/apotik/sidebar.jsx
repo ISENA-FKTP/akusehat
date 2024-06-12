@@ -26,7 +26,7 @@ export default function Sidebar() {
     },
     {
       title: "Laporan",
-      path: "/apotek/laporan",
+      path: "/apotek/laporan-apotek",
       icon: <MdLibraryBooks/>,
     },
   ];
