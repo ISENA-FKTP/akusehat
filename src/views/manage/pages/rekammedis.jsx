@@ -3,22 +3,34 @@ import Sidebar from "../../../components/manage/sidebar";
 import Header from "../../../components/header";
 import SearchBar from "../../../components/manage/searchBar";
 import TambahButton from "../../../components/manage/tambahButton";
-import { DataRekamMedis, headData } from "../model/dataRekamMedis";
+import { DataSakit, head_data_rekam_medis } from "../model/dataSakit";
 import TabelRekamMedis from "../../../components/manage/tabel-rekam-medis";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 export default function RekamMedis() {
-  const [data, setData] = useState([]);
+  const navigate = useNavigate();
 
-  const navigate = useNavigate() ;
-  
+  const [data, setData] = useState([]);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [keyword, setKeyword] = useState(() => {
+    return searchParams.get("keyword") || "";
+  });
+
+  useEffect(() => {
+    DataSakit.getDataRekamMedis().then((data) => setData(data));
+  }, []);
+
   const tambahDataHandler = () => {
     navigate("/manage/data-rekam-medis/tambah-data");
   };
+  function onKeywordChangeHandler(keyword) {
+    setKeyword(keyword);
+    setSearchParams({ keyword });
+  }
 
-  useEffect(() => {
-    DataRekamMedis.getDataRekamMedis().then((data) => setData(data));
-  }, []);
+  const filteredData = data.filter((data) => {
+    return data.nama.toLowerCase().includes(keyword.toLowerCase());
+  });
 
   return (
     <div className=" font-primary">
@@ -34,11 +46,16 @@ export default function RekamMedis() {
       />
       <main className="mt-12 ml-32 mr-12 space-y-4  ">
         <div>
-          <h1>Data Juni 2024</h1>
+          <h1 className="text-2xl ">Data Rekam Medis</h1>
         </div>
-        <SearchBar />
-        <TambahButton onClicked={tambahDataHandler}/>
-        <TabelRekamMedis table_head={headData} table_row={data}/>
+        <div className="w-full my-4 flex gap-4">
+          <SearchBar keyword={keyword} keywordChange={onKeywordChangeHandler} />
+          <TambahButton onClicked={tambahDataHandler} />
+        </div>
+        <TabelRekamMedis
+          table_head={head_data_rekam_medis}
+          table_row={filteredData}
+        />
       </main>
     </div>
   );

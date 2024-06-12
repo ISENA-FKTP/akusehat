@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+const colors = require('tailwindcss/colors')
 export default {
   content: ["./index.html",
   "./node_modules/primereact/**/*.{js,ts,jsx,tsx}",
@@ -9,6 +10,10 @@ export default {
       current: "currentColor",
       white: "#ffffff",
       black: "#000000",
+      gray: colors.gray,
+      emerald: colors.emerald,
+      indigo: colors.indigo,
+      yellow: colors.yellow,
       primary: {
         50: "#f2f2ff",
         100: "#e9e7ff",
