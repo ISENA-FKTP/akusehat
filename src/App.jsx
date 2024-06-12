@@ -24,6 +24,7 @@ import TambahDataSakit from "./views/manage/pages/tambahDataSakit";
 import TambahDataHomeVisit from "./views/manage/pages/tambahDataHomeVisit";
 import TambahDataRekamMedis from "./views/manage/pages/tambahDataRekamMedis";
 import Pengingat from "./views/apoteker/pages/Pengingat";
+import DetailPage from "./views/manage/pages/detail";
 
 function App() {
   return (
@@ -64,16 +65,20 @@ function App() {
         <Route path="/manage" element={<Manage />} />
         <Route path="/manage/data-home-visit" element={<HomeVisit />} />
         <Route path="/manage/data-rekam-medis" element={<RekamMedis />} />
-        
-<<<<<<< HEAD
-=======
+        <Route 
+        path="/manage/data-sakit/tambah-data"
+        element={<TambahDataSakit/>} />
         <Route 
         path="/manage/data-home-visit/tambah-data"
         element={<TambahDataHomeVisit/>} />
         <Route 
         path="/manage/data-rekam-medis/tambah-data"
         element={<TambahDataRekamMedis/>} />
->>>>>>> 3e9e94aa71610a5c4906aa5b88a166b8fab81e63
+        <Route 
+        path="/manage/detail/:nrp"
+        element={<DetailPage/>} />
+
+
       </Routes>
     </Router>
   );

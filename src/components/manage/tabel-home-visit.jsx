@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, Typography } from "@material-tailwind/react";
 
-export default function TabelHoemVisit({ table_head, table_row}) {
+export default function TabelHoemVisit({ table_head, table_row }) {
   return (
     <div>
       <Card className="h-full w-full overflow-auto">
@@ -9,10 +9,7 @@ export default function TabelHoemVisit({ table_head, table_row}) {
           <thead>
             <tr>
               {table_head.map((head) => (
-                <th
-                  key={head}
-                  className=" bg-primary-500 p-4"
-                >
+                <th key={head} className=" bg-primary-500 p-4">
                   <Typography
                     variant="large"
                     color="white"
@@ -25,70 +22,130 @@ export default function TabelHoemVisit({ table_head, table_row}) {
             </tr>
           </thead>
           <tbody>
-            {table_row.map(({ No, NRP, Nama, SatuanKerja, Keluhan }) => {
-              const classes = "p-4";
+            {table_row.map(
+              ({
+                nrp,
+                nama,
+                pangkat,
+                satuan_kerja,
+                tanggal,
+                keluhan,
+                pemeriksaan_fisik,
+                diagnosis,
+                terapi,
+                saran_medis,
+              }) => {
+                const classes = "p-4";
 
-              return (
-                <tr key={NRP} className="even:bg-primary-300">
-                  <td className={classes}>
-                    <Typography
-                      variant="small"
-                      color="blue-gray"
-                      className="font-normal"
-                    >
-                      {No}
-                    </Typography>
-                  </td>
-                  <td className={classes}>
-                    <Typography
-                      variant="small"
-                      color="blue-gray"
-                      className="font-normal"
-                    >
-                      {NRP}
-                    </Typography>
-                  </td>
-                  <td className={classes}>
-                    <Typography
-                      variant="small"
-                      color="blue-gray"
-                      className="font-normal"
-                    >
-                      {Nama}
-                    </Typography>
-                  </td>
-                  <td className={classes}>
-                    <Typography
-                      variant="small"
-                      color="blue-gray"
-                      className="font-normal"
-                    >
-                      {SatuanKerja}
-                    </Typography>
-                  </td>
-                  <td className={classes}>
-                    <Typography
-                      variant="small"
-                      color="blue-gray"
-                      className="font-normal"
-                    >
-                      {Keluhan}
-                    </Typography>
-                  </td>
-                  <td className={classes}>
-                    <Typography
-                      as="a"
-                      href="#"
-                      variant="small"
-                      color="blue-gray"
-                      className="font-medium"
-                    >
-                      Detail
-                    </Typography>
-                  </td>
-                </tr>
-              );
-            })}
+                return (
+                  <tr key={nrp} className="even:bg-primary-300">
+                    <td className={classes}>
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal"
+                      >
+                        {nrp}
+                      </Typography>
+                    </td>
+                    <td className={classes}>
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal"
+                      >
+                        {nama}
+                      </Typography>
+                    </td>
+                    <td className={classes}>
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal"
+                      >
+                        {pangkat}
+                      </Typography>
+                    </td>
+                    <td className={classes}>
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal"
+                      >
+                        {satuan_kerja}
+                      </Typography>
+                    </td>
+                    <td className={classes}>
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal"
+                      >
+                        {tanggal}
+                      </Typography>
+                    </td>
+                    <td className={classes}>
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal"
+                      >
+                        {keluhan}
+                      </Typography>
+                    </td>
+                    <td className={classes}>
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal"
+                      >
+                        {pemeriksaan_fisik}
+                      </Typography>
+                    </td>
+                    <td className={classes}>
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal"
+                      >
+                        {diagnosis}
+                      </Typography>
+                    </td>
+                    <td className={classes}>
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal"
+                      >
+                        {terapi}
+                      </Typography>
+                    </td>
+                    <td className={classes}>
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal"
+                      >
+                        {saran_medis}
+                      </Typography>
+                    </td>
+                    <td className={classes}>
+                      <Link to={`/detail/${nrp}`}>
+                        <Typography
+                          as="a"
+                          href="#"
+                          variant="small"
+                          color="blue-gray"
+                          className="font-medium"
+                        >
+                          Detail
+                        </Typography>
+                      </Link>
+                    </td>
+                  </tr>
+                );
+              }
+            )}
           </tbody>
         </table>
       </Card>
