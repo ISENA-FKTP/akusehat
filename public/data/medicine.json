@@ -3,14 +3,14 @@
     "uuid": "123e4567-e89b-12d3-a456-426614174000",
     "medicineName": "Paracetamol",
     "quantity": 90,
-    "entryDate": "2023-05-01",
+    "entryDate": "2022-05-01",
     "expiryDate": "2024-07-01",
     "batchNo": "B12345",
     "category": "Obat Cair",
     "type": "Syrup",
     "price": 5000,
     "userId": 1,
-    "usedMedicine" : "50"
+    "usedMedicine": "50"
   },
   {
     "uuid": "123e4567-e89b-12d3-a456-426614174001",
@@ -23,7 +23,7 @@
     "type": "Tablet",
     "price": 10000,
     "userId": 1,
-    "usedMedicine" : "50"
+    "usedMedicine": "50"
   },
   {
     "uuid": "123e4567-e89b-12d3-a456-426614174002",
@@ -36,7 +36,7 @@
     "type": "Syrup",
     "price": 5000,
     "userId": 1,
-    "usedMedicine" : "50"
+    "usedMedicine": "50"
   },
   {
     "uuid": "123e4567-e89b-12d3-a456-426614174003",
@@ -49,7 +49,7 @@
     "type": "Tablet",
     "price": 5000,
     "userId": 1,
-    "usedMedicine" : "50"
+    "usedMedicine": "50"
   },
   {
     "uuid": "123e4567-e89b-12d3-a456-426614174004",
@@ -62,6 +62,6 @@
     "type": "Tablet",
     "price": 5000,
     "userId": 1,
-    "usedMedicine" : "50"
+    "usedMedicine": "50"
   }
 ]

@@ -27,11 +27,11 @@ export default function Dashboard() {
           console.log("Decoded Token:", decoded);
           setEmail(decoded.email);
         } else {
-          navigate("/");
+          // navigate("/");
         }
       } catch (error) {
         console.error("Error fetching token:", error);
-        navigate("/");
+        // navigate("/");
       }
     };
 

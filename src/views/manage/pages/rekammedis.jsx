@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Sidebar from "../../../components/manage/sidebar";
 import Header from "../../../components/header";
 import SearchBar from "../../../components/manage/searchBar";

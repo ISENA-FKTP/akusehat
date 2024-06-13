@@ -18,6 +18,7 @@ const FormComponent = ({ token }) => {
   FormComponent.propTypes = {
     token: PropTypes.string,
   };
+
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     nobpjs: "",
@@ -75,8 +76,8 @@ const FormComponent = ({ token }) => {
   };
 
   const [, setUsername] = useState("");
-  const [expire, setExpire] = useState("");
-  const [token, setToken] = useState("");
+  const [, setExpire] = useState("");
+  const [, setToken] = useState("");
   const [, setLoading] = useState(true);
   const [, setMsg] = useState("");
 
@@ -99,11 +100,10 @@ const FormComponent = ({ token }) => {
       console.error("Error refreshing token:", error);
       setLoading(false);
       if (error.response) {
-        navigate("/");
+        // navigate("/");
       }
     }
   };
-
 
   const axiosJWT = axios.create();
 
@@ -275,7 +275,7 @@ const FormComponent = ({ token }) => {
         </button>
         <button
           type="button"
-          className="bg-gray-500 bg-error-700 text-white px-4 py-1 rounded hover:bg-gray-600"
+          className="bg-error-700 text-white px-4 py-1 rounded hover:bg-gray-600"
           onClick={handleCancel}
         >
           Batal
@@ -304,7 +304,7 @@ export default function Administrasi() {
         setToken(response.data.accessToken);
       } catch (error) {
         console.error("Error fetching token:", error);
-        navigate("/");
+        // navigate("/");
       }
     };
 

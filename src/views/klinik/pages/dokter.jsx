@@ -298,7 +298,7 @@ export default function Dokter() {
                   </button>
                   <button
                     type="button"
-                    className="bg-gray-500 bg-error-600 text-white px-4 py-1 rounded hover:bg-gray-600"
+                    className="bg-error-600 text-white px-4 py-1 rounded hover:bg-gray-600"
                     onClick={handleCancel}
                   >
                     Batal
@@ -393,7 +393,7 @@ export default function Dokter() {
                     </button>
                     <button
                       type="button"
-                      className="bg-gray-500 bg-error-700 text-white px-4 py-1 my-[30px] rounded hover:bg-gray-600"
+                      className="bg-error-700 text-white px-4 py-1 my-[30px] rounded hover:bg-gray-600"
                       onClick={handleCancel}
                     >
                       Batal
@@ -482,7 +482,7 @@ export default function Dokter() {
                       </button>
                       <button
                         type="button"
-                        className="bg-gray-500 bg-error-700 text-white px-4 py-1  rounded hover:bg-gray-600"
+                        className=" bg-error-700 text-white px-4 py-1  rounded hover:bg-gray-600"
                         onClick={handleCancel}
                       >
                         Batal
@@ -581,7 +581,7 @@ export default function Dokter() {
                   </button>
                   <button
                     type="button"
-                    className="bg-gray-500 bg-error-700 text-white px-4 py-1 my-[30px] rounded hover:bg-gray-600"
+                    className="bg-error-700 text-white px-4 py-1 my-[30px] rounded hover:bg-gray-600"
                     onClick={handleCancel}
                   >
                     Batal
@@ -592,13 +592,13 @@ export default function Dokter() {
             <div></div>
             <div className="mt-5">
               <div className=" bg-primary-600 shadow-lg rounded-t-lg py-2 justify-center flex items-center">
-                <h1 className="text-white font-primary-Poppins font-bold text-xl">
+                <h1 className="text-white font-primary-Poppins font-bold text-xl ">
                   Riwayat Alergi
                 </h1>
               </div>
               <div className="h-96 border border-primary-600 -mt-8 shadow-lg rounded-lg">
-                <form className="-space-y-12 mx-6 sm:mx-12">
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-5 py-12">
+                <form className="-space-y-12 mx-6 w-full">
+                  <div className="flex flex-col items-start space-y-4 py-12 w-full">
                     <SelectWithInput />
                   </div>
 
@@ -717,7 +717,7 @@ export default function Dokter() {
                   </button>
                   <button
                     type="button"
-                    className="bg-gray-500 bg-error-700 text-white px-4 py-1 rounded hover:bg-gray-600"
+                    className="bg-error-700 text-white px-4 py-1 rounded hover:bg-gray-600"
                     onClick={handleCancel}
                   >
                     Batal

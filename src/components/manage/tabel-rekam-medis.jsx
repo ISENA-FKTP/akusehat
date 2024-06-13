@@ -1,7 +1,12 @@
-import React from "react";
 import { Card, Typography } from "@material-tailwind/react";
+import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 
 export default function TabelRekamMedis({ table_head, table_row }) {
+  TabelRekamMedis.propTypes = {
+    table_head: PropTypes.arrayOf(PropTypes.string).isRequired,
+    table_row: PropTypes.arrayOf(PropTypes.object).isRequired,
+  };
   return (
     <div>
       <Card className="h-full w-full overflow-auto">
