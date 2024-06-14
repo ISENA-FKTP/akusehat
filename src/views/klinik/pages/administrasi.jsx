@@ -163,9 +163,6 @@ const FormComponent = ({ token }) => {
         // "http://localhost:5000/pasiens",
         "https://be-isena-fktp.onrender.com/pasiens",
         {
-          withCredentials: true,
-        },
-        {
           nobpjs,
           nama,
           statuspeserta,
