@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import coverImage from "./cover.png";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -15,10 +15,7 @@ const Login = () => {
     try {
       const response = await axios.post(
         "https://be-isena-fktp.onrender.com/login",
-        {
-          username,
-          password,
-        },
+        { username, password },
         { withCredentials: true }
       );
 
@@ -31,6 +28,8 @@ const Login = () => {
       console.log("Decoded Token:", decoded);
 
       if (accessToken) {
+        localStorage.setItem("accessToken", accessToken);
+
         axios.defaults.headers.common[
           "Authorization"
         ] = `Bearer ${accessToken}`;
@@ -52,6 +51,16 @@ const Login = () => {
       }
     }
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      const decoded = jwtDecode(token);
+      if (decoded.role === "admin") {
+        navigate("/dashboard");
+      }
+    }
+  }, [navigate]);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 h-screen">
