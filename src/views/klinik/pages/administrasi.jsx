@@ -76,9 +76,6 @@ const FormComponent = ({ token }) => {
   };
 
   const [, setUsername] = useState("");
-  const [, setExpire] = useState("");
-  const [, setToken] = useState("");
-  const [, setLoading] = useState(true);
   const [, setMsg] = useState("");
 
   useEffect(() => {
@@ -88,24 +85,15 @@ const FormComponent = ({ token }) => {
 
   const refreshToken = async () => {
     try {
-      // const response = await axios.get("http://localhost:5000/token");
       const response = await axios.get(
-        "https://be-isena-fktp.onrender.com/token",
-        {
-          withCredentials: true,
-        }
+        "https://be-isena-fktp.onrender.com/token"
       );
-      setToken(response.data.accessToken);
-      const decoded = jwtDecode(response.data.accessToken);
+      const accessToken = response.data.accessToken;
+      const decoded = jwtDecode(accessToken);
       setUsername(decoded.username);
-      setExpire(decoded.exp);
-      setLoading(false);
     } catch (error) {
       console.error("Error refreshing token:", error);
-      setLoading(false);
-      if (error.response) {
-        // navigate("/");
-      }
+      navigate("/");
     }
   };
 
@@ -114,15 +102,22 @@ const FormComponent = ({ token }) => {
   axiosJWT.interceptors.request.use(
     async (config) => {
       const currentDate = new Date();
-      if (jwtDecode(token).exp * 1000 < currentDate.getTime()) {
-        // const response = await axios.get("http://localhost:5000/token", {
-        const response = await axios.get(
-          "https://be-isena-fktp.onrender.com/token",
-          {
-            withCredentials: true,
-          }
-        );
-        config.headers.Authorization = `Bearer ${response.data.accessToken}`;
+      const accessToken = localStorage.getItem("accessToken");
+      if (
+        accessToken &&
+        jwtDecode(accessToken).exp * 1000 < currentDate.getTime()
+      ) {
+        try {
+          const response = await axios.get(
+            "https://be-isena-fktp.onrender.com/token"
+          );
+          const newAccessToken = response.data.accessToken;
+          localStorage.setItem("accessToken", newAccessToken);
+          config.headers.Authorization = `Bearer ${newAccessToken}`;
+        } catch (error) {
+          console.error("Error refreshing token:", error);
+          navigate("/");
+        }
       }
       return config;
     },
@@ -156,11 +151,10 @@ const FormComponent = ({ token }) => {
         !norm ||
         !role
       ) {
-        throw new Error("Silahkan lengkapi semua data pasien");
+        throw new Error("Silakan lengkapi semua data pasien");
       }
 
       const response = await axiosJWT.post(
-        // "http://localhost:5000/pasiens",
         "https://be-isena-fktp.onrender.com/pasiens",
         {
           nobpjs,
