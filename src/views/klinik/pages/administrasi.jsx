@@ -312,6 +312,7 @@ export default function Administrasi() {
         const decoded = jwtDecode(response.data.accessToken);
         setUsername(decoded.username);
         setToken(response.data.accessToken);
+        console.log("Akses Token di Administrasi :", response.data.accessToken);
       } catch (error) {
         console.error("Error fetching token:", error);
         // navigate("/");
