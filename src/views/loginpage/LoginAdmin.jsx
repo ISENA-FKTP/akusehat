@@ -30,9 +30,12 @@ const Login = () => {
       const decoded = jwtDecode(accessToken);
       console.log("Decoded Token:", decoded);
 
-      localStorage.setItem("accessToken", accessToken);
-
-      axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+      if (accessToken) {
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${accessToken}`;
+        console.log("Axios Authorization:", axios.defaults.headers.common);
+      }
 
       if (decoded.role === "admin") {
         navigate("/dashboard");
