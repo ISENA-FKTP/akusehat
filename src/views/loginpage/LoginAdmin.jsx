@@ -28,9 +28,6 @@ const Login = () => {
       const { accessToken } = response.data;
       console.log("Access Token:", accessToken);
 
-      // Save access token to localStorage
-      localStorage.setItem("accessToken", accessToken);
-
       const decoded = jwtDecode(accessToken);
       console.log("Decoded Token:", decoded);
 

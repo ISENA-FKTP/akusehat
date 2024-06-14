@@ -90,7 +90,10 @@ const FormComponent = ({ token }) => {
     try {
       // const response = await axios.get("http://localhost:5000/token");
       const response = await axios.get(
-        "https://be-isena-fktp.onrender.com/token"
+        "https://be-isena-fktp.onrender.com/token",
+        {
+          withCredentials: true,
+        }
       );
       setToken(response.data.accessToken);
       const decoded = jwtDecode(response.data.accessToken);
@@ -159,6 +162,9 @@ const FormComponent = ({ token }) => {
       const response = await axiosJWT.post(
         // "http://localhost:5000/pasiens",
         "https://be-isena-fktp.onrender.com/pasiens",
+        {
+          withCredentials: true,
+        },
         {
           nobpjs,
           nama,
