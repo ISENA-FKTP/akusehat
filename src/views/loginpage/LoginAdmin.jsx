@@ -13,8 +13,9 @@ const Login = () => {
   const Auth = async (e) => {
     e.preventDefault();
     try {
+      // const response = await axios.post("http://localhost:5000/login", {
       const response = await axios.post(
-        "https://backend-isenafktp.onrender.com/login",
+        "https://be-isena-fktp.onrender.com/login",
         {
           username,
           password,
@@ -25,6 +26,9 @@ const Login = () => {
 
       const { accessToken } = response.data;
       console.log("Access Token:", accessToken);
+
+      // Save access token to localStorage
+      localStorage.setItem("accessToken", accessToken);
 
       const decoded = jwtDecode(accessToken);
       console.log("Decoded Token:", decoded);
@@ -159,7 +163,6 @@ const Login = () => {
               >
                 Masuk
               </button>
-              {msg && <p>{msg}</p>}
             </div>
           </form>
         </div>

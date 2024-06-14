@@ -88,8 +88,9 @@ const FormComponent = ({ token }) => {
 
   const refreshToken = async () => {
     try {
+      // const response = await axios.get("http://localhost:5000/token");
       const response = await axios.get(
-        "https://backend-isenafktp.onrender.com/token"
+        "https://be-isena-fktp.onrender.com/token"
       );
       setToken(response.data.accessToken);
       const decoded = jwtDecode(response.data.accessToken);
@@ -111,8 +112,9 @@ const FormComponent = ({ token }) => {
     async (config) => {
       const currentDate = new Date();
       if (jwtDecode(token).exp * 1000 < currentDate.getTime()) {
+        // const response = await axios.get("http://localhost:5000/token", {
         const response = await axios.get(
-          "https://backend-isenafktp.onrender.com/token",
+          "https://be-isena-fktp.onrender.com/token",
           {
             withCredentials: true,
           }
@@ -155,7 +157,8 @@ const FormComponent = ({ token }) => {
       }
 
       const response = await axiosJWT.post(
-        "https://backend-isenafktp.onrender.com/pasiens",
+        // "http://localhost:5000/pasiens",
+        "https://be-isena-fktp.onrender.com/pasiens",
         {
           nobpjs,
           nama,
@@ -293,8 +296,9 @@ export default function Administrasi() {
   useEffect(() => {
     const fetchToken = async () => {
       try {
+        // const response = await axios.get("http://localhost:5000/token", {
         const response = await axios.get(
-          "https://backend-isenafktp.onrender.com/token",
+          "https://be-isena-fktp.onrender.com/token",
           {
             withCredentials: true,
           }

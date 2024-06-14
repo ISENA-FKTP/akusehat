@@ -12,14 +12,15 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // const response = await axios.get("http://localhost:5000/token", {
         const response = await axios.get(
-          "https://backend-isenafktp.onrender.com/token",
+          "https://be-isena-fktp.onrender.com/token",
           {
             withCredentials: true,
           }
         );
 
-        const accessToken = response.data.accessToken;
+        const { accessToken } = response.data;
         console.log("Access Token:", accessToken);
 
         if (accessToken) {
@@ -27,11 +28,11 @@ export default function Dashboard() {
           console.log("Decoded Token:", decoded);
           setEmail(decoded.email);
         } else {
-          // navigate("/");
+          navigate("/");
         }
       } catch (error) {
         console.error("Error fetching token:", error);
-        // navigate("/");
+        navigate("/");
       }
     };
 
