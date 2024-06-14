@@ -1,7 +1,7 @@
 import { useState } from "react";
 import coverImage from "./cover.png";
 import { Link, useNavigate } from "react-router-dom";
-import { decode } from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 
 const Login = () => {
@@ -27,21 +27,21 @@ const Login = () => {
       const { accessToken } = response.data;
       console.log("Access Token:", accessToken);
 
-      try {
-        const decoded = decode(accessToken);
-        console.log("Decoded Token:", decoded);
+      const decoded = jwtDecode(accessToken);
+      console.log("Decoded Token:", decoded);
 
-        if (decoded.role === "admin") {
-          navigate("/dashboard");
-        } else {
-          setMsg("Akses Ditolak, Silahkan Masukan Akun Administrasi.");
-        }
-      } catch (error) {
-        console.error("Error decoding token:", error.message);
-        setMsg("Token tidak valid, silakan coba lagi.");
+      if (accessToken) {
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${accessToken}`;
+        console.log("Axios Authorization:", axios.defaults.headers.common);
       }
 
-      axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+      if (decoded.role === "admin") {
+        navigate("/dashboard");
+      } else {
+        setMsg("Akses Ditolak, Silahkan Masukan Akun Administrasi.");
+      }
     } catch (error) {
       if (error.response) {
         console.log("Error response:", error.response.data);
