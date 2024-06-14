@@ -13,7 +13,6 @@ const Login = () => {
   const Auth = async (e) => {
     e.preventDefault();
     try {
-      // const response = await axios.post("http://localhost:5000/login", {
       const response = await axios.post(
         "https://be-isena-fktp.onrender.com/login",
         {
@@ -31,6 +30,10 @@ const Login = () => {
       const decoded = jwtDecode(accessToken);
       console.log("Decoded Token:", decoded);
 
+      localStorage.setItem("accessToken", accessToken);
+
+      axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+
       if (decoded.role === "admin") {
         navigate("/dashboard");
       } else {
@@ -46,7 +49,6 @@ const Login = () => {
       }
     }
   };
-
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 h-screen">
       {/* Bagian Kiri: Gambar Cover */}
