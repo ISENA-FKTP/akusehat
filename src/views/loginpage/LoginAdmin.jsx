@@ -1,7 +1,7 @@
 import { useState } from "react";
 import coverImage from "./cover.png";
 import { Link, useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
+import { decode } from "jwt-decode";
 import axios from "axios";
 
 const Login = () => {
@@ -27,21 +27,21 @@ const Login = () => {
       const { accessToken } = response.data;
       console.log("Access Token:", accessToken);
 
-      const decoded = jwtDecode(accessToken);
-      console.log("Decoded Token:", decoded);
+      try {
+        const decoded = decode(accessToken);
+        console.log("Decoded Token:", decoded);
 
-      if (accessToken) {
-        axios.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${accessToken}`;
-        console.log("Axios Authorization:", axios.defaults.headers.common);
+        if (decoded.role === "admin") {
+          navigate("/dashboard");
+        } else {
+          setMsg("Akses Ditolak, Silahkan Masukan Akun Administrasi.");
+        }
+      } catch (error) {
+        console.error("Error decoding token:", error.message);
+        setMsg("Token tidak valid, silakan coba lagi.");
       }
 
-      if (decoded.role === "admin") {
-        navigate("/dashboard");
-      } else {
-        setMsg("Akses Ditolak, Silahkan Masukan Akun Administrasi.");
-      }
+      axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
     } catch (error) {
       if (error.response) {
         console.log("Error response:", error.response.data);
@@ -52,6 +52,7 @@ const Login = () => {
       }
     }
   };
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 h-screen">
       {/* Bagian Kiri: Gambar Cover */}
