@@ -6,7 +6,7 @@ import withReactContent from "sweetalert2-react-content";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode"; // Perbaikan impor jwtDecode
+import jwtDecode from "jwt-decode"; // Fixed import statement
 import Sidebar_Klinik from "../../../components/klinik/sidebar_klinik";
 import Header from "../../../components/header";
 import axios from "axios";
@@ -234,11 +234,7 @@ const FormComponent = ({ token }) => {
             name: "norm",
             placeholder: "Masukkan nomor rekam medis",
           },
-          {
-            label: "Role",
-            name: "role",
-            value: "pasien",
-          },
+          { label: "Role", name: "role", value: "pasien" },
         ].map((field, index) => (
           <div className="flex items-center mb-1" key={index}>
             <label className="text-black font-secondary-Karla font-bold w-48 mx-1">
@@ -293,7 +289,6 @@ export default function Administrasi() {
   useEffect(() => {
     const fetchToken = async () => {
       try {
-        // const response = await axios.get("http://localhost:5000/token", {
         const response = await axios.get(
           "https://be-isena-fktp.onrender.com/token",
           {
@@ -306,7 +301,7 @@ export default function Administrasi() {
         console.log("Akses Token di Administrasi :", response.data.accessToken);
       } catch (error) {
         console.error("Error fetching token:", error);
-        // navigate("/");
+        navigate("/");
       }
     };
 
