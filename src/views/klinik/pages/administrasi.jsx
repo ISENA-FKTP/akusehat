@@ -11,6 +11,7 @@ import Sidebar_Klinik from "../../../components/klinik/sidebar_klinik";
 import Header from "../../../components/header";
 import axios from "axios";
 import PropTypes from "prop-types";
+import axiosJWT from "../../../axios";
 
 const MySwal = withReactContent(Swal);
 
@@ -94,33 +95,6 @@ const FormComponent = ({ token }) => {
       navigate("/");
     }
   };
-
-  const axiosJWT = axios.create();
-
-  axiosJWT.interceptors.request.use(
-    async (config) => {
-      const currentDate = new Date();
-      const accessToken = localStorage.getItem("accessToken");
-      if (
-        accessToken &&
-        jwtDecode(accessToken).exp * 1000 < currentDate.getTime()
-      ) {
-        try {
-          const response = await axios.get("/token");
-          const newAccessToken = response.data.accessToken;
-          localStorage.setItem("accessToken", newAccessToken);
-          config.headers.Authorization = `Bearer ${newAccessToken}`;
-        } catch (error) {
-          console.error("Error refreshing token:", error);
-          navigate("/");
-        }
-      }
-      return config;
-    },
-    (error) => {
-      return Promise.reject(error);
-    }
-  );
 
   const postPasiens = async () => {
     try {
