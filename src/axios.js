@@ -1,5 +1,5 @@
 import axios from "axios";
-import jwtDecode from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 
 // Buat instance axios
@@ -25,7 +25,7 @@ axiosJWT.interceptors.request.use(
           config.headers.Authorization = `Bearer ${newAccessToken}`;
         } catch (error) {
           console.error("Error refreshing token:", error);
-          useNavigate().push("/"); // Redirect to login page
+          useNavigate().push("/");
         }
       } else {
         config.headers.Authorization = `Bearer ${accessToken}`;
