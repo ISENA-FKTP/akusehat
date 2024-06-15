@@ -6,7 +6,7 @@ import withReactContent from "sweetalert2-react-content";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
-import jwtDecode from "jwt-decode"; // Fixed import statement
+import { jwtDecode } from "jwt-decode";
 import Sidebar_Klinik from "../../../components/klinik/sidebar_klinik";
 import Header from "../../../components/header";
 import axios from "axios";
