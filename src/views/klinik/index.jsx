@@ -12,10 +12,7 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // const response = await axios.get("http://localhost:5000/token", {
-        const response = await axios.get(
-          "https://be-isena-fktp.onrender.com/token"
-        );
+        const response = await axios.get("/token");
 
         const { accessToken } = response.data;
         console.log("Access Token:", accessToken);

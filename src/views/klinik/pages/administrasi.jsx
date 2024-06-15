@@ -85,9 +85,7 @@ const FormComponent = ({ token }) => {
 
   const refreshToken = async () => {
     try {
-      const response = await axios.get(
-        "https://be-isena-fktp.onrender.com/token"
-      );
+      const response = await axios.get("/token");
       const accessToken = response.data.accessToken;
       const decoded = jwtDecode(accessToken);
       setUsername(decoded.username);
@@ -108,9 +106,7 @@ const FormComponent = ({ token }) => {
         jwtDecode(accessToken).exp * 1000 < currentDate.getTime()
       ) {
         try {
-          const response = await axios.get(
-            "https://be-isena-fktp.onrender.com/token"
-          );
+          const response = await axios.get("/token");
           const newAccessToken = response.data.accessToken;
           localStorage.setItem("accessToken", newAccessToken);
           config.headers.Authorization = `Bearer ${newAccessToken}`;
@@ -155,7 +151,7 @@ const FormComponent = ({ token }) => {
       }
 
       const response = await axiosJWT.post(
-        "https://be-isena-fktp.onrender.com/pasiens",
+        "/pasiens",
         {
           nobpjs,
           nama,

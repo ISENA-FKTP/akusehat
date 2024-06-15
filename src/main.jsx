@@ -4,7 +4,6 @@ import App from "./App.jsx";
 import "./index.css";
 import axios from "axios";
 
-// Set axios defaults
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = "https://be-isena-fktp.onrender.com";
 

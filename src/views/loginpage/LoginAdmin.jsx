@@ -13,10 +13,7 @@ const Login = () => {
   const Auth = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        "https://be-isena-fktp.onrender.com/login",
-        { username, password }
-      );
+      const response = await axios.post("/login", { username, password });
 
       console.log("Login response:", response.data);
 
