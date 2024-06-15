@@ -14,10 +14,7 @@ export default function Dashboard() {
       try {
         // const response = await axios.get("http://localhost:5000/token", {
         const response = await axios.get(
-          "https://be-isena-fktp.onrender.com/token",
-          {
-            withCredentials: true,
-          }
+          "https://be-isena-fktp.onrender.com/token"
         );
 
         const { accessToken } = response.data;

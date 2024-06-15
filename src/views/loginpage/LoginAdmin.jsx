@@ -15,8 +15,7 @@ const Login = () => {
     try {
       const response = await axios.post(
         "https://be-isena-fktp.onrender.com/login",
-        { username, password },
-        { withCredentials: true }
+        { username, password }
       );
 
       console.log("Login response:", response.data);
