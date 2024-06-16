@@ -11,15 +11,10 @@ import Sidebar_Klinik from "../../../components/klinik/sidebar_klinik";
 import Header from "../../../components/header";
 import axios from "axios";
 import PropTypes from "prop-types";
-import axiosJWT from "../../../axios";
 
 const MySwal = withReactContent(Swal);
 
 const FormComponent = ({ token }) => {
-  FormComponent.propTypes = {
-    token: PropTypes.string,
-  };
-
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     nobpjs: "",
@@ -76,26 +71,6 @@ const FormComponent = ({ token }) => {
     });
   };
 
-  const [, setUsername] = useState("");
-  const [, setMsg] = useState("");
-
-  useEffect(() => {
-    refreshToken();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const refreshToken = async () => {
-    try {
-      const response = await axios.get("/token");
-      const accessToken = response.data.accessToken;
-      const decoded = jwtDecode(accessToken);
-      setUsername(decoded.username);
-    } catch (error) {
-      console.error("Error refreshing token:", error);
-      navigate("/");
-    }
-  };
-
   const postPasiens = async () => {
     try {
       const {
@@ -124,7 +99,7 @@ const FormComponent = ({ token }) => {
         throw new Error("Silakan lengkapi semua data pasien");
       }
 
-      const response = await axiosJWT.post(
+      const response = await axios.post(
         "/pasiens",
         {
           nobpjs,
@@ -150,7 +125,6 @@ const FormComponent = ({ token }) => {
         "Error adding pasien:",
         error.response ? error.response.data : error.message
       );
-      setMsg(error.response ? error.response.data : error.message);
     }
   };
 
@@ -251,31 +225,30 @@ const FormComponent = ({ token }) => {
   );
 };
 
+FormComponent.propTypes = {
+  token: PropTypes.string.isRequired,
+};
+
 export default function Administrasi() {
   const [token, setToken] = useState("");
   const [username, setUsername] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchToken = async () => {
+    const storedToken = localStorage.getItem("accessToken");
+    if (storedToken) {
       try {
-        const response = await axios.get(
-          "https://be-isena-fktp.onrender.com/token",
-          {
-            withCredentials: true,
-          }
-        );
-        const decoded = jwtDecode(response.data.accessToken);
-        setUsername(decoded.username);
-        setToken(response.data.accessToken);
-        console.log("Akses Token di Administrasi :", response.data.accessToken);
+        const decodedToken = jwtDecode(storedToken);
+        setUsername(decodedToken.username);
+        setToken(storedToken);
       } catch (error) {
-        console.error("Error fetching token:", error);
+        console.error("Error decoding token:", error);
+        localStorage.removeItem("accessToken");
         navigate("/");
       }
-    };
-
-    fetchToken();
+    } else {
+      navigate("/");
+    }
   }, [navigate]);
 
   return (

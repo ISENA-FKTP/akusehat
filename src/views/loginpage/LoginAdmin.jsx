@@ -17,7 +17,7 @@ const Login = () => {
 
       console.log("Login response:", response.data);
 
-      const { accessToken } = response.data;
+      const { accessToken, refreshToken } = response.data;
       console.log("Access Token:", accessToken);
 
       const decoded = jwtDecode(accessToken);
@@ -25,6 +25,7 @@ const Login = () => {
 
       if (accessToken) {
         localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("refreshToken", refreshToken);
 
         axios.defaults.headers.common[
           "Authorization"
@@ -50,6 +51,7 @@ const Login = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
+    // Konfirmasi Token dahulu
     if (token) {
       const decoded = jwtDecode(token);
       if (decoded.role === "admin") {
@@ -61,7 +63,7 @@ const Login = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 h-screen">
       {/* Bagian Kiri: Gambar Cover */}
-      <div className="hidden md:flex items-center justify-center bg-">
+      <div className="hidden md:flex items-center justify-center">
         <img
           src={coverImage}
           alt="Cover"

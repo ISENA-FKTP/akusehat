@@ -7,11 +7,14 @@ import { GoHomeFill } from "react-icons/go";
 import { FaUserDoctor } from "react-icons/fa6";
 import { IoMdArrowDropleft } from "react-icons/io";
 import { MdSpaceDashboard } from "react-icons/md";
+import useClearTokensOnUnload from "../../useClearTokensOnUnload";
 
-export default function Sidebar_Klinik() {
+const Sidebar_Klinik = () => {
   const [open, setOpen] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
+
+  useClearTokensOnUnload();
 
   const Menus = [
     { title: "Dashboard", path: "/dashboard", icon: <MdSpaceDashboard /> },
@@ -34,10 +37,14 @@ export default function Sidebar_Klinik() {
 
   const handleLogout = async () => {
     try {
-      // await axios.delete("http://localhost:5000/logout", {
-      await axios.delete("https://be-isena-fktp.onrender.com/logout", {
-        withCredentials: true,
+      const refreshToken = localStorage.getItem("refreshToken");
+
+      await axios.delete("/logout", {
+        data: {
+          refreshToken: refreshToken,
+        },
       });
+
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
       navigate("/");
@@ -114,4 +121,6 @@ export default function Sidebar_Klinik() {
       </div>
     </>
   );
-}
+};
+
+export default Sidebar_Klinik;

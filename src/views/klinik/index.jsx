@@ -3,19 +3,22 @@ import Header from "../../components/header";
 import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import useAxios from "../../useAxios";
 
-export default function Dashboard() {
+const Dashboard = () => {
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
+  const axiosInstance = useAxios();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("/token");
+        const accessToken = localStorage.getItem("accessToken");
 
-        const { accessToken } = response.data;
-        console.log("Access Token:", accessToken);
+        if (!accessToken) {
+          navigate("/");
+          return;
+        }
 
         if (accessToken) {
           const decoded = jwtDecode(accessToken);
@@ -31,7 +34,7 @@ export default function Dashboard() {
     };
 
     fetchData();
-  }, [navigate]);
+  }, [axiosInstance, navigate]);
 
   return (
     <>
@@ -93,4 +96,6 @@ export default function Dashboard() {
       </div>
     </>
   );
-}
+};
+
+export default Dashboard;
