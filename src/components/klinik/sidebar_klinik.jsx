@@ -17,7 +17,11 @@ const Sidebar_Klinik = () => {
   useClearTokensOnUnload();
 
   const Menus = [
-    { title: "Dashboard", path: "/dashboard", icon: <MdSpaceDashboard /> },
+    {
+      title: "Dashboard",
+      path: "/dashboard_klinik",
+      icon: <MdSpaceDashboard />,
+    },
     {
       title: "Administrasi",
       path: "/administrasi",
