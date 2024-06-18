@@ -1,20 +1,20 @@
 import { useState, useEffect } from "react";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import "react-datepicker/dist/react-datepicker.css";
 import Sidebar_Klinik from "../../../components/klinik/sidebar_klinik";
+import DatePicker from "react-datepicker";
 import Header from "../../../components/header";
+import withReactContent from "sweetalert2-react-content";
+import Swal from "sweetalert2";
 import axios from "axios";
 import PropTypes from "prop-types";
 
 const MySwal = withReactContent(Swal);
 
-const FormComponent = ({ token }) => {
+const FormComponent = ({ token, existingPatient }) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     nobpjs: "",
@@ -28,6 +28,24 @@ const FormComponent = ({ token }) => {
     role: "pasien",
   });
 
+  useEffect(() => {
+    if (existingPatient) {
+      setFormData(existingPatient);
+    } else {
+      setFormData({
+        nobpjs: "",
+        nama: "",
+        statuspeserta: "",
+        tgllahir: null,
+        gender: "",
+        ppkumum: "",
+        nohp: "",
+        norm: "",
+        role: "pasien",
+      });
+    }
+  }, [existingPatient]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -37,21 +55,25 @@ const FormComponent = ({ token }) => {
     setFormData({ ...formData, tgllahir: date });
   };
 
-  const handleSave = () => {
-    MySwal.fire({
-      title: "Apakah Anda yakin?",
-      text: "Anda tidak akan dapat mengembalikan ini!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Ya, simpan!",
-      cancelButtonText: "Tidak, batalkan!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        postPasiens();
-      }
-    });
+  const handleSaveOrNext = () => {
+    if (existingPatient) {
+      navigate("/dokter");
+    } else {
+      MySwal.fire({
+        title: "Apakah Anda yakin?",
+        text: "Anda tidak akan dapat mengembalikan ini!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Ya, simpan!",
+        cancelButtonText: "Tidak, batalkan!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          postPasiens();
+        }
+      });
+    }
   };
 
   const handleCancel = () => {
@@ -118,6 +140,14 @@ const FormComponent = ({ token }) => {
           },
         }
       );
+
+      MySwal.fire({
+        title: "Sukses!",
+        text: "Data pasien berhasil ditambahkan.",
+        icon: "success",
+        confirmButtonText: "OK",
+      });
+
       navigate("/administrasi");
       console.log(response.data);
     } catch (error) {
@@ -133,85 +163,79 @@ const FormComponent = ({ token }) => {
   };
 
   return (
-    <div
-      className="bg-white shadow-xl flex flex-col place-content-center mx-80 p-6 mt-40 rounded-lg items-center"
-      style={{ width: "auto", height: "auto" }}
-    >
+    <div className="bg-white shadow-xl flex flex-col place-content-center mx-80 p-6 mt-40 rounded-lg items-center">
       <h1 className="text-black font-primary-Poppins font-extrabold text-3xl mb-6 mx-72">
         BIODATA
       </h1>
-      <div>
-        {[
-          {
-            label: "NRP/No.BPJS",
-            name: "nobpjs",
-            placeholder: "Masukkan NRP atau No. BPJS",
-          },
-          { label: "Nama", name: "nama", placeholder: "Masukkan nama" },
-          {
-            label: "Status Pasien",
-            name: "statuspeserta",
-            placeholder: "Masukkan status pasien",
-          },
-          {
-            label: "Tanggal Lahir",
-            name: "tgllahir",
-            placeholder: "Pilih tanggal lahir",
-          },
-          {
-            label: "Jenis Kelamin",
-            name: "gender",
-            placeholder: "Masukkan jenis kelamin",
-          },
-          {
-            label: "PPK Umum",
-            name: "ppkumum",
-            placeholder: "Masukkan PPK umum",
-          },
-          {
-            label: "No.Handphone",
-            name: "nohp",
-            placeholder: "Masukkan nomor handphone",
-          },
-          {
-            label: "No.Rekam Medis",
-            name: "norm",
-            placeholder: "Masukkan nomor rekam medis",
-          },
-          { label: "Role", name: "role", value: "pasien" },
-        ].map((field, index) => (
-          <div className="flex items-center mb-1" key={index}>
-            <label className="text-black font-secondary-Karla font-bold w-48 mx-1">
-              {field.label}:
-            </label>
-            {field.name === "tgllahir" ? (
-              <DatePicker
-                selected={formData.tgllahir}
-                onChange={handleDateChange}
-                dateFormat="dd/MM/yyyy"
-                placeholderText={field.placeholder}
-                className="px-10 py-1 rounded-md border-2 border-black border-opacity-70 w-[30rem]"
-              />
-            ) : (
-              <input
-                type="text"
-                name={field.name}
-                value={formData[field.name]}
-                onChange={handleChange}
-                placeholder={field.placeholder}
-                className="px-10 py-1 rounded-md border-2 border-black border-opacity-70 w-[30rem]"
-              />
-            )}
-          </div>
-        ))}
-      </div>
-
+      {[
+        {
+          label: "NRP/No.BPJS",
+          name: "nobpjs",
+          placeholder: "Masukkan NRP atau No. BPJS",
+        },
+        { label: "Nama", name: "nama", placeholder: "Masukkan nama" },
+        {
+          label: "Status Pasien",
+          name: "statuspeserta",
+          placeholder: "Masukkan status pasien",
+        },
+        {
+          label: "Tanggal Lahir",
+          name: "tgllahir",
+          placeholder: "Pilih tanggal lahir",
+        },
+        {
+          label: "Jenis Kelamin",
+          name: "gender",
+          placeholder: "Masukkan jenis kelamin",
+        },
+        {
+          label: "PPK Umum",
+          name: "ppkumum",
+          placeholder: "Masukkan PPK umum",
+        },
+        {
+          label: "No.Handphone",
+          name: "nohp",
+          placeholder: "Masukkan nomor handphone",
+        },
+        {
+          label: "No.Rekam Medis",
+          name: "norm",
+          placeholder: "Masukkan nomor rekam medis",
+        },
+        { label: "Role", name: "role", value: "pasien" },
+      ].map((field, index) => (
+        <div className="flex items-center mb-1" key={index}>
+          <label className="text-black font-secondary-Karla font-bold w-48 mx-1">
+            {field.label}:
+          </label>
+          {field.name === "tgllahir" ? (
+            <DatePicker
+              selected={formData.tgllahir}
+              onChange={handleDateChange}
+              dateFormat="dd/MM/yyyy"
+              placeholderText={field.placeholder}
+              className="px-10 py-1 rounded-md border-2 border-black border-opacity-70 w-[30rem]"
+            />
+          ) : (
+            <input
+              type="text"
+              name={field.name}
+              value={formData[field.name]}
+              onChange={handleChange}
+              placeholder={field.placeholder}
+              className="px-10 py-1 rounded-md border-2 border-black border-opacity-70 w-[30rem]"
+            />
+          )}
+        </div>
+      ))}
       <div className="flex space-x-5 mt-6 mx-72">
         <button
-          onClick={handleSave}
+          onClick={handleSaveOrNext}
           className="text-white px-3 py-1 rounded-md transition duration-300 bg-success-600"
         >
-          Simpan
+          {existingPatient ? "Selanjutnya" : "Simpan"}
         </button>
         <button
           type="button"
@@ -227,11 +251,13 @@ const FormComponent = ({ token }) => {
 
 FormComponent.propTypes = {
   token: PropTypes.string.isRequired,
+  existingPatient: PropTypes.object,
 };
 
 export default function Administrasi() {
   const [token, setToken] = useState("");
   const [username, setUsername] = useState("");
+  const [existingPatient, setExistingPatient] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -250,6 +276,23 @@ export default function Administrasi() {
       navigate("/");
     }
   }, [navigate]);
+
+  const handleSearch = async (searchValue) => {
+    try {
+      const response = await axios.get(`/pasiens/nobpjs/${searchValue}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.data) {
+        setExistingPatient(response.data);
+      } else {
+        setExistingPatient(null);
+      }
+    } catch (error) {
+      console.error("Error searching patient:", error);
+    }
+  };
 
   return (
     <>
@@ -276,16 +319,34 @@ export default function Administrasi() {
               <h1 className="text-white font-secondary-Karla font-medium absolute left-6 py-0 pt-8">
                 Selamat Bertugas, Silahkan menambahkan Pasien Di Bawah
               </h1>
-              <form className="h-12 rounded-md py-32 pt-10 absolute right-5">
+              <form
+                className="h-12 rounded-md py-32 pt-10 absolute right-5"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const searchValue = e.target.search.value;
+                  handleSearch(searchValue);
+                }}
+              >
                 <div className="flex items-center space-x-5">
                   <select
                     name="bpjsType"
-                    className="p-1 rounded-md mb-9 w-60 bg-primary-600 font-secondary-Karla font-medium text-white focus:outline-none focus:border-blue-500"
+                    className="py-1 px-2 rounded-md border border-white mb-9 w-[15.8rem] bg-primary-600 font-secondary-Karla font-medium text-white focus:outline-none focus:border-indigo-50"
                   >
-                    <option value="">BPJS</option>
-                    <option value="nik">NIK</option>
-                    <option value="nrp">NRP</option>
-                    <option value="nip">NIP</option>
+                    <option className="bg-primary-600 text-white" value="">
+                      BPJS
+                    </option>
+                    <option
+                      className="bg-primary-600 text-white"
+                      value="nobpjs"
+                    >
+                      NRP/No. BPJS
+                    </option>
+                    <option className="bg-primary-600 text-white" value="nik">
+                      NIK
+                    </option>
+                    <option className="bg-primary-600 text-white" value="nip">
+                      NIP
+                    </option>
                   </select>
                   <div className="relative w-full">
                     <input
@@ -301,6 +362,7 @@ export default function Administrasi() {
                   </div>
                 </div>
               </form>
+
               <form className="h-12 rounded-md absolute right-5 -mb-14">
                 <div className="flex items-center space-x-5">
                   <h1 className="text-white font-secondary-Karla font-medium mb-9 w-60">
@@ -317,7 +379,7 @@ export default function Administrasi() {
               </form>
             </div>
           </div>
-          <FormComponent token={token} />
+          <FormComponent token={token} existingPatient={existingPatient} />
         </div>
       </div>
     </>

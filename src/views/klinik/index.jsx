@@ -22,7 +22,6 @@ const Dashboard = () => {
 
         if (accessToken) {
           const decoded = jwtDecode(accessToken);
-          console.log("Decoded Token:", decoded);
           setEmail(decoded.email);
         } else {
           navigate("/");

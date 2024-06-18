@@ -5,6 +5,7 @@ import { IoMdArrowDropleft } from "react-icons/io";
 import { MdOutlineNotificationsActive } from "react-icons/md";
 import { MdLibraryBooks } from "react-icons/md";
 import { BsCapsulePill } from "react-icons/bs";
+import { CgLogOut } from "react-icons/cg";
 import axios from "axios";
 
 export default function Sidebar() {
@@ -105,7 +106,7 @@ export default function Sidebar() {
             onClick={handleLogout}
           >
             <span className="text-2xl block float-left">
-              <GoHomeFill />
+              <CgLogOut />
             </span>
             <span className={`text-lg font-medium flex-1 ${!open && "hidden"}`}>
               Logout

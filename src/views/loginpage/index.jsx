@@ -19,23 +19,17 @@ const Login = () => {
     try {
       const response = await axios.post("/login", { username, password });
 
-      console.log("Login response:", response.data);
-
       const { accessToken, refreshToken } = response.data;
-      console.log("Access Token:", accessToken);
 
       const decoded = jwtDecode(accessToken);
-      console.log("Decoded Token:", decoded);
 
       if (decoded.role.toLowerCase() === role.toLowerCase()) {
-        // Only store tokens if the roles match
         localStorage.setItem("accessToken", accessToken);
         localStorage.setItem("refreshToken", refreshToken);
 
         axios.defaults.headers.common[
           "Authorization"
         ] = `Bearer ${accessToken}`;
-        console.log("Axios Authorization:", axios.defaults.headers.common);
 
         switch (role.toLowerCase()) {
           case "admin":

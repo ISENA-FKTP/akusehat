@@ -6,6 +6,7 @@ import { MdSick } from "react-icons/md";
 import { GoHomeFill } from "react-icons/go";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { IoMdArrowDropleft } from "react-icons/io";
+import { CgLogOut } from "react-icons/cg";
 import PropTypes from "prop-types";
 import axios from "axios";
 
@@ -135,7 +136,7 @@ export default function Sidebar({ userName, userStatus, profilePicture }) {
             onClick={handleLogout}
           >
             <span className="text-2xl block float-left">
-              <GoHomeFill />
+              <CgLogOut />
             </span>
             <span className={`text-lg font-medium flex-1 ${!open && "hidden"}`}>
               Logout
