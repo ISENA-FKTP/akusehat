@@ -155,6 +155,13 @@ const FormComponent = ({ token, existingPatient }) => {
         "Error adding pasien:",
         error.response ? error.response.data : error.message
       );
+
+      MySwal.fire({
+        title: "Gagal!",
+        text: error.response ? error.response.data : error.message,
+        icon: "error",
+        confirmButtonText: "OK",
+      });
     }
   };
 
@@ -277,15 +284,39 @@ export default function Administrasi() {
     }
   }, [navigate]);
 
-  const handleSearch = async (searchValue) => {
+  const handleSearch = async (searchType, searchValue) => {
+    let apiUrl = "";
+
+    if (searchType === "bpjs") {
+      apiUrl = `http://localhost:3000/api/peserta/bpjs/${searchValue}`;
+    } else if (searchType === "nik") {
+      apiUrl = `http://localhost:3000/api/peserta/nik/${searchValue}`;
+    }
+
     try {
-      const response = await axios.get(`/pasiens/nobpjs/${searchValue}`, {
+      const response = await axios.get(apiUrl, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      if (response.data) {
-        setExistingPatient(response.data);
+
+      if (response.data.response) {
+        const formattedPatient = {
+          nobpjs: response.data.response.noKartu,
+          nama: response.data.response.nama,
+          statuspeserta: response.data.response.jnsPeserta.nama,
+          tgllahir: new Date(
+            response.data.response.tglLahir.split("-").reverse().join("-")
+          ),
+          gender: response.data.response.sex,
+          ppkumum: response.data.response.kdProviderPst
+            ? response.data.response.kdProviderPst.nmProvider
+            : "",
+          nohp: response.data.response.noHP,
+          norm: "",
+          role: "pasien",
+        };
+        setExistingPatient(formattedPatient);
       } else {
         setExistingPatient(null);
       }
@@ -323,8 +354,9 @@ export default function Administrasi() {
                 className="h-12 rounded-md py-32 pt-10 absolute right-5"
                 onSubmit={(e) => {
                   e.preventDefault();
+                  const searchType = e.target.bpjsType.value;
                   const searchValue = e.target.search.value;
-                  handleSearch(searchValue);
+                  handleSearch(searchType, searchValue);
                 }}
               >
                 <div className="flex items-center space-x-5">
@@ -332,20 +364,11 @@ export default function Administrasi() {
                     name="bpjsType"
                     className="py-1 px-2 rounded-md border border-white mb-9 w-[15.8rem] bg-primary-600 font-secondary-Karla font-medium text-white focus:outline-none focus:border-indigo-50"
                   >
-                    <option className="bg-primary-600 text-white" value="">
+                    <option className="bg-primary-600 text-white" value="bpjs">
                       BPJS
-                    </option>
-                    <option
-                      className="bg-primary-600 text-white"
-                      value="nobpjs"
-                    >
-                      NRP/No. BPJS
                     </option>
                     <option className="bg-primary-600 text-white" value="nik">
                       NIK
-                    </option>
-                    <option className="bg-primary-600 text-white" value="nip">
-                      NIP
                     </option>
                   </select>
                   <div className="relative w-full">
