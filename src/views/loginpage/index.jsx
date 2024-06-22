@@ -12,57 +12,6 @@ const Login = () => {
   const [navigateRoute, setNavigateRoute] = useState("");
   const navigate = useNavigate();
 
-<<<<<<< HEAD:src/views/loginpage/LoginAdmin.jsx
-  // const Auth = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const response = await axios.post("/login", { username, password });
-
-  //     console.log("Login response:", response.data);
-
-  //     const { accessToken, refreshToken } = response.data;
-  //     console.log("Access Token:", accessToken);
-
-  //     const decoded = jwtDecode(accessToken);
-  //     console.log("Decoded Token:", decoded);
-
-  //     if (accessToken) {
-  //       localStorage.setItem("accessToken", accessToken);
-  //       localStorage.setItem("refreshToken", refreshToken);
-
-  //       axios.defaults.headers.common[
-  //         "Authorization"
-  //       ] = `Bearer ${accessToken}`;
-  //       console.log("Axios Authorization:", axios.defaults.headers.common);
-  //     }
-
-  //     if (decoded.role === "admin") {
-  //       navigate("/dashboard");
-  //     } else {
-  //       setMsg("Akses Ditolak, Silahkan Masukan Akun Administrasi.");
-  //     }
-  //   } catch (error) {
-  //     if (error.response) {
-  //       console.log("Error response:", error.response.data);
-  //       setMsg(error.response.data.msg);
-  //     } else {
-  //       console.error("Error:", error.message);
-  //       setMsg("Login gagal, silakan coba lagi.");
-  //     }
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   const token = localStorage.getItem("accessToken");
-  //   // Konfirmasi Token dahulu
-  //   if (token) {
-  //     const decoded = jwtDecode(token);
-  //     if (decoded.role === "admin") {
-  //       navigate("/dashboard");
-  //     }
-  //   }
-  // }, [navigate]);
-=======
   const roles = ["Admin", "Apoteker", "Dokter", "Pegawai", "Kepala Bidang"];
 
   const Auth = async (e) => {
@@ -144,7 +93,6 @@ const Login = () => {
       }
     }
   }, [navigate]);
->>>>>>> c56c3a7940f07a4004e0fb97381ef61a95a6e05c:src/views/loginpage/index.jsx
 
   useEffect(() => {
     if (navigateRoute) {
