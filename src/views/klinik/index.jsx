@@ -14,12 +14,10 @@ const Dashboard = () => {
     const fetchData = async () => {
       try {
         const accessToken = localStorage.getItem("accessToken");
-
         if (!accessToken) {
           navigate("/");
           return;
         }
-
         if (accessToken) {
           const decoded = jwtDecode(accessToken);
           setEmail(decoded.email);
