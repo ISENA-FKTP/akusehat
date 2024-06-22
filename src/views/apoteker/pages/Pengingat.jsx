@@ -4,6 +4,7 @@ import { FaEdit, FaTrash, FaPlus, FaMinus } from "react-icons/fa";
 import Sidebar from "../../../components/apotik/sidebar";
 import Header from "../../../components/header";
 import PropTypes from "prop-types";
+import Swal from "sweetalert2";
 
 const Pengingat = () => {
   const [medicines, setMedicines] = useState([]);
@@ -14,6 +15,9 @@ const Pengingat = () => {
   const [expiringSearchTerm, setExpiringSearchTerm] = useState("");
   const [lowStockSearchTerm, setLowStockSearchTerm] = useState("");
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isReduceModalOpen, setIsReduceModalOpen] = useState(false);
   const [currentMedicine, setCurrentMedicine] = useState(null);
 
   const categories = [
@@ -22,7 +26,7 @@ const Pengingat = () => {
     "Obat Padat",
     "Obat Lainnya",
   ];
-  const types = ["Tablet", "Syrup", "krim"];
+  const types = ["Tablet", "Syrup", "Krim"];
 
   useEffect(() => {
     fetch("/data/medicine.json")
@@ -55,12 +59,6 @@ const Pengingat = () => {
     setLowStockMedicines(sortMedicines(lowStock, lowStockSortBy));
   };
 
-  const sortMedicines = (medicinesToSort, sortBy) => {
-    return sortBy === "most"
-      ? [...medicinesToSort].sort((a, b) => b.quantity - a.quantity)
-      : [...medicinesToSort].sort((a, b) => a.quantity - b.quantity);
-  };
-
   const handleExpiringSortChange = (e) => {
     setExpiringSortBy(e.target.value);
   };
@@ -87,6 +85,30 @@ const Pengingat = () => {
     setCurrentMedicine(null);
   };
 
+  const openDeleteModal = () => {
+    setIsDeleteModalOpen(true);
+  };
+
+  const closeDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+  };
+
+  const openAddModal = () => {
+    setIsAddModalOpen(true);
+  };
+
+  const closeAddModal = () => {
+    setIsAddModalOpen(false);
+  };
+
+  const openReduceModal = () => {
+    setIsReduceModalOpen(true);
+  };
+
+  const closeReduceModal = () => {
+    setIsReduceModalOpen(false);
+  };
+
   const handleEditChange = (e) => {
     const { name, value } = e.target;
     setCurrentMedicine((prevMedicine) => ({
@@ -97,49 +119,98 @@ const Pengingat = () => {
 
   const handleSaveChanges = () => {
     const updatedMedicines = medicines.map((medicine) =>
-      medicine.medicineName === currentMedicine.medicineName
-        ? currentMedicine
-        : medicine
+      medicine.uuid === currentMedicine.uuid ? currentMedicine : medicine
     );
     setMedicines(updatedMedicines);
+    filterMedicines(updatedMedicines);
     closeEditModal();
+
+    Swal.fire({
+      icon: "success",
+      title: "Berhasil!",
+      text: "Perubahan berhasil disimpan.",
+    });
   };
 
   const handleDelete = () => {
     const updatedMedicines = medicines.filter(
-      (medicine) => medicine.medicineName !== currentMedicine.medicineName
+      (medicine) => medicine.uuid !== currentMedicine.uuid
     );
     setMedicines(updatedMedicines);
+    filterMedicines(updatedMedicines);
     closeEditModal();
+    closeDeleteModal();
+
+    Swal.fire({
+      icon: "success",
+      title: "Dihapus!",
+      text: "Obat berhasil dihapus.",
+    });
+  };
+
+  const sortMedicines = (medicinesToSort, sortBy) => {
+    return sortBy === "most"
+      ? [...medicinesToSort].sort((a, b) => b.quantity - a.quantity)
+      : [...medicinesToSort].sort((a, b) => a.quantity - b.quantity);
   };
 
   const handleIncreaseQuantity = (medicineName) => {
-    const updatedMedicines = medicines.map((medicine) =>
-      medicine.medicineName === medicineName
-        ? { ...medicine, quantity: medicine.quantity + 1 }
-        : medicine
+    setCurrentMedicine(
+      medicines.find((medicine) => medicine.medicineName === medicineName)
     );
-    setMedicines(updatedMedicines);
+    openAddModal();
   };
 
   const handleDecreaseQuantity = (medicineName) => {
+    setCurrentMedicine(
+      medicines.find((medicine) => medicine.medicineName === medicineName)
+    );
+    openReduceModal();
+  };
+
+  const handleAddQuantity = (quantityToAdd) => {
     const updatedMedicines = medicines.map((medicine) =>
-      medicine.medicineName === medicineName && medicine.quantity > 0
-        ? { ...medicine, quantity: medicine.quantity - 1 }
+      medicine.medicineName === currentMedicine.medicineName
+        ? { ...medicine, quantity: medicine.quantity + quantityToAdd }
         : medicine
     );
     setMedicines(updatedMedicines);
+    filterMedicines(updatedMedicines);
+    closeAddModal();
+
+    Swal.fire({
+      icon: "success",
+      title: "Berhasil!",
+      text: "Jumlah obat berhasil ditambahkan.",
+    });
   };
+
+  const handleReduceQuantity = (quantityToReduce) => {
+    const updatedMedicines = medicines.map((medicine) =>
+      medicine.medicineName === currentMedicine.medicineName
+        ? {
+            ...medicine,
+            quantity: Math.max(medicine.quantity - quantityToReduce, 0),
+          }
+        : medicine
+    );
+    setMedicines(updatedMedicines);
+    filterMedicines(updatedMedicines);
+    closeReduceModal();
+
+    Swal.fire({
+      icon: "success",
+      title: "Berhasil!",
+      text: "Jumlah obat berhasil dikurangi.",
+    });
+  };
+
   const filteredExpiringMedicines = expiringMedicines.filter((medicine) =>
-    medicine.medicineName
-      .toLowerCase()
-      .includes(expiringSearchTerm.toLowerCase())
+    medicine.medicineName.toLowerCase().includes(expiringSearchTerm.toLowerCase())
   );
 
   const filteredLowStockMedicines = lowStockMedicines.filter((medicine) =>
-    medicine.medicineName
-      .toLowerCase()
-      .includes(lowStockSearchTerm.toLowerCase())
+    medicine.medicineName.toLowerCase().includes(lowStockSearchTerm.toLowerCase())
   );
 
   return (
@@ -178,8 +249,7 @@ const Pengingat = () => {
               />
             </div>
           </div>
-
-          <h2 className="text-2xl font-bold ">
+          <h2 className="text-2xl font-bold">
             Obat yang Kadaluarsa dalam 6 Bulan
           </h2>
           <h3 className="text-xl font-semibold mb-3 text-secondary-500">
@@ -302,7 +372,7 @@ const Pengingat = () => {
               />
             </div>
           </div>
-          <h2 className="text-2xl font-bold ">
+          <h2 className="text-2xl font-bold">
             Obat dengan Stok Kurang dari 100
           </h2>
           <h3 className="text-xl font-semibold mb-3 text-secondary-500">
@@ -401,53 +471,113 @@ const Pengingat = () => {
             </table>
           </div>
         </div>
-      </div>
 
-      {isEditModalOpen && currentMedicine && (
-        <EditMedicineModal
-          medicine={currentMedicine}
-          closeEditModal={closeEditModal}
-          handleEditChange={handleEditChange}
-          handleSaveChanges={handleSaveChanges}
-          handleDelete={handleDelete}
-          categories={categories}
-          types={types}
-        />
-      )}
+        {isEditModalOpen && (
+          <EditModal
+            medicine={currentMedicine}
+            handleEditChange={handleEditChange}
+            handleSaveChanges={handleSaveChanges}
+            closeEditModal={closeEditModal}
+            openDeleteModal={openDeleteModal}
+            categories={categories}
+            types={types}
+          />
+        )}
+        {isDeleteModalOpen && (
+          <DeleteModal
+            handleDelete={handleDelete}
+            closeDeleteModal={closeDeleteModal}
+          />
+        )}
+        {isAddModalOpen && (
+          <AddReduceModal
+            type="Tambah"
+            medicineName={currentMedicine.medicineName}
+            handleQuantityChange={handleAddQuantity}
+            closeModal={closeAddModal}
+          />
+        )}
+               {isReduceModalOpen && (
+          <AddReduceModal
+            type="Kurangi"
+            medicineName={currentMedicine.medicineName}
+            handleQuantityChange={handleReduceQuantity}
+            closeModal={closeReduceModal}
+          />
+        )}
+      </div>
     </div>
   );
 };
 
-const EditMedicineModal = ({
+const AddReduceModal = ({
+  type,
+  medicineName,
+  handleQuantityChange,
+  closeModal,
+}) => {
+  const [quantity, setQuantity] = useState(1);
+
+  const handleChange = (e) => {
+    setQuantity(parseInt(e.target.value));
+  };
+
+  const handleSubmit = () => {
+    handleQuantityChange(quantity);
+  };
+
+  return (
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="bg-white p-6 rounded-md shadow-md w-1/3 max-h-screen overflow-y-auto">
+        <h2 className="text-2xl mb-4">{type} Obat</h2>
+        <p>
+          {type} jumlah obat untuk {medicineName}:
+        </p>
+        <input
+          type="number"
+          value={quantity}
+          onChange={handleChange}
+          className="mt-2 mb-4 w-full px-2 py-1 border rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+        />
+        <div className="flex justify-end mt-4">
+          <button
+            onClick={closeModal}
+            className="px-4 py-2 bg-primary-200 text-black rounded-md mr-2"
+          >
+            Batal
+          </button>
+          <button
+            onClick={handleSubmit}
+            className="px-4 py-2 bg-success-600 text-white rounded-md"
+          >
+            Simpan
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+AddReduceModal.propTypes = {
+  type: PropTypes.string.isRequired,
+  medicineName: PropTypes.string.isRequired,
+  handleQuantityChange: PropTypes.func.isRequired,
+  closeModal: PropTypes.func.isRequired,
+};
+
+const EditModal = ({
   medicine,
-  closeEditModal,
   handleEditChange,
   handleSaveChanges,
-  handleDelete,
+  closeEditModal,
+  openDeleteModal,
   categories,
   types,
 }) => {
-  EditMedicineModal.propTypes = {
-    medicine: PropTypes.shape({
-      medicineName: PropTypes.string,
-      quantity: PropTypes.number,
-      category: PropTypes.string,
-      type: PropTypes.string,
-      expiryDate: PropTypes.string,
-      entryDate: PropTypes.string,
-      price: PropTypes.number,
-    }).isRequired,
-    closeEditModal: PropTypes.func.isRequired,
-    handleEditChange: PropTypes.func.isRequired,
-    handleSaveChanges: PropTypes.func.isRequired,
-    handleDelete: PropTypes.func.isRequired,
-    categories: PropTypes.array.isRequired,
-    types: PropTypes.array.isRequired,
-  };
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white p-6 rounded-md shadow-md w-1/2 max-h-screen overflow-y-auto">
-        <h2 className="text-xl mb-4">Edit Obat</h2>
+        <h2 className="text-2xl mb-4">Edit Obat</h2>
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700">
             Nama Obat
@@ -458,7 +588,6 @@ const EditMedicineModal = ({
             value={medicine.medicineName}
             onChange={handleEditChange}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
-            readOnly
           />
         </div>
         <div className="mb-4">
@@ -545,12 +674,12 @@ const EditMedicineModal = ({
         </div>
         <div className="flex justify-between">
           <button
-            onClick={handleDelete}
-            className="px-4 py-2 bg-error-600 text-white rounded-md mr-2 flex items-center"
+            onClick={openDeleteModal}
+            className="px-4 py-2 bg-error-600 text-white rounded-md flex items-center"
           >
             <FaTrash className="mr-2" /> Hapus
           </button>
-          <div>
+          <div className="flex justify-end">
             <button
               onClick={closeEditModal}
               className="px-4 py-2 bg-primary-200 text-black rounded-md mr-2"
@@ -570,4 +699,53 @@ const EditMedicineModal = ({
   );
 };
 
+EditModal.propTypes = {
+  medicine: PropTypes.shape({
+    medicineName: PropTypes.string,
+    quantity: PropTypes.number,
+    category: PropTypes.string,
+    type: PropTypes.string,
+    expiryDate: PropTypes.string,
+    entryDate: PropTypes.string,
+    price: PropTypes.number,
+  }).isRequired,
+  handleEditChange: PropTypes.func.isRequired,
+  handleSaveChanges: PropTypes.func.isRequired,
+  closeEditModal: PropTypes.func.isRequired,
+  openDeleteModal: PropTypes.func.isRequired,
+  categories: PropTypes.array.isRequired,
+  types: PropTypes.array.isRequired,
+};
+
+const DeleteModal = ({ handleDelete, closeDeleteModal }) => {
+  return (
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="bg-white p-6 rounded-md shadow-md w-1/3 max-h-screen overflow-y-auto">
+        <h2 className="text-2xl mb-4">Konfirmasi Hapus</h2>
+        <p>Apakah Anda yakin ingin menghapus obat ini?</p>
+        <div className="flex justify-end mt-4">
+          <button
+            onClick={closeDeleteModal}
+            className="px-4 py-2 bg-primary-200 text-black rounded-md mr-2"
+          >
+            Batal
+          </button>
+          <button
+            onClick={handleDelete}
+            className="px-4 py-2 bg-error-600 text-white rounded-md"
+          >
+            Hapus
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+DeleteModal.propTypes = {
+  handleDelete: PropTypes.func.isRequired,
+  closeDeleteModal: PropTypes.func.isRequired,
+};
+
 export default Pengingat;
+

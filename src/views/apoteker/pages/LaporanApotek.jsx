@@ -100,8 +100,8 @@ const LaporanApotek = () => {
           <h1 className="text-2xl font-bold mt-4 mb-2">
             Laporan Penggunaan Obat Apotek
           </h1>
-          <h2 className="text-xl font-semibold mb-4 text-secondary-700">
-            Seluruh data terkait obat di apotek
+          <h2 className="text-xl font-semibold mb-4 text-secondary-400">
+            Seluruh data terkait keluar masuknya obat di apotek
           </h2>
           <div className="flex justify-between mb-4">
             <div>
