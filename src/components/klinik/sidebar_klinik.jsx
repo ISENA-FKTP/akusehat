@@ -1,15 +1,17 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import axios from "axios";
+import useAxios from "../../useAxios";
 import { TbReportAnalytics } from "react-icons/tb";
 import { FaReadme } from "react-icons/fa6";
 import { GoHomeFill } from "react-icons/go";
 import { FaUserDoctor } from "react-icons/fa6";
 import { IoMdArrowDropleft } from "react-icons/io";
 import { MdSpaceDashboard } from "react-icons/md";
+import { CgLogOut } from "react-icons/cg";
 import useClearTokensOnUnload from "../../useClearTokensOnUnload";
 
 const Sidebar_Klinik = () => {
+  const axiosInstance = useAxios();
   const [open, setOpen] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
@@ -17,7 +19,11 @@ const Sidebar_Klinik = () => {
   useClearTokensOnUnload();
 
   const Menus = [
-    { title: "Dashboard", path: "/dashboard", icon: <MdSpaceDashboard /> },
+    {
+      title: "Dashboard",
+      path: "/dashboard_klinik",
+      icon: <MdSpaceDashboard />,
+    },
     {
       title: "Administrasi",
       path: "/administrasi",
@@ -39,7 +45,7 @@ const Sidebar_Klinik = () => {
     try {
       const refreshToken = localStorage.getItem("refreshToken");
 
-      await axios.delete("/logout", {
+      await axiosInstance.delete("/logout", {
         data: {
           refreshToken: refreshToken,
         },
@@ -47,6 +53,7 @@ const Sidebar_Klinik = () => {
 
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
+      localStorage.removeItem("pasienId");
       navigate("/");
     } catch (error) {
       console.error("Failed to logout", error);
@@ -111,7 +118,7 @@ const Sidebar_Klinik = () => {
             onClick={handleLogout}
           >
             <span className="text-2xl block float-left">
-              <GoHomeFill />
+              <CgLogOut />
             </span>
             <span className={`text-lg font-medium flex-1 ${!open && "hidden"}`}>
               Logout

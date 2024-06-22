@@ -1,15 +1,18 @@
 import { useState, useEffect } from "react";
 import coverImage from "./cover.png";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState("Admin");
   const [msg, setMsg] = useState("");
+  const [navigateRoute, setNavigateRoute] = useState("");
   const navigate = useNavigate();
 
+<<<<<<< HEAD:src/views/loginpage/LoginAdmin.jsx
   // const Auth = async (e) => {
   //   e.preventDefault();
   //   try {
@@ -59,11 +62,100 @@ const Login = () => {
   //     }
   //   }
   // }, [navigate]);
+=======
+  const roles = ["Admin", "Apoteker", "Dokter", "Pegawai", "Kepala Bidang"];
+
+  const Auth = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post("/login", { username, password });
+
+      const { accessToken, refreshToken } = response.data;
+
+      const decoded = jwtDecode(accessToken);
+
+      if (decoded.role.toLowerCase() === role.toLowerCase()) {
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("refreshToken", refreshToken);
+
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${accessToken}`;
+
+        switch (role.toLowerCase()) {
+          case "admin":
+            setNavigateRoute("/dashboard_klinik");
+            break;
+          case "apoteker":
+            setNavigateRoute("/dashboard_apotek");
+            break;
+          case "dokter":
+            setNavigateRoute("/dashboard_dokter");
+            break;
+          case "pegawai":
+            setNavigateRoute("/manage");
+            break;
+          case "kepala bidang":
+            setNavigateRoute("/statistik");
+            break;
+          default:
+            setNavigateRoute("/");
+            break;
+        }
+      } else {
+        setMsg("Akses Ditolak, Silahkan Masukan Akun dengan Role yang benar.");
+      }
+    } catch (error) {
+      if (error.response) {
+        console.log("Error response:", error.response.data);
+        setMsg(error.response.data.msg);
+      } else {
+        console.error("Error:", error.message);
+        setMsg("Login gagal, silakan coba lagi.");
+      }
+    }
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      const decoded = jwtDecode(token);
+      const userRole = decoded.role.toLowerCase();
+
+      switch (userRole) {
+        case "admin":
+          navigate("/dashboard_klinik");
+          break;
+        case "apoteker":
+          navigate("/dashboard_apotek");
+          break;
+        case "dokter":
+          navigate("/dashboard_dokter");
+          break;
+        case "pegawai":
+          navigate("/manage");
+          break;
+        case "kepala bidang":
+          navigate("/statistik");
+          break;
+        default:
+          navigate("/");
+          break;
+      }
+    }
+  }, [navigate]);
+>>>>>>> c56c3a7940f07a4004e0fb97381ef61a95a6e05c:src/views/loginpage/index.jsx
+
+  useEffect(() => {
+    if (navigateRoute) {
+      navigate(navigateRoute);
+    }
+  }, [navigateRoute, navigate]);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 h-screen">
       {/* Bagian Kiri: Gambar Cover */}
-      <div className="hidden md:flex items-center justify-center">
+      <div className="hidden md:flex items-center justify-center bg-warning-100">
         <img
           src={coverImage}
           alt="Cover"
@@ -74,34 +166,6 @@ const Login = () => {
       {/* Bagian Kanan: Formulir Login */}
       <div className="flex items-center justify-center bg-gray-100">
         <div className="w-4/6 max-w-2xl p-10 bg-white shadow-2xl rounded-lg">
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-2 mb-6">
-            <Link to="/adminlog" className="flex-1">
-              <button className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-success-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                Admin
-              </button>
-            </Link>
-            <Link to="/dokterlog" className="flex-1">
-              <button className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                Dokter
-              </button>
-            </Link>
-            <Link to="/apotekerlog" className="flex-1">
-              <button className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                Apoteker
-              </button>
-            </Link>
-            <Link to="/pawaslog" className="flex-1">
-              <button className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                Pegawai
-              </button>
-            </Link>
-            <Link to="/statistiklog" className="flex-1">
-              <button className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                Manage
-              </button>
-            </Link>
-          </div>
-
           <h1 className="text-2xl font-bold text-center text-primary-500">
             Masukan Akun Administrasi Anda!
           </h1>
@@ -148,6 +212,29 @@ const Login = () => {
                 placeholder="*******"
                 className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               />
+            </div>
+
+            {/* Role */}
+            <div>
+              <label
+                htmlFor="role"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Role
+              </label>
+              <select
+                id="role"
+                name="role"
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              >
+                {roles.map((role) => (
+                  <option key={role} value={role}>
+                    {role}
+                  </option>
+                ))}
+              </select>
             </div>
 
             {/* Checkbox: Remember Me */}
