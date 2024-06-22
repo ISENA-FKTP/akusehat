@@ -14,22 +14,21 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        // "https://backend-isenafktp.onrender.com/login",
-        "http://localhost:5000/login",
+        "https://backend-isenafktp.onrender.com/login",
         {
           username,
           password,
         }
       );
 
-      console.log("Login response:", response.data); // Debug: Cek respons dari endpoint login
+      console.log("Login response:", response.data);
 
       const { accessToken, refreshToken } = response.data;
-      console.log("Access Token:", accessToken); // Debug: Cek akses token
-      console.log("Refresh Token:", refreshToken); // Debug: Cek refresh token
+      console.log("Access Token:", accessToken);
+      console.log("Refresh Token:", refreshToken);
 
       const decoded = jwtDecode(accessToken);
-      console.log("Decoded Token:", decoded); // Debug: Cek hasil dekode token
+      console.log("Decoded Token:", decoded);
 
       if (decoded.role === "admin") {
         localStorage.setItem("accessToken", accessToken);
@@ -52,7 +51,7 @@ const Login = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 h-screen">
       {/* Bagian Kiri: Gambar Cover */}
-      <div className="hidden md:flex items-center justify-center bg-[#F4D03F]">
+      <div className="hidden md:flex items-center justify-center bg-">
         <img
           src={coverImage}
           alt="Cover"
@@ -61,11 +60,11 @@ const Login = () => {
       </div>
 
       {/* Bagian Kanan: Formulir Login */}
-      <div className="flex items-center justify-center bg-[#f5f5f5]">
+      <div className="flex items-center justify-center bg-gray-100">
         <div className="w-4/6 max-w-2xl p-10 bg-white shadow-2xl rounded-lg">
           <div className="grid grid-cols-2 md:grid-cols-5 gap-2 mb-6">
             <Link to="/adminlog" className="flex-1">
-            <button className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-success-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+              <button className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-success-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                 Admin
               </button>
             </Link>

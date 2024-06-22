@@ -1,5 +1,6 @@
 import React from "react";
 import { Card, Typography } from "@material-tailwind/react";
+import { Link } from "react-router-dom";
 
 export default function TabelRekamMedis({ table_head, table_row }) {
   return (
