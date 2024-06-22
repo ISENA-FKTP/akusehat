@@ -6,7 +6,6 @@ import Laporan from "./views/klinik/pages/laporan";
 import KajianAwal from "./views/klinik/pages/kajianawal";
 import DashboardKlinik from "./views/klinik";
 import Login from "./views/loginpage/index";
-
 import Statistik from "./views/statistik/";
 import DataSakitPolisi from "./views/statistik/pages/data-sakit-polisi";
 import DataPengunjungKlinik from "./views/statistik/pages/data-pengunjung-klinik";

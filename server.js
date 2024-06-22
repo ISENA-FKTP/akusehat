@@ -3,7 +3,6 @@ import cors from "cors";
 const app = express();
 const port = 3000;
 
-// Data dummy untuk peserta
 const dummyPeserta = {
   noKartu: "0000039043765",
   nama: "SUSIAMINI IMAM SOERADI",
@@ -52,7 +51,6 @@ app.use(
   })
 );
 
-// Endpoint untuk mendapatkan data peserta berdasarkan BPJS atau NIK
 app.get("/api/peserta/:searchType/:searchValue", (req, res) => {
   const { searchType, searchValue } = req.params;
 
@@ -87,7 +85,6 @@ app.get("/api/peserta/:searchType/:searchValue", (req, res) => {
   }
 });
 
-// Jalankan server pada port yang ditentukan
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
