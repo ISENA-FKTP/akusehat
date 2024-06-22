@@ -10,55 +10,55 @@ const Login = () => {
   const [msg, setMsg] = useState("");
   const navigate = useNavigate();
 
-  const Auth = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post("/login", { username, password });
+  // const Auth = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const response = await axios.post("/login", { username, password });
 
-      console.log("Login response:", response.data);
+  //     console.log("Login response:", response.data);
 
-      const { accessToken, refreshToken } = response.data;
-      console.log("Access Token:", accessToken);
+  //     const { accessToken, refreshToken } = response.data;
+  //     console.log("Access Token:", accessToken);
 
-      const decoded = jwtDecode(accessToken);
-      console.log("Decoded Token:", decoded);
+  //     const decoded = jwtDecode(accessToken);
+  //     console.log("Decoded Token:", decoded);
 
-      if (accessToken) {
-        localStorage.setItem("accessToken", accessToken);
-        localStorage.setItem("refreshToken", refreshToken);
+  //     if (accessToken) {
+  //       localStorage.setItem("accessToken", accessToken);
+  //       localStorage.setItem("refreshToken", refreshToken);
 
-        axios.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${accessToken}`;
-        console.log("Axios Authorization:", axios.defaults.headers.common);
-      }
+  //       axios.defaults.headers.common[
+  //         "Authorization"
+  //       ] = `Bearer ${accessToken}`;
+  //       console.log("Axios Authorization:", axios.defaults.headers.common);
+  //     }
 
-      if (decoded.role === "admin") {
-        navigate("/dashboard");
-      } else {
-        setMsg("Akses Ditolak, Silahkan Masukan Akun Administrasi.");
-      }
-    } catch (error) {
-      if (error.response) {
-        console.log("Error response:", error.response.data);
-        setMsg(error.response.data.msg);
-      } else {
-        console.error("Error:", error.message);
-        setMsg("Login gagal, silakan coba lagi.");
-      }
-    }
-  };
+  //     if (decoded.role === "admin") {
+  //       navigate("/dashboard");
+  //     } else {
+  //       setMsg("Akses Ditolak, Silahkan Masukan Akun Administrasi.");
+  //     }
+  //   } catch (error) {
+  //     if (error.response) {
+  //       console.log("Error response:", error.response.data);
+  //       setMsg(error.response.data.msg);
+  //     } else {
+  //       console.error("Error:", error.message);
+  //       setMsg("Login gagal, silakan coba lagi.");
+  //     }
+  //   }
+  // };
 
-  useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-    // Konfirmasi Token dahulu
-    if (token) {
-      const decoded = jwtDecode(token);
-      if (decoded.role === "admin") {
-        navigate("/dashboard");
-      }
-    }
-  }, [navigate]);
+  // useEffect(() => {
+  //   const token = localStorage.getItem("accessToken");
+  //   // Konfirmasi Token dahulu
+  //   if (token) {
+  //     const decoded = jwtDecode(token);
+  //     if (decoded.role === "admin") {
+  //       navigate("/dashboard");
+  //     }
+  //   }
+  // }, [navigate]);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 h-screen">

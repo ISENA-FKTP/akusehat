@@ -10,31 +10,31 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const axiosInstance = useAxios();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const accessToken = localStorage.getItem("accessToken");
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const accessToken = localStorage.getItem("accessToken");
 
-        if (!accessToken) {
-          navigate("/");
-          return;
-        }
+  //       if (!accessToken) {
+  //         navigate("/");
+  //         return;
+  //       }
 
-        if (accessToken) {
-          const decoded = jwtDecode(accessToken);
-          console.log("Decoded Token:", decoded);
-          setEmail(decoded.email);
-        } else {
-          navigate("/");
-        }
-      } catch (error) {
-        console.error("Error fetching token:", error);
-        navigate("/");
-      }
-    };
+  //       if (accessToken) {
+  //         const decoded = jwtDecode(accessToken);
+  //         console.log("Decoded Token:", decoded);
+  //         setEmail(decoded.email);
+  //       } else {
+  //         navigate("/");
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching token:", error);
+  //       navigate("/");
+  //     }
+  //   };
 
-    fetchData();
-  }, [axiosInstance, navigate]);
+  //   fetchData();
+  // }, [axiosInstance, navigate]);
 
   return (
     <>

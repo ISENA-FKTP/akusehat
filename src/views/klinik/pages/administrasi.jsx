@@ -11,6 +11,7 @@ import Sidebar_Klinik from "../../../components/klinik/sidebar_klinik";
 import Header from "../../../components/header";
 import axios from "axios";
 import PropTypes from "prop-types";
+import { SlCalender } from "react-icons/sl";
 
 const MySwal = withReactContent(Swal);
 
@@ -28,14 +29,6 @@ const FormComponent = ({ token }) => {
     role: "pasien",
   });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const handleDateChange = (date) => {
-    setFormData({ ...formData, tgllahir: date });
-  };
 
   const handleSave = () => {
     MySwal.fire({
@@ -137,11 +130,104 @@ const FormComponent = ({ token }) => {
       className="bg-white shadow-xl flex flex-col place-content-center mx-80 p-6 mt-40 rounded-lg items-center"
       style={{ width: "auto", height: "auto" }}
     >
-      <h1 className="text-black font-primary-Poppins font-extrabold text-3xl mb-6 mx-72">
+      <h1 className="text-black font-primary-Poppins font-extrabold text-3xl mb-6">
         BIODATA
       </h1>
       <div>
-        {[
+            <div className="flex items-center py-1">
+                      <label className=" text-black font-secondary-Karla font-bold w-36">
+                        NRP/No. BPJS :
+                      </label>
+                      <input
+                        type="text"
+                        name="Pelayanan Non Medis"
+                        className="p-2  w-[500px] rounded-md text-left bg-white border border-black focus:outline-none"
+                        placeholder=" Keterangan....."
+                      />
+                    </div>
+
+                    <div className="flex items-center py-1">
+                      <label className=" text-black font-secondary-Karla font-bold w-36 ">
+                        Nama :
+                      </label>
+                      <input
+                        type="text"
+                        name="Pelayanan Non Medis"
+                        className="p-2 w-[500px] rounded-md text-left bg-white border border-black focus:outline-none"
+                        placeholder=" Keterangan....."
+                      />
+                    </div>
+
+                    <div className="flex items-center  py-1">
+                      <label className=" text-black font-secondary-Karla font-bold w-36 ">
+                        Status Peserta :
+                      </label>
+                      <input
+                        type="text"
+                        name="Pelayanan Non Medis"
+                        className="p-2 w-[500px] rounded-md text-left bg-white border border-black focus:outline-none"
+                        placeholder=" Keterangan....."
+                      />
+                    </div>
+
+                    <div className="flex items-center py-1 w-full">
+              <label className="text-black font-secondary-Karla font-bold w-36">
+                Tanggal :
+              </label>
+              <input
+                type="date"
+                className="p-2  w-[500px] rounded-md border border-black font-secondary-Karla font-medium text-black focus:outline-none focus:border-blue-500"
+              />
+            </div>
+
+            <div className="flex items-center py-1">
+                      <label className=" text-black font-secondary-Karla font-bold w-36">
+                        Jenis Kelamin :
+                      </label>
+                      <input
+                        type="text"
+                        name="Pelayanan Non Medis"
+                        className="p-2 w-[500px] rounded-md text-left bg-white border border-black focus:outline-none"
+                        placeholder=" Keterangan....."
+                      />
+                    </div>
+
+                    <div className="flex items-center  py-1">
+                      <label className=" text-black font-secondary-Karla font-bold w-36 ">
+                        PKK Umum :
+                      </label>
+                      <input
+                        type="text"
+                        name="Pelayanan Non Medis"
+                        className="p-2  w-[500px] rounded-md text-left bg-white border border-black focus:outline-none"
+                        placeholder=" Keterangan....."
+                      />
+                    </div>
+
+                    <div className="flex items-center  py-1">
+                      <label className=" text-black font-secondary-Karla font-bold w-36 ">
+                        No. Handphone :
+                      </label>
+                      <input
+                        type="text"
+                        name="Pelayanan Non Medis"
+                        className="p-2  w-[500px] rounded-md text-left bg-white border border-black focus:outline-none"
+                        placeholder=" Keterangan....."
+                      />
+                    </div>
+
+                    <div className="flex items-center  py-1">
+                      <label className=" text-black font-secondary-Karla font-bold w-36 ">
+                       No. Rekam Medis :
+                      </label>
+                      <input
+                        type="text"
+                        name="Pelayanan Non Medis"
+                        className="p-2  w-[500px] rounded-md text-left bg-white border border-black focus:outline-none"
+                        placeholder=" Keterangan....."
+                      />
+                    </div>
+        {/* {[
           {
             label: "NRP/No.BPJS",
             name: "nobpjs",
@@ -155,8 +241,10 @@ const FormComponent = ({ token }) => {
           },
           {
             label: "Tanggal Lahir",
+            type : "date",
             name: "tgllahir",
             placeholder: "Pilih tanggal lahir",
+            iconName : <SlCalender />
           },
           {
             label: "Jenis Kelamin",
@@ -179,31 +267,7 @@ const FormComponent = ({ token }) => {
             placeholder: "Masukkan nomor rekam medis",
           },
           { label: "Role", name: "role", value: "pasien" },
-        ].map((field, index) => (
-          <div className="flex items-center mb-1" key={index}>
-            <label className="text-black font-secondary-Karla font-bold w-48 mx-1">
-              {field.label}:
-            </label>
-            {field.name === "tgllahir" ? (
-              <DatePicker
-                selected={formData.tgllahir}
-                onChange={handleDateChange}
-                dateFormat="dd/MM/yyyy"
-                placeholderText={field.placeholder}
-                className="px-10 py-1 rounded-md border-2 border-black border-opacity-70 w-[30rem]"
-              />
-            ) : (
-              <input
-                type="text"
-                name={field.name}
-                value={formData[field.name]}
-                onChange={handleChange}
-                placeholder={field.placeholder}
-                className="px-10 py-1 rounded-md border-2 border-black border-opacity-70 w-[30rem]"
-              />
-            )}
-          </div>
-        ))}
+        ]} */}
       </div>
 
       <div className="flex space-x-5 mt-6 mx-72">
@@ -234,22 +298,22 @@ export default function Administrasi() {
   const [username, setUsername] = useState("");
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const storedToken = localStorage.getItem("accessToken");
-    if (storedToken) {
-      try {
-        const decodedToken = jwtDecode(storedToken);
-        setUsername(decodedToken.username);
-        setToken(storedToken);
-      } catch (error) {
-        console.error("Error decoding token:", error);
-        localStorage.removeItem("accessToken");
-        navigate("/");
-      }
-    } else {
-      navigate("/");
-    }
-  }, [navigate]);
+  // useEffect(() => {
+  //   const storedToken = localStorage.getItem("accessToken");
+  //   if (storedToken) {
+  //     try {
+  //       const decodedToken = jwtDecode(storedToken);
+  //       setUsername(decodedToken.username);
+  //       setToken(storedToken);
+  //     } catch (error) {
+  //       console.error("Error decoding token:", error);
+  //       localStorage.removeItem("accessToken");
+  //       navigate("/");
+  //     }
+  //   } else {
+  //     navigate("/");
+  //   }
+  // }, [navigate]);
 
   return (
     <>
