@@ -2,6 +2,7 @@ import Sidebar_Klinik from "../../../components/klinik/sidebar_klinik";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import Header from "../../../components/header";
+import KeadaanFisik from "./components/KeadaanFisik";
 
 const MySwal = withReactContent(Swal);
 
@@ -164,75 +165,7 @@ export default function KajianAwal() {
               </div>
 
               <div className="grid grid-rows-2 gap-5 flex-[40%]">
-                <div className="">
-                  <h1 className=" w-[30rem] bg-primary-600 shadow-lg rounded-t-lg h-10 text-white font-primary-Poppins font-bold text-xl justify-center flex items-center">
-                    Keadaan Fisik
-                  </h1>
-                  <div className="h-72 w-[30rem] border border-primary-600 mx-18 -my-8 shadow-lg rounded-b-lg ">
-                    <form className="-space-y-10 grid-cols-1 w-full mx-8 left-10 right-24">
-                      <div className="flex items-center">
-                        <label className="text-black font-secondary-Karla font-bold py-14 w-40">
-                          Berat Badan :
-                        </label>
-                        <input
-                          type="text"
-                          name="berat_badan"
-                          className="p-1 h-9 w-60 rounded-md text-left bg-white border border-black focus:outline-none"
-                          placeholder=""
-                        />
-                      </div>
-                      <div className="flex items-center">
-                        <label className="text-black font-secondary-Karla font-bold w-40">
-                          Tinggi Badan :
-                        </label>
-                        <input
-                          type="text"
-                          name="tinggi_badan"
-                          className="p-1 h-9 w-60 rounded-md text-left bg-white border border-black focus:outline-none"
-                          placeholder=""
-                        />
-                      </div>
-                      <div className="flex items-center">
-                        <label className="py-14 text-black font-secondary-Karla font-bold w-40">
-                          Lingkar Perut :
-                        </label>
-                        <input
-                          type="text"
-                          name="lingkar_perut"
-                          className="p-1 h-9 w-60 rounded-md text-left bg-white border border-black focus:outline-none"
-                          placeholder=""
-                        />
-                      </div>
-                      <div className="flex items-center">
-                        <label className="py-2 text-black font-secondary-Karla font-bold w-40">
-                          IMT (BB/TB) :
-                        </label>
-                        <input
-                          type="text"
-                          name="imt"
-                          className="p-1 h-9 w-60 rounded-md text-left bg-white border border-black focus:outline-none"
-                          placeholder=""
-                        />
-                      </div>
-                    </form>
-                    <div className="flex space-x-4 mt-4 place-content-center">
-                      <button
-                        type="button"
-                        className="bg-blue-500 bg-success-600 text-white px-4 py-1 rounded hover:bg-blue-600"
-                        onClick={handleSave}
-                      >
-                        Simpan
-                      </button>
-                      <button
-                        type="button"
-                        className="bg-error-700 text-white px-4 py-1 rounded hover:bg-gray-600"
-                        onClick={handleCancel}
-                      >
-                        Batal
-                      </button>
-                    </div>
-                  </div>
-                </div>
+                <KeadaanFisik />
 
                 <div>
                   <h1 className=" w-[30rem] bg-primary-600 shadow-lg rounded-t-lg h-10 text-white font-primary-Poppins font-bold text-xl justify-center flex items-center">

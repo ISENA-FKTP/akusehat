@@ -1,9 +1,6 @@
 import { Card, Typography } from "@material-tailwind/react";
 import { Link } from "react-router-dom";
-<<<<<<< HEAD
-=======
 import PropTypes from "prop-types";
->>>>>>> f30e9cee008cc5e0a50f4e4bcfedabb54b64a120
 
 export default function TabelRekamMedis({ table_head, table_row }) {
   TabelRekamMedis.propTypes = {

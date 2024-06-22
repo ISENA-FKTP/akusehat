@@ -137,8 +137,8 @@ const FormComponent = ({ existingPatient }) => {
           },
         }
       );
-
-      console.log("Data pasien berhasil ditambahkan:", response.data);
+      console.log(response);
+      localStorage.setItem("pasienId", response.data.userId);
 
       MySwal.fire({
         title: "Sukses!",
@@ -147,7 +147,7 @@ const FormComponent = ({ existingPatient }) => {
         confirmButtonText: "OK",
       });
 
-      navigate("/administrasi");
+      navigate("/kajianawal");
     } catch (error) {
       console.error(
         "Error adding pasien:",

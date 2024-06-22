@@ -61,7 +61,6 @@ function App() {
         <Route path="/manage" element={<Manage />} />
         <Route path="/manage/data-home-visit" element={<HomeVisit />} />
         <Route path="/manage/data-rekam-medis" element={<RekamMedis />} />
-<<<<<<< HEAD
         <Route 
         path="/manage/data-sakit/tambah-data"
         element={<TambahDataSakit/>} />
@@ -76,21 +75,6 @@ function App() {
         element={<DetailPage/>} />
 
 
-=======
-        <Route
-          path="/manage/data-sakit/tambah-data"
-          element={<TambahDataSakit />}
-        />
-        <Route
-          path="/manage/data-home-visit/tambah-data"
-          element={<TambahDataHomeVisit />}
-        />
-        <Route
-          path="/manage/data-rekam-medis/tambah-data"
-          element={<TambahDataRekamMedis />}
-        />
-        <Route path="/manage/detail/:nrp" element={<DetailPage />} />
->>>>>>> f30e9cee008cc5e0a50f4e4bcfedabb54b64a120
       </Routes>
     </Router>
   );
