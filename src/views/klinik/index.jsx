@@ -3,23 +3,37 @@ import Header from "../../components/header";
 import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
+import useAxios from "../../useAxios";
 
-export default function Dashboard() {
+const Dashboard = () => {
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
+  const axiosInstance = useAxios();
 
   useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-    console.log("Access Token:", token); // Debug token akses
+    const fetchData = async () => {
+      try {
+        const accessToken = localStorage.getItem("accessToken");
 
-    if (token) {
-      const decoded = jwtDecode(token);
-      console.log("Decoded Token:", decoded); // Debug token yang telah didekode
-      setEmail(decoded.email);
-    } else {
-      navigate("/");
-    }
-  }, [navigate]);
+        if (!accessToken) {
+          navigate("/");
+          return;
+        }
+
+        if (accessToken) {
+          const decoded = jwtDecode(accessToken);
+          setEmail(decoded.email);
+        } else {
+          navigate("/");
+        }
+      } catch (error) {
+        console.error("Error fetching token:", error);
+        navigate("/");
+      }
+    };
+
+    fetchData();
+  }, [axiosInstance, navigate]);
 
   return (
     <>
@@ -81,4 +95,6 @@ export default function Dashboard() {
       </div>
     </>
   );
-}
+};
+
+export default Dashboard;

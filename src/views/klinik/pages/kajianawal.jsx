@@ -154,7 +154,7 @@ export default function KajianAwal() {
                     </button>
                     <button
                       type="button"
-                      className="bg-gray-500 bg-error-600 text-white px-4 py-1 rounded hover:bg-gray-600"
+                      className="bg-error-600 text-white px-4 py-1 rounded hover:bg-gray-600"
                       onClick={handleCancel}
                     >
                       Batal
@@ -225,7 +225,7 @@ export default function KajianAwal() {
                       </button>
                       <button
                         type="button"
-                        className="bg-gray-500 bg-error-700 text-white px-4 py-1 rounded hover:bg-gray-600"
+                        className="bg-error-700 text-white px-4 py-1 rounded hover:bg-gray-600"
                         onClick={handleCancel}
                       >
                         Batal
@@ -290,7 +290,7 @@ export default function KajianAwal() {
                         </button>
                         <button
                           type="button"
-                          className="bg-gray-500 bg-error-700 text-white px-4 py-1 rounded hover:bg-gray-600"
+                          className=" bg-error-700 text-white px-4 py-1 rounded hover:bg-gray-600"
                           onClick={handleCancel}
                         >
                           Batal

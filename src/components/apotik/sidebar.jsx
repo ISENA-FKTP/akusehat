@@ -5,7 +5,8 @@ import { IoMdArrowDropleft } from "react-icons/io";
 import { MdOutlineNotificationsActive } from "react-icons/md";
 import { MdLibraryBooks } from "react-icons/md";
 import { BsCapsulePill } from "react-icons/bs";
-
+import { CgLogOut } from "react-icons/cg";
+import axios from "axios";
 
 export default function Sidebar() {
   const [open, setOpen] = useState(true);
@@ -17,7 +18,7 @@ export default function Sidebar() {
     {
       title: "Tambah Obat",
       path: "/apotek/tambah-obat",
-      icon: <BsCapsulePill/>,
+      icon: <BsCapsulePill />,
     },
     {
       title: "Pengingat",
@@ -26,10 +27,26 @@ export default function Sidebar() {
     },
     {
       title: "Laporan",
-      path: "/apotek/laporan",
-      icon: <MdLibraryBooks/>,
+      path: "/apotek/laporan-apotek",
+      icon: <MdLibraryBooks />,
     },
   ];
+
+  const handleLogout = async () => {
+    try {
+      const refreshToken = localStorage.getItem("refreshToken");
+
+      await axios.delete("/logout", {
+        data: { refreshToken: refreshToken },
+      });
+
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      navigate("/");
+    } catch (error) {
+      console.error("Failed to logout", error);
+    }
+  };
 
   return (
     <>
@@ -83,6 +100,18 @@ export default function Sidebar() {
               </span>
             </li>
           ))}
+          {/* Logout Button */}
+          <li
+            className={`text-white flex items-center gap-x-4 cursor-pointer p-3 mt-9 hover:bg-primary-300 hover:text-primary-600 px-5`}
+            onClick={handleLogout}
+          >
+            <span className="text-2xl block float-left">
+              <CgLogOut />
+            </span>
+            <span className={`text-lg font-medium flex-1 ${!open && "hidden"}`}>
+              Logout
+            </span>
+          </li>
         </ul>
       </div>
     </>
