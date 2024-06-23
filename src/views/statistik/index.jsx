@@ -6,17 +6,19 @@ import PieChartApotik, {
 import Sidebar from "../../components/statistik/sidebar";
 import BarChart from "./diagram/BarChart/BarChart";
 import LineChart from "./diagram/LineChart/LineChart";
-import { FaCircleArrowUp } from "react-icons/fa6";
-import { FaCircleArrowDown } from "react-icons/fa6";
+import {
+  FaCircleArrowUp,
+  FaCircleArrowDown,
+  FaPeopleGroup,
+  FaVirus,
+} from "react-icons/fa6";
 import { BsPeopleFill } from "react-icons/bs";
-import { FaPeopleGroup } from "react-icons/fa6";
 import { GiMedicines } from "react-icons/gi";
-import { FaVirus } from "react-icons/fa6";
 import Header from "../../components/header";
-import axios from "axios";
 import { DataSektor } from "./model/dataSektor";
 import { IoSearch } from "react-icons/io5";
 import { DataPegawaiRawat } from "./model/dataPegawaiRawat";
+import { DataSakit } from "./model/dataSakit";
 
 const currentYear = new Date().getFullYear();
 
@@ -42,14 +44,8 @@ export default function Statistik() {
   }
 
   useEffect(() => {
-    axios
-      .get("https://65fcf9c49fc4425c6530ec6c.mockapi.io/dataShoe")
-      .then((response) => {
-        const data = response.data;
-        setData(data);
-        filterDataByYear(data, year);
-      })
-      .catch((error) => console.error("Error fetching data: ", error));
+    setData(DataSakit);
+    filterDataByYear(DataSakit, year);
   }, [year]);
 
   useEffect(() => {

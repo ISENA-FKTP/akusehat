@@ -13,21 +13,21 @@ const Administrasi = () => {
   const [existingPatient, setExistingPatient] = useState(null);
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   const storedToken = localStorage.getItem("accessToken");
-  //   if (storedToken) {
-  //     try {
-  //       const decodedToken = jwtDecode(storedToken);
-  //       setUsername(decodedToken.username);
-  //     } catch (error) {
-  //       console.error("Error decoding token:", error);
-  //       localStorage.removeItem("accessToken");
-  //       navigate("/");
-  //     }
-  //   } else {
-  //     navigate("/");
-  //   }
-  // }, [navigate]);
+  useEffect(() => {
+    const storedToken = localStorage.getItem("accessToken");
+    if (storedToken) {
+      try {
+        const decodedToken = jwtDecode(storedToken);
+        setUsername(decodedToken.username);
+      } catch (error) {
+        console.error("Error decoding token:", error);
+        localStorage.removeItem("accessToken");
+        navigate("/");
+      }
+    } else {
+      navigate("/");
+    }
+  }, [navigate]);
 
   const handleSearch = async (searchType, searchValue) => {
     let apiUrl = "";
