@@ -9,12 +9,23 @@ import { dataDiagnosa } from "../../statistik/model/data/dataDiagnosa";
 import { dataObatPasien } from "../../statistik/model/data/dataTerapi";
 import { dataPemeriksaan } from "../../statistik/model/data/dataPemeriksaan";
 import { DataKunjunganKlinik } from "../../statistik/model/dataKunjunganKlinik";
+import { useNavigate } from 'react-router-dom';
 
 export default function Laporan() {
   const [sortBy, setSortBy] = useState("most");
   const [sortedData, setSortedData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
+  const navigate = useNavigate();
+  const [glitch, setGlitch] = useState(false);
+
+  const handleClick = () => {
+    setGlitch(true);
+    setTimeout(() => {
+      setGlitch(false);
+      navigate('/KajianAwal');
+    }, 1000); // Durasi glitch (ms)
+  };
 
   const combinedData = dataPasien.map((pasien) => ({
     ...pasien,
@@ -110,9 +121,17 @@ export default function Laporan() {
 
       <div className="border border-primary-600 mx-auto shadow-lg flex items-center text-center w-[80%] rounded ml-44 py-5">
         <form className="w-full mx-8 space-y-4">
-          <div className="flex justify-around">
+        <div className="flex items-center">
+      <button
+        type="button"
+        className="relative overflow-hidden group p-3 bg-success-600 text-white rounded-md font-medium focus:outline-none focus:ring-2 focus:ring-success-700 flex items-center justify-center transition-transform duration-200 transform hover:rotate-10 hover:scale-90"
+        onClick={handleClick}
+      > Tambah Data
+      </button>
+    </div>
+          <div className="flex justify-center">
             <div className="flex items-center space-x-3">
-              <div>
+              <div className="flex items-center space-x-3 ">
                 <label
                   htmlFor="sort"
                   className="text-black font-secondary-Karla font-bold"

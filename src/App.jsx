@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Administrasi from "./views/klinik/pages/administrasi";
-import Dokter from "./views/klinik/pages/dokter";
 import Laporan from "./views/klinik/pages/laporan";
 import KajianAwal from "./views/klinik/pages/kajianawal";
 import DashboardKlinik from "./views/klinik";
@@ -13,7 +12,6 @@ import DataObatKlinik from "./views/statistik/pages/data-obat-klinik";
 import TambahObat from "./views/apoteker/pages/tambahObat";
 import DashboardApotekUtama from "./views/apoteker/pages/DashboardApotek";
 import DashboardApotek from "./views/apoteker/index";
-import DashboardDokter from "./views/dokter/index";
 import Manage from "./views/manage";
 import HomeVisit from "./views/manage/pages/homevisit";
 import RekamMedis from "./views/manage/pages/rekammedis";
@@ -23,6 +21,8 @@ import TambahDataRekamMedis from "./views/manage/pages/tambahDataRekamMedis";
 import Pengingat from "./views/apoteker/pages/Pengingat";
 import DetailPage from "./views/manage/pages/detail";
 import LaporanApotek from "./views/apoteker/pages/LaporanApotek";
+import Dashboard_Dokter from "./views/dokter/index";
+import Dokter from "./views/dokter/dokter";
 
 function App() {
   return (
@@ -31,11 +31,12 @@ function App() {
         {/* Klinik */}
         <Route path="/dashboard_klinik" element={<DashboardKlinik />} />
         <Route path="/dashboard_apotek" element={<DashboardApotek />} />
-        <Route path="/dashboard_dokter" element={<DashboardDokter />} />
         <Route path="/administrasi" element={<Administrasi />} />
-        <Route path="/dokter" element={<Dokter />} />
         <Route path="/laporan" element={<Laporan />} />
         <Route path="/kajianawal" element={<KajianAwal />} />
+        {/* Dokter */}
+        <Route path="/dokter" element={<Dokter/>}/>
+        <Route path="/dashboard_dokter" element={<Dashboard_Dokter/>} />
         {/* Login */}
         <Route path="/" element={<Login />} />
         <Route path="/apotek/tambah-obat" element={<TambahObat />} />

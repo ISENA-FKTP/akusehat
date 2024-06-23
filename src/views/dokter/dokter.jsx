@@ -1,11 +1,12 @@
 import { useState } from "react";
-import Sidebar_Klinik from "../../../components/klinik/sidebar_klinik";
+import Sidebar_Klinik from "../../components/klinik/sidebar_klinik";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { AiOutlineCalendar, AiOutlineClockCircle } from "react-icons/ai";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import Header from "../../../components/header";
+import Header from "../../components/header";
+import Sidebar_Dokter from "../../components/klinik/sidebar_dokter";
 
 const MySwal = withReactContent(Swal);
 
@@ -95,7 +96,7 @@ export default function Dokter() {
   return (
     <>
       <div className="fixed z-50">
-        <Sidebar_Klinik />
+        <Sidebar_Dokter />
       </div>
       <Header
         title="Pendaftaran Pelayanan Pasien"
@@ -122,15 +123,6 @@ export default function Dokter() {
         <form className="w-full mx-8 space-y-4">
           <div className="flex justify-around">
             <div className="flex items-center space-x-3">
-              <div>
-                <button
-                  type="button"
-                  className=" bg-success-600 text-white p-3 rounded-md font-secondary-Karla font-medium focus:outline-none focus:ring-2 focus:ring-green-500 flex items-center space-x-1"
-                >
-                  <i className="fas fa-plus"></i>
-                  <span>Tambah Data</span>
-                </button>
-              </div>
               <label className="text-black font-secondary-Karla font-bold">
                 Poli
               </label>

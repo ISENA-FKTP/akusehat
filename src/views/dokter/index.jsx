@@ -1,45 +1,45 @@
-import Sidebar_Klinik from "../../components/klinik/sidebar_klinik";
 import Header from "../../components/header";
 import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import useAxios from "../../useAxios";
+import Sidebar_Dokter from "../../components/klinik/sidebar_dokter";
 
-const Dashboard = () => {
+const Dashboard_Dokter= () => {
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
   const axiosInstance = useAxios();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const accessToken = localStorage.getItem("accessToken");
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const accessToken = localStorage.getItem("accessToken");
 
-        if (!accessToken) {
-          navigate("/");
-          return;
-        }
+  //       if (!accessToken) {
+  //         navigate("/");
+  //         return;
+  //       }
 
-        if (accessToken) {
-          const decoded = jwtDecode(accessToken);
-          console.log("Decoded Token:", decoded);
-          setEmail(decoded.email);
-        } else {
-          navigate("/");
-        }
-      } catch (error) {
-        console.error("Error fetching token:", error);
-        navigate("/");
-      }
-    };
+  //       if (accessToken) {
+  //         const decoded = jwtDecode(accessToken);
+  //         console.log("Decoded Token:", decoded);
+  //         setEmail(decoded.email);
+  //       } else {
+  //         navigate("/");
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching token:", error);
+  //       navigate("/");
+  //     }
+  //   };
 
-    fetchData();
-  }, [axiosInstance, navigate]);
+  //   fetchData();
+  // }, [axiosInstance, navigate]);
 
   return (
     <>
       <div className="fixed z-50">
-        <Sidebar_Klinik />
+        <Sidebar_Dokter />
       </div>
       <Header
         title="Pendaftaran Pelayanan Pasien"
@@ -98,4 +98,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default Dashboard_Dokter;
