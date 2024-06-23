@@ -46,7 +46,7 @@
     "expiryDate": "2025-05-01",
     "batchNo": "B12345",
     "category": "Obat Cair",
-    "type": "Tablet",
+    "type": "Syrup",
     "price": 5000,
     "userId": 1,
     "usedMedicine" : "50"
@@ -63,5 +63,85 @@
     "price": 5000,
     "userId": 1,
     "usedMedicine" : "50"
+  },
+  {
+    "uuid": "123e4567-e89b-12d3-a456-426614174005",
+    "medicineName": "Fluanza",
+    "quantity": 210,
+    "entryDate": "2023-07-01",
+    "expiryDate": "2024-05-01",
+    "batchNo": "B12345",
+    "category": "Obat Padat",
+    "type": "Tablet",
+    "price": 5000,
+    "userId": 1,
+    "usedMedicine" : "50"
+  },
+  {
+    "uuid": "123e4567-e89b-12d3-a456-426614174006",
+    "medicineName": "Alphara",
+    "quantity": 50,
+    "entryDate": "2023-08-01",
+    "expiryDate": "2024-05-01",
+    "batchNo": "B12345",
+    "category": "Obat Padat",
+    "type": "Tablet",
+    "price": 6000,
+    "userId": 1,
+    "usedMedicine" : "20"
+  },
+  {
+    "uuid": "123e4567-e89b-12d3-a456-426614174007",
+    "medicineName": "Oralit",
+    "quantity": 50,
+    "entryDate": "2023-09-01",
+    "expiryDate": "2024-05-01",
+    "batchNo": "B12345",
+    "category": "Obat Padat",
+    "type": "Tablet",
+    "price": 6000,
+    "userId": 1,
+    "usedMedicine" : "10"
+  },
+  {
+    "uuid": "123e4567-e89b-12d3-a456-426614174008",
+    "medicineName": "Abbocath 18",
+    "quantity": 40,
+    "entryDate": "2023-09-01",
+    "expiryDate": "2024-05-01",
+    "batchNo": "B12345",
+    "category": "Alkes Habis Pakai",
+    "type": "PCS",
+    "price": 80000,
+    "userId": 1,
+    "usedMedicine" : "10"
+  },
+  {
+    "uuid": "123e4567-e89b-12d3-a456-426614174009",
+    "medicineName": "Abbocath 20",
+    "quantity": 30,
+    "entryDate": "2023-10-01",
+    "expiryDate": "2024-05-01",
+    "batchNo": "B12345",
+    "category": "Alkes Habis Pakai",
+    "type": "PCS",
+    "price": 80000,
+    "userId": 1,
+    "usedMedicine" : "10"
+  },
+  {
+    "uuid": "123e4567-e89b-12d3-a456-4266141740010",
+    "medicineName": "Infus Set Makro",
+    "quantity": 28,
+    "entryDate": "2023-11-01",
+    "expiryDate": "2024-11-01",
+    "batchNo": "B12345",
+    "category": "Alkes Habis Pakai",
+    "type": "PCS",
+    "price": 20000,
+    "userId": 1,
+    "usedMedicine" : "10"
   }
+
 ]
+
