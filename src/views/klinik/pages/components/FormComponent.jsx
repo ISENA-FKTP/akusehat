@@ -145,7 +145,6 @@ const FormComponent = ({ existingPatient }) => {
           },
         }
       );
-      console.log(response);
       localStorage.setItem("pasienId", response.data.userId);
 
       MySwal.fire({

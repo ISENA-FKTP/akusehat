@@ -7,7 +7,7 @@ import { jwtDecode } from "jwt-decode";
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("Admin");
+  const [role, setRole] = useState("");
   const [msg, setMsg] = useState("");
   const [navigateRoute, setNavigateRoute] = useState("");
   const navigate = useNavigate();
@@ -177,6 +177,7 @@ const Login = () => {
                 onChange={(e) => setRole(e.target.value)}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               >
+                <option value="">Pilih Role</option>
                 {roles.map((role) => (
                   <option key={role} value={role}>
                     {role}
