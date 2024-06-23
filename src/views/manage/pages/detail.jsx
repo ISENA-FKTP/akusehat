@@ -129,9 +129,9 @@ export default function DetailPage() {
       </div>
       <Header
         title="Data Sakit Polisi"
-        userName="Rifki Rusdi Satma Putra"
+        userName="Daden Kasandi"
         userStatus="Kepala Polisi"
-        profilePicture="logo.png"
+        profilePicture="/logo.png"
       />
       <main className="mt-12 ml-32 mr-12 space-y-4">
         <PDFDownloadLink

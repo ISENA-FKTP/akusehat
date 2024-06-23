@@ -43,7 +43,7 @@ export default function Manage() {
       </div>
       <Header
         title="Data Sakit Polisi"
-        userName="Rifki Rusdi Satma Putra"
+        userName="Daden Kasandi"
         userStatus="Kepala Polisi"
         profilePicture="/logo.png"
       />
