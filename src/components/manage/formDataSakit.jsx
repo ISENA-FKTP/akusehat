@@ -16,6 +16,7 @@ const FormDataSakit = () => {
     lama_cuti: "",
     WFH: "",
     Keterangan: "",
+    pegawaiId: "",
   });
 
   const axiosInstance = useAxios();
@@ -32,7 +33,7 @@ const FormDataSakit = () => {
   const handleNrpKeyDown = async (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      await fetchData(e.target.value);
+      await fetchData(formData.nrp);
     }
   };
 
@@ -54,13 +55,14 @@ const FormDataSakit = () => {
       });
 
       const foundData = response.data;
-
+      console.log(foundData);
       if (foundData) {
         setFormData({
           ...formData,
           namapegawai: foundData.namapegawai,
           pangkat: foundData.pangkat,
           satuankerja: foundData.satuankerja,
+          pegawaiId: foundData.userId,
         });
         Swal.fire({
           icon: "success",
@@ -74,38 +76,22 @@ const FormDataSakit = () => {
           pangkat: "",
           satuankerja: "",
         });
-        Swal.fire({
-          icon: "error",
-          title: "Data tidak ditemukan",
-          text: "Data pegawai tidak ditemukan. Akan ditambahkan ke database.",
-        });
+        throw new Error("Data pegawai tidak ditemukan");
       }
     } catch (error) {
       console.error("Error fetching data:", error);
+      throw error;
     }
   };
 
   const handleSubmit = async (e) => {
-    const token = localStorage.getItem("accessToken");
     e.preventDefault();
+    const token = localStorage.getItem("accessToken");
 
     try {
-      const existingEmployeeResponse = await axiosInstance.get(
-        `/pegawais/nonrp/${formData.nrp}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (existingEmployeeResponse.status === 200) {
-        await addSickData(token);
-      } else {
-        throw new Error("Employee not found");
-      }
+      await fetchData(formData.nrp);
+      await addSickData(token);
     } catch (error) {
-      console.error("There was an error!", error);
       if (error.response && error.response.status === 404) {
         Swal.fire({
           icon: "error",
@@ -124,16 +110,13 @@ const FormDataSakit = () => {
                   namapegawai: formData.namapegawai,
                   pangkat: formData.pangkat,
                   satuankerja: formData.satuankerja,
+                  pegawaiId: formData.userId,
                 },
                 {
                   headers: {
                     Authorization: `Bearer ${token}`,
                   },
                 }
-              );
-              localStorage.setItem(
-                "pegawaiId",
-                addEmployeeResponse.data.userId
               );
 
               if (addEmployeeResponse.status === 201) {
@@ -166,7 +149,7 @@ const FormDataSakit = () => {
   };
 
   const addSickData = async (token) => {
-    const getPegawaiId = localStorage.getItem("pegawaiId");
+    console.log(formData);
     try {
       const addSakitResponse = await axiosInstance.post(
         "/datasakits",
@@ -178,7 +161,7 @@ const FormDataSakit = () => {
           keterangan: formData.Keterangan,
           wfh: formData.WFH,
           sumberbiaya: formData.sumber_biaya,
-          pegawaiId: getPegawaiId,
+          pegawaiId: formData.pegawaiId,
         },
         {
           headers: {
