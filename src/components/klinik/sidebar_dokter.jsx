@@ -1,17 +1,13 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import useAxios from "../../useAxios";
-import { TbReportAnalytics } from "react-icons/tb";
-import { FaReadme } from "react-icons/fa6";
-import { GoHomeFill } from "react-icons/go";
+import axios from "axios";
+import { GoHome, GoHomeFill } from "react-icons/go";
 import { FaUserDoctor } from "react-icons/fa6";
 import { IoMdArrowDropleft } from "react-icons/io";
 import { MdSpaceDashboard } from "react-icons/md";
-import { CgLogOut } from "react-icons/cg";
 import useClearTokensOnUnload from "../../useClearTokensOnUnload";
 
-const Sidebar_Klinik = () => {
-  const axiosInstance = useAxios();
+const Sidebar_Dokter = () => {
   const [open, setOpen] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
@@ -21,18 +17,13 @@ const Sidebar_Klinik = () => {
   const Menus = [
     {
       title: "Dashboard",
-      path: "/dashboard_klinik",
-      icon: <MdSpaceDashboard />,
+      path: "/dashboard_dokter",
+      icon: <MdSpaceDashboard />
     },
     {
-      title: "Administrasi",
-      path: "/administrasi",
-      icon: <FaReadme />,
-    },
-    {
-      title: "Laporan",
-      path: "/laporan",
-      icon: <TbReportAnalytics />,
+      title: "Dokter",
+      path: "/dokter",
+      icon: <FaUserDoctor />,
     },
   ];
 
@@ -40,7 +31,7 @@ const Sidebar_Klinik = () => {
     try {
       const refreshToken = localStorage.getItem("refreshToken");
 
-      await axiosInstance.delete("/logout", {
+      await axios.delete("/logout", {
         data: {
           refreshToken: refreshToken,
         },
@@ -48,7 +39,6 @@ const Sidebar_Klinik = () => {
 
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
-      localStorage.removeItem("pasienId");
       navigate("/");
     } catch (error) {
       console.error("Failed to logout", error);
@@ -58,28 +48,24 @@ const Sidebar_Klinik = () => {
   return (
     <>
       <div
-        className={`bg-primary-600 h-screen fixed left-0 py-5 pt-8 font-poppins ${
-          open ? "w-72" : "w-20"
-        } duration-300 relative`}
+        className={`bg-primary-600 h-screen fixed left-0 py-5 pt-8 font-poppins ${open ? "w-72" : "w-20"
+          } duration-300 relative`}
       >
         {/* Title */}
         <IoMdArrowDropleft
-          className={`bg-transparent right-5 text-white text-3xl rounded-full absolute top-9 cursor-pointer ${
-            !open && "rotate-180 right-8"
-          }`}
+          className={`bg-transparent right-5 text-white text-3xl rounded-full absolute top-9 cursor-pointer ${!open && "rotate-180 right-8"
+            }`}
           onClick={() => setOpen(!open)}
         />
         <div className="inline-flex px-5">
           <img
             src="/logo.png"
-            className={`w-10 h-10 cursor-pointer block float-left mr-3 duration-500 ${
-              !open && "hidden"
-            }`}
+            className={`w-10 h-10 cursor-pointer block float-left mr-3 duration-500 ${!open && "hidden"
+              }`}
           />
           <h1
-            className={`text-white text-2xl origin-left font-bold duration-500 mt-[0.20rem] ${
-              !open && "hidden"
-            }`}
+            className={`text-white text-2xl origin-left font-bold duration-500 mt-[0.20rem] ${!open && "hidden"
+              }`}
           >
             ISENA FKTP
           </h1>
@@ -90,15 +76,14 @@ const Sidebar_Klinik = () => {
           {Menus.map((menu, index) => (
             <li
               key={index}
-              className={`text-white flex items-center gap-x-4 cursor-pointer p-3 ${
-                location.pathname === menu.path
+              className={`text-white flex items-center gap-x-4 cursor-pointer p-3 ${location.pathname === menu.path
                   ? "bg-primary-300 text-primary-600"
                   : "hover:bg-primary-300 hover:text-primary-600"
-              } px-5 ${menu.spacing ? "mt-9" : "mt-2"}`}
+                } px-5 ${menu.spacing ? "mt-9" : "mt-2"}`}
               onClick={() => navigate(menu.path)}
             >
               <span className="text-2xl block float-left">
-                {menu.icon ? menu.icon : <GoHomeFill />}
+                {menu.icon ? menu.icon : <GoHome />}
               </span>
               <span
                 className={`text-lg font-medium flex-1 ${!open && "hidden"}`}
@@ -113,7 +98,7 @@ const Sidebar_Klinik = () => {
             onClick={handleLogout}
           >
             <span className="text-2xl block float-left">
-              <CgLogOut />
+              <GoHomeFill />
             </span>
             <span className={`text-lg font-medium flex-1 ${!open && "hidden"}`}>
               Logout
@@ -125,4 +110,4 @@ const Sidebar_Klinik = () => {
   );
 };
 
-export default Sidebar_Klinik;
+export default Sidebar_Dokter;

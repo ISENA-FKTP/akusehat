@@ -24,23 +24,23 @@ const FormComponent = ({ existingPatient }) => {
     role: "pasien",
   });
 
-  useEffect(() => {
-    if (existingPatient) {
-      setFormData(existingPatient);
-    } else {
-      setFormData({
-        nobpjs: "",
-        nama: "",
-        statuspeserta: "",
-        tgllahir: null,
-        gender: "",
-        ppkumum: "",
-        nohp: "",
-        norm: "",
-        role: "pasien",
-      });
-    }
-  }, [existingPatient]);
+  // useEffect(() => {
+  //   if (existingPatient) {
+  //     setFormData(existingPatient);
+  //   } else {
+  //     setFormData({
+  //       nobpjs: "",
+  //       nama: "",
+  //       statuspeserta: "",
+  //       tgllahir: null,
+  //       gender: "",
+  //       ppkumum: "",
+  //       nohp: "",
+  //       norm: "",
+  //       role: "pasien",
+  //     });
+  //   }
+  // }, [existingPatient]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -172,7 +172,102 @@ const FormComponent = ({ existingPatient }) => {
       <h1 className="text-black font-primary-Poppins font-extrabold text-3xl mb-6 mx-72">
         BIODATA
       </h1>
-      {[
+      <div>
+            <div className="flex items-center py-1">
+                      <label className=" text-black font-secondary-Karla font-bold w-36">
+                        NRP/No. BPJS :
+                      </label>
+                      <input
+                        type="text"
+                        name="Pelayanan Non Medis"
+                        className="p-2  w-[500px] rounded-md text-left bg-white border border-black focus:outline-none"
+                        placeholder=" Keterangan....."
+                      />
+                    </div>
+
+                    <div className="flex items-center py-1">
+                      <label className=" text-black font-secondary-Karla font-bold w-36 ">
+                        Nama :
+                      </label>
+                      <input
+                        type="text"
+                        name="Pelayanan Non Medis"
+                        className="p-2 w-[500px] rounded-md text-left bg-white border border-black focus:outline-none"
+                        placeholder=" Keterangan....."
+                      />
+                    </div>
+
+                    <div className="flex items-center  py-1">
+                      <label className=" text-black font-secondary-Karla font-bold w-36 ">
+                        Status Peserta :
+                      </label>
+                      <input
+                        type="text"
+                        name="Pelayanan Non Medis"
+                        className="p-2 w-[500px] rounded-md text-left bg-white border border-black focus:outline-none"
+                        placeholder=" Keterangan....."
+                      />
+                    </div>
+
+                    <div className="flex items-center py-1 w-full">
+              <label className="text-black font-secondary-Karla font-bold w-36">
+                Tanggal :
+              </label>
+              <input
+                type="date"
+                className="p-2  w-[500px] rounded-md border border-black font-secondary-Karla font-medium text-black focus:outline-none focus:border-blue-500"
+              />
+            </div>
+
+            <div className="flex items-center py-1">
+                      <label className=" text-black font-secondary-Karla font-bold w-36">
+                        Jenis Kelamin :
+                      </label>
+                      <input
+                        type="text"
+                        name="Pelayanan Non Medis"
+                        className="p-2 w-[500px] rounded-md text-left bg-white border border-black focus:outline-none"
+                        placeholder=" Keterangan....."
+                      />
+                    </div>
+
+                    <div className="flex items-center  py-1">
+                      <label className=" text-black font-secondary-Karla font-bold w-36 ">
+                        PKK Umum :
+                      </label>
+                      <input
+                        type="text"
+                        name="Pelayanan Non Medis"
+                        className="p-2  w-[500px] rounded-md text-left bg-white border border-black focus:outline-none"
+                        placeholder=" Keterangan....."
+                      />
+                    </div>
+
+                    <div className="flex items-center  py-1">
+                      <label className=" text-black font-secondary-Karla font-bold w-36 ">
+                        No. Handphone :
+                      </label>
+                      <input
+                        type="text"
+                        name="Pelayanan Non Medis"
+                        className="p-2  w-[500px] rounded-md text-left bg-white border border-black focus:outline-none"
+                        placeholder=" Keterangan....."
+                      />
+                    </div>
+
+                    <div className="flex items-center  py-1">
+                      <label className=" text-black font-secondary-Karla font-bold w-36 ">
+                       No. Rekam Medis :
+                      </label>
+                      <input
+                        type="text"
+                        name="Pelayanan Non Medis"
+                        className="p-2  w-[500px] rounded-md text-left bg-white border border-black focus:outline-none"
+                        placeholder=" Keterangan....."
+                      />
+                    </div>
+                    </div>
+      {/* {[
         {
           label: "NRP/No.BPJS",
           name: "nobpjs",
@@ -234,7 +329,7 @@ const FormComponent = ({ existingPatient }) => {
             />
           )}
         </div>
-      ))}
+      ))} */}
       <div className="flex space-x-5 mt-6 mx-72">
         <button
           onClick={handleSaveOrNext}
