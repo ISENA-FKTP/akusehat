@@ -1,8 +1,18 @@
-import React from "react";
 import { Card, Typography } from "@material-tailwind/react";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 
 export default function Tabel({ table_head, table_row }) {
+  Tabel.propTypes = {
+    table_head: PropTypes.arrayOf(PropTypes.any).isRequired,
+    table_row: PropTypes.arrayOf(PropTypes.any).isRequired,
+  };
+
+  const formatDate = (dateString) => {
+    const options = { year: "numeric", month: "2-digit", day: "2-digit" };
+    return new Date(dateString).toLocaleDateString("id-ID", options);
+  };
+
   return (
     <div>
       <Card className="h-full w-full overflow-auto">
@@ -10,7 +20,7 @@ export default function Tabel({ table_head, table_row }) {
           <thead>
             <tr>
               {table_head.map((head) => (
-                <th key={head} className=" bg-primary-500 p-4">
+                <th key={head} className="bg-primary-500 p-4">
                   <Typography
                     variant="large"
                     color="white"
@@ -25,24 +35,22 @@ export default function Tabel({ table_head, table_row }) {
           <tbody>
             {table_row.map(
               ({
-                nrp,
-                nama,
-                pangkat,
-                satuan_kerja,
-                tanggal,
-                jenis_sakit,
-                jenis_perawatan,
-                sumber_biaya,
-                awal_sakit,
-                lama_cuti,
+                pegawai: { nrp, namapegawai, pangkat, satuankerja },
+                createdAt,
+                jenispenyakit,
+                jenisperawatan,
+                sumberbiaya,
+                awalsakit,
+                lamacuti,
                 wfh,
                 keterangan,
+                uuid,
               }) => {
                 const classes = "p-4";
 
                 return (
                   <tr key={nrp} className="even:bg-primary-200">
-                    <td className={classes}imp>
+                    <td className={classes}>
                       <Typography
                         variant="small"
                         color="blue-gray"
@@ -57,7 +65,7 @@ export default function Tabel({ table_head, table_row }) {
                         color="blue-gray"
                         className="font-normal"
                       >
-                        {nama}
+                        {namapegawai}
                       </Typography>
                     </td>
                     <td className={classes}>
@@ -75,7 +83,7 @@ export default function Tabel({ table_head, table_row }) {
                         color="blue-gray"
                         className="font-normal"
                       >
-                        {satuan_kerja}
+                        {satuankerja}
                       </Typography>
                     </td>
                     <td className={classes}>
@@ -84,7 +92,7 @@ export default function Tabel({ table_head, table_row }) {
                         color="blue-gray"
                         className="font-normal"
                       >
-                        {tanggal}
+                        {formatDate(createdAt)}
                       </Typography>
                     </td>
                     <td className={classes}>
@@ -93,7 +101,7 @@ export default function Tabel({ table_head, table_row }) {
                         color="blue-gray"
                         className="font-normal"
                       >
-                        {jenis_sakit}
+                        {jenispenyakit}
                       </Typography>
                     </td>
                     <td className={classes}>
@@ -102,7 +110,7 @@ export default function Tabel({ table_head, table_row }) {
                         color="blue-gray"
                         className="font-normal"
                       >
-                        {jenis_perawatan}
+                        {jenisperawatan}
                       </Typography>
                     </td>
                     <td className={classes}>
@@ -111,7 +119,7 @@ export default function Tabel({ table_head, table_row }) {
                         color="blue-gray"
                         className="font-normal"
                       >
-                        {sumber_biaya}
+                        {sumberbiaya}
                       </Typography>
                     </td>
                     <td className={classes}>
@@ -120,7 +128,7 @@ export default function Tabel({ table_head, table_row }) {
                         color="blue-gray"
                         className="font-normal"
                       >
-                        {awal_sakit}
+                        {formatDate(awalsakit)}
                       </Typography>
                     </td>
                     <td className={classes}>
@@ -129,7 +137,7 @@ export default function Tabel({ table_head, table_row }) {
                         color="blue-gray"
                         className="font-normal"
                       >
-                        {lama_cuti}
+                        {lamacuti}
                       </Typography>
                     </td>
                     <td className={classes}>
@@ -157,7 +165,8 @@ export default function Tabel({ table_head, table_row }) {
                           href="#"
                           variant="small"
                           color="blue-gray"
-                          className="font-medium">
+                          className="font-medium"
+                        >
                           Detail
                         </Typography>
                       </Link>

@@ -55,14 +55,14 @@ const FormDataSakit = () => {
       });
 
       const foundData = response.data;
-      console.log(foundData);
+
       if (foundData) {
         setFormData({
           ...formData,
           namapegawai: foundData.namapegawai,
           pangkat: foundData.pangkat,
           satuankerja: foundData.satuankerja,
-          pegawaiId: foundData.userId,
+          pegawaiId: foundData.id,
         });
         Swal.fire({
           icon: "success",
@@ -110,7 +110,7 @@ const FormDataSakit = () => {
                   namapegawai: formData.namapegawai,
                   pangkat: formData.pangkat,
                   satuankerja: formData.satuankerja,
-                  pegawaiId: formData.userId,
+                  pegawaiId: formData.id,
                 },
                 {
                   headers: {
@@ -149,7 +149,6 @@ const FormDataSakit = () => {
   };
 
   const addSickData = async (token) => {
-    console.log(formData);
     try {
       const addSakitResponse = await axiosInstance.post(
         "/datasakits",
@@ -159,7 +158,7 @@ const FormDataSakit = () => {
           lamacuti: formData.lama_cuti,
           awalsakit: formData.awal_sakit,
           keterangan: formData.Keterangan,
-          wfh: formData.WFH,
+          WFH: formData.WFH,
           sumberbiaya: formData.sumber_biaya,
           pegawaiId: formData.pegawaiId,
         },
