@@ -4,7 +4,6 @@ import useAxios from "../../useAxios";
 import { TbReportAnalytics } from "react-icons/tb";
 import { FaReadme } from "react-icons/fa6";
 import { GoHomeFill } from "react-icons/go";
-import { FaUserDoctor } from "react-icons/fa6";
 import { IoMdArrowDropleft } from "react-icons/io";
 import { MdSpaceDashboard } from "react-icons/md";
 import { CgLogOut } from "react-icons/cg";

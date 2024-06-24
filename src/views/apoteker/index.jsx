@@ -1,4 +1,4 @@
-import Sidebar_Klinik from "../../components/klinik/sidebar_klinik";
+import Sidebar from "../../components/apotik/sidebar";
 import Header from "../../components/header";
 import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
@@ -39,13 +39,13 @@ const Dashboard = () => {
   return (
     <>
       <div className="fixed z-50">
-        <Sidebar_Klinik />
+        <Sidebar />
       </div>
       <Header
         title="Pendaftaran Pelayanan Pasien"
         userName={email}
         userStatus="Dokter Poli Umum"
-        profilePicture="logo.png"
+        profilePicture="/logo.png"
       />
       <div className="flex-1 relative">
         <div className="absolute inset-0">

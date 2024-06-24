@@ -8,7 +8,8 @@ import { FaPeopleGroup } from "react-icons/fa6";
 import { IoMdArrowDropleft } from "react-icons/io";
 import { CgLogOut } from "react-icons/cg";
 import PropTypes from "prop-types";
-import axios from "axios";
+import useAxios from "../../useAxios";
+import useClearTokensOnUnload from "../../useClearTokensOnUnload";
 
 export default function Sidebar({ userName, userStatus, profilePicture }) {
   Sidebar.propTypes = {
@@ -16,7 +17,8 @@ export default function Sidebar({ userName, userStatus, profilePicture }) {
     userStatus: PropTypes.string,
     profilePicture: PropTypes.string,
   };
-
+  useClearTokensOnUnload();
+  const axiosInstance = useAxios();
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -51,7 +53,7 @@ export default function Sidebar({ userName, userStatus, profilePicture }) {
     try {
       const refreshToken = localStorage.getItem("refreshToken");
 
-      await axios.delete("/logout", {
+      await axiosInstance.delete("/logout", {
         data: { refreshToken: refreshToken },
       });
 

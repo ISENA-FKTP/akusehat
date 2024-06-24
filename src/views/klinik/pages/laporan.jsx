@@ -9,7 +9,7 @@ import { dataDiagnosa } from "../../statistik/model/data/dataDiagnosa";
 import { dataObatPasien } from "../../statistik/model/data/dataTerapi";
 import { dataPemeriksaan } from "../../statistik/model/data/dataPemeriksaan";
 import { DataKunjunganKlinik } from "../../statistik/model/dataKunjunganKlinik";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 export default function Laporan() {
   const [sortBy, setSortBy] = useState("most");
@@ -17,13 +17,13 @@ export default function Laporan() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
   const navigate = useNavigate();
-  const [glitch, setGlitch] = useState(false);
+  const [, setGlitch] = useState(false);
 
   const handleClick = () => {
     setGlitch(true);
     setTimeout(() => {
       setGlitch(false);
-      navigate('/KajianAwal');
+      navigate("/KajianAwal");
     }, 1000); // Durasi glitch (ms)
   };
 
@@ -120,16 +120,8 @@ export default function Laporan() {
       </div>
 
       <div className="border border-primary-600 mx-auto shadow-lg flex items-center text-center w-[80%] rounded ml-44 py-5">
-        <form className="w-full mx-8 space-y-4">
-        <div className="flex items-center">
-      <button
-        type="button"
-        className="relative overflow-hidden group p-3 bg-success-600 text-white rounded-md font-medium focus:outline-none focus:ring-2 focus:ring-success-700 flex items-center justify-center transition-transform duration-200 transform hover:rotate-10 hover:scale-90"
-        onClick={handleClick}
-      > Tambah Data
-      </button>
-    </div>
-          <div className="flex justify-center">
+        <form className="w-full mx-8 space-y-4 ">
+          <div className="flex justify-center gap-4">
             <div className="flex items-center space-x-3">
               <div className="flex items-center space-x-3 ">
                 <label
@@ -178,37 +170,47 @@ export default function Laporan() {
               />
             </div>
 
-            <div className="flex items-center space-x-5">
-              <div className="flex items-center mt-9 lg:mt-0">
-                <div className="relative">
-                  <span className="absolute inset-y-0 left-0 flex items-center pl-2">
-                    <IoSearch className="text-xl text-gray-500" />
-                  </span>
-                  <input
-                    type="text"
-                    placeholder="Cari pengunjung..."
-                    value={searchTerm}
-                    onChange={handleSearch}
-                    className="lg:px-2 lg:w-auto w-40 py-1 pl-8 border rounded-md focus:outline-none focus:ring-blue-500 focus:border-primary-600 placeholder:ml-5"
-                    style={{ paddingLeft: "2rem" }}
-                  />
-                </div>
+            <div className="flex items-center mt-9 lg:mt-0">
+              <div className="relative">
+                <span className="absolute inset-y-0 left-0 flex items-center pl-2">
+                  <IoSearch className="text-xl text-gray-500" />
+                </span>
+                <input
+                  type="text"
+                  placeholder="Cari pengunjung..."
+                  value={searchTerm}
+                  onChange={handleSearch}
+                  className="lg:px-2 lg:w-auto w-40 py-1 pl-8 border rounded-md focus:outline-none focus:ring-blue-500 focus:border-primary-600 placeholder:ml-5"
+                  style={{ paddingLeft: "2rem" }}
+                />
               </div>
-
-              <button
-                type="button"
-                className="flex items-center px-4 p-1 border border-black text-black rounded-md hover:bg-blue-600 focus:outline-none"
-              >
-                <FaPrint className=" mr-3" />
-                Cetak
-              </button>
+            </div>
+            <div className="flex flex-col items-center space-y-2">
+              <div className="flex items-center space-x-5">
+                <button
+                  type="button"
+                  className="flex items-center px-6 py-1 border border-black text-black rounded-md hover:bg-blue-600 focus:outline-none"
+                >
+                  <FaPrint className="mr-3" />
+                  Cetak
+                </button>
+              </div>
+              <div className="flex items-center place-content-end mt-2">
+                <button
+                  type="button"
+                  className="relative overflow-hidden group px-4 py-2 bg-success-600 text-white rounded-md font-medium text-sm"
+                  onClick={handleClick}
+                >
+                  Tambah Data
+                </button>
+              </div>
             </div>
           </div>
         </form>
       </div>
 
       {/* Data Pengunjung */}
-      <div className="ml-28 mr-14 mt-10">
+      <div className="ml-28 mr-14 mt-5">
         <div className="overflow-x-auto pr-5 lg:pr-0">
           <table className="table-auto w-full">
             <thead>
