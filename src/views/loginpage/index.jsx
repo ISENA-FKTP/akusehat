@@ -67,35 +67,6 @@ const Login = () => {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-    if (token) {
-      const decoded = jwtDecode(token);
-      const userRole = decoded.role.toLowerCase();
-
-      switch (userRole) {
-        case "admin":
-          navigate("/dashboard_klinik");
-          break;
-        case "apoteker":
-          navigate("/dashboard_apotek");
-          break;
-        case "dokter":
-          navigate("/dashboard_dokter");
-          break;
-        case "pegawai":
-          navigate("/manage");
-          break;
-        case "kepala bidang":
-          navigate("/statistik");
-          break;
-        default:
-          navigate("/");
-          break;
-      }
-    }
-  }, [navigate]);
-
-  useEffect(() => {
     if (navigateRoute) {
       navigate(navigateRoute);
     }
