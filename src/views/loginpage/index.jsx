@@ -22,6 +22,7 @@ const Login = () => {
       const { accessToken, refreshToken } = response.data;
 
       const decoded = jwtDecode(accessToken);
+      console.log("Role:", decoded.role);
 
       if (decoded.role.toLowerCase() === role.toLowerCase()) {
         localStorage.setItem("accessToken", accessToken);
