@@ -13,6 +13,7 @@ export default function Tabel({ table_head, table_row }) {
     return new Date(dateString).toLocaleDateString("id-ID", options);
   };
 
+  console.log(table_row);
   return (
     <div>
       <Card className="h-full w-full overflow-auto">
@@ -44,7 +45,7 @@ export default function Tabel({ table_head, table_row }) {
                 lamacuti,
                 wfh,
                 keterangan,
-                uuid,
+                pegawaiId,
               }) => {
                 const classes = "p-4";
 
@@ -159,7 +160,7 @@ export default function Tabel({ table_head, table_row }) {
                       </Typography>
                     </td>
                     <td className={classes}>
-                      <Link to={`/manage/detail/${nrp}`}>
+                      <Link to={`detail/${pegawaiId}`}>
                         <Typography
                           as="a"
                           href="#"

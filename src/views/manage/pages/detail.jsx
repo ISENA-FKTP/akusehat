@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { DataSakit } from "../model/dataSakit";
+import useAxios from "../../../useAxios";
 import Sidebar from "../../../components/manage/sidebar";
 import Header from "../../../components/header";
 import CardDataSakit from "../../../components/manage/cardDataSakit";
@@ -28,10 +28,12 @@ const PdfDocument = ({ data }) => (
     <Page style={styles.page}>
       <View style={styles.section}>
         <Text style={styles.heading}>Identitas</Text>
-        <Text style={styles.text}>NRP: {data.nrp}</Text>
-        <Text style={styles.text}>Nama: {data.nama}</Text>
-        <Text style={styles.text}>Pangkat: {data.pangkat}</Text>
-        <Text style={styles.text}>Satuan kerja: {data.satuan_kerja}</Text>
+        <Text style={styles.text}>NRP: {data.pegawai.nrp}</Text>
+        <Text style={styles.text}>Nama: {data.pegawai.namapegawai}</Text>
+        <Text style={styles.text}>Pangkat: {data.pegawai.pangkat}</Text>
+        <Text style={styles.text}>
+          Satuan kerja: {data.pegawai.satuankerja}
+        </Text>
       </View>
       <View style={styles.section}>
         <Text style={styles.heading}>Data Sakit</Text>
@@ -76,25 +78,12 @@ const PdfDocument = ({ data }) => (
 export default function DetailPage() {
   PdfDocument.propTypes = {
     data: PropTypes.shape({
-      nrp: PropTypes.string,
-      nama: PropTypes.string,
-      pangkat: PropTypes.string,
-      satuan_kerja: PropTypes.string,
-      data_sakit: PropTypes.arrayOf(
-        PropTypes.shape({
-          detail: PropTypes.string,
-        })
-      ),
-      data_home_visit: PropTypes.array,
-    }).isRequired,
-  };
-
-  PdfDocument.propTypes = {
-    data: PropTypes.shape({
-      nrp: PropTypes.string,
-      nama: PropTypes.string,
-      pangkat: PropTypes.string,
-      satuan_kerja: PropTypes.string,
+      pegawai: PropTypes.shape({
+        nrp: PropTypes.number,
+        namapegawai: PropTypes.string,
+        pangkat: PropTypes.string,
+        satuankerja: PropTypes.string,
+      }).isRequired,
       data_sakit: PropTypes.arrayOf(
         PropTypes.shape({
           detail: PropTypes.string,
@@ -108,18 +97,73 @@ export default function DetailPage() {
       ),
     }).isRequired,
   };
-  const { nrp } = useParams();
+
+  const axiosInstance = useAxios();
+  const { pegawaiId } = useParams();
   const [data, setData] = useState({
+    pegawai: {},
     data_sakit: [],
     data_home_visit: [],
     data_rekam_medis: [],
   });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const token = localStorage.getItem("accessToken");
 
   useEffect(() => {
-    DataSakit.getData(nrp).then((data) => setData(data));
-  }, [nrp]);
+    const fetchData = async () => {
+      try {
+        const dataSakitResponse = await axiosInstance.get(
+          `/datasakits/pegawai/${pegawaiId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const datasakits = dataSakitResponse.data;
+
+        if (datasakits.length === 0) {
+          throw new Error("No data found");
+        }
+
+        const dataUuid = datasakits[0].Pegawais.uuid;
+
+        const employeeResponse = await axiosInstance.get(
+          `/pegawais/${dataUuid}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const employeeData = employeeResponse.data;
+
+        setData({
+          pegawai: employeeData,
+          data_sakit: datasakits,
+          data_home_visit: [],
+          data_rekam_medis: [],
+        });
+      } catch (error) {
+        setError(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [axiosInstance, token, pegawaiId]);
 
   const classes = "px-2 py-1";
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
 
   return (
     <div className="font-primary">
@@ -136,7 +180,7 @@ export default function DetailPage() {
       <main className="mt-12 ml-32 mr-12 space-y-4">
         <PDFDownloadLink
           document={<PdfDocument data={data} />}
-          fileName={`Detail_${data.nrp}.pdf`}
+          fileName={`Detail_${data.pegawai.nrp}.pdf`}
           className="px-4 py-2 bg-indigo-600 text-white rounded"
         >
           {({ loading }) => (loading ? "Loading document..." : "Export to PDF")}
@@ -148,26 +192,28 @@ export default function DetailPage() {
             </div>
             <div className="space-y-2 py-2 px-2">
               <table>
-                <tr>
-                  <td className={classes}>NRP</td>
-                  <td className={classes}> : </td>
-                  <td className={classes}> {data.nrp}</td>
-                </tr>
-                <tr>
-                  <td className={classes}>Nama</td>
-                  <td className={classes}> : </td>
-                  <td className={classes}>{data.nama}</td>
-                </tr>
-                <tr>
-                  <td className={classes}>Pangkat</td>
-                  <td className={classes}> : </td>
-                  <td className={classes}>{data.pangkat}</td>
-                </tr>
-                <tr>
-                  <td className={classes}>Satuan kerja</td>
-                  <td className={classes}> : </td>
-                  <td className={classes}>{data.satuan_kerja}</td>
-                </tr>
+                <tbody>
+                  <tr>
+                    <td className={classes}>NRP</td>
+                    <td className={classes}> : </td>
+                    <td className={classes}> {data.pegawai.nrp}</td>
+                  </tr>
+                  <tr>
+                    <td className={classes}>Nama</td>
+                    <td className={classes}> : </td>
+                    <td className={classes}>{data.pegawai.namapegawai}</td>
+                  </tr>
+                  <tr>
+                    <td className={classes}>Pangkat</td>
+                    <td className={classes}> : </td>
+                    <td className={classes}>{data.pegawai.pangkat}</td>
+                  </tr>
+                  <tr>
+                    <td className={classes}>Satuan kerja</td>
+                    <td className={classes}> : </td>
+                    <td className={classes}>{data.pegawai.satuankerja}</td>
+                  </tr>
+                </tbody>
               </table>
             </div>
           </div>

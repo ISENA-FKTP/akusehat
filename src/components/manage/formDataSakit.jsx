@@ -170,7 +170,6 @@ const FormDataSakit = () => {
       );
 
       if (addSakitResponse.status === 201) {
-        console.log(addSakitResponse.data);
         Swal.fire({
           icon: "success",
           title: "Berhasil",

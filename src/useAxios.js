@@ -29,7 +29,6 @@ const useAxios = () => {
         },
       });
       const { accessToken } = response.data;
-      console.log("Token refreshed successfully:", accessToken);
       localStorage.setItem("accessToken", accessToken);
       // Update axiosInstance default headers
       axiosInstance.defaults.headers.common[
@@ -50,8 +49,6 @@ const useAxios = () => {
   };
 
   const requestInterceptor = (config) => {
-    console.log("Request interceptor called with config:", config);
-
     const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {
       config.headers["Authorization"] = `Bearer ${accessToken}`;

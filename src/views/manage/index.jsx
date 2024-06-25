@@ -26,7 +26,6 @@ export default function Manage() {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log("Data fetched:", response.data);
         setData(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
