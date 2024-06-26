@@ -8,30 +8,30 @@ import useAxios from "../../useAxios";
 const Dashboard = () => {
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
-  // const axiosInstance = useAxios();
+  const axiosInstance = useAxios();
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const accessToken = localStorage.getItem("accessToken");
-  //       if (!accessToken) {
-  //         navigate("/");
-  //         return;
-  //       }
-  //       if (accessToken) {
-  //         const decoded = jwtDecode(accessToken);
-  //         setEmail(decoded.email);
-  //       } else {
-  //         navigate("/");
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching token:", error);
-  //       navigate("/");
-  //     }
-  //   };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const accessToken = localStorage.getItem("accessToken");
+        if (!accessToken) {
+          navigate("/");
+          return;
+        }
+        if (accessToken) {
+          const decoded = jwtDecode(accessToken);
+          setEmail(decoded.email);
+        } else {
+          navigate("/");
+        }
+      } catch (error) {
+        console.error("Error fetching token:", error);
+        navigate("/");
+      }
+    };
 
-  //   fetchData();
-  // }, [axiosInstance, navigate]);
+    fetchData();
+  }, [axiosInstance, navigate]);
 
   return (
     <>

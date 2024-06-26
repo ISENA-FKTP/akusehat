@@ -54,7 +54,7 @@ const FormDataSakit = () => {
         },
       });
 
-      const foundData = response.data;
+      const foundData = response.data[0];
 
       if (foundData) {
         setFormData({
@@ -80,7 +80,11 @@ const FormDataSakit = () => {
       }
     } catch (error) {
       console.error("Error fetching data:", error);
-      throw error;
+      Swal.fire({
+        icon: "error",
+        title: "Gagal",
+        text: "Terjadi kesalahan saat memproses permintaan.",
+      });
     }
   };
 
@@ -193,6 +197,7 @@ const FormDataSakit = () => {
     }
   };
 
+  console.log(formData);
   return (
     <div className="w-full h-max rounded-md border-3 shadow overflow-auto">
       <div className="pt-2 pl-4 w-full bg-secondary-300">
