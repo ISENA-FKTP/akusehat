@@ -180,7 +180,7 @@ export default function Laporan() {
 
             <div className="flex items-center space-x-5">
               <div className="flex items-center mt-9 lg:mt-0">
-                <div className="relative">
+                <div className="relative mx-2">
                   <span className="absolute inset-y-0 left-0 flex items-center pl-2">
                     <IoSearch className="text-xl text-gray-500" />
                   </span>
