@@ -22,7 +22,12 @@
     "@react-pdf/renderer": "^3.4.4",
     "axios": "^1.7.2",
     "date-fns": "^3.6.0",
+
+    "html2canvas": "^1.4.1",
+    "jspdf": "^2.5.1",
+
     "express": "^4.19.2",
+
     "jwt-decode": "^4.0.0",
     "nodemon": "^3.1.4",
     "primereact": "^10.6.6",

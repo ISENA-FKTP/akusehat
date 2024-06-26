@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 import Sidebar from "../../../components/apotik/sidebar";
 import Header from "../../../components/header";
 
@@ -9,6 +11,7 @@ const LaporanApotek = () => {
   const [selectedYear, setSelectedYear] = useState('');
   const [totalUsedMedicinePrice, setTotalUsedMedicinePrice] = useState(0);
   const [totalRemainingMedicinePrice, setTotalRemainingMedicinePrice] = useState(0);
+  const reportRef = useRef(null);
 
   useEffect(() => {
     fetch('/data/medicine.json')
@@ -52,11 +55,10 @@ const LaporanApotek = () => {
     setTotalRemainingMedicinePrice(totalRemainingPrice);
   };
 
-  const startYear = 2020; // Menentukan awal tahun untuk filtering
+  const startYear = 2020;
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: currentYear - startYear + 1 }, (v, i) => startYear + i);
 
-  // Function to group medicines by category
   const groupByCategory = (medicines) => {
     return medicines.reduce((grouped, medicine) => {
       const category = medicine.category;
@@ -84,6 +86,28 @@ const LaporanApotek = () => {
 
   const { totalUsedOverall, totalRemainingOverall } = calculateOverallTotals();
 
+  const downloadPDF = () => {
+    const input = reportRef.current;
+    const options = {
+      scale: 2,
+      backgroundColor: '#fff',
+      useCORS: true,
+      logging: true,
+      scrollX: 0,
+      scrollY: 0,
+    };
+    
+    html2canvas(input, options)
+      .then(canvas => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+        pdf.save('laporan_apotek.pdf');
+      });
+  };
+
   return (
     <div className="flex">
       <div className="fixed z-50">
@@ -96,7 +120,7 @@ const LaporanApotek = () => {
           userStatus="Apoteker"
           profilePicture="/logo.png"
         />
-        <div className="container mx-auto">
+        <div className="container mx-auto" ref={reportRef}>
           <h1 className="text-2xl font-bold mt-4 mb-2">
             Laporan Penggunaan Obat Apotek
           </h1>
@@ -210,6 +234,14 @@ const LaporanApotek = () => {
             </table>
           </div>
         </div>
+          <div className="flex justify-center mt-8">
+            <button
+              onClick={downloadPDF}
+              className="bg-secondary-500 text-white px-4 py-2 mb-4 rounded-md"
+            >
+              Download PDF
+            </button>
+          </div>
       </div>
     </div>
   );
