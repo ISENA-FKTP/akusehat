@@ -1,21 +1,63 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {
+  DataSakit,
+  showFormattedDate,
+} from "../../views/manage/model/dataSakit";
 
 export const FormDataHomeVisit = () => {
+  const [data, setData] = useState([]);
+  const [dataNrp, setNrp] = useState([]);
+
   const [formData, setFormData] = useState({
-    No: 1,
-    NRP: "",
-    Nama: "",
-    Pangkat: "",
-    SatuanKerja: "",
-    Keluhan: "",
-    PemeriksaanFisik: "",
-    Diagnosa: "",
-    Terapi: "",
-    SaranMedis: "",
+    nrp: "",
+    nama: "",
+    pangkat: "",
+    satuan_kerja: "",
+    keluhan: "",
+    pemeriksaan_fisik: "",
+    diagnosa: "",
+    terapi: "",
+    saran_medis: "",
   });
+  useEffect(() => {
+    DataSakit.getDataSakit().then((data) => {
+      setData(data);
+    });
+  }, []);
+
+  useEffect(() => {
+    const filteredData = data.filter((data) => data.nrp === dataNrp);
+
+    if (filteredData.length === 1) {
+      setFormData({
+        ...formData,
+        nama: filteredData[0].nama,
+        pangkat: filteredData[0].pangkat,
+        satuan_kerja: filteredData[0].satuan_kerja,
+      });
+    } else {
+      setFormData({
+        ...formData,
+        nama: "",
+        pangkat: "",
+        satuan_kerja: "",
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dataNrp]);
 
   const navigate = useNavigate();
+
+  const handleNrpChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+    setNrp(value);
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -27,8 +69,18 @@ export const FormDataHomeVisit = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission logic
-    console.log(formData);
+    const { nrp, keluhan, pemeriksaan_fisik, diagnosa, terapi, saran_medis } =
+      formData;
+    const date = showFormattedDate(new Date().toISOString());
+    DataSakit.setDataHomeVisit(
+      nrp,
+      date,
+      keluhan,
+      pemeriksaan_fisik,
+      diagnosa,
+      terapi,
+      saran_medis
+    );
     navigate("/manage/data-home-visit");
   };
 
@@ -40,46 +92,46 @@ export const FormDataHomeVisit = () => {
       <form className="px-5 pb-5" onSubmit={handleSubmit}>
         <div className="w-full my-4 flex gap-4">
           <div className="mb-4 w-1/3">
-            <label className="block text-gray-700">NRP</label>
+            <label className="block text-gray-700">nrp</label>
             <input
               type="text"
               name="nrp"
-              value={formData.NRP}
-              onChange={handleChange}
+              value={formData.nrp}
+              onChange={handleNrpChange}
               className="w-full px-3 py-2 border rounded-md"
-              placeholder="Masukkan NRP"
+              placeholder="Masukkan nrp"
             />
           </div>
           <div className="mb-4 w-1/3">
-            <label className="block text-gray-700">Nama</label>
+            <label className="block text-gray-700">nama</label>
             <input
               type="text"
               name="nama"
-              value={formData.Nama}
+              value={formData.nama}
               onChange={handleChange}
               className="w-full px-3 py-2 border rounded-md"
-              placeholder="Nama pegawai"
+              placeholder="nama pegawai"
             />
           </div>
         </div>
         <div className="w-full my-4 flex gap-4">
           <div className="mb-4 w-1/3">
-            <label className="block text-gray-700">Pangkat</label>
+            <label className="block text-gray-700">pangkat</label>
             <input
               type="text"
               name="pangkat"
-              value={formData.Pangkat}
+              value={formData.pangkat}
               onChange={handleChange}
               className="w-full px-3 py-2 border rounded-md"
-              placeholder="Pangkat"
+              placeholder="pangkat"
             />
           </div>
           <div className="mb-4 w-1/3">
             <label className="block text-gray-700">Satuan Kerja</label>
             <input
               type="text"
-              name="satuanKerja"
-              value={formData.SatuanKerja}
+              name="satuan_kerja"
+              value={formData.satuan_kerja}
               onChange={handleChange}
               className="w-full px-3 py-2 border rounded-md"
               placeholder="Satuan kerja"
@@ -88,20 +140,20 @@ export const FormDataHomeVisit = () => {
         </div>
         <div className="w-full my-4 flex gap-4">
           <div className="mb-4 w-1/3">
-            <label className="block text-gray-700">Keluhan</label>
+            <label className="block text-gray-700">keluhan</label>
             <textarea
               name="keluhan"
-              value={formData.Keluhan}
+              value={formData.keluhan}
               onChange={handleChange}
               className="w-full px-3 py-2 border rounded-md"
               placeholder="Masukkan keluhan"
             />
           </div>
           <div className="mb-4 w-1/3">
-          <label className="block text-gray-700">Pemeriksaan Fisik</label>
+            <label className="block text-gray-700">Pemeriksaan Fisik</label>
             <textarea
-              name="pemeriksaanFisik"
-              value={formData.PemeriksaanFisik}
+              name="pemeriksaan_fisik"
+              value={formData.pemeriksaan_fisik}
               onChange={handleChange}
               className="w-full px-3 py-2 border rounded-md"
               placeholder="Masukkan hasil pemeriksaan"
@@ -110,20 +162,20 @@ export const FormDataHomeVisit = () => {
         </div>
         <div className="w-full my-4 flex gap-4">
           <div className="mb-4 w-1/3">
-          <label className="block text-gray-700">Diagnosa</label>
+            <label className="block text-gray-700">diagnosa</label>
             <textarea
               name="diagnosa"
-              value={formData.Diagnosa}
+              value={formData.diagnosa}
               onChange={handleChange}
               className="w-full px-3 py-2 border rounded-md"
               placeholder="Masukkan hasil diagnosa"
             />
           </div>
           <div className="mb-4 w-1/3">
-          <label className="block text-gray-700">Terapi</label>
+            <label className="block text-gray-700">terapi</label>
             <textarea
               name="terapi"
-              value={formData.Terapi}
+              value={formData.terapi}
               onChange={handleChange}
               className="w-full px-3 py-2 border rounded-md"
               placeholder="Masukkan terapi yang diberikan"
@@ -134,8 +186,8 @@ export const FormDataHomeVisit = () => {
           <div className="mb-4 w-1/3">
             <label className="block text-gray-700">Saran Medis</label>
             <textarea
-              name="saranMedis"
-              value={formData.SaranMedis}
+              name="saran_medis"
+              value={formData.saran_medis}
               onChange={handleChange}
               className="w-full px-3 py-2 border rounded-md"
               placeholder="Masukkan saran medis yang diberikan"

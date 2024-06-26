@@ -1,24 +1,37 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Sidebar from "../../../components/manage/sidebar";
 import Header from "../../../components/header";
 import SearchBar from "../../../components/manage/searchBar";
 import TambahButton from "../../../components/manage/tambahButton";
-import { DataHomeVisit, headData } from "../model/dataHomeVisit";
+import { DataSakit, head_data_home_visit } from "../model/dataSakit";
 import TabelHoemVisit from "../../../components/manage/tabel-home-visit";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 export default function HomeVisit() {
-  const [data, setData] = useState([]);
-
   const navigate = useNavigate();
-  
+
+  const [data, setData] = useState([]);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [keyword, setKeyword] = useState(() => {
+    return searchParams.get("keyword") || "";
+  });
+
+  useEffect(() => {
+    DataSakit.getDataHomeVisit().then((data) => setData(data));
+  }, []);
+
   const tambahDataHandler = () => {
     navigate("/manage/data-home-visit/tambah-data");
   };
-    
-  useEffect(() => {
-    DataHomeVisit.getDataHomeVisit().then((data) => setData(data));
-  }, []);
+
+  function onKeywordChangeHandler(keyword) {
+    setKeyword(keyword);
+    setSearchParams({ keyword });
+  }
+
+  const filteredData = data.filter((data) => {
+    return data.nama.toLowerCase().includes(keyword.toLowerCase());
+  });
 
   return (
     <div className=" font-primary">
@@ -28,17 +41,22 @@ export default function HomeVisit() {
       </div>
       <Header
         title="Data Home Visit Polisi"
-        userName="Rifki Rusdi Satma Putra"
+        userName="Daden Kasandi"
         userStatus="Kepala Polisi"
-        profilePicture="logo.png"
+        profilePicture="/logo.png"
       />
       <main className="mt-12 ml-32 mr-12 space-y-4  ">
         <div>
-          <h1>Data Juni 2024</h1>
+          <h1 className="text-2xl ">Data Home Visit</h1>
         </div>
-        <SearchBar />
-        <TambahButton onClicked={tambahDataHandler}/>
-        <TabelHoemVisit table_head={headData} table_row={data}/>
+        <div className="w-full my-4 flex gap-4">
+          <SearchBar keyword={keyword} keywordChange={onKeywordChangeHandler} />
+          <TambahButton onClicked={tambahDataHandler} />
+        </div>
+        <TabelHoemVisit
+          table_head={head_data_home_visit}
+          table_row={filteredData}
+        />
       </main>
     </div>
   );

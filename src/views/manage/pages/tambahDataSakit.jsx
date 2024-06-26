@@ -1,14 +1,11 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Sidebar from "../../../components/manage/sidebar";
 import Header from "../../../components/header";
-import SearchBar from "../../../components/manage/searchBar";
-import TambahButton from "../../../components/manage/tambahButton";
-import { DataRekamMedis, headData } from "../model/dataRekamMedis";
-import TabelRekamMedis from "../../../components/manage/tabel-rekam-medis";
-import { FormDataSakit } from "../../../components/manage/formDataSakit";
+import { DataRekamMedis } from "../model/dataRekamMedis";
+import FormDataSakit from "../../../components/manage/formDataSakit";
 
 export default function TambahDataSakit() {
-  const [data, setData] = useState([]);
+  const [, setData] = useState([]);
 
   useEffect(() => {
     DataRekamMedis.getDataRekamMedis().then((data) => setData(data));
@@ -22,9 +19,9 @@ export default function TambahDataSakit() {
       </div>
       <Header
         title="Tambah Data Sakit Polisi"
-        userName="Rifki Rusdi Satma Putra"
+        userName="Daden Kasandi"
         userStatus="Kepala Polisi"
-        profilePicture="logo.png"
+        profilePicture="/logo.png"
       />
       <main className="mt-12 ml-32 mr-12 space-y-4 pb-10 ">
         <FormDataSakit />

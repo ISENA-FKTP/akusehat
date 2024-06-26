@@ -3,40 +3,35 @@ import Header from "../../components/header";
 import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import useAxios from "../../useAxios";
 
-export default function Dashboard() {
+const Dashboard = () => {
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
+  // const axiosInstance = useAxios();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "https://backend-isenafktp.onrender.com/token",
-          {
-            withCredentials: true,
-          }
-        );
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const accessToken = localStorage.getItem("accessToken");
+  //       if (!accessToken) {
+  //         navigate("/");
+  //         return;
+  //       }
+  //       if (accessToken) {
+  //         const decoded = jwtDecode(accessToken);
+  //         setEmail(decoded.email);
+  //       } else {
+  //         navigate("/");
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching token:", error);
+  //       navigate("/");
+  //     }
+  //   };
 
-        const accessToken = response.data.accessToken;
-        console.log("Access Token:", accessToken);
-
-        if (accessToken) {
-          const decoded = jwtDecode(accessToken);
-          console.log("Decoded Token:", decoded);
-          setEmail(decoded.email);
-        } else {
-          navigate("/");
-        }
-      } catch (error) {
-        console.error("Error fetching token:", error);
-        navigate("/");
-      }
-    };
-
-    fetchData();
-  }, [navigate]);
+  //   fetchData();
+  // }, [axiosInstance, navigate]);
 
   return (
     <>
@@ -98,4 +93,6 @@ export default function Dashboard() {
       </div>
     </>
   );
-}
+};
+
+export default Dashboard;

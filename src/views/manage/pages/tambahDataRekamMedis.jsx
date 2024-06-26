@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Sidebar from "../../../components/manage/sidebar";
 import Header from "../../../components/header";
-import { DataRekamMedis, headData } from "../model/dataRekamMedis";
-import { FormDataHomeVisit } from "../../../components/manage/formDataHomeVisit";
+import { DataRekamMedis } from "../model/dataRekamMedis";
 import { FormDataRekamMedis } from "../../../components/manage/formDataRekamMedis";
 
 export default function TambahDataRekamMedis() {
-  const [data, setData] = useState([]);
+  const [, setData] = useState([]);
 
   useEffect(() => {
     DataRekamMedis.getDataRekamMedis().then((data) => setData(data));
@@ -20,12 +19,12 @@ export default function TambahDataRekamMedis() {
       </div>
       <Header
         title="Tambah Data Sakit Polisi"
-        userName="Rifki Rusdi Satma Putra"
+        userName="Daden Kasandi"
         userStatus="Kepala Polisi"
-        profilePicture="logo.png"
+        profilePicture="/logo.png"
       />
       <main className="mt-12 ml-32 mr-12 space-y-4 pb-10 ">
-        <FormDataRekamMedis/>
+        <FormDataRekamMedis />
       </main>
     </div>
   );

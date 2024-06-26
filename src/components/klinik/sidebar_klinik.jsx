@@ -1,29 +1,32 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import axios from "axios";
+import useAxios from "../../useAxios";
 import { TbReportAnalytics } from "react-icons/tb";
 import { FaReadme } from "react-icons/fa6";
 import { GoHomeFill } from "react-icons/go";
-import { FaUserDoctor } from "react-icons/fa6";
 import { IoMdArrowDropleft } from "react-icons/io";
 import { MdSpaceDashboard } from "react-icons/md";
+import { CgLogOut } from "react-icons/cg";
+import useClearTokensOnUnload from "../../useClearTokensOnUnload";
 
-export default function Sidebar_Klinik() {
+const Sidebar_Klinik = () => {
+  const axiosInstance = useAxios();
   const [open, setOpen] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
 
+  useClearTokensOnUnload();
+
   const Menus = [
-    { title: "Dashboard", path: "/dashboard", icon: <MdSpaceDashboard /> },
+    {
+      title: "Dashboard",
+      path: "/dashboard_klinik",
+      icon: <MdSpaceDashboard />,
+    },
     {
       title: "Administrasi",
       path: "/administrasi",
       icon: <FaReadme />,
-    },
-    {
-      title: "Dokter",
-      path: "/dokter",
-      icon: <FaUserDoctor />,
     },
     {
       title: "Laporan",
@@ -34,11 +37,17 @@ export default function Sidebar_Klinik() {
 
   const handleLogout = async () => {
     try {
-      await axios.delete("https://backend-isenafktp.onrender.com/logout", {
-        withCredentials: true,
+      const refreshToken = localStorage.getItem("refreshToken");
+
+      await axiosInstance.delete("/logout", {
+        data: {
+          refreshToken: refreshToken,
+        },
       });
+
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
+      localStorage.removeItem("pasienId");
       navigate("/");
     } catch (error) {
       console.error("Failed to logout", error);
@@ -103,7 +112,7 @@ export default function Sidebar_Klinik() {
             onClick={handleLogout}
           >
             <span className="text-2xl block float-left">
-              <GoHomeFill />
+              <CgLogOut />
             </span>
             <span className={`text-lg font-medium flex-1 ${!open && "hidden"}`}>
               Logout
@@ -113,4 +122,6 @@ export default function Sidebar_Klinik() {
       </div>
     </>
   );
-}
+};
+
+export default Sidebar_Klinik;

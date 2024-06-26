@@ -6,8 +6,8 @@ export default function TambahButton({onClicked}) {
     onClicked();
   };
   return (
-    <div>
-      <button className="text-white bg-primary-500 px-2 py-2 rounded-md hover:bg-primary-400 inline-flex items-center" onClick={onClickedHandler}>
+    <div className="w-1/2  ">
+      <button className="text-white bg-primary-500 px-4 py-3 rounded-md hover:bg-primary-400 inline-flex items-center" onClick={onClickedHandler}>
         <IoIosAdd className="w-6 h-6 mr-2" />
         <span>Tambah Data</span>
       </button>

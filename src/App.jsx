@@ -1,22 +1,17 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Administrasi from "./views/klinik/pages/administrasi";
-import Dokter from "./views/klinik/pages/dokter";
 import Laporan from "./views/klinik/pages/laporan";
 import KajianAwal from "./views/klinik/pages/kajianawal";
-import Dashboard from "./views/klinik";
-import Login from "./views/loginpage/LoginAdmin";
-import LoginAdmin from "./views/loginpage/LoginAdmin";
-import LoginDokter from "./views/loginpage/LoginDokter";
-import LoginApoteker from "./views/loginpage/LoginApoteker";
-import LoginPawas from "./views/loginpage/LoginPawas";
-import LoginStatistik from "./views/loginpage/LoginStatistik";
+import DashboardKlinik from "./views/klinik";
+import Login from "./views/loginpage/index";
 import Statistik from "./views/statistik/";
 import DataSakitPolisi from "./views/statistik/pages/data-sakit-polisi";
 import DataPengunjungKlinik from "./views/statistik/pages/data-pengunjung-klinik";
 import DataObatKlinik from "./views/statistik/pages/data-obat-klinik";
 import TambahObat from "./views/apoteker/pages/tambahObat";
-import DashboardApotek from "./views/apoteker/pages/DashboardApotek";
+import DashboardApotekUtama from "./views/apoteker/pages/DashboardApotek";
+import DashboardApotek from "./views/apoteker/index";
 import Manage from "./views/manage";
 import HomeVisit from "./views/manage/pages/homevisit";
 import RekamMedis from "./views/manage/pages/rekammedis";
@@ -24,27 +19,28 @@ import TambahDataSakit from "./views/manage/pages/tambahDataSakit";
 import TambahDataHomeVisit from "./views/manage/pages/tambahDataHomeVisit";
 import TambahDataRekamMedis from "./views/manage/pages/tambahDataRekamMedis";
 import Pengingat from "./views/apoteker/pages/Pengingat";
+import DetailPage from "./views/manage/pages/detail";
 import LaporanApotek from "./views/apoteker/pages/LaporanApotek";
+import Dashboard_Dokter from "./views/dokter/index";
+import Dokter from "./views/dokter/dokter";
 
 function App() {
   return (
     <Router>
       <Routes>
         {/* Klinik */}
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard_klinik" element={<DashboardKlinik />} />
+        <Route path="/dashboard_apotek" element={<DashboardApotek />} />
         <Route path="/administrasi" element={<Administrasi />} />
-        <Route path="/dokter" element={<Dokter />} />
         <Route path="/laporan" element={<Laporan />} />
         <Route path="/kajianawal" element={<KajianAwal />} />
+        {/* Dokter */}
+        <Route path="/dokter" element={<Dokter />} />
+        <Route path="/dashboard_dokter" element={<Dashboard_Dokter />} />
         {/* Login */}
         <Route path="/" element={<Login />} />
-        <Route path="/adminlog" element={<LoginAdmin />} />
-        <Route path="/dokterlog" element={<LoginDokter />} />
-        <Route path="/apotekerlog" element={<LoginApoteker />} />
-        <Route path="/pawaslog" element={<LoginPawas />} />
-        <Route path="/statistiklog" element={<LoginStatistik />} />
         <Route path="/apotek/tambah-obat" element={<TambahObat />} />
-        <Route path="/apotek" element={<DashboardApotek />} />
+        <Route path="/apotek" element={<DashboardApotekUtama />} />
         <Route path="/apotek/pengingat" element={<Pengingat />} />
         <Route path="/apotek/laporan-apotek" element={<LaporanApotek />} />
 
@@ -70,7 +66,6 @@ function App() {
           path="/manage/data-sakit/tambah-data"
           element={<TambahDataSakit />}
         />
-
         <Route
           path="/manage/data-home-visit/tambah-data"
           element={<TambahDataHomeVisit />}
@@ -79,6 +74,7 @@ function App() {
           path="/manage/data-rekam-medis/tambah-data"
           element={<TambahDataRekamMedis />}
         />
+        <Route path="/manage/detail/:pegawaiId" element={<DetailPage />} />
       </Routes>
     </Router>
   );

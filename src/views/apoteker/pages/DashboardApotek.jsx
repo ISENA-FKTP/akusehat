@@ -258,7 +258,7 @@ const DashboardApotek = () => {
                       index % 2 === 0 ? "bg-primary-50" : "bg-primary-100"
                     }
                   >
-                    <td className="border px-4 py-2">
+                    <td className="border border-primary-600 px-4 py-2 text-center">
                       {medicine.medicineName}
                     </td>
                     <td className="border border-primary-600 px-4 py-2 text-center">

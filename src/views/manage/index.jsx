@@ -1,44 +1,77 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Sidebar from "../../components/manage/sidebar";
 import Header from "../../components/header";
 import SearchBar from "../../components/manage/searchBar";
 import TambahButton from "../../components/manage/tambahButton";
-import { DataSakit, headData } from "./model/dataSakit";
+import { head_data_sakit } from "./model/dataSakit";
 import Tabel from "../../components/manage/tabel";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import useAxios from "../../useAxios";
 
 export default function Manage() {
-  const [data, setData] = useState([]);
-
   const navigate = useNavigate();
+  const axiosInstance = useAxios();
+  const [data, setData] = useState([]);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [keyword, setKeyword] = useState(() => {
+    return searchParams.get("keyword") || "";
+  });
 
   useEffect(() => {
-    DataSakit.getDataSakit().then((data) => setData(data));
-  }, []);
+    const fetchData = async () => {
+      const token = localStorage.getItem("accessToken");
+      try {
+        const response = await axiosInstance.get("/datasakits", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setData(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [axiosInstance]);
 
   const tambahDataHandler = () => {
     navigate("/manage/data-sakit/tambah-data");
   };
 
+  function onKeywordChangeHandler(keyword) {
+    setKeyword(keyword);
+    setSearchParams({ keyword });
+  }
+
+  const filteredData =
+    data?.filter((data) => {
+      return data.pegawai?.namapegawai
+        ?.toLowerCase()
+        .includes(keyword?.toLowerCase());
+    }) || [];
+
   return (
-    <div className=" font-primary">
+    <div className="font-primary">
       {/* Sidebar */}
       <div className="fixed z-50">
         <Sidebar />
       </div>
       <Header
         title="Data Sakit Polisi"
-        userName="Rifki Rusdi Satma Putra"
+        userName="Daden Kasandi"
         userStatus="Kepala Polisi"
-        profilePicture="logo.png"
+        profilePicture="/logo.png"
       />
-      <main className="mt-12 ml-32 mr-12 space-y-4  ">
+      <main className="mt-12 ml-32 mr-12 space-y-4">
         <div>
-          <h1>Data Juni 2024</h1>
+          <h1 className="text-2xl">Data Sakit Polisi</h1>
         </div>
-        <SearchBar />
-        <TambahButton onClicked={tambahDataHandler} />
-        <Tabel table_head={headData} table_row={data}/>
+        <div className="w-full my-4 flex gap-4">
+          <SearchBar keyword={keyword} keywordChange={onKeywordChangeHandler} />
+          <TambahButton onClicked={tambahDataHandler} />
+        </div>
+        <Tabel table_head={head_data_sakit} table_row={filteredData} />
       </main>
     </div>
   );

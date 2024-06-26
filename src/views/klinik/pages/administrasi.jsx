@@ -1,286 +1,89 @@
 import { useState, useEffect } from "react";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode"; // Perbaikan impor jwtDecode
+import { jwtDecode } from "jwt-decode";
 import Sidebar_Klinik from "../../../components/klinik/sidebar_klinik";
 import Header from "../../../components/header";
+import FormComponent from "./components/FormComponent";
 import axios from "axios";
-import PropTypes from "prop-types";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
-const MySwal = withReactContent(Swal);
-
-const FormComponent = ({ token }) => {
-  FormComponent.propTypes = {
-    token: PropTypes.string,
-  };
-  const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    nobpjs: "",
-    nama: "",
-    statuspeserta: "",
-    tgllahir: null,
-    gender: "",
-    ppkumum: "",
-    nohp: "",
-    norm: "",
-    role: "pasien",
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const handleDateChange = (date) => {
-    setFormData({ ...formData, tgllahir: date });
-  };
-
-  const handleSave = () => {
-    MySwal.fire({
-      title: "Apakah Anda yakin?",
-      text: "Anda tidak akan dapat mengembalikan ini!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Ya, simpan!",
-      cancelButtonText: "Tidak, batalkan!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        postPasiens();
-      }
-    });
-  };
-
-  const handleCancel = () => {
-    MySwal.fire({
-      title: "Apakah Anda yakin?",
-      text: "Anda akan membatalkan perubahan ini!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
-      confirmButtonText: "Ya, batalkan!",
-      cancelButtonText: "Tidak, kembali!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        cancelData();
-      }
-    });
-  };
-
-  const [, setMsg] = useState("");
-
-  const axiosJWT = axios.create();
-
-  axiosJWT.interceptors.request.use(
-    async (config) => {
-      const currentDate = new Date();
-      if (jwtDecode(token).exp * 1000 < currentDate.getTime()) {
-        const response = await axios.get(
-          "https://backend-isenafktp.onrender.com/token",
-          {
-            withCredentials: true,
-          }
-        );
-        config.headers.Authorization = `Bearer ${response.data.accessToken}`;
-      }
-      return config;
-    },
-    (error) => {
-      return Promise.reject(error);
-    }
-  );
-
-  const postPasiens = async () => {
-    try {
-      const {
-        nobpjs,
-        nama,
-        statuspeserta,
-        tgllahir,
-        gender,
-        ppkumum,
-        nohp,
-        norm,
-        role,
-      } = formData;
-
-      if (
-        !nobpjs ||
-        !nama ||
-        !statuspeserta ||
-        !tgllahir ||
-        !gender ||
-        !ppkumum ||
-        !nohp ||
-        !norm ||
-        !role
-      ) {
-        throw new Error("Silahkan lengkapi semua data pasien");
-      }
-
-      const response = await axiosJWT.post(
-        "https://backend-isenafktp.onrender.com/pasiens",
-        {
-          nobpjs,
-          nama,
-          statuspeserta,
-          tgllahir,
-          gender,
-          ppkumum,
-          nohp,
-          norm,
-          role,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      navigate("/administrasi");
-      console.log(response.data);
-    } catch (error) {
-      console.error(
-        "Error adding pasien:",
-        error.response ? error.response.data : error.message
-      );
-      setMsg(error.response ? error.response.data : error.message);
-    }
-  };
-
-  const cancelData = () => {
-    MySwal.fire("Dibatalkan!", "Perubahan telah dibatalkan.", "error");
-  };
-
-  return (
-    <div
-      className="bg-white shadow-xl flex flex-col place-content-center mx-80 p-6 mt-40 rounded-lg items-center"
-      style={{ width: "auto", height: "auto" }}
-    >
-      <h1 className="text-black font-primary-Poppins font-extrabold text-3xl mb-6 mx-72">
-        BIODATA
-      </h1>
-      <div>
-        {[
-          {
-            label: "NRP/No.BPJS",
-            name: "nobpjs",
-            placeholder: "Masukkan NRP atau No. BPJS",
-          },
-          { label: "Nama", name: "nama", placeholder: "Masukkan nama" },
-          {
-            label: "Status Pasien",
-            name: "statuspeserta",
-            placeholder: "Masukkan status pasien",
-          },
-          {
-            label: "Tanggal Lahir",
-            name: "tgllahir",
-            placeholder: "Pilih tanggal lahir",
-          },
-          {
-            label: "Jenis Kelamin",
-            name: "gender",
-            placeholder: "Masukkan jenis kelamin",
-          },
-          {
-            label: "PPK Umum",
-            name: "ppkumum",
-            placeholder: "Masukkan PPK umum",
-          },
-          {
-            label: "No.Handphone",
-            name: "nohp",
-            placeholder: "Masukkan nomor handphone",
-          },
-          {
-            label: "No.Rekam Medis",
-            name: "norm",
-            placeholder: "Masukkan nomor rekam medis",
-          },
-          {
-            label: "Role",
-            name: "role",
-            value: "pasien",
-          },
-        ].map((field, index) => (
-          <div className="flex items-center mb-1" key={index}>
-            <label className="text-black font-secondary-Karla font-bold w-48 mx-1">
-              {field.label}:
-            </label>
-            {field.name === "tgllahir" ? (
-              <DatePicker
-                selected={formData.tgllahir}
-                onChange={handleDateChange}
-                dateFormat="dd/MM/yyyy"
-                placeholderText={field.placeholder}
-                className="px-10 py-1 rounded-md border-2 border-black border-opacity-70 w-[30rem]"
-              />
-            ) : (
-              <input
-                type="text"
-                name={field.name}
-                value={formData[field.name]}
-                onChange={handleChange}
-                placeholder={field.placeholder}
-                className="px-10 py-1 rounded-md border-2 border-black border-opacity-70 w-[30rem]"
-              />
-            )}
-          </div>
-        ))}
-      </div>
-
-      <div className="flex space-x-5 mt-6 mx-72">
-        <button
-          onClick={handleSave}
-          className="text-white px-3 py-1 rounded-md transition duration-300 bg-success-600"
-        >
-          Simpan
-        </button>
-        <button
-          type="button"
-          className="bg-gray-500 bg-error-700 text-white px-4 py-1 rounded hover:bg-gray-600"
-          onClick={handleCancel}
-        >
-          Batal
-        </button>
-      </div>
-    </div>
-  );
-};
-
-export default function Administrasi() {
-  const [token, setToken] = useState("");
+const Administrasi = () => {
   const [username, setUsername] = useState("");
+  const [existingPatient, setExistingPatient] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchToken = async () => {
+    const storedToken = localStorage.getItem("accessToken");
+    if (storedToken) {
       try {
-        const response = await axios.get(
-          "https://backend-isenafktp.onrender.com/token",
-          {
-            withCredentials: true,
-          }
-        );
-        const decoded = jwtDecode(response.data.accessToken);
-        setUsername(decoded.username);
-        setToken(response.data.accessToken);
+        const decodedToken = jwtDecode(storedToken);
+        setUsername(decodedToken.username);
       } catch (error) {
-        console.error("Error fetching token:", error);
+        console.error("Error decoding token:", error);
+        localStorage.removeItem("accessToken");
         navigate("/");
       }
-    };
-
-    fetchToken();
+    } else {
+      navigate("/");
+    }
   }, [navigate]);
+
+  const handleSearch = async (searchType, searchValue) => {
+    let apiUrl = "";
+
+    if (searchType === "bpjs") {
+      apiUrl = `http://localhost:3000/api/peserta/bpjs/${searchValue}`;
+    } else if (searchType === "nik") {
+      apiUrl = `http://localhost:3000/api/peserta/nik/${searchValue}`;
+    }
+
+    try {
+      const response = await axios.get(apiUrl, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      });
+
+      if (response.data.response) {
+        const formattedPatient = {
+          nobpjs: response.data.response.noKartu,
+          nama: response.data.response.nama,
+          statuspeserta: response.data.response.jnsPeserta.nama,
+          tgllahir: new Date(
+            response.data.response.tglLahir.split("-").reverse().join("-")
+          ),
+          gender: response.data.response.sex,
+          ppkumum: response.data.response.kdProviderPst
+            ? response.data.response.kdProviderPst.nmProvider
+            : "",
+          nohp: response.data.response.noHP,
+          norm: "",
+          role: "pasien",
+        };
+        setExistingPatient(formattedPatient);
+      } else {
+        setExistingPatient(null);
+      }
+    } catch (error) {
+      console.log("Nothing searching patient in Server BPJS:");
+      console.log("Try to catch in server klinik!");
+      try {
+        const response = await axios.get(`/pasiens/nobpjs/${searchValue}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        });
+        if (response.data) {
+          setExistingPatient(response.data);
+        } else {
+          setExistingPatient(null);
+        }
+      } catch (error) {
+        console.error("Error searching patient:", error);
+      }
+    }
+  };
 
   return (
     <>
@@ -307,16 +110,26 @@ export default function Administrasi() {
               <h1 className="text-white font-secondary-Karla font-medium absolute left-6 py-0 pt-8">
                 Selamat Bertugas, Silahkan menambahkan Pasien Di Bawah
               </h1>
-              <form className="h-12 rounded-md py-32 pt-10 absolute right-5">
+              <form
+                className="h-12 rounded-md py-32 pt-10 absolute right-5"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const searchType = e.target.bpjsType.value;
+                  const searchValue = e.target.search.value;
+                  handleSearch(searchType, searchValue);
+                }}
+              >
                 <div className="flex items-center space-x-5">
                   <select
                     name="bpjsType"
-                    className="p-1 rounded-md mb-9 w-60 bg-primary-600 font-secondary-Karla font-medium text-white focus:outline-none focus:border-blue-500"
+                    className="py-1 px-2 rounded-md border border-white mb-9 w-[15.8rem] bg-primary-600 font-secondary-Karla font-medium text-white focus:outline-none focus:border-indigo-50"
                   >
-                    <option value="">BPJS</option>
-                    <option value="nik">NIK</option>
-                    <option value="nrp">NRP</option>
-                    <option value="nip">NIP</option>
+                    <option className="bg-primary-600 text-white" value="bpjs">
+                      BPJS
+                    </option>
+                    <option className="bg-primary-600 text-white" value="nik">
+                      NIK
+                    </option>
                   </select>
                   <div className="relative w-full">
                     <input
@@ -332,6 +145,7 @@ export default function Administrasi() {
                   </div>
                 </div>
               </form>
+
               <form className="h-12 rounded-md absolute right-5 -mb-14">
                 <div className="flex items-center space-x-5">
                   <h1 className="text-white font-secondary-Karla font-medium mb-9 w-60">
@@ -348,9 +162,11 @@ export default function Administrasi() {
               </form>
             </div>
           </div>
-          <FormComponent token={token} />
+          <FormComponent existingPatient={existingPatient} />
         </div>
       </div>
     </>
   );
-}
+};
+
+export default Administrasi;
