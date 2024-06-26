@@ -1,14 +1,11 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Sidebar from "../../../components/manage/sidebar";
 import Header from "../../../components/header";
-import SearchBar from "../../../components/manage/searchBar";
-import TambahButton from "../../../components/manage/tambahButton";
-import { DataRekamMedis, headData } from "../model/dataRekamMedis";
-import TabelRekamMedis from "../../../components/manage/tabel-rekam-medis";
-import { FormDataSakit } from "../../../components/manage/formDataSakit";
+import { DataRekamMedis } from "../model/dataRekamMedis";
+import FormDataSakit from "../../../components/manage/formDataSakit";
 
 export default function TambahDataSakit() {
-  const [data, setData] = useState([]);
+  const [, setData] = useState([]);
 
   useEffect(() => {
     DataRekamMedis.getDataRekamMedis().then((data) => setData(data));

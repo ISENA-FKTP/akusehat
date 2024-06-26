@@ -7,66 +7,98 @@ import { jwtDecode } from "jwt-decode";
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("Admin");
+  const [role, setRole] = useState("");
   const [msg, setMsg] = useState("");
   const [navigateRoute, setNavigateRoute] = useState("");
   const navigate = useNavigate();
 
-  // const Auth = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const response = await axios.post("/login", { username, password });
+  const roles = ["Admin", "Apoteker", "Dokter", "Pegawai", "Kepala Bidang"];
 
-  //     console.log("Login response:", response.data);
+  const Auth = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post("/login", { username, password });
 
-  //     const { accessToken, refreshToken } = response.data;
-  //     console.log("Access Token:", accessToken);
+      const { accessToken, refreshToken } = response.data;
 
-  //     const decoded = jwtDecode(accessToken);
-  //     console.log("Decoded Token:", decoded);
+      const decoded = jwtDecode(accessToken);
 
-  //     if (accessToken) {
-  //       localStorage.setItem("accessToken", accessToken);
-  //       localStorage.setItem("refreshToken", refreshToken);
+      if (decoded.role.toLowerCase() === role.toLowerCase()) {
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("refreshToken", refreshToken);
 
-  //       axios.defaults.headers.common[
-  //         "Authorization"
-  //       ] = `Bearer ${accessToken}`;
-  //       console.log("Axios Authorization:", axios.defaults.headers.common);
-  //     }
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${accessToken}`;
 
-  //     if (decoded.role === "admin") {
-  //       navigate("/dashboard");
-  //     } else {
-  //       setMsg("Akses Ditolak, Silahkan Masukan Akun Administrasi.");
-  //     }
-  //   } catch (error) {
-  //     if (error.response) {
-  //       console.log("Error response:", error.response.data);
-  //       setMsg(error.response.data.msg);
-  //     } else {
-  //       console.error("Error:", error.message);
-  //       setMsg("Login gagal, silakan coba lagi.");
-  //     }
-  //   }
-  // };
+        switch (role.toLowerCase()) {
+          case "admin":
+            setNavigateRoute("/dashboard_klinik");
+            break;
+          case "apoteker":
+            setNavigateRoute("/dashboard_apotek");
+            break;
+          case "dokter":
+            setNavigateRoute("/dashboard_dokter");
+            break;
+          case "pegawai":
+            setNavigateRoute("/manage");
+            break;
+          case "kepala bidang":
+            setNavigateRoute("/statistik");
+            break;
+          default:
+            setNavigateRoute("/");
+            break;
+        }
+      } else {
+        setMsg("Akses Ditolak, Silahkan Masukan Akun dengan Role yang benar.");
+      }
+    } catch (error) {
+      if (error.response) {
+        console.log("Error response:", error.response.data);
+        setMsg(error.response.data.msg);
+      } else {
+        console.error("Error:", error.message);
+        setMsg("Login gagal, silakan coba lagi.");
+      }
+    }
+  };
 
-  // useEffect(() => {
-  //   const token = localStorage.getItem("accessToken");
-  //   // Konfirmasi Token dahulu
-  //   if (token) {
-  //     const decoded = jwtDecode(token);
-  //     if (decoded.role === "admin") {
-  //       navigate("/dashboard");
-  //     }
-  //   }
-  // }, [navigate]);
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      const decoded = jwtDecode(token);
+      const userRole = decoded.role.toLowerCase();
 
-  // useEffect(() => {
-  //   if (navigateRoute) {
-  //     navigate(navigateRoute);
-  //   }
-  // }, [navigateRoute, navigate]);
+      switch (userRole) {
+        case "admin":
+          navigate("/dashboard_klinik");
+          break;
+        case "apoteker":
+          navigate("/dashboard_apotek");
+          break;
+        case "dokter":
+          navigate("/dashboard_dokter");
+          break;
+        case "pegawai":
+          navigate("/manage");
+          break;
+        case "kepala bidang":
+          navigate("/statistik");
+          break;
+        default:
+          navigate("/");
+          break;
+      }
+    }
+  }, [navigate]);
+
+  useEffect(() => {
+    if (navigateRoute) {
+      navigate(navigateRoute);
+    }
+  }, [navigateRoute, navigate]);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 h-screen">
@@ -145,6 +177,7 @@ const Login = () => {
                 onChange={(e) => setRole(e.target.value)}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               >
+                <option value="">Pilih Role</option>
                 {roles.map((role) => (
                   <option key={role} value={role}>
                     {role}

@@ -62,19 +62,20 @@ function App() {
         <Route path="/manage" element={<Manage />} />
         <Route path="/manage/data-home-visit" element={<HomeVisit />} />
         <Route path="/manage/data-rekam-medis" element={<RekamMedis />} />
-        <Route
-          path="/manage/data-sakit/tambah-data"
-          element={<TambahDataSakit />}
-        />
-        <Route
-          path="/manage/data-home-visit/tambah-data"
-          element={<TambahDataHomeVisit />}
-        />
-        <Route
-          path="/manage/data-rekam-medis/tambah-data"
-          element={<TambahDataRekamMedis />}
-        />
-        <Route path="/manage/detail/:nrp" element={<DetailPage />} />
+        <Route 
+        path="/manage/data-sakit/tambah-data"
+        element={<TambahDataSakit/>} />
+        <Route 
+        path="/manage/data-home-visit/tambah-data"
+        element={<TambahDataHomeVisit/>} />
+        <Route 
+        path="/manage/data-rekam-medis/tambah-data"
+        element={<TambahDataRekamMedis/>} />
+        <Route 
+        path="/manage/detail/:nrp"
+        element={<DetailPage/>} />
+
+
       </Routes>
     </Router>
   );
