@@ -1,97 +1,22 @@
-import { useEffect, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import Sidebar_Klinik from "../../../components/klinik/sidebar_klinik";
 import Header from "../../../components/header";
 import { FaPrint } from "react-icons/fa6";
 import { IoSearch } from "react-icons/io5";
-import { dataPasien } from "../../statistik/model/data/dataPasien";
-import { dataDiagnosa } from "../../statistik/model/data/dataDiagnosa";
-import { dataObatPasien } from "../../statistik/model/data/dataTerapi";
-import { dataPemeriksaan } from "../../statistik/model/data/dataPemeriksaan";
-import { DataKunjunganKlinik } from "../../statistik/model/dataKunjunganKlinik";
-import { useNavigate } from "react-router-dom";
+import useLaporanData from "./components/useLaporanData";
 
 export default function Laporan() {
-  const [sortBy, setSortBy] = useState("most");
-  const [sortedData, setSortedData] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedStatus, setSelectedStatus] = useState("");
-  const navigate = useNavigate();
-  const [, setGlitch] = useState(false);
-
-  const handleClick = () => {
-    setGlitch(true);
-    setTimeout(() => {
-      setGlitch(false);
-      navigate("/KajianAwal");
-    }, 1000); // Durasi glitch (ms)
-  };
-
-  const combinedData = dataPasien.map((pasien) => ({
-    ...pasien,
-    diagnosa: dataDiagnosa.find((diagnosa) => diagnosa.uuid === pasien.uuid),
-    kunjungan: DataKunjunganKlinik.find(
-      (kunjungan) => kunjungan.uuid === pasien.uuid
-    ),
-    obatpasien: dataObatPasien.find((obat) => obat.uuid === pasien.uuid),
-    pemeriksaan: dataPemeriksaan.find(
-      (pemeriksaan) => pemeriksaan.uuid === pasien.uuid
-    ),
-  }));
-
-  const countStatusOccurrences = (data) => {
-    const statusCount = data.reduce((acc, item) => {
-      acc[item.statuspeserta] = (acc[item.statuspeserta] || 0) + 1;
-      return acc;
-    }, {});
-    return statusCount;
-  };
-
-  const sortStatusByFrequency = (a, b, order, statusCount) => {
-    const countA = statusCount[a.statuspeserta] || 0;
-    const countB = statusCount[b.statuspeserta] || 0;
-    return order === "most" ? countB - countA : countA - countB;
-  };
-
-  useEffect(() => {
-    const statusCount = countStatusOccurrences(combinedData);
-    const sorted = [...combinedData].sort((a, b) =>
-      sortStatusByFrequency(a, b, sortBy, statusCount)
-    );
-    setSortedData(sorted);
-  }, [combinedData, sortBy]);
-
-  const handleSortChange = (event) => {
-    setSortBy(event.target.value);
-  };
-
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
-  };
-
-  const handleStatusChange = (event) => {
-    setSelectedStatus(event.target.value);
-  };
-
-  const filteredKlinik = sortedData.filter(
-    (entry) =>
-      entry.nama.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      (selectedStatus ? entry.statuspeserta === selectedStatus : true)
-  );
-
-  const calculateAge = (dateOfBirth) => {
-    const birthDate = new Date(dateOfBirth);
-    const currentDate = new Date();
-    let age = currentDate.getFullYear() - birthDate.getFullYear();
-    const monthDifference = currentDate.getMonth() - birthDate.getMonth();
-    if (
-      monthDifference < 0 ||
-      (monthDifference === 0 && currentDate.getDate() < birthDate.getDate())
-    ) {
-      age--;
-    }
-    return age;
-  };
+  const {
+    sortBy,
+    searchTerm,
+    selectedStatus,
+    handleClick,
+    handleSortChange,
+    handleSearch,
+    handleStatusChange,
+    filteredKlinik,
+    calculateAge,
+  } = useLaporanData();
 
   return (
     <>
@@ -105,25 +30,25 @@ export default function Laporan() {
         profilePicture="logo.png"
       />
       <div className="py-5 bg-primary-600 shadow-lg flex-none text-start rounded-lg ml-28 mr-14 mt-5">
-        <h1 className="ml-10 text-white font-secondary-Karla font-bold text-xl ">
+        <h1 className="ml-10 text-white font-secondary-Karla font-bold text-xl">
           Selamat Pagi Petugas Administrasi
         </h1>
-        <h1 className="ml-10 text-white font-secondary-Karla font-medium ">
+        <h1 className="ml-10 text-white font-secondary-Karla font-medium">
           Selamat Bertugas, Silahkan menambahkan Pasien Di Bawah
         </h1>
       </div>
 
       <div className="bg-primary-600 mx-auto shadow-lg flex justify-center items-center text-center w-[80%] rounded ml-44 mt-5 py-10">
-        <h1 className="flex w-auto text-white font-primary-Poppins font-bold text-2xl ">
+        <h1 className="flex w-auto text-white font-primary-Poppins font-bold text-2xl">
           LAPORAN PENDAFTARAN PASIEN
         </h1>
       </div>
 
       <div className="border border-primary-600 mx-auto shadow-lg flex items-center text-center w-[80%] rounded ml-44 py-5">
-        <form className="w-full mx-8 space-y-4 ">
+        <form className="w-full mx-8 space-y-4">
           <div className="flex justify-center gap-4">
             <div className="flex items-center space-x-3">
-              <div className="flex items-center space-x-3 ">
+              <div className="flex items-center space-x-3">
                 <label
                   htmlFor="sort"
                   className="text-black font-secondary-Karla font-bold"
@@ -134,7 +59,7 @@ export default function Laporan() {
                   id="sort"
                   value={sortBy}
                   onChange={handleSortChange}
-                  className="lg:ml-2 mt-2 lg:mt-0 border border-primary-600 rounded-md shadow-sm "
+                  className="lg:ml-2 mt-2 lg:mt-0 border border-primary-600 rounded-md shadow-sm"
                 >
                   <option value="most">Paling Banyak</option>
                   <option value="least">Paling Sedikit</option>
@@ -149,7 +74,7 @@ export default function Laporan() {
               <select
                 name="Status"
                 value={selectedStatus}
-                onChange={handleStatusChange} // Added onChange event handler
+                onChange={handleStatusChange}
                 className="p-1 w-32 rounded-md border border-black font-secondary-Karla font-medium text-black"
               >
                 <option value="">Semua</option>
@@ -256,7 +181,7 @@ export default function Laporan() {
                     {entry.norm}
                   </td>
                   <td className="border border-primary-600 px-4 py-2 text-center">
-                    {entry.kunjungan.politujuan}
+                    {entry.pengajuansResponse.politujuan}
                   </td>
                   <td className="border border-primary-600 px-4 py-2 text-center">
                     {entry.nama}
@@ -271,7 +196,7 @@ export default function Laporan() {
                     {entry.statuspeserta}
                   </td>
                   <td className="border border-primary-600 px-4 py-2 text-center">
-                    {entry.diagnosa.jenispenyakit}
+                    {entry.pengajuansResponse.keluhan}
                   </td>
                   <td className="border border-primary-600 px-4 py-2 text-center">
                     {entry.obatpasien && (
