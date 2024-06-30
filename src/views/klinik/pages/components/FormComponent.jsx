@@ -231,7 +231,7 @@ const FormComponent = ({ existingPatient }) => {
           name="tgllahir"
           value={formData.tgllahir}
           onChange={handleChange}
-          className="p-2  w-[500px] rounded-md border border-black font-secondary-Karla font-medium text-black focus:outline-none focus:border-blue-500"
+          className=" p-2  w-[500px] rounded-md border border-black font-secondary-Karla font-medium text-black focus:outline-none focus:border-blue-500"
         />
       </div>
 
