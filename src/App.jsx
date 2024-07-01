@@ -23,6 +23,7 @@ import DetailPage from "./views/manage/pages/detail";
 import LaporanApotek from "./views/apoteker/pages/LaporanApotek";
 import Dashboard_Dokter from "./views/dokter/index";
 import Dokter from "./views/dokter/dokter";
+import KunjunganDokter from "./views/dokter/kunjungan_dokter";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
         <Route path="/kajianawal" element={<KajianAwal />} />
         {/* Dokter */}
         <Route path="/dokter" element={<Dokter/>}/>
+        <Route path="/kunjungan_dokter" element={<KunjunganDokter/> } />
         <Route path="/dashboard_dokter" element={<Dashboard_Dokter/>} />
         {/* Login */}
         <Route path="/" element={<Login />} />

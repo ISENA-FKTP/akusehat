@@ -9,7 +9,9 @@ import { dataDiagnosa } from "../../statistik/model/data/dataDiagnosa";
 import { dataObatPasien } from "../../statistik/model/data/dataTerapi";
 import { dataPemeriksaan } from "../../statistik/model/data/dataPemeriksaan";
 import { DataKunjunganKlinik } from "../../statistik/model/dataKunjunganKlinik";
-import { useNavigate } from 'react-router-dom';
+import { generatePath, useNavigate } from 'react-router-dom';
+import jsPDF from 'jspdf';
+import App from "../../../components/klinik/ConvertPdf";
 
 export default function Laporan() {
   const [sortBy, setSortBy] = useState("most");
@@ -18,6 +20,14 @@ export default function Laporan() {
   const [selectedStatus, setSelectedStatus] = useState("");
   const navigate = useNavigate();
   const [glitch, setGlitch] = useState(false);
+
+  const PdfButton = () => {
+    const handlePrint = () => {
+      const doc = new jsPDF();
+      doc.text('Hello world!', 10, 10);
+      doc.save('document.pdf');
+    };
+  }
 
   const handleClick = () => {
     setGlitch(true);
@@ -196,6 +206,7 @@ export default function Laporan() {
               </div>
 
               <button
+              
                 type="button"
                 className="flex items-center px-4 p-1 border border-black text-black rounded-md hover:bg-blue-600 focus:outline-none"
               >
