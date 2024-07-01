@@ -11,7 +11,7 @@ import { dataPemeriksaan } from "../../statistik/model/data/dataPemeriksaan";
 import { DataKunjunganKlinik } from "../../statistik/model/dataKunjunganKlinik";
 import { generatePath, useNavigate } from 'react-router-dom';
 import jsPDF from 'jspdf';
-import App from "../../../components/klinik/ConvertPdf";
+import PrintButton from "../../../components/klinik/converPDF";
 
 export default function Laporan() {
   const [sortBy, setSortBy] = useState("most");
@@ -204,15 +204,9 @@ export default function Laporan() {
                   />
                 </div>
               </div>
-
-              <button
-              
-                type="button"
-                className="flex items-center px-4 p-1 border border-black text-black rounded-md hover:bg-blue-600 focus:outline-none"
-              >
-                <FaPrint className=" mr-3" />
-                Cetak
-              </button>
+             <div>
+              <PrintButton/>
+             </div>
             </div>
           </div>
         </form>

@@ -8,9 +8,6 @@ import { MdDelete } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
-import App from "../../components/klinik/ConvertPdf";
-import { FaPrint } from "react-icons/fa6";
-import PrintButton from "../../components/klinik/ConvertPdf";
 
 export default function Dokter() {
   const navigate = useNavigate();
@@ -117,14 +114,6 @@ export default function Dokter() {
                 />
               </div>
             </div>
-            <button
-              
-                type="button"
-                className="flex items-center px-4 p-1 border border-black text-black rounded-md hover:bg-blue-600 focus:outline-none"
-              >
-                <FaPrint className=" mr-3" />
-                Cetak
-              </button>
           </div>
         </form>
       </div>
@@ -216,7 +205,7 @@ export default function Dokter() {
                   </td>
                   <td className="border border-primary-600 px-4 py-2 text-center">
                     <button onClick={() => handleApproveClick(entry.Nama)}>
-                      <FaCheck className="text-primary-600" style={{ fontSize: '18px' }} />
+                      <FaCheck className="text-primary-600 border border-indigo-900" style={{ fontSize: '18px' }} />
                     </button>
                   </td>
                 </tr>
