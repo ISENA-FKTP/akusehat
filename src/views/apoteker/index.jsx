@@ -1,4 +1,4 @@
-import Sidebar from "../../components/apotik/sidebar";
+import Sidebar_Klinik from "../../components/klinik/sidebar_klinik";
 import Header from "../../components/header";
 import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
@@ -22,6 +22,7 @@ const Dashboard = () => {
 
         if (accessToken) {
           const decoded = jwtDecode(accessToken);
+          console.log("Decoded Token:", decoded);
           setEmail(decoded.email);
         } else {
           navigate("/");
@@ -38,13 +39,13 @@ const Dashboard = () => {
   return (
     <>
       <div className="fixed z-50">
-        <Sidebar />
+        <Sidebar_Klinik />
       </div>
       <Header
         title="Pendaftaran Pelayanan Pasien"
         userName={email}
         userStatus="Dokter Poli Umum"
-        profilePicture="/logo.png"
+        profilePicture="logo.png"
       />
       <div className="flex-1 relative">
         <div className="absolute inset-0">

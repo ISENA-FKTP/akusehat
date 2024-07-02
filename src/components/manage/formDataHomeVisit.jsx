@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   DataSakit,
@@ -44,7 +44,6 @@ export const FormDataHomeVisit = () => {
         satuan_kerja: "",
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataNrp]);
 
   const navigate = useNavigate();
@@ -71,6 +70,7 @@ export const FormDataHomeVisit = () => {
     e.preventDefault();
     const { nrp, keluhan, pemeriksaan_fisik, diagnosa, terapi, saran_medis } =
       formData;
+    // Handle form submission logic
     const date = showFormattedDate(new Date().toISOString());
     DataSakit.setDataHomeVisit(
       nrp,

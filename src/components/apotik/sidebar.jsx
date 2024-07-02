@@ -6,15 +6,12 @@ import { MdOutlineNotificationsActive } from "react-icons/md";
 import { MdLibraryBooks } from "react-icons/md";
 import { BsCapsulePill } from "react-icons/bs";
 import { CgLogOut } from "react-icons/cg";
-import useAxios from "../../useAxios";
-import useClearTokensOnUnload from "../../useClearTokensOnUnload";
+import axios from "axios";
 
 export default function Sidebar() {
   const [open, setOpen] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
-  const axiosInstance = useAxios();
-  useClearTokensOnUnload();
 
   const Menus = [
     { title: "Dashboard", path: "/apotek" },
@@ -39,7 +36,7 @@ export default function Sidebar() {
     try {
       const refreshToken = localStorage.getItem("refreshToken");
 
-      await axiosInstance.delete("/logout", {
+      await axios.delete("/logout", {
         data: { refreshToken: refreshToken },
       });
 

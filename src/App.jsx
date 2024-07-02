@@ -23,6 +23,7 @@ import DetailPage from "./views/manage/pages/detail";
 import LaporanApotek from "./views/apoteker/pages/LaporanApotek";
 import Dashboard_Dokter from "./views/dokter/index";
 import Dokter from "./views/dokter/dokter";
+import KunjunganDokter from "./views/dokter/kunjungan_dokter";
 
 function App() {
   return (
@@ -35,8 +36,9 @@ function App() {
         <Route path="/laporan" element={<Laporan />} />
         <Route path="/kajianawal" element={<KajianAwal />} />
         {/* Dokter */}
-        <Route path="/dokter" element={<Dokter />} />
-        <Route path="/dashboard_dokter" element={<Dashboard_Dokter />} />
+        <Route path="/dokter" element={<Dokter/>}/>
+        <Route path="/kunjungan_dokter" element={<KunjunganDokter/> } />
+        <Route path="/dashboard_dokter" element={<Dashboard_Dokter/>} />
         {/* Login */}
         <Route path="/" element={<Login />} />
         <Route path="/apotek/tambah-obat" element={<TambahObat />} />
@@ -62,19 +64,20 @@ function App() {
         <Route path="/manage" element={<Manage />} />
         <Route path="/manage/data-home-visit" element={<HomeVisit />} />
         <Route path="/manage/data-rekam-medis" element={<RekamMedis />} />
-        <Route
-          path="/manage/data-sakit/tambah-data"
-          element={<TambahDataSakit />}
-        />
-        <Route
-          path="/manage/data-home-visit/tambah-data"
-          element={<TambahDataHomeVisit />}
-        />
-        <Route
-          path="/manage/data-rekam-medis/tambah-data"
-          element={<TambahDataRekamMedis />}
-        />
-        <Route path="/manage/detail/:pegawaiId" element={<DetailPage />} />
+        <Route 
+        path="/manage/data-sakit/tambah-data"
+        element={<TambahDataSakit/>} />
+        <Route 
+        path="/manage/data-home-visit/tambah-data"
+        element={<TambahDataHomeVisit/>} />
+        <Route 
+        path="/manage/data-rekam-medis/tambah-data"
+        element={<TambahDataRekamMedis/>} />
+        <Route 
+        path="/manage/detail/:nrp"
+        element={<DetailPage/>} />
+
+
       </Routes>
     </Router>
   );

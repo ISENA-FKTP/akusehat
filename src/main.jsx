@@ -6,7 +6,6 @@ import axios from "axios";
 
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = "http://localhost:5000";
-// axios.defaults.baseURL = "https://be-isena-fktp.onrender.com";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

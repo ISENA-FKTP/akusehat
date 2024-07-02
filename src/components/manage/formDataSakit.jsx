@@ -54,15 +54,15 @@ const FormDataSakit = () => {
         },
       });
 
-      const foundData = response.data[0];
-
+      const foundData = response.data;
+      console.log(foundData);
       if (foundData) {
         setFormData({
           ...formData,
           namapegawai: foundData.namapegawai,
           pangkat: foundData.pangkat,
           satuankerja: foundData.satuankerja,
-          pegawaiId: foundData.id,
+          pegawaiId: foundData.userId,
         });
         Swal.fire({
           icon: "success",
@@ -80,11 +80,7 @@ const FormDataSakit = () => {
       }
     } catch (error) {
       console.error("Error fetching data:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Gagal",
-        text: "Terjadi kesalahan saat memproses permintaan.",
-      });
+      throw error;
     }
   };
 
@@ -114,7 +110,7 @@ const FormDataSakit = () => {
                   namapegawai: formData.namapegawai,
                   pangkat: formData.pangkat,
                   satuankerja: formData.satuankerja,
-                  pegawaiId: formData.id,
+                  pegawaiId: formData.userId,
                 },
                 {
                   headers: {
@@ -153,6 +149,7 @@ const FormDataSakit = () => {
   };
 
   const addSickData = async (token) => {
+    console.log(formData);
     try {
       const addSakitResponse = await axiosInstance.post(
         "/datasakits",
@@ -162,7 +159,7 @@ const FormDataSakit = () => {
           lamacuti: formData.lama_cuti,
           awalsakit: formData.awal_sakit,
           keterangan: formData.Keterangan,
-          WFH: formData.WFH,
+          wfh: formData.WFH,
           sumberbiaya: formData.sumber_biaya,
           pegawaiId: formData.pegawaiId,
         },
@@ -174,6 +171,7 @@ const FormDataSakit = () => {
       );
 
       if (addSakitResponse.status === 201) {
+        console.log(addSakitResponse.data);
         Swal.fire({
           icon: "success",
           title: "Berhasil",
@@ -197,7 +195,6 @@ const FormDataSakit = () => {
     }
   };
 
-  console.log(formData);
   return (
     <div className="w-full h-max rounded-md border-3 shadow overflow-auto">
       <div className="pt-2 pl-4 w-full bg-secondary-300">

@@ -26,7 +26,7 @@ const Pengingat = () => {
     "Obat Padat",
     "Obat Lainnya",
   ];
-  const types = ["Tablet", "Syrup", "Krim", "PCS"];
+  const types = ["Tablet", "Syrup", "Krim"];
 
   useEffect(() => {
     fetch("/data/medicine.json")

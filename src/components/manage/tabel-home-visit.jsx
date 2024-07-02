@@ -135,7 +135,7 @@ export default function TabelHoemVisit({ table_head, table_row }) {
                       </Typography>
                     </td>
                     <td className={classes}>
-                      <Link to={`manage/data-rekam-medis/manage/detail/${nrp}`}>
+                      <Link to={`/detail/${nrp}`}>
                         <Typography
                           as="a"
                           href="#"

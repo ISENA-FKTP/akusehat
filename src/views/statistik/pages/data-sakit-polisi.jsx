@@ -13,7 +13,7 @@ import {
   calculateTotals as calculateBpjsTotals,
 } from "../model/dataPegawaiRawat";
 import Header from "../../../components/header";
-import { DataSakit } from "../model/dataSakit";
+import axios from "axios";
 import { IoSearch } from "react-icons/io5";
 import { DataSektor } from "../model/dataSektor";
 
@@ -38,8 +38,14 @@ export default function DataSakitPolisi() {
   const percentages = calculateBpjsTotals(filteredDataPegawai);
 
   useEffect(() => {
-    setData(DataSakit);
-    filterDataByYear(DataSakit, year);
+    axios
+      .get("https://65fcf9c49fc4425c6530ec6c.mockapi.io/dataShoe")
+      .then((response) => {
+        const data = response.data;
+        setData(data);
+        filterDataByYear(data, year);
+      })
+      .catch((error) => console.error("Error fetching data: ", error));
   }, [year]);
 
   useEffect(() => {

@@ -167,7 +167,7 @@ const TambahObat = () => {
                 {formData.type || "Pilih Jenis"}
               </Menu.Button>
               <Menu.Items className="absolute mt-1 w-full bg-white border border-gray-200 rounded-md shadow-lg z-10">
-                {["Tablet", "Syrup", "Krim", "PCS"].map((type) => (
+                {["Tablet", "Syrup", "Krim"].map((type) => (
                   <Menu.Item key={type}>
                     {({ active }) => (
                       <div
