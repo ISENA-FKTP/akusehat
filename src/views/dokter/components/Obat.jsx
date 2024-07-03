@@ -2,9 +2,13 @@ import { useState } from "react";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import "react-datepicker/dist/react-datepicker.css";
+import useAxios from "../../../useAxios";
+import { useParams } from "react-router-dom";
 
 export default function Obat() {
+  const { id } = useParams();
   const MySwal = withReactContent(Swal);
+  const axiosInstance = useAxios();
 
   const handleSave = () => {
     MySwal.fire({
@@ -40,8 +44,29 @@ export default function Obat() {
     });
   };
 
-  const saveData = () => {
-    MySwal.fire("Tersimpan!", "Data Anda telah disimpan.", "success");
+  const saveData = async () => {
+    const data = {
+      jenisobat: jenisObat,
+      dosis: document.querySelector('textarea[name="Dosis"]').value,
+      BMHP: document.querySelector('textarea[name="BMHP"]').value,
+      pasienId: id,
+    };
+    const token = localStorage.getItem("accessToken");
+    try {
+      const response = await axiosInstance.post("/obats", data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.status === 201) {
+        MySwal.fire("Tersimpan!", "Data Anda telah disimpan.", "success");
+      } else {
+        MySwal.fire("Gagal!", "Data gagal disimpan.", "error");
+      }
+    } catch (error) {
+      MySwal.fire("Error!", "Terjadi kesalahan.", "error");
+    }
   };
 
   const cancelData = () => {
@@ -63,16 +88,17 @@ export default function Obat() {
       setJenisObat(newJenisObat);
     }
   };
+
   return (
-    <div className=" border border-primary-600 shadow-lg rounded-lg">
+    <div className="border border-primary-600 shadow-lg rounded-lg">
       <div className="h-10 bg-primary-600 shadow-lg rounded-t-lg py-4 justify-center flex items-center">
         <h1 className="text-white font-primary-Poppins font-bold text-xl space-y-7">
           Obat
         </h1>
       </div>
       <form className="space-y-3 p-4 w-full">
-        <div className="flex items-center space-x-4 ">
-          <label className=" text-black font-secondary-Karla font-bold w-[120px]">
+        <div className="flex items-center space-x-4">
+          <label className="text-black font-secondary-Karla font-bold w-[120px]">
             Jenis Obat
           </label>
           <div className="flex flex-col space-y-4">
@@ -117,9 +143,9 @@ export default function Obat() {
             Dosis :
           </label>
           <textarea
-            type="Text"
+            type="text"
             name="Dosis"
-            placeholder=" Keterangan....."
+            placeholder="Keterangan....."
             className="p-2 h-24 rounded-md w-full border border-black font-secondary-Karla font-medium text-black focus:outline-none focus:border-blue-500"
           />
         </div>
@@ -130,14 +156,14 @@ export default function Obat() {
           <textarea
             type="text"
             name="BMHP"
-            placeholder=" Keterangan....."
+            placeholder="Keterangan....."
             className="p-2 h-24 rounded-md w-full border border-black font-secondary-Karla font-medium text-black focus:outline-none focus:border-blue-500"
           />
         </div>
         <div className="flex space-x-4">
           <button
             type="button"
-            className="bg-blue-500 bg-success-600 text-white px-4 py-1 my-[30px] rounded  hover:bg-emerald-950"
+            className="bg-blue-500 bg-success-600 text-white px-4 py-1 my-[30px] rounded hover:bg-emerald-950"
             onClick={handleSave}
           >
             Simpan

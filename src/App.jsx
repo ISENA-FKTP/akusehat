@@ -34,11 +34,11 @@ function App() {
         <Route path="/dashboard_apotek" element={<DashboardApotek />} />
         <Route path="/administrasi" element={<Administrasi />} />
         <Route path="/laporan" element={<Laporan />} />
-        <Route path="/kajianawal" element={<KajianAwal />} />
+        <Route path="/kajianawal/:id" element={<KajianAwal />} />
         {/* Dokter */}
-        <Route path="/dokter" element={<Dokter/>}/>
-        <Route path="/kunjungan_dokter" element={<KunjunganDokter/> } />
-        <Route path="/dashboard_dokter" element={<Dashboard_Dokter/>} />
+        <Route path="/dokter" element={<Dokter />} />
+        <Route path="/kunjungan_dokter/:id" element={<KunjunganDokter />} />
+        <Route path="/dashboard_dokter" element={<Dashboard_Dokter />} />
         {/* Login */}
         <Route path="/" element={<Login />} />
         <Route path="/apotek/tambah-obat" element={<TambahObat />} />
@@ -64,20 +64,19 @@ function App() {
         <Route path="/manage" element={<Manage />} />
         <Route path="/manage/data-home-visit" element={<HomeVisit />} />
         <Route path="/manage/data-rekam-medis" element={<RekamMedis />} />
-        <Route 
-        path="/manage/data-sakit/tambah-data"
-        element={<TambahDataSakit/>} />
-        <Route 
-        path="/manage/data-home-visit/tambah-data"
-        element={<TambahDataHomeVisit/>} />
-        <Route 
-        path="/manage/data-rekam-medis/tambah-data"
-        element={<TambahDataRekamMedis/>} />
-        <Route 
-        path="/manage/detail/:nrp"
-        element={<DetailPage/>} />
-
-
+        <Route
+          path="/manage/data-sakit/tambah-data"
+          element={<TambahDataSakit />}
+        />
+        <Route
+          path="/manage/data-home-visit/tambah-data"
+          element={<TambahDataHomeVisit />}
+        />
+        <Route
+          path="/manage/data-rekam-medis/tambah-data"
+          element={<TambahDataRekamMedis />}
+        />
+        <Route path="/manage/detail/:nrp" element={<DetailPage />} />
       </Routes>
     </Router>
   );

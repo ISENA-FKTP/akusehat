@@ -1,11 +1,14 @@
 import { useState } from "react";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-
 import "react-datepicker/dist/react-datepicker.css";
+import useAxios from "../../../useAxios";
+import { useParams } from "react-router-dom";
 
-export default function Diagosa() {
+export default function Diagnosa() {
+  const { id } = useParams();
   const MySwal = withReactContent(Swal);
+  const axiosInstance = useAxios();
 
   const handleSave = () => {
     MySwal.fire({
@@ -41,8 +44,27 @@ export default function Diagosa() {
     });
   };
 
-  const saveData = () => {
-    MySwal.fire("Tersimpan!", "Data Anda telah disimpan.", "success");
+  const saveData = async () => {
+    const data = {
+      jenispenyakit: diagnosa.map((item) => (item.trim() === "" ? null : item)),
+      kesadaran: document.querySelector('select[name="Kesadaran"]').value,
+      suhu: document.querySelector('input[name="Suhu"]').value,
+      pasienId: id,
+    };
+    const token = localStorage.getItem("accessToken");
+    try {
+      const response = await axiosInstance.post("/diagnosas", data, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (response.status === 201) {
+        MySwal.fire("Tersimpan!", "Data Anda telah disimpan.", "success");
+      } else {
+        MySwal.fire("Gagal!", "Data gagal disimpan.", "error");
+      }
+    } catch (error) {
+      MySwal.fire("Error!", "Terjadi kesalahan.", "error");
+    }
   };
 
   const cancelData = () => {
@@ -64,14 +86,15 @@ export default function Diagosa() {
       setDiagnosa(newDiagnosa);
     }
   };
+
   return (
     <div className="py-6">
       <div className="h-10 bg-primary-600 shadow-lg rounded-t-lg py-4 justify-center flex items-center">
-        <h1 className="text-white font-primary-Poppins font-bold text-xl ">
+        <h1 className="text-white font-primary-Poppins font-bold text-xl">
           Diagnosa
         </h1>
       </div>
-      <div className=" border border-primary-600 shadow-lg rounded-b-lg">
+      <div className="border border-primary-600 shadow-lg rounded-b-lg">
         <form className="space-y-3 p-4 mx-6">
           <div className="space-y-4">
             <div className="flex items-start space-x-4">
@@ -121,7 +144,6 @@ export default function Diagosa() {
               </div>
             </div>
           </div>
-
           <div className="flex items-center space-x-5">
             <label className="text-black font-secondary-Karla font-bold w-40">
               Kesadaran :

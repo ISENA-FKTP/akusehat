@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { AiOutlineCalendar, AiOutlineClockCircle } from "react-icons/ai";
@@ -11,11 +12,12 @@ import useAxios from "../../../useAxios";
 export default function Pengajuan() {
   const MySwal = withReactContent(Swal);
   const axiosInstance = useAxios();
+  const { id } = useParams();
   const [poli, setPoli] = useState("");
   const [perawatan, setPerawatan] = useState("");
   const [jeniskunjungan, setJeniskunjungan] = useState("");
   const [keluhan, setKeluhan] = useState("");
-  const [anamnesia, setAnamnesia] = useState("");
+  const [anestesi, setAnestesi] = useState("");
   const [startDate, setStartDate] = useState(new Date());
   const [startTime, setStartTime] = useState(new Date());
 
@@ -55,13 +57,14 @@ export default function Pengajuan() {
 
   const saveData = async () => {
     try {
-      const response = await axiosInstance.post("/pengajuans", {
-        politujuan: poli,
+      const response = await axiosInstance.post("/pelayanans", {
+        poli: poli,
         perawatan: perawatan,
         jeniskunjungan: jeniskunjungan,
         keluhan: keluhan,
-        anamnesia: anamnesia,
-        tanggalKunjungan: startDate,
+        anestesi: anestesi,
+        tanggalkunjungan: startDate,
+        pasienId: id,
       });
 
       console.log("Data: ", response.data);
@@ -176,12 +179,12 @@ export default function Pengajuan() {
 
             <div className="flex items-center space-x-5 mr-14">
               <label className=" text-black font-secondary-Karla font-bold flex-[30%]">
-                Anamnesa
+                Anestesi
               </label>
               <textarea
                 name="keterangan"
-                value={anamnesia}
-                onChange={(e) => setAnamnesia(e.target.value)}
+                value={anestesi}
+                onChange={(e) => setAnestesi(e.target.value)}
                 className="p-1 h-24 rounded-md text-left bg-white border border-black focus:outline-none flex-[70%]"
                 placeholder="Keterangan......"
                 style={{ width: "51%" }}

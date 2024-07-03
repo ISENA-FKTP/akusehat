@@ -31,7 +31,6 @@ const useAxios = () => {
       const { accessToken } = response.data;
       console.log("Token refreshed successfully:", accessToken);
       localStorage.setItem("accessToken", accessToken);
-      // Update axiosInstance default headers
       axiosInstance.defaults.headers.common[
         "Authorization"
       ] = `Bearer ${accessToken}`;

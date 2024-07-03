@@ -2,18 +2,20 @@ import { useState } from "react";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import useAxios from "../../../../useAxios";
+import { useParams } from "react-router-dom";
 
 const MySwal = withReactContent(Swal);
 
 export default function Pengajuan() {
+  const { id } = useParams();
+  console.log(id);
   const axiosInstance = useAxios();
-  const getPasienId = localStorage.getItem("pasienId");
   const [formData, setFormData] = useState({
     politujuan: "",
     perawatan: "",
     jeniskunjungan: "",
     keluhan: "",
-    pasienId: getPasienId,
+    pasienId: id,
   });
 
   const handleChange = (e) => {

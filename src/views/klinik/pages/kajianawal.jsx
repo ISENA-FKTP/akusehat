@@ -3,8 +3,10 @@ import Header from "../../../components/header";
 import KeadaanFisik from "./components/KeadaanFisik";
 import Pengajuan from "./components/Pengajuan";
 import TekananDarah from "./components/TekananDarah";
+import { useParams } from "react-router-dom";
 
 export default function KajianAwal() {
+  const { id } = useParams();
   return (
     <>
       <div className="fixed z-50">
@@ -42,12 +44,12 @@ export default function KajianAwal() {
             </div>
 
             <div className="flex mt-7 ml-44 mr-28 items-baseline">
-              <Pengajuan />
+              <Pengajuan id={id} />
 
               <div className="grid grid-rows-2 gap-5 flex-[40%]">
-                <KeadaanFisik />
+                <KeadaanFisik id={id} />
 
-                <TekananDarah />
+                <TekananDarah id={id} />
               </div>
             </div>
           </div>

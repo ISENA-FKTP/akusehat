@@ -9,8 +9,8 @@ import { dataDiagnosa } from "../../statistik/model/data/dataDiagnosa";
 import { dataObatPasien } from "../../statistik/model/data/dataTerapi";
 import { dataPemeriksaan } from "../../statistik/model/data/dataPemeriksaan";
 import { DataKunjunganKlinik } from "../../statistik/model/dataKunjunganKlinik";
-import { generatePath, useNavigate } from 'react-router-dom';
-import jsPDF from 'jspdf';
+import { generatePath, useNavigate } from "react-router-dom";
+import jsPDF from "jspdf";
 import PrintButton from "../../../components/klinik/converPDF";
 
 export default function Laporan() {
@@ -24,16 +24,16 @@ export default function Laporan() {
   const PdfButton = () => {
     const handlePrint = () => {
       const doc = new jsPDF();
-      doc.text('Hello world!', 10, 10);
-      doc.save('document.pdf');
+      doc.text("Hello world!", 10, 10);
+      doc.save("document.pdf");
     };
-  }
+  };
 
   const handleClick = () => {
     setGlitch(true);
     setTimeout(() => {
       setGlitch(false);
-      navigate('/KajianAwal');
+      navigate("/KajianAwal");
     }, 1000); // Durasi glitch (ms)
   };
 
@@ -131,14 +131,16 @@ export default function Laporan() {
 
       <div className="border border-primary-600 mx-auto shadow-lg flex items-center text-center w-[80%] rounded ml-44 py-5">
         <form className="w-full mx-8 space-y-4">
-        <div className="flex items-center">
-      <button
-        type="button"
-        className="relative overflow-hidden group p-3 bg-success-600 text-white rounded-md font-medium focus:outline-none focus:ring-2 focus:ring-success-700 flex items-center justify-center transition-transform duration-200 transform hover:rotate-10 hover:scale-90"
-        onClick={handleClick}
-      > Tambah Data
-      </button>
-    </div>
+          <div className="flex items-center">
+            <button
+              type="button"
+              className="relative overflow-hidden group p-3 bg-success-600 text-white rounded-md font-medium focus:outline-none focus:ring-2 focus:ring-success-700 flex items-center justify-center transition-transform duration-200 transform hover:rotate-10 hover:scale-90"
+              onClick={handleClick}
+            >
+              {" "}
+              Tambah Data
+            </button>
+          </div>
           <div className="flex justify-center">
             <div className="flex items-center space-x-3">
               <div className="flex items-center space-x-3 ">
@@ -204,9 +206,9 @@ export default function Laporan() {
                   />
                 </div>
               </div>
-             <div>
-              <PrintButton/>
-             </div>
+              <div>
+                <PrintButton />
+              </div>
             </div>
           </div>
         </form>

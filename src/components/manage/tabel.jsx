@@ -1,8 +1,17 @@
-import React from "react";
 import { Card, Typography } from "@material-tailwind/react";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 
 export default function Tabel({ table_head, table_row }) {
+  Tabel.propTypes = {
+    table_head: PropTypes.arrayOf(PropTypes.string).isRequired,
+    table_row: PropTypes.arrayOf(
+      PropTypes.shape({
+        nrp: PropTypes.string,
+        nama: PropTypes.string,
+      })
+    ).isRequired,
+  };
   return (
     <div>
       <Card className="h-full w-full overflow-auto">
@@ -42,7 +51,7 @@ export default function Tabel({ table_head, table_row }) {
 
                 return (
                   <tr key={nrp} className="even:bg-primary-200">
-                    <td className={classes}imp>
+                    <td className={classes} data-imp>
                       <Typography
                         variant="small"
                         color="blue-gray"
@@ -157,7 +166,8 @@ export default function Tabel({ table_head, table_row }) {
                           href="#"
                           variant="small"
                           color="blue-gray"
-                          className="font-medium">
+                          className="font-medium"
+                        >
                           Detail
                         </Typography>
                       </Link>

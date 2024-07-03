@@ -8,7 +8,6 @@ import PropTypes from "prop-types";
 
 const MySwal = withReactContent(Swal);
 
-// Utilitas untuk mengkonversi objek Date ke string dengan format yyyy-MM-dd
 const formatDate = (date) => {
   if (!date) return "";
   const d = new Date(date);
@@ -32,7 +31,6 @@ const FormComponent = ({ existingPatient }) => {
     norm: "",
     role: "pasien",
   });
-
 
   useEffect(() => {
     if (existingPatient) {
@@ -146,7 +144,8 @@ const FormComponent = ({ existingPatient }) => {
           },
         }
       );
-      localStorage.setItem("pasienId", response.data.userId);
+
+      const id = response.data.userId;
 
       MySwal.fire({
         title: "Sukses!",
@@ -155,7 +154,7 @@ const FormComponent = ({ existingPatient }) => {
         confirmButtonText: "OK",
       });
 
-      navigate("/kajianawal");
+      navigate(`/kajianawal/${id}`);
     } catch (error) {
       console.error(
         "Error adding pasien:",
