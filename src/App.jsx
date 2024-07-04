@@ -76,7 +76,7 @@ function App() {
           path="/manage/data-rekam-medis/tambah-data"
           element={<TambahDataRekamMedis />}
         />
-        <Route path="/manage/detail/:nrp" element={<DetailPage />} />
+        <Route path="/detail/:pegawaiId" element={<DetailPage />} />
       </Routes>
     </Router>
   );

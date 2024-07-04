@@ -54,8 +54,7 @@ const FormDataSakit = () => {
         },
       });
 
-      const foundData = response.data;
-
+      const foundData = response.data[0];
       if (foundData) {
         setFormData({
           ...formData,
@@ -90,7 +89,8 @@ const FormDataSakit = () => {
 
     try {
       await fetchData(formData.nrp);
-      await addSickData(token);
+      const pegawaiId = formData.pegawaiId;
+      await addSickData(token, pegawaiId);
     } catch (error) {
       if (error.response && error.response.status === 404) {
         Swal.fire({
@@ -110,7 +110,6 @@ const FormDataSakit = () => {
                   namapegawai: formData.namapegawai,
                   pangkat: formData.pangkat,
                   satuankerja: formData.satuankerja,
-                  pegawaiId: formData.id,
                 },
                 {
                   headers: {
@@ -120,7 +119,17 @@ const FormDataSakit = () => {
               );
 
               if (addEmployeeResponse.status === 201) {
-                await addSickData(token);
+                console.log(addEmployeeResponse.data);
+                const response = await axiosInstance.get(
+                  `/pegawais/nonrp/${formData.nrp}`,
+                  {
+                    headers: {
+                      Authorization: `Bearer ${token}`,
+                    },
+                  }
+                );
+                const pegawaiId = response.data[0].id;
+                await addSickData(token, pegawaiId);
               } else {
                 Swal.fire({
                   icon: "error",
@@ -148,7 +157,7 @@ const FormDataSakit = () => {
     }
   };
 
-  const addSickData = async (token) => {
+  const addSickData = async (token, pegawaiId) => {
     try {
       const addSakitResponse = await axiosInstance.post(
         "/datasakits",
@@ -160,7 +169,7 @@ const FormDataSakit = () => {
           keterangan: formData.Keterangan,
           WFH: formData.WFH,
           sumberbiaya: formData.sumber_biaya,
-          pegawaiId: formData.pegawaiId,
+          pegawaiId: pegawaiId,
         },
         {
           headers: {
