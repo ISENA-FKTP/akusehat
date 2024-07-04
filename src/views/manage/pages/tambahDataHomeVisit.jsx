@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Sidebar from "../../../components/manage/sidebar";
 import Header from "../../../components/header";
 import { DataRekamMedis } from "../model/dataRekamMedis";
-import { TabelDataHomeVisit } from "../../../components/manage/formDataHomeVisit";
+import TabelHomeVisit from "../../../components/manage/formDataHomeVisit";
 
 export default function TambahDataHomeVisit() {
   const [, setData] = useState([]);
@@ -24,7 +24,7 @@ export default function TambahDataHomeVisit() {
         profilePicture="logo.png"
       />
       <main className="mt-12 ml-32 mr-12 space-y-4 pb-10 ">
-        <TabelDataHomeVisit />
+        <TabelHomeVisit />
       </main>
     </div>
   );
