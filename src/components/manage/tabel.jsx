@@ -160,7 +160,7 @@ export default function Tabel({ table_head, table_row }) {
                       </Typography>
                     </td>
                     <td className={classes}>
-                      <Link to={`detail/${pegawaiId}`}>
+                      <Link to={`/detail/${pegawaiId}`}>
                         <Typography
                           as="a"
                           href="#"
