@@ -3,8 +3,11 @@ import "react-datepicker/dist/react-datepicker.css";
 import Header from "../../components/header";
 import Sidebar_Dokter from "../../components/klinik/sidebar_dokter";
 import { IoSearch } from "react-icons/io5";
-import { FaEdit, FaCheck } from "react-icons/fa";
-import { MdDelete } from "react-icons/md";
+import { FaEdit } from "react-icons/fa";
+import {
+  MdOutlineCheckBoxOutlineBlank,
+  MdOutlineCheckBox,
+} from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
@@ -12,6 +15,7 @@ import useAxios from "../../useAxios";
 
 export default function Dokter() {
   const [dataPasien, setDataPasien] = useState([]);
+  const [approvalStatus, setApprovalStatus] = useState({});
   const navigate = useNavigate();
   const axiosInstance = useAxios();
 
@@ -41,7 +45,6 @@ export default function Dokter() {
           return { ...pasien, pengajuan };
         });
 
-        console.log(combinedData);
         setDataPasien(combinedData);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -73,29 +76,60 @@ export default function Dokter() {
     navigate(`/kunjungan_dokter/${id}`);
   };
 
-  const handleDeleteClick = (id, nama) => {
-    toast.error(`Hapus pasien ${nama}`, {
-      position: "top-right",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-    console.log(`Menghapus pasien dengan id: ${id}`);
-  };
+  const handleApproveClick = async (nama, id) => {
+    try {
+      const token = localStorage.getItem("accessToken");
+      const pelayanansResponse = await axiosInstance.get(`/pelayanans/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-  const handleApproveClick = (nama) => {
-    toast.success(`Approve pasien ${nama}`, {
-      position: "top-right",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
+      if (pelayanansResponse.data.length !== 0) {
+        setApprovalStatus((prevStatus) => ({
+          ...prevStatus,
+          [id]: true,
+        }));
+        toast.success(`Approve pasien ${nama}`, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      } else {
+        setApprovalStatus((prevStatus) => ({
+          ...prevStatus,
+          [id]: false,
+        }));
+        toast.error(`Tidak ada data pelayanan untuk pasien ${nama}`, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    } catch (error) {
+      setApprovalStatus((prevStatus) => ({
+        ...prevStatus,
+        [id]: false,
+      }));
+      console.error("Error fetching pelayanans data:", error);
+      toast.error("Gagal mengambil data pelayanan", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
   };
 
   return (
@@ -272,34 +306,22 @@ export default function Dokter() {
                           style={{ fontSize: "24px" }}
                         />
                       </button>
-                      <button
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          padding: "8px",
-                          border: "none",
-                          background: "none",
-                        }}
-                        onClick={() =>
-                          handleDeleteClick(
-                            entry.pengajuan.pasien.id,
-                            entry.nama
-                          )
-                        }
-                      >
-                        <MdDelete
-                          className="text-primary-600"
-                          style={{ fontSize: "24px" }}
-                        />
-                      </button>
                     </div>
                   </td>
                   <td className="border border-primary-600 px-4 py-2 text-center">
-                    <button onClick={() => handleApproveClick(entry.nama)}>
-                      <FaCheck
-                        className="text-primary-600 border border-indigo-900"
-                        style={{ fontSize: "18px" }}
-                      />
+                    <button
+                      onClick={() =>
+                        handleApproveClick(
+                          entry.nama,
+                          entry.pengajuan.pasien.id
+                        )
+                      }
+                    >
+                      {approvalStatus[entry.pengajuan.pasien.id] ? (
+                        <MdOutlineCheckBox className="text-primary-600 text-2xl" />
+                      ) : (
+                        <MdOutlineCheckBoxOutlineBlank className="text-primary-600 text-2xl" />
+                      )}
                     </button>
                   </td>
                 </tr>

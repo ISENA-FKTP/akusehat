@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { GoHome, GoHomeFill } from "react-icons/go";
+import { GoHome } from "react-icons/go";
 import { FaUserDoctor } from "react-icons/fa6";
 import { IoMdArrowDropleft } from "react-icons/io";
 import { MdSpaceDashboard } from "react-icons/md";
+import { CgLogOut } from "react-icons/cg";
 import useClearTokensOnUnload from "../../useClearTokensOnUnload";
 import useAxios from "../../useAxios";
 
@@ -104,7 +105,7 @@ const Sidebar_Dokter = () => {
             onClick={handleLogout}
           >
             <span className="text-2xl block float-left">
-              <GoHomeFill />
+              <CgLogOut />
             </span>
             <span className={`text-lg font-medium flex-1 ${!open && "hidden"}`}>
               Logout
