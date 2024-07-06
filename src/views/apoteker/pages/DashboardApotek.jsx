@@ -14,6 +14,10 @@ const DashboardApotek = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [modal, setModal] = useState({ type: null, medicine: null });
   const [token, setToken] = useState("");
+  const handleSortChange = (e) => setSortBy(e.target.value);
+  const handleSearch = (e) => setSearchTerm(e.target.value);
+  const openModal = (type, medicine) => setModal({ type, medicine });
+  const closeModal = () => setModal({ type: null, medicine: null });
   const axiosInstance = useAxios();
 
   const categories = [
@@ -70,11 +74,6 @@ const DashboardApotek = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [axiosInstance, sortBy, token]);
-
-  const handleSortChange = (e) => setSortBy(e.target.value);
-  const handleSearch = (e) => setSearchTerm(e.target.value);
-  const openModal = (type, medicine) => setModal({ type, medicine });
-  const closeModal = () => setModal({ type: null, medicine: null });
 
   const handleEditChange = (e) => {
     const { name, value } = e.target;

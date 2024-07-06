@@ -10,7 +10,6 @@ export default function TambahObat({
   closeModal,
 }) {
   const axiosInstance = useAxios();
-  console.log(type);
 
   TambahObat.propTypes = {
     uuid: PropTypes.string.isRequired,

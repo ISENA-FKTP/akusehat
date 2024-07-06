@@ -49,9 +49,11 @@ const TambahObat = () => {
               Authorization: `Bearer ${token}`,
             },
           })
-          .then(() => {
-            Swal.fire("Data obat telah disimpan!", "", "success");
-            navigate("/apotek");
+          .then((response) => {
+            if (response.status === 201) {
+              Swal.fire("Data obat telah disimpan!", "", "success");
+              navigate("/apotek");
+            }
           })
           .catch((error) => {
             console.error("There was an error saving the data!", error);
