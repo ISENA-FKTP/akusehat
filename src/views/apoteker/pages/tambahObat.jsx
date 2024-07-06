@@ -4,17 +4,22 @@ import Sidebar from "../../../components/apotik/sidebar";
 import Header from "../../../components/header";
 import { useState } from "react";
 import Swal from "sweetalert2";
+import useAxios from "../../../useAxios";
+import { useNavigate } from "react-router-dom";
 
 const TambahObat = () => {
+  const axiosInstance = useAxios();
+  const token = localStorage.getItem("accessToken");
+  const navigate = useNavigate;
   const [formData, setFormData] = useState({
-    medicineName: "",
-    quantity: "",
-    entryDate: "",
-    expiryDate: "",
-    batchNo: "",
-    category: "",
-    type: "",
-    price: "",
+    namaobat: "",
+    jumlahobat: "",
+    tglmasuk: "",
+    tglkadaluarsa: "",
+    nobatch: "",
+    kategori: "",
+    jenisobat: "",
+    hargaobat: "",
   });
 
   const handleChange = (e) => {
@@ -38,7 +43,20 @@ const TambahObat = () => {
       cancelButtonText: "Batal",
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire("Data obat telah disimpan!", "", "success");
+        axiosInstance
+          .post("/dataobats", formData, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          .then(() => {
+            Swal.fire("Data obat telah disimpan!", "", "success");
+            navigate("/apotek");
+          })
+          .catch((error) => {
+            console.error("There was an error saving the data!", error);
+            Swal.fire("Gagal menyimpan data!", "", "error");
+          });
       }
     });
   };
@@ -64,8 +82,8 @@ const TambahObat = () => {
             </label>
             <input
               type="text"
-              name="medicineName"
-              value={formData.medicineName}
+              name="namaobat"
+              value={formData.namaobat}
               onChange={handleChange}
               className="shadow appearance-none border rounded w-full py-2 px-4 text-black leading-tight focus:outline-none focus:shadow-outline"
               required
@@ -77,8 +95,8 @@ const TambahObat = () => {
             </label>
             <input
               type="number"
-              name="quantity"
-              value={formData.quantity}
+              name="jumlahobat"
+              value={formData.jumlahobat}
               onChange={handleChange}
               className="shadow appearance-none border rounded w-full py-2 px-4 text-black leading-tight focus:outline-none focus:shadow-outline"
               required
@@ -91,8 +109,8 @@ const TambahObat = () => {
             <div className="flex items-center">
               <input
                 type="date"
-                name="entryDate"
-                value={formData.entryDate}
+                name="tglmasuk"
+                value={formData.tglmasuk}
                 onChange={handleChange}
                 className="shadow appearance-none border rounded w-full py-2 px-4 text-black leading-tight focus:outline-none focus:shadow-outline"
                 required
@@ -106,8 +124,8 @@ const TambahObat = () => {
             <div className="flex items-center">
               <input
                 type="date"
-                name="expiryDate"
-                value={formData.expiryDate}
+                name="tglkadaluarsa"
+                value={formData.tglkadaluarsa}
                 onChange={handleChange}
                 className="shadow appearance-none border rounded w-full py-2 px-4 text-black leading-tight focus:outline-none focus:shadow-outline"
                 required
@@ -120,8 +138,8 @@ const TambahObat = () => {
             </label>
             <input
               type="text"
-              name="batchNo"
-              value={formData.batchNo}
+              name="nobatch"
+              value={formData.nobatch}
               onChange={handleChange}
               className="shadow appearance-none border rounded w-full py-2 px-4 text-black leading-tight focus:outline-none focus:shadow-outline"
               required
@@ -133,7 +151,7 @@ const TambahObat = () => {
             </label>
             <Menu as="div" className="relative">
               <Menu.Button className="shadow appearance-none border rounded w-full py-2 px-4 text-left text-black leading-tight focus:outline-none focus:shadow-outline">
-                {formData.category || "Pilih Kategori"}
+                {formData.kategori || "Pilih Kategori"}
               </Menu.Button>
               <Menu.Items className="absolute mt-1 w-full bg-white border border-gray-200 rounded-md shadow-lg z-10">
                 {[
@@ -141,16 +159,16 @@ const TambahObat = () => {
                   "Obat Cair",
                   "Obat Padat",
                   "Obat Lainnya",
-                ].map((category) => (
-                  <Menu.Item key={category}>
+                ].map((kategori) => (
+                  <Menu.Item key={kategori}>
                     {({ active }) => (
                       <div
                         className={`${
                           active ? "bg-secondary-400 text-white" : "text-black"
                         } px-4 py-2 cursor-pointer`}
-                        onClick={() => setFormData({ ...formData, category })}
+                        onClick={() => setFormData({ ...formData, kategori })}
                       >
-                        {category}
+                        {kategori}
                       </div>
                     )}
                   </Menu.Item>
@@ -164,19 +182,19 @@ const TambahObat = () => {
             </label>
             <Menu as="div" className="relative">
               <Menu.Button className="shadow appearance-none border rounded w-full py-2 px-4 text-left text-black leading-tight focus:outline-none focus:shadow-outline">
-                {formData.type || "Pilih Jenis"}
+                {formData.jenisobat || "Pilih Jenis"}
               </Menu.Button>
               <Menu.Items className="absolute mt-1 w-full bg-white border border-gray-200 rounded-md shadow-lg z-10">
-                {["Tablet", "Syrup", "Krim"].map((type) => (
-                  <Menu.Item key={type}>
+                {["Tablet", "Syrup", "Krim"].map((jenisobat) => (
+                  <Menu.Item key={jenisobat}>
                     {({ active }) => (
                       <div
                         className={`${
                           active ? "bg-secondary-400 text-white" : "text-black"
                         } px-4 py-2 cursor-pointer`}
-                        onClick={() => setFormData({ ...formData, type })}
+                        onClick={() => setFormData({ ...formData, jenisobat })}
                       >
-                        {type}
+                        {jenisobat}
                       </div>
                     )}
                   </Menu.Item>
@@ -186,12 +204,12 @@ const TambahObat = () => {
           </div>
           <div className="mb-4">
             <label className="block text-black text-base font-bold mb-2">
-              Harga
+              Hargaobat
             </label>
             <input
               type="number"
-              name="price"
-              value={formData.price}
+              name="hargaobat"
+              value={formData.hargaobat}
               onChange={handleChange}
               className="shadow appearance-none border rounded w-full py-2 px-4 text-black leading-tight focus:outline-none focus:shadow-outline"
               required
