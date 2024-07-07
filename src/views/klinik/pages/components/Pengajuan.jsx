@@ -8,7 +8,6 @@ const MySwal = withReactContent(Swal);
 
 export default function Pengajuan() {
   const { id } = useParams();
-  console.log(id);
   const axiosInstance = useAxios();
   const [formData, setFormData] = useState({
     politujuan: "",

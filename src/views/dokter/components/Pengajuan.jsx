@@ -57,7 +57,7 @@ export default function Pengajuan() {
 
   const saveData = async () => {
     try {
-      const response = await axiosInstance.post("/pelayanans", {
+      await axiosInstance.post("/pelayanans", {
         poli: poli,
         perawatan: perawatan,
         jeniskunjungan: jeniskunjungan,
@@ -66,8 +66,6 @@ export default function Pengajuan() {
         tanggalkunjungan: startDate,
         pasienId: id,
       });
-
-      console.log("Data: ", response.data);
 
       MySwal.fire("Tersimpan!", "Data Anda telah disimpan.", "success");
     } catch (error) {
@@ -124,14 +122,16 @@ export default function Pengajuan() {
               <label className=" text-black font-secondary-Karla font-bold flex-[30%]">
                 Poli
               </label>
-              <input
-                type="text"
-                name="poli"
+              <select
+                name="Poli"
                 value={poli}
                 onChange={(e) => setPoli(e.target.value)}
                 className="p-1 h-9 flex-[70%] rounded-md text-left bg-white border border-black focus:outline-none"
-                placeholder=""
-              />
+              >
+                <option value=""></option>
+                <option value="Poli Umum">Poli Umum</option>
+                <option value="Poli Gigi">Poli Gigi</option>
+              </select>
             </div>
             <div className="flex items-center space-x-5 mr-14 ">
               <label className=" text-black font-secondary-Karla font-bold flex-[30%]">

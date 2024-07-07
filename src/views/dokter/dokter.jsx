@@ -13,6 +13,25 @@ import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import useAxios from "../../useAxios";
 
+const formatDate = (dateString) => {
+  const options = { year: "numeric", month: "long", day: "numeric" };
+  return new Date(dateString).toLocaleDateString(undefined, options);
+};
+
+const calculateAge = (birthDateString) => {
+  const birthDate = new Date(birthDateString);
+  const referenceDate = new Date("2024-07-08T00:00:00.000Z");
+  let age = referenceDate.getFullYear() - birthDate.getFullYear();
+  const monthDifference = referenceDate.getMonth() - birthDate.getMonth();
+  if (
+    monthDifference < 0 ||
+    (monthDifference === 0 && referenceDate.getDate() < birthDate.getDate())
+  ) {
+    age--;
+  }
+  return age;
+};
+
 export default function Dokter() {
   const [dataPasien, setDataPasien] = useState([]);
   const [approvalStatus, setApprovalStatus] = useState({});
@@ -263,7 +282,9 @@ export default function Dokter() {
                     {entry.statuspeserta}
                   </td>
                   <td className="border border-primary-600 px-4 py-2 text-center">
-                    {entry.tgllahir}
+                    {`${formatDate(entry.tgllahir)} (${calculateAge(
+                      entry.tgllahir
+                    )} tahun)`}
                   </td>
                   <td className="border border-primary-600 px-4 py-2 text-center">
                     {entry.gender}

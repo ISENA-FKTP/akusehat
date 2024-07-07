@@ -1,53 +1,84 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import Sidebar_Klinik from "../../../components/klinik/sidebar_klinik";
 import Header from "../../../components/header";
-import { FaPrint } from "react-icons/fa6";
 import { IoSearch } from "react-icons/io5";
-import { dataPasien } from "../../statistik/model/data/dataPasien";
-import { dataDiagnosa } from "../../statistik/model/data/dataDiagnosa";
-import { dataObatPasien } from "../../statistik/model/data/dataTerapi";
-import { dataPemeriksaan } from "../../statistik/model/data/dataPemeriksaan";
-import { DataKunjunganKlinik } from "../../statistik/model/dataKunjunganKlinik";
-import { generatePath, useNavigate } from "react-router-dom";
-import jsPDF from "jspdf";
+import { useNavigate } from "react-router-dom";
 import PrintButton from "../../../components/klinik/converPDF";
+import useAxios from "../../../useAxios";
 
 export default function Laporan() {
+  const axiosInstance = useAxios();
   const [sortBy, setSortBy] = useState("most");
   const [sortedData, setSortedData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
+  const [dataPasien, setDataPasien] = useState([]);
+  const [dataPengajuans, setPengajuans] = useState([]);
+  const [dataDiagnosa, setDataDiagnosa] = useState([]);
+  const [dataObat, setDataObat] = useState([]);
+  const [dataPemeriksaan, setDataPemeriksaan] = useState([]);
   const navigate = useNavigate();
-  const [glitch, setGlitch] = useState(false);
-
-  const PdfButton = () => {
-    const handlePrint = () => {
-      const doc = new jsPDF();
-      doc.text("Hello world!", 10, 10);
-      doc.save("document.pdf");
-    };
-  };
+  const [, setGlitch] = useState(false);
 
   const handleClick = () => {
     setGlitch(true);
     setTimeout(() => {
       setGlitch(false);
       navigate("/KajianAwal");
-    }, 1000); // Durasi glitch (ms)
+    }, 1000);
   };
 
-  const combinedData = dataPasien.map((pasien) => ({
-    ...pasien,
-    diagnosa: dataDiagnosa.find((diagnosa) => diagnosa.uuid === pasien.uuid),
-    kunjungan: DataKunjunganKlinik.find(
-      (kunjungan) => kunjungan.uuid === pasien.uuid
-    ),
-    obatpasien: dataObatPasien.find((obat) => obat.uuid === pasien.uuid),
-    pemeriksaan: dataPemeriksaan.find(
-      (pemeriksaan) => pemeriksaan.uuid === pasien.uuid
-    ),
-  }));
+  const formatDate = (dateString) => {
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [
+          pasiensRes,
+          pengajuansRes,
+          diagnosaRes,
+          obatRes,
+          pemeriksaanRes,
+        ] = await Promise.all([
+          axiosInstance.get("/pasiens"),
+          axiosInstance.get("/pelayanans"),
+          axiosInstance.get("/diagnosas"),
+          axiosInstance.get("/obats"),
+          axiosInstance.get("/pemeriksaans"),
+        ]);
+
+        setDataPasien(pasiensRes.data);
+        setPengajuans(pengajuansRes.data);
+        setDataDiagnosa(diagnosaRes.data);
+        setDataObat(obatRes.data);
+        setDataPemeriksaan(pemeriksaanRes.data);
+      } catch (error) {
+        console.error("Error fetching data", error);
+      }
+    };
+
+    fetchData();
+  }, [axiosInstance]);
+
+  const combinedData = useMemo(
+    () =>
+      dataPasien.map((pasien) => ({
+        ...pasien,
+        pengajuan: dataPengajuans.find((obat) => obat.pasienId === pasien.id),
+        diagnosa: dataDiagnosa.find(
+          (diagnosa) => diagnosa.pasienId === pasien.id
+        ),
+        obat: dataObat.find((obat) => obat.pasienId === pasien.id),
+        pemeriksaan: dataPemeriksaan.find(
+          (pemeriksaan) => pemeriksaan.pasienId === pasien.id
+        ),
+      })),
+    [dataPasien, dataPengajuans, dataDiagnosa, dataObat, dataPemeriksaan]
+  );
 
   const countStatusOccurrences = (data) => {
     const statusCount = data.reduce((acc, item) => {
@@ -89,14 +120,14 @@ export default function Laporan() {
       (selectedStatus ? entry.statuspeserta === selectedStatus : true)
   );
 
-  const calculateAge = (dateOfBirth) => {
-    const birthDate = new Date(dateOfBirth);
-    const currentDate = new Date();
-    let age = currentDate.getFullYear() - birthDate.getFullYear();
-    const monthDifference = currentDate.getMonth() - birthDate.getMonth();
+  const calculateAge = (birthDateString) => {
+    const birthDate = new Date(birthDateString);
+    const referenceDate = new Date("2024-07-08T00:00:00.000Z");
+    let age = referenceDate.getFullYear() - birthDate.getFullYear();
+    const monthDifference = referenceDate.getMonth() - birthDate.getMonth();
     if (
       monthDifference < 0 ||
-      (monthDifference === 0 && currentDate.getDate() < birthDate.getDate())
+      (monthDifference === 0 && referenceDate.getDate() < birthDate.getDate())
     ) {
       age--;
     }
@@ -131,17 +162,7 @@ export default function Laporan() {
 
       <div className="border border-primary-600 mx-auto shadow-lg flex items-center text-center w-[80%] rounded ml-44 py-5">
         <form className="w-full mx-8 space-y-4">
-          <div className="flex items-center">
-            <button
-              type="button"
-              className="relative overflow-hidden group p-3 bg-success-600 text-white rounded-md font-medium focus:outline-none focus:ring-2 focus:ring-success-700 flex items-center justify-center transition-transform duration-200 transform hover:rotate-10 hover:scale-90"
-              onClick={handleClick}
-            >
-              {" "}
-              Tambah Data
-            </button>
-          </div>
-          <div className="flex justify-center">
+          <div className="flex  justify-between">
             <div className="flex items-center space-x-3">
               <div className="flex items-center space-x-3 ">
                 <label
@@ -169,7 +190,7 @@ export default function Laporan() {
               <select
                 name="Status"
                 value={selectedStatus}
-                onChange={handleStatusChange} // Added onChange event handler
+                onChange={handleStatusChange}
                 className="p-1 w-32 rounded-md border border-black font-secondary-Karla font-medium text-black"
               >
                 <option value="">Semua</option>
@@ -198,7 +219,7 @@ export default function Laporan() {
                   </span>
                   <input
                     type="text"
-                    placeholder="Cari pengunjung..."
+                    placeholder="Nama Pasien..."
                     value={searchTerm}
                     onChange={handleSearch}
                     className="lg:px-2 lg:w-auto w-40 py-1 pl-8 border rounded-md focus:outline-none focus:ring-blue-500 focus:border-primary-600 placeholder:ml-5"
@@ -207,6 +228,15 @@ export default function Laporan() {
                 </div>
               </div>
               <div>
+                <div className="flex items-center">
+                  <button
+                    type="button"
+                    className="relative overflow-hidden group px-3 py-1 mb-1 bg-success-600 text-white rounded-md font-medium focus:outline-none focus:ring-2 focus:ring-success-700 flex items-center justify-center transition-transform duration-200 transform hover:rotate-10 hover:scale-90"
+                    onClick={handleClick}
+                  >
+                    Tambah Data
+                  </button>
+                </div>
                 <PrintButton />
               </div>
             </div>
@@ -242,7 +272,7 @@ export default function Laporan() {
                 </th>
                 <th className="px-4 py-2 bg-primary-600 text-white">Terapi</th>
                 <th className="px-4 py-2 bg-primary-600 text-white rounded-tr-lg">
-                  Rujuk (Ya/Tidak)
+                  Status Pulang
                 </th>
               </tr>
             </thead>
@@ -261,13 +291,15 @@ export default function Laporan() {
                     {entry.norm}
                   </td>
                   <td className="border border-primary-600 px-4 py-2 text-center">
-                    {entry.kunjungan.politujuan}
+                    {entry.pengajuan.poli}
                   </td>
                   <td className="border border-primary-600 px-4 py-2 text-center">
                     {entry.nama}
                   </td>
                   <td className="border border-primary-600 px-4 py-2 text-center">
-                    {calculateAge(entry.tgllahir)} tahun
+                    {`${formatDate(entry.tgllahir)} (${calculateAge(
+                      entry.tgllahir
+                    )} tahun)`}
                   </td>
                   <td className="border border-primary-600 px-4 py-2 text-center">
                     {entry.gender}
@@ -276,16 +308,24 @@ export default function Laporan() {
                     {entry.statuspeserta}
                   </td>
                   <td className="border border-primary-600 px-4 py-2 text-center">
-                    {entry.diagnosa.jenispenyakit}
+                    {entry.diagnosa && (
+                      <>
+                        <div>{entry.diagnosa.jenispenyakit1}</div>
+                        <div>{entry.diagnosa.jenispenyakit2}</div>
+                        <div>{entry.diagnosa.jenispenyakit3}</div>
+                        <div>{entry.diagnosa.jenispenyakit4}</div>
+                        <div>{entry.diagnosa.jenispenyakit5}</div>
+                      </>
+                    )}
                   </td>
                   <td className="border border-primary-600 px-4 py-2 text-center">
-                    {entry.obatpasien && (
+                    {entry.obat && (
                       <>
-                        <div>{entry.obatpasien.jenisobat1}</div>
-                        <div>{entry.obatpasien.jenisobat2}</div>
-                        <div>{entry.obatpasien.jenisobat3}</div>
-                        <div>{entry.obatpasien.jenisobat4}</div>
-                        <div>{entry.obatpasien.jenisobat5}</div>
+                        <div>{entry.obat.jenisobat1}</div>
+                        <div>{entry.obat.jenisobat2}</div>
+                        <div>{entry.obat.jenisobat3}</div>
+                        <div>{entry.obat.jenisobat4}</div>
+                        <div>{entry.obat.jenisobat5}</div>
                       </>
                     )}
                   </td>

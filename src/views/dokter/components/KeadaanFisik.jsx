@@ -7,48 +7,6 @@ import { useParams } from "react-router-dom";
 
 const MySwal = withReactContent(Swal);
 
-const handleSave = () => {
-  MySwal.fire({
-    title: "Apakah Anda yakin?",
-    text: "Anda tidak akan dapat mengembalikan ini!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#3085d6",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Ya, simpan!",
-    cancelButtonText: "Tidak, batalkan!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      saveData();
-    }
-  });
-};
-
-const handleCancel = () => {
-  MySwal.fire({
-    title: "Apakah Anda yakin?",
-    text: "Anda akan membatalkan perubahan ini!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#d33",
-    cancelButtonColor: "#3085d6",
-    confirmButtonText: "Ya, batalkan!",
-    cancelButtonText: "Tidak, kembali!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      cancelData();
-    }
-  });
-};
-
-const saveData = () => {
-  MySwal.fire("Tersimpan!", "Data Anda telah disimpan.", "success");
-};
-
-const cancelData = () => {
-  MySwal.fire("Dibatalkan!", "Perubahan telah dibatalkan.", "error");
-};
-
 export default function KeadaanFisik() {
   const [data, setData] = useState({
     beratbadan: "",
@@ -137,22 +95,6 @@ export default function KeadaanFisik() {
               value={data.imtBBTB}
               readOnly
             />
-          </div>
-          <div className="flex space-x-4">
-            <button
-              type="button"
-              className="bg-blue-500 bg-success-600 text-white px-4 py-1 rounded hover:bg-emerald-950"
-              onClick={handleSave}
-            >
-              Simpan
-            </button>
-            <button
-              type="button"
-              className="bg-error-700 text-white px-4 py-1 rounded hover:bg-gray-600"
-              onClick={handleCancel}
-            >
-              Batal
-            </button>
           </div>
         </form>
       </div>

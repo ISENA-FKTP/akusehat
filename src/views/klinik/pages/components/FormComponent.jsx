@@ -211,14 +211,20 @@ const FormComponent = ({ existingPatient }) => {
         <label className="text-black font-secondary-Karla font-bold w-36 ">
           Status Peserta :
         </label>
-        <input
-          type="text"
+        <select
           name="statuspeserta"
           value={formData.statuspeserta}
           onChange={handleChange}
           className="p-2 w-[500px] rounded-md text-left bg-white border border-black focus:outline-none"
-          placeholder=" Keterangan....."
-        />
+        >
+          <option value="" disabled>
+            Pilih Status Peserta
+          </option>
+          <option value="Anggota">Anggota</option>
+          <option value="PNS">PNS</option>
+          <option value="Keluarga">Keluarga</option>
+          <option value="Siswa Dikban">Siswa Dikban</option>
+        </select>
       </div>
 
       <div className="flex items-center py-1 ">
@@ -238,14 +244,18 @@ const FormComponent = ({ existingPatient }) => {
         <label className="text-black font-secondary-Karla font-bold w-36">
           Jenis Kelamin :
         </label>
-        <input
-          type="text"
+        <select
           name="gender"
           value={formData.gender}
           onChange={handleChange}
           className="p-2 w-[500px] rounded-md text-left bg-white border border-black focus:outline-none"
-          placeholder=" Keterangan....."
-        />
+        >
+          <option value="" disabled>
+            Pilih Jenis Kelamin
+          </option>
+          <option value="Laki-laki">Laki-laki</option>
+          <option value="Perempuan">Perempuan</option>
+        </select>
       </div>
 
       <div className="flex items-center  py-1">

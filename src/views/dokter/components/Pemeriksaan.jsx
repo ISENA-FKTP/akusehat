@@ -11,8 +11,8 @@ export default function Pemeriksaan() {
   const axiosInstance = useAxios();
   const [formData, setFormData] = useState({
     namadokter: "",
-    pelayanannonmedis: "", // Perhatikan nama ini
-    statuspulang: "", // Perhatikan nama ini
+    pelayanannonmedis: "",
+    statuspulang: "",
     kasusKLL: false,
     pasienId: id,
   });

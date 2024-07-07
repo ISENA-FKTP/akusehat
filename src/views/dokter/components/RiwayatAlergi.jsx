@@ -141,6 +141,8 @@ export default function RiwayatAlergi() {
               }
             >
               <option value=""></option>
+              <option value="Tidak ada">Tidak ada</option>
+
               <option value="Antibiotik">Antibiotik</option>
               <option value="Antiinflamasi">Antiinflamasi</option>
               <option value="Non Steroid">Non Steroid</option>
