@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from "react";
-import { FaEdit, FaPlus, FaMinus } from "react-icons/fa";
+import { FaEdit, FaPlus, FaMinus, FaCheck } from "react-icons/fa";
 import Sidebar from "../../../components/apotik/sidebar";
 import Header from "../../../components/header";
 import Swal from "sweetalert2";
@@ -10,6 +11,7 @@ import useAxios from "../../../useAxios";
 
 const DashboardApotek = () => {
   const [medicines, setMedicines] = useState([]);
+  const [requests, setRequests] = useState([]);
   const [sortBy, setSortBy] = useState("most");
   const [searchTerm, setSearchTerm] = useState("");
   const [modal, setModal] = useState({ type: null, medicine: null });
@@ -69,10 +71,25 @@ const DashboardApotek = () => {
       }
     };
 
+    const getRequests = async () => {
+      const status = false;
+      try {
+        const response = await axiosInstance.get(`/obatsbyStatus/${status}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = response.data;
+        setRequests(data);
+      } catch (error) {
+        console.error("Error fetching requests:", error);
+      }
+    };
+
     if (token) {
       getDataobats();
+      getRequests();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [axiosInstance, sortBy, token]);
 
   const handleEditChange = (e) => {
@@ -111,7 +128,8 @@ const DashboardApotek = () => {
 
   const handlejumlahobatChange = (jumlahobat, isAdd) => {
     const updatedMedicines = medicines.map((medicine) =>
-      medicine.namaobat === modal.medicine.namaobat
+      medicine.namaobat === modal.medicine.namaobat &&
+      medicine.jenisobat === modal.medicine.jenisobat
         ? {
             ...medicine,
             jumlahobat: isAdd
@@ -127,6 +145,35 @@ const DashboardApotek = () => {
       text: `Jumlah obat berhasil ${isAdd ? "ditambahkan" : "dikurangi"}.`,
     });
     closeModal();
+  };
+
+  const handleRequestComplete = async (requestId) => {
+    try {
+      const response = await axiosInstance.patch(
+        `/obats/${requestId}`,
+        { status: true },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        setRequests(requests.filter((request) => request.uuid !== requestId));
+        Swal.fire({
+          icon: "success",
+          title: "Berhasil!",
+          text: "Permintaan obat berhasil diselesaikan.",
+        });
+      }
+    } catch (error) {
+      console.error("Error updating request status:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Gagal!",
+        text: "Terjadi kesalahan saat memperbarui status permintaan obat.",
+      });
+    }
   };
 
   return (
@@ -148,6 +195,44 @@ const DashboardApotek = () => {
           <h2 className="text-xl font-semibold mb-4 text-secondary-500">
             Seluruh data terkait obat di apotek
           </h2>
+          <div className="mb-4 p-4 border rounded-md bg-gray-100">
+            <h3 className="text-xl font-semibold mb-2">Permintaan Obat</h3>
+            <ul>
+              {requests.map((request) => (
+                <li
+                  key={request.uuid}
+                  className="mb-2 flex justify-between items-center "
+                >
+                  <div>
+                    {[
+                      request.jenisobat1,
+                      request.jenisobat2,
+                      request.jenisobat3,
+                      request.jenisobat4,
+                      request.jenisobat5,
+                    ].map(
+                      (jenisobat, idx) =>
+                        jenisobat && (
+                          <div key={idx}>
+                            <span>
+                              Obat ke-{idx + 1}: {jenisobat} - {request.dosis}{" "}
+                            </span>
+                          </div>
+                        )
+                    )}
+                    <span>BMHP: {request.BMHP}</span>
+                    <div className="border-b border-primary-950 my-1 "></div>
+                  </div>
+                  <button
+                    onClick={() => handleRequestComplete(request.uuid)}
+                    className="p-2 rounded-md bg-green-600 text-white"
+                  >
+                    <FaCheck className="text-success-600" />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
           <div className="flex justify-between mb-4">
             <div>
               <label htmlFor="sort">Urutkan berdasarkan:</label>
@@ -200,7 +285,7 @@ const DashboardApotek = () => {
               <tbody>
                 {filteredMedicines.map((medicine, index) => (
                   <tr
-                    key={index}
+                    key={medicine.uuid}
                     className={
                       index % 2 === 0 ? "bg-primary-50" : "bg-primary-100"
                     }

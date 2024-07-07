@@ -1,28 +1,80 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from "react";
 import Sidebar from "../../../components/apotik/sidebar";
 import Header from "../../../components/header";
+import useAxios from "../../../useAxios";
 
 const LaporanApotek = () => {
   const [medicines, setMedicines] = useState([]);
-  const [filteredMedicines, setFilteredMedicines] = useState([]);
   const [selectedMonth, setSelectedMonth] = useState("");
   const [selectedYear, setSelectedYear] = useState("");
-  const [, setTotalUsedMedicinePrice] = useState(0);
-  const [, setTotalRemainingMedicinePrice] = useState(0);
+  const [, setTotalUsedMedicinehargaobat] = useState(0);
+  const [, setTotalRemainingMedicinehargaobat] = useState(0);
+  const axiosInstance = useAxios();
+  const token = localStorage.getItem("accessToken");
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+  };
 
   useEffect(() => {
-    fetch("/data/medicine.json")
-      .then((response) => response.json())
-      .then((data) => {
-        const sortedData = data.sort((a, b) =>
-          a.medicineName.localeCompare(b.medicineName)
+    const fetchData = async () => {
+      try {
+        const [dataobatsResponse, deletedDataobatsResponse] = await Promise.all(
+          [
+            axiosInstance.get("/dataobats", {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }),
+            axiosInstance.get("/deletedataobats", {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }),
+          ]
+        );
+
+        const dataobats = dataobatsResponse.data;
+        const deletedDataobats = deletedDataobatsResponse.data;
+
+        // Gabungkan data obat dan data obat yang dihapus
+        const mergedData = dataobats.map((obat) => {
+          const deleted = deletedDataobats.find(
+            (delObat) =>
+              delObat.namaobat === obat.namaobat &&
+              delObat.jenisobat === obat.jenisobat
+          );
+          return {
+            ...obat,
+            deletedJumlah: deleted ? deleted.jumlahobat : 0,
+            deletedHarga: deleted ? deleted.hargaobat : 0,
+          };
+        });
+
+        const sortedData = mergedData.sort((a, b) =>
+          a.namaobat.localeCompare(b.namaobat)
         );
         setMedicines(sortedData);
-        setFilteredMedicines(sortedData);
-        calculatePrices(sortedData);
-      })
-      .catch((error) => console.error("Error fetching medicines:", error));
-  }, []);
+        calculatehargaobats(sortedData);
+      } catch (error) {
+        console.error("Error fetching medicines:", error);
+      }
+    };
+
+    if (token) {
+      fetchData();
+    }
+  }, [axiosInstance, token]);
+
+  useEffect(() => {
+    filterMedicines();
+  }, [selectedMonth, selectedYear]);
 
   const handleMonthChange = (e) => {
     setSelectedMonth(e.target.value);
@@ -32,37 +84,31 @@ const LaporanApotek = () => {
     setSelectedYear(e.target.value);
   };
 
-  useEffect(() => {
-    filterMedicines();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedMonth, selectedYear]);
-
   const filterMedicines = () => {
     const filtered = medicines.filter((medicine) => {
-      const entryDate = new Date(medicine.entryDate);
+      const tglmasuk = new Date(medicine.tglmasuk);
       const monthMatches = selectedMonth
-        ? entryDate.getMonth() + 1 === parseInt(selectedMonth)
+        ? tglmasuk.getMonth() + 1 === parseInt(selectedMonth)
         : true;
       const yearMatches = selectedYear
-        ? entryDate.getFullYear() === parseInt(selectedYear)
+        ? tglmasuk.getFullYear() === parseInt(selectedYear)
         : true;
       return monthMatches && yearMatches;
     });
-    setFilteredMedicines(filtered);
-    calculatePrices(filtered);
+    calculatehargaobats(filtered);
   };
 
-  const calculatePrices = (medicinesToCalculate) => {
-    const totalUsedPrice = medicinesToCalculate.reduce(
-      (sum, medicine) => sum + medicine.price * medicine.usedMedicine,
+  const calculatehargaobats = (medicinesToCalculate) => {
+    const totalUsedhargaobat = medicinesToCalculate.reduce(
+      (sum, medicine) => sum + medicine.deletedHarga * medicine.deletedJumlah,
       0
     );
-    const totalRemainingPrice = medicinesToCalculate.reduce(
-      (sum, medicine) => sum + medicine.price * medicine.quantity,
+    const totalRemaininghargaobat = medicinesToCalculate.reduce(
+      (sum, medicine) => sum + medicine.hargaobat * medicine.jumlahobat,
       0
     );
-    setTotalUsedMedicinePrice(totalUsedPrice);
-    setTotalRemainingMedicinePrice(totalRemainingPrice);
+    setTotalUsedMedicinehargaobat(totalUsedhargaobat);
+    setTotalRemainingMedicinehargaobat(totalRemaininghargaobat);
   };
 
   const startYear = 2020;
@@ -72,45 +118,52 @@ const LaporanApotek = () => {
     (v, i) => startYear + i
   );
 
-  // Function to group medicines by category
-  const groupByCategory = (medicines) => {
+  const groupBykategori = (medicines) => {
     return medicines.reduce((grouped, medicine) => {
-      const category = medicine.category;
-      if (!grouped[category]) {
-        grouped[category] = [];
+      const kategori = medicine.kategori;
+      if (!grouped[kategori]) {
+        grouped[kategori] = [];
       }
-      grouped[category].push(medicine);
+      grouped[kategori].push(medicine);
       return grouped;
     }, {});
   };
 
-  const calculateCategoryTotals = (categoryMedicines) => {
-    const totalUsed = categoryMedicines.reduce(
-      (sum, medicine) => sum + medicine.price * medicine.usedMedicine,
+  const calculatekategoriTotals = (kategoriMedicines) => {
+    const totalUsed = kategoriMedicines.reduce((sum, medicine) => {
+      return sum + medicine.deletedHarga * medicine.deletedJumlah;
+    }, 0);
+    const totalRemaining = kategoriMedicines.reduce(
+      (sum, medicine) => sum + medicine.hargaobat * medicine.jumlahobat,
       0
     );
-    const totalRemaining = categoryMedicines.reduce(
-      (sum, medicine) => sum + medicine.price * medicine.quantity,
+    const totalObatKeluar = kategoriMedicines.reduce(
+      (sum, medicine) => sum + medicine.deletedJumlah,
       0
     );
-    return { totalUsed, totalRemaining };
+    return { totalUsed, totalRemaining, totalObatKeluar };
   };
 
-  const groupedMedicines = groupByCategory(filteredMedicines);
+  const groupedMedicines = groupBykategori(medicines);
 
   const calculateOverallTotals = () => {
-    const totalUsedOverall = filteredMedicines.reduce(
-      (sum, medicine) => sum + medicine.price * medicine.usedMedicine,
+    const totalUsedOverall = medicines.reduce(
+      (sum, medicine) => sum + medicine.deletedHarga * medicine.deletedJumlah,
       0
     );
-    const totalRemainingOverall = filteredMedicines.reduce(
-      (sum, medicine) => sum + medicine.price * medicine.quantity,
+    const totalRemainingOverall = medicines.reduce(
+      (sum, medicine) => sum + medicine.hargaobat * medicine.jumlahobat,
       0
     );
-    return { totalUsedOverall, totalRemainingOverall };
+    const totalObatKeluarOverall = medicines.reduce(
+      (sum, medicine) => sum + medicine.deletedJumlah,
+      0
+    );
+    return { totalUsedOverall, totalRemainingOverall, totalObatKeluarOverall };
   };
 
-  const { totalUsedOverall, totalRemainingOverall } = calculateOverallTotals();
+  const { totalUsedOverall, totalRemainingOverall, totalObatKeluarOverall } =
+    calculateOverallTotals();
 
   return (
     <div className="flex">
@@ -124,7 +177,7 @@ const LaporanApotek = () => {
           userStatus="Apoteker"
           profilePicture="/logo.png"
         />
-        <div className="container mx-auto">
+        <div className="container mx-auto pl-5">
           <h1 className="text-2xl font-bold mt-4 mb-2">
             Laporan Penggunaan Obat Apotek
           </h1>
@@ -167,13 +220,12 @@ const LaporanApotek = () => {
               </select>
             </div>
           </div>
-          {Object.keys(groupedMedicines).map((category, index) => {
-            const { totalUsed, totalRemaining } = calculateCategoryTotals(
-              groupedMedicines[category]
-            );
+          {Object.keys(groupedMedicines).map((kategori, index) => {
+            const { totalUsed, totalRemaining, totalObatKeluar } =
+              calculatekategoriTotals(groupedMedicines[kategori]);
             return (
               <div key={index} className="mb-6">
-                <h1 className="text-xl font-bold mt-4 mb-2">{category}</h1>
+                <h1 className="text-xl font-bold mt-4 mb-2">{kategori}</h1>
                 <div className="overflow-x-auto">
                   <table className="table-auto w-full">
                     <thead>
@@ -211,47 +263,54 @@ const LaporanApotek = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {groupedMedicines[category].map((medicine, index) => (
-                        <tr
-                          key={index}
-                          className={
-                            index % 2 === 0 ? "bg-primary-50" : "bg-primary-100"
-                          }
-                        >
-                          <td className="border px-4 py-2">
-                            {medicine.medicineName}
-                          </td>
-                          <td className="border px-4 py-2">
-                            Rp{medicine.price}
-                          </td>
-                          <td className="border px-4 py-2">
-                            {medicine.category}
-                          </td>
-                          <td className="border px-4 py-2">{medicine.type}</td>
-                          <td className="border px-4 py-2">
-                            {medicine.entryDate}
-                          </td>
-                          <td className="border px-4 py-2">
-                            {medicine.expiryDate}
-                          </td>
-                          <td className="border px-4 py-2">
-                            {medicine.usedMedicine}
-                          </td>
-                          <td className="border px-4 py-2">
-                            Rp{medicine.price * medicine.usedMedicine}
-                          </td>
-                          <td className="border px-4 py-2">
-                            {medicine.quantity}
-                          </td>
-                          <td className="border px-4 py-2">
-                            Rp{medicine.price * medicine.quantity}
-                          </td>
-                        </tr>
-                      ))}
-                      <tr className="bg- bg-primary-500 text-white font-semibold">
-                        <td className="border px-4 py-2 text-left" colSpan="7">
-                          Total Harga Keseluruhan {category}
+                      {groupedMedicines[kategori].map((medicine, index) => {
+                        return (
+                          <tr
+                            key={index}
+                            className={
+                              index % 2 === 0
+                                ? "bg-primary-50"
+                                : "bg-primary-100"
+                            }
+                          >
+                            <td className="border px-4 py-2">
+                              {medicine.namaobat}
+                            </td>
+                            <td className="border px-4 py-2">
+                              Rp{medicine.hargaobat}
+                            </td>
+                            <td className="border px-4 py-2">
+                              {medicine.kategori}
+                            </td>
+                            <td className="border px-4 py-2">
+                              {medicine.jenisobat}
+                            </td>
+                            <td className="border px-4 py-2">
+                              {formatDate(medicine.tglmasuk)}
+                            </td>
+                            <td className="border px-4 py-2">
+                              {formatDate(medicine.tglkadaluarsa)}
+                            </td>
+                            <td className="border px-4 py-2">
+                              {medicine.deletedJumlah}
+                            </td>
+                            <td className="border px-4 py-2">
+                              Rp{medicine.deletedHarga * medicine.deletedJumlah}
+                            </td>
+                            <td className="border px-4 py-2">
+                              {medicine.jumlahobat}
+                            </td>
+                            <td className="border px-4 py-2">
+                              Rp{medicine.hargaobat * medicine.jumlahobat}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                      <tr className="bg-primary-500 text-white font-semibold">
+                        <td className="border px-4 py-2 text-left" colSpan="6">
+                          Total Harga Keseluruhan {kategori}
                         </td>
+                        <td className="border px-4 py-2">{totalObatKeluar}</td>
                         <td className="border px-4 py-2">Rp{totalUsed}</td>
                         <td className="border px-4 py-2"></td>
                         <td className="border px-4 py-2">Rp{totalRemaining}</td>
@@ -268,6 +327,9 @@ const LaporanApotek = () => {
               <thead>
                 <tr>
                   <th className="border px-4 py-2 bg-primary-600 text-white">
+                    Total Obat Keluar
+                  </th>
+                  <th className="border px-4 py-2 bg-primary-600 text-white">
                     Total Harga Obat Keluar
                   </th>
                   <th className="border px-4 py-2 bg-primary-600 text-white">
@@ -276,7 +338,8 @@ const LaporanApotek = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr className="bg- bg-primary-500 text-white font-semibold">
+                <tr className="bg-primary-500 text-white font-semibold">
+                  <td className="border px-4 py-2">{totalObatKeluarOverall}</td>
                   <td className="border px-4 py-2">Rp{totalUsedOverall}</td>
                   <td className="border px-4 py-2">
                     Rp{totalRemainingOverall}
