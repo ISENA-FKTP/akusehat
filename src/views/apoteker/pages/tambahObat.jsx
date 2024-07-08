@@ -5,12 +5,10 @@ import Header from "../../../components/header";
 import { useState } from "react";
 import Swal from "sweetalert2";
 import useAxios from "../../../useAxios";
-import { useNavigate } from "react-router-dom";
 
 const TambahObat = () => {
   const axiosInstance = useAxios();
   const token = localStorage.getItem("accessToken");
-  const navigate = useNavigate;
   const [formData, setFormData] = useState({
     namaobat: "",
     jumlahobat: "",
@@ -41,24 +39,27 @@ const TambahObat = () => {
       cancelButtonColor: "#d33",
       confirmButtonText: "Ya, Simpan!",
       cancelButtonText: "Batal",
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
-        axiosInstance
-          .post("/dataobats", formData, {
+        try {
+          const response = await axiosInstance.post("/dataobats", formData, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          })
-          .then((response) => {
-            if (response.status === 201) {
-              Swal.fire("Data obat telah disimpan!", "", "success");
-              navigate("/apotek");
-            }
-          })
-          .catch((error) => {
-            console.error("There was an error saving the data!", error);
-            Swal.fire("Gagal menyimpan data!", "", "error");
           });
+
+          if (response.status === 201) {
+            Swal.fire("Data obat telah disimpan!", "", "success");
+          } else {
+            Swal.fire("Unexpected response status!", "", "error");
+          }
+        } catch (error) {
+          Swal.fire(
+            "Error",
+            "Terjadi kesalahan saat mengirim permintaan",
+            error
+          );
+        }
       }
     });
   };
