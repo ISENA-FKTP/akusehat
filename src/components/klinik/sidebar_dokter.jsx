@@ -9,7 +9,7 @@ import useClearTokensOnUnload from "../../useClearTokensOnUnload";
 import useAxios from "../../useAxios";
 
 const Sidebar_Dokter = () => {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const axiosInstance = useAxios();

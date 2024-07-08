@@ -65,6 +65,13 @@ export default function Dokter() {
         });
 
         setDataPasien(combinedData);
+
+        // Set initial approvalStatus based on fetched data
+        const initialApprovalStatus = combinedData.reduce((acc, entry) => {
+          acc[entry.id] = entry.approved;
+          return acc;
+        }, {});
+        setApprovalStatus(initialApprovalStatus);
       } catch (error) {
         console.error("Error fetching data:", error);
         toast.error("Gagal mengambil data pasien atau pengajuan", {
@@ -105,6 +112,15 @@ export default function Dokter() {
       });
 
       if (pelayanansResponse.data.length !== 0) {
+        await axiosInstance.patch(
+          `/pasiens/${id}`,
+          { approved: true },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         setApprovalStatus((prevStatus) => ({
           ...prevStatus,
           [id]: true,
@@ -232,7 +248,7 @@ export default function Dokter() {
                   NRP/No. BPJS
                 </th>
                 <th className="px-4 py-2 bg-primary-600 text-white">
-                  Nama Lengkap
+                  Nama Pasien
                 </th>
                 <th className="px-4 py-2 bg-primary-600 text-white">
                   Status Peserta
@@ -338,7 +354,7 @@ export default function Dokter() {
                         )
                       }
                     >
-                      {approvalStatus[entry.pengajuan.pasien.id] ? (
+                      {approvalStatus[entry.id] ? (
                         <MdOutlineCheckBox className="text-primary-600 text-2xl" />
                       ) : (
                         <MdOutlineCheckBoxOutlineBlank className="text-primary-600 text-2xl" />
