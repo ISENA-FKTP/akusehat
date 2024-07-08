@@ -1,12 +1,18 @@
 import { Card, Typography } from "@material-tailwind/react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
+import { format } from "date-fns";
 
-export default function TabelHoemVisit({ table_head, table_row }) {
-  TabelHoemVisit.propTypes = {
+export default function TabelHomeVisit({ table_head, table_row }) {
+  TabelHomeVisit.propTypes = {
     table_head: PropTypes.arrayOf(PropTypes.string).isRequired,
     table_row: PropTypes.arrayOf(PropTypes.object).isRequired,
   };
+
+  const formatDate = (dateString) => {
+    return format(new Date(dateString), "dd MMM yyyy HH:mm:ss");
+  };
+
   return (
     <div>
       <Card className="h-full w-full overflow-auto">
@@ -14,7 +20,7 @@ export default function TabelHoemVisit({ table_head, table_row }) {
           <thead>
             <tr>
               {table_head.map((head) => (
-                <th key={head} className=" bg-primary-500 p-4">
+                <th key={head} className="bg-primary-500 p-4">
                   <Typography
                     variant="large"
                     color="white"
@@ -29,16 +35,14 @@ export default function TabelHoemVisit({ table_head, table_row }) {
           <tbody>
             {table_row.map(
               ({
-                nrp,
-                nama,
-                pangkat,
-                satuan_kerja,
-                tanggal,
+                pegawai: { nrp, namapegawai, pangkat, satuankerja },
+                createdAt,
                 keluhan,
-                pemeriksaan_fisik,
-                diagnosis,
+                pemeriksaanfisik,
+                diagnosa,
                 terapi,
-                saran_medis,
+                saranmedis,
+                fotodokumentasi,
               }) => {
                 const classes = "p-4";
 
@@ -59,7 +63,7 @@ export default function TabelHoemVisit({ table_head, table_row }) {
                         color="blue-gray"
                         className="font-normal"
                       >
-                        {nama}
+                        {namapegawai}
                       </Typography>
                     </td>
                     <td className={classes}>
@@ -77,7 +81,7 @@ export default function TabelHoemVisit({ table_head, table_row }) {
                         color="blue-gray"
                         className="font-normal"
                       >
-                        {satuan_kerja}
+                        {satuankerja}
                       </Typography>
                     </td>
                     <td className={classes}>
@@ -86,7 +90,7 @@ export default function TabelHoemVisit({ table_head, table_row }) {
                         color="blue-gray"
                         className="font-normal"
                       >
-                        {tanggal}
+                        {formatDate(createdAt)}
                       </Typography>
                     </td>
                     <td className={classes}>
@@ -104,7 +108,7 @@ export default function TabelHoemVisit({ table_head, table_row }) {
                         color="blue-gray"
                         className="font-normal"
                       >
-                        {pemeriksaan_fisik}
+                        {pemeriksaanfisik}
                       </Typography>
                     </td>
                     <td className={classes}>
@@ -113,7 +117,7 @@ export default function TabelHoemVisit({ table_head, table_row }) {
                         color="blue-gray"
                         className="font-normal"
                       >
-                        {diagnosis}
+                        {diagnosa}
                       </Typography>
                     </td>
                     <td className={classes}>
@@ -131,8 +135,25 @@ export default function TabelHoemVisit({ table_head, table_row }) {
                         color="blue-gray"
                         className="font-normal"
                       >
-                        {saran_medis}
+                        {saranmedis}
                       </Typography>
+                    </td>
+                    <td className={classes}>
+                      {fotodokumentasi && (
+                        <a
+                          href={fotodokumentasi}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Typography
+                            variant="small"
+                            color="blue-gray"
+                            className="font-medium"
+                          >
+                            Lihat Foto
+                          </Typography>
+                        </a>
+                      )}
                     </td>
                     <td className={classes}>
                       <Link to={`/detail/${nrp}`}>

@@ -3,13 +3,14 @@ import Sidebar from "../../../components/manage/sidebar";
 import Header from "../../../components/header";
 import SearchBar from "../../../components/manage/searchBar";
 import TambahButton from "../../../components/manage/tambahButton";
-import { DataSakit, head_data_home_visit } from "../model/dataSakit";
-import TabelHoemVisit from "../../../components/manage/tabel-home-visit";
+import { head_data_home_visit } from "../model/dataSakit";
+import TabelHomeVisit from "../../../components/manage/tabel-home-visit";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import useAxios from "../../../useAxios";
 
 export default function HomeVisit() {
   const navigate = useNavigate();
-
+  const axiosInstance = useAxios();
   const [data, setData] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const [keyword, setKeyword] = useState(() => {
@@ -17,8 +18,22 @@ export default function HomeVisit() {
   });
 
   useEffect(() => {
-    DataSakit.getDataHomeVisit().then((data) => setData(data));
-  }, []);
+    const fetchData = async () => {
+      const token = localStorage.getItem("accessToken");
+      try {
+        const response = await axiosInstance.get("/homevisits", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setData(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [axiosInstance]);
 
   const tambahDataHandler = () => {
     navigate("/manage/data-home-visit/tambah-data");
@@ -29,9 +44,12 @@ export default function HomeVisit() {
     setSearchParams({ keyword });
   }
 
-  const filteredData = data.filter((data) => {
-    return data.nama.toLowerCase().includes(keyword.toLowerCase());
-  });
+  const filteredData =
+    data.filter((data) => {
+      return data.pegawai?.namapegawai
+        ?.toLowerCase()
+        .includes(keyword?.toLowerCase());
+    }) || [];
 
   return (
     <div className=" font-primary">
@@ -53,7 +71,7 @@ export default function HomeVisit() {
           <SearchBar keyword={keyword} keywordChange={onKeywordChangeHandler} />
           <TambahButton onClicked={tambahDataHandler} />
         </div>
-        <TabelHoemVisit
+        <TabelHomeVisit
           table_head={head_data_home_visit}
           table_row={filteredData}
         />

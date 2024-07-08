@@ -4,6 +4,9 @@ import Swal from "sweetalert2";
 import useAxios from "../../useAxios";
 
 const FormDataSakit = () => {
+  const axiosInstance = useAxios();
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     nrp: "",
     namapegawai: "",
@@ -17,10 +20,8 @@ const FormDataSakit = () => {
     WFH: "",
     Keterangan: "",
     pegawaiId: "",
+    penyakitLainnya: "",
   });
-
-  const axiosInstance = useAxios();
-  const navigate = useNavigate();
 
   const handleNrpChange = (e) => {
     const { name, value } = e.target;
@@ -38,6 +39,14 @@ const FormDataSakit = () => {
   };
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleJenisSakitChange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -119,7 +128,6 @@ const FormDataSakit = () => {
               );
 
               if (addEmployeeResponse.status === 201) {
-                console.log(addEmployeeResponse.data);
                 const response = await axiosInstance.get(
                   `/pegawais/nonrp/${formData.nrp}`,
                   {
@@ -162,7 +170,10 @@ const FormDataSakit = () => {
       const addSakitResponse = await axiosInstance.post(
         "/datasakits",
         {
-          jenispenyakit: formData.jenis_sakit,
+          jenispenyakit:
+            formData.jenis_sakit === "Lainnya"
+              ? formData.penyakitLainnya
+              : formData.jenis_sakit,
           jenisperawatan: formData.jenis_perawatan,
           lamacuti: formData.lama_cuti,
           awalsakit: formData.awal_sakit,
@@ -260,7 +271,7 @@ const FormDataSakit = () => {
             <select
               name="jenis_sakit"
               value={formData.jenis_sakit}
-              onChange={handleChange}
+              onChange={handleJenisSakitChange}
               className="w-full px-3 py-2 border rounded-md"
             >
               <option value="">Pilih penyakit</option>
@@ -270,6 +281,16 @@ const FormDataSakit = () => {
               <option value="Ginjal">Ginjal</option>
               <option value="Lainnya">Lainnya</option>
             </select>
+            {formData.jenis_sakit === "Lainnya" && (
+              <input
+                type="text"
+                name="penyakitLainnya"
+                value={formData.penyakitLainnya}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border rounded-md mt-2"
+                placeholder="Masukkan penyakit lainnya"
+              />
+            )}
           </div>
           <div className="mb-4 w-1/2">
             <label className="block text-gray-700">Jenis Perawatan</label>

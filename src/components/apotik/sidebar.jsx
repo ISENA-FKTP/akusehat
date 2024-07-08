@@ -10,7 +10,7 @@ import useAxios from "../../useAxios";
 import useClearTokensOnUnload from "../../useClearTokensOnUnload";
 
 export default function Sidebar() {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const axiosInstance = useAxios();

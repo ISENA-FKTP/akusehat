@@ -677,12 +677,7 @@ export const DataSakit = {
     });
   },
 
-  setDataRekamMedis(
-    nrp,
-    tanggal,
-    keterangan,
-    pdf_url
-  ) {
+  setDataRekamMedis(nrp, tanggal, keterangan, pdf_url) {
     const data_sakit = data_sakit_polisi.find((data) => data.nrp === nrp);
 
     data_sakit.data_rekam_medis.push({
@@ -692,12 +687,10 @@ export const DataSakit = {
     });
   },
 
-  getData(nrp){
+  getData(nrp) {
     const data_sakit = data_sakit_polisi.find((data) => data.nrp === nrp);
     return Promise.resolve(data_sakit);
-  }
-
-
+  },
 };
 
 export const head_data_sakit = [
@@ -713,7 +706,7 @@ export const head_data_sakit = [
   "Lama Cuti",
   "WFH",
   "Keterangan",
-  "",
+  "Detail",
 ];
 
 export const head_data_home_visit = [
@@ -727,7 +720,8 @@ export const head_data_home_visit = [
   "Diagnosis",
   "Terapi",
   "Saran Medis",
-  "",
+  "Dokumentasi",
+  "Detail",
 ];
 
 export const head_data_rekam_medis = [
@@ -743,10 +737,10 @@ export const head_data_rekam_medis = [
 
 export const showFormattedDate = (date) => {
   const options = {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
   };
-  return new Date(date).toLocaleDateString('id-ID', options);
+  return new Date(date).toLocaleDateString("id-ID", options);
 };
