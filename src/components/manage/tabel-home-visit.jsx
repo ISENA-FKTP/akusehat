@@ -43,6 +43,7 @@ export default function TabelHomeVisit({ table_head, table_row }) {
                 terapi,
                 saranmedis,
                 fotodokumentasi,
+                pegawaiId,
               }) => {
                 const classes = "p-4";
 
@@ -156,7 +157,7 @@ export default function TabelHomeVisit({ table_head, table_row }) {
                       )}
                     </td>
                     <td className={classes}>
-                      <Link to={`/detail/${nrp}`}>
+                      <Link to={`/detail/${pegawaiId}`}>
                         <Typography
                           as="a"
                           href="#"

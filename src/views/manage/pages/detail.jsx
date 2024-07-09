@@ -129,6 +129,17 @@ export default function DetailPage() {
 
         const dataUuid = datasakits[0].Pegawais.uuid;
 
+        const dataHomeVisitResponse = await axiosInstance.get(
+          `/homevisits/pegawai/${pegawaiId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const datahomevisits = dataHomeVisitResponse.data;
+
         const employeeResponse = await axiosInstance.get(
           `/pegawais/${dataUuid}`,
           {
@@ -142,7 +153,7 @@ export default function DetailPage() {
         setData({
           pegawai: employeeData,
           data_sakit: datasakits,
-          data_home_visit: [],
+          data_home_visit: datahomevisits,
           data_rekam_medis: [],
         });
       } catch (error) {
