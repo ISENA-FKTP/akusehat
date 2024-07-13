@@ -1,0 +1,42 @@
+export const ppkData = [
+  {
+    no: 1,
+    kdppk: "02340072",
+    namaPpk: "POLI POLRES LOMBOK BARAT",
+    consid: "28304",
+    consumerSecret: "3mJ2523C46",
+    userKeyPcare: "4e6c2fc627e8a7bd413d054cfc561dc5",
+  },
+  {
+    no: 2,
+    kdppk: "0509B005",
+    namaPpk: "POLIKLINIK POLRES LOMBOK UTARA",
+    consid: "28147",
+    consumerSecret: "2tV0607328",
+    userKeyPcare: "b6443ec5c9dc77fb6cdab30d59d96fc2",
+  },
+  {
+    no: 3,
+    kdppk: "02400008",
+    namaPpk: "KLINIK SAT BRIMOB POLDA NTB",
+    consid: "16679",
+    consumerSecret: "7rHDC16BF8",
+    userKeyPcare: "45c74ec3f79f12cb35a8b3de3872433e",
+  },
+  {
+    no: 4,
+    kdppk: "02400009",
+    namaPpk: "KLINIK POLDA NTB",
+    consid: "19319",
+    consumerSecret: "6jH7812742",
+    userKeyPcare: "cb5c1a16e60d25c86a1bc98e90734a74",
+  },
+  {
+    no: 5,
+    kdppk: "02400007",
+    namaPpk: "KLINIK POLRES MATARAM",
+    consid: "24794",
+    consumerSecret: "2oXFFD581A",
+    userKeyPcare: "141406ce27b239ae56279f456ba616dc",
+  },
+];

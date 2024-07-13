@@ -68,7 +68,9 @@ export default function Laporan() {
     () =>
       dataPasien.map((pasien) => ({
         ...pasien,
-        pengajuan: dataPengajuans.find((obat) => obat.pasienId === pasien.id),
+        pengajuan: dataPengajuans.find(
+          (pengajuan) => pengajuan.pasienId === pasien.id
+        ),
         diagnosa: dataDiagnosa.find(
           (diagnosa) => diagnosa.pasienId === pasien.id
         ),
@@ -77,7 +79,7 @@ export default function Laporan() {
           (pemeriksaan) => pemeriksaan.pasienId === pasien.id
         ),
       })),
-    [dataPasien, dataPengajuans, dataDiagnosa, dataObat, dataPemeriksaan]
+    [dataDiagnosa, dataObat, dataPasien, dataPemeriksaan, dataPengajuans]
   );
 
   const countStatusOccurrences = (data) => {
@@ -254,6 +256,9 @@ export default function Laporan() {
                   No
                 </th>
                 <th className="px-4 py-2 bg-primary-600 text-white">
+                  Tanggal Masuk
+                </th>
+                <th className="px-4 py-2 bg-primary-600 text-white">
                   No. Rekam Medis
                 </th>
                 <th className="px-4 py-2 bg-primary-600 text-white">Poli</th>
@@ -288,10 +293,13 @@ export default function Laporan() {
                     {index + 1}
                   </td>
                   <td className="border border-primary-600 px-4 py-2 text-center">
+                    {formatDate(entry.createdAt)}
+                  </td>
+                  <td className="border border-primary-600 px-4 py-2 text-center">
                     {entry.norm}
                   </td>
                   <td className="border border-primary-600 px-4 py-2 text-center">
-                    {entry.pengajuan.poli}
+                    {entry.pengajuan?.poli || "Data Belum Diisi Oleh Dokter"}
                   </td>
                   <td className="border border-primary-600 px-4 py-2 text-center">
                     {entry.nama}
@@ -308,29 +316,40 @@ export default function Laporan() {
                     {entry.statuspeserta}
                   </td>
                   <td className="border border-primary-600 px-4 py-2 text-center">
-                    {entry.diagnosa && (
+                    {entry.diagnosa ? (
                       <>
-                        <div>{entry.diagnosa.jenispenyakit1}</div>
+                        <div>
+                          {entry.diagnosa.jenispenyakit1 ||
+                            "Data Belum Diisi Oleh Dokter"}
+                        </div>
                         <div>{entry.diagnosa.jenispenyakit2}</div>
                         <div>{entry.diagnosa.jenispenyakit3}</div>
                         <div>{entry.diagnosa.jenispenyakit4}</div>
                         <div>{entry.diagnosa.jenispenyakit5}</div>
                       </>
+                    ) : (
+                      "Data Belum Diisi Oleh Dokter"
                     )}
                   </td>
                   <td className="border border-primary-600 px-4 py-2 text-center">
-                    {entry.obat && (
+                    {entry.obat ? (
                       <>
-                        <div>{entry.obat.jenisobat1}</div>
+                        <div>
+                          {entry.obat.jenisobat1 ||
+                            "Data Belum Diisi Oleh Dokter"}
+                        </div>
                         <div>{entry.obat.jenisobat2}</div>
                         <div>{entry.obat.jenisobat3}</div>
                         <div>{entry.obat.jenisobat4}</div>
                         <div>{entry.obat.jenisobat5}</div>
                       </>
+                    ) : (
+                      "Data Belum Diisi Oleh Dokter"
                     )}
                   </td>
                   <td className="border border-primary-600 px-4 py-2 text-center">
-                    {entry.pemeriksaan.statuspulang}
+                    {entry.pemeriksaan?.statuspulang ||
+                      "Data Belum Diisi Oleh Dokter"}
                   </td>
                 </tr>
               ))}

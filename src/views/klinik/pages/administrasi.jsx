@@ -7,6 +7,8 @@ import FormComponent from "./components/FormComponent";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import crypto from "crypto-js"; // Menambahkan library crypto-js
+import { ppkData } from "../../../json/ppkData";
 
 const Administrasi = () => {
   const [username, setUsername] = useState("");
@@ -29,18 +31,51 @@ const Administrasi = () => {
     }
   }, [navigate]);
 
-  const handleSearch = async (searchType, searchValue) => {
-    let apiUrl = "";
+  const generateTimestamp = () => Math.floor(Date.now() / 1000);
 
-    if (searchType === "bpjs") {
-      apiUrl = `http://localhost:3000/api/peserta/bpjs/${searchValue}`;
-    } else if (searchType === "nik") {
-      apiUrl = `http://localhost:3000/api/peserta/nik/${searchValue}`;
-    }
+  const generateSignature = (consid, timestamp, consumerSecret) => {
+    const message = `${consid}&${timestamp}`;
+    const hash = crypto.HmacSHA256(message, consumerSecret);
+    return crypto.enc.Base64.stringify(hash);
+  };
+
+  const generateAuthorization = (username, password, kdAplikasi) => {
+    const credentials = `${username}:${password}:${kdAplikasi}`;
+    return btoa(credentials);
+  };
+
+  const handleSearch = async (searchType, searchValue) => {
+    let baseUrl = "https://apijkn-dev.bpjs-kesehatan.go.id";
+    let serviceName = "pcare-rest-dev";
+    let apiUrl = `${baseUrl}/${serviceName}/peserta/${searchType}/${searchValue}`;
+
+    const selectedPpk = ppkData[0];
+    const {
+      consid,
+      consumerSecret,
+      userKeyPcare,
+      usernamePcare,
+      passwordPcare,
+      kdAplikasi,
+    } = selectedPpk;
+
+    const timestamp = generateTimestamp();
+    const signature = generateSignature(consid, timestamp, consumerSecret);
+    const authorization = generateAuthorization(
+      usernamePcare,
+      passwordPcare,
+      kdAplikasi
+    );
 
     try {
       const response = await axios.get(apiUrl, {
         headers: {
+          "X-cons-id": consid,
+          "X-timestamp": timestamp,
+          "X-signature": signature,
+          "X-authorization": authorization,
+          user_key: userKeyPcare,
+          "Content-Type": "application/json; charset=utf-8",
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       });

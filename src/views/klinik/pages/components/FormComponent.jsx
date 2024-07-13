@@ -59,24 +59,20 @@ const FormComponent = ({ existingPatient }) => {
   };
 
   const handleSaveOrNext = () => {
-    if (existingPatient) {
-      navigate("/dokter");
-    } else {
-      MySwal.fire({
-        title: "Apakah Anda yakin?",
-        text: "Anda tidak akan dapat mengembalikan ini!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Ya, simpan!",
-        cancelButtonText: "Tidak, batalkan!",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          postPasiens();
-        }
-      });
-    }
+    MySwal.fire({
+      title: "Apakah Anda yakin?",
+      text: "Anda tidak akan dapat mengembalikan ini!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Ya, simpan!",
+      cancelButtonText: "Tidak, batalkan!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        postPasiens();
+      }
+    });
   };
 
   const handleCancel = () => {
@@ -229,7 +225,7 @@ const FormComponent = ({ existingPatient }) => {
 
       <div className="flex items-center py-1 ">
         <label className="text-black font-secondary-Karla font-bold w-36">
-          Tanggal :
+          Tanggal Lahir:
         </label>
         <input
           type="date"

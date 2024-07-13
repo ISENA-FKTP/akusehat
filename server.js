@@ -55,7 +55,6 @@ app.get("/api/peserta/:searchType/:searchValue", (req, res) => {
   const { searchType, searchValue } = req.params;
 
   if (searchType === "bpjs") {
-    // Logic untuk mencari data berdasarkan no BPJS
     if (searchValue === dummyPeserta.noKartu) {
       res.status(200).json({
         response: dummyPeserta,

@@ -57,18 +57,17 @@ export default function Dokter() {
           }
         );
 
-        const combinedData = pasiensResponse.data.map((pasien) => {
-          const pengajuan = pengajuansResponse.data.find(
+        const combinedData = pasiensResponse.data.flatMap((pasien) => {
+          const pengajuans = pengajuansResponse.data.filter(
             (pengajuanDokter) => pengajuanDokter.pasien.id === pasien.id
           );
-          return { ...pasien, pengajuan };
+          return pengajuans.map((pengajuan) => ({ ...pasien, pengajuan }));
         });
 
         setDataPasien(combinedData);
 
-        // Set initial approvalStatus based on fetched data
         const initialApprovalStatus = combinedData.reduce((acc, entry) => {
-          acc[entry.id] = entry.approved;
+          acc[entry.pengajuan.uuid] = entry.pengajuan.approved;
           return acc;
         }, {});
         setApprovalStatus(initialApprovalStatus);
@@ -102,7 +101,7 @@ export default function Dokter() {
     navigate(`/kunjungan_dokter/${id}`);
   };
 
-  const handleApproveClick = async (nama, id) => {
+  const handleApproveClick = async (nama, id, uuid) => {
     try {
       const token = localStorage.getItem("accessToken");
       const pelayanansResponse = await axiosInstance.get(`/pelayanans/${id}`, {
@@ -113,7 +112,7 @@ export default function Dokter() {
 
       if (pelayanansResponse.data.length !== 0) {
         await axiosInstance.patch(
-          `/pasiens/${id}`,
+          `/pengajuans/${uuid}`,
           { approved: true },
           {
             headers: {
@@ -123,7 +122,7 @@ export default function Dokter() {
         );
         setApprovalStatus((prevStatus) => ({
           ...prevStatus,
-          [id]: true,
+          [uuid]: true,
         }));
         toast.success(`Approve pasien ${nama}`, {
           position: "top-right",
@@ -137,7 +136,7 @@ export default function Dokter() {
       } else {
         setApprovalStatus((prevStatus) => ({
           ...prevStatus,
-          [id]: false,
+          [uuid]: false,
         }));
         toast.error(`Tidak ada data pelayanan untuk pasien ${nama}`, {
           position: "top-right",
@@ -152,7 +151,7 @@ export default function Dokter() {
     } catch (error) {
       setApprovalStatus((prevStatus) => ({
         ...prevStatus,
-        [id]: false,
+        [uuid]: false,
       }));
       console.error("Error fetching pelayanans data:", error);
       toast.error("Gagal mengambil data pelayanan", {
@@ -248,6 +247,9 @@ export default function Dokter() {
                   NRP/No. BPJS
                 </th>
                 <th className="px-4 py-2 bg-primary-600 text-white">
+                  Tanggal Masuk
+                </th>
+                <th className="px-4 py-2 bg-primary-600 text-white">
                   Nama Pasien
                 </th>
                 <th className="px-4 py-2 bg-primary-600 text-white">
@@ -290,6 +292,9 @@ export default function Dokter() {
                   </td>
                   <td className="border border-primary-600 px-4 py-2 text-center">
                     {entry.nobpjs}
+                  </td>
+                  <td className="border border-primary-600 px-4 py-2 text-center">
+                    {formatDate(entry.createdAt)}
                   </td>
                   <td className="border border-primary-600 px-4 py-2 text-center">
                     {entry.nama}
@@ -350,11 +355,12 @@ export default function Dokter() {
                       onClick={() =>
                         handleApproveClick(
                           entry.nama,
-                          entry.pengajuan.pasien.id
+                          entry.pengajuan.pasien.id,
+                          entry.pengajuan.uuid
                         )
                       }
                     >
-                      {approvalStatus[entry.id] ? (
+                      {approvalStatus[entry.pengajuan.uuid] ? (
                         <MdOutlineCheckBox className="text-primary-600 text-2xl" />
                       ) : (
                         <MdOutlineCheckBoxOutlineBlank className="text-primary-600 text-2xl" />
