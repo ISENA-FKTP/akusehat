@@ -24,6 +24,7 @@ import LaporanApotek from "./views/apoteker/pages/LaporanApotek";
 import Dashboard_Dokter from "./views/dokter/index";
 import Dokter from "./views/dokter/dokter";
 import KunjunganDokter from "./views/dokter/kunjungan_dokter";
+import PrintPDF from "./views/klinik/pages/print_pdf";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
         <Route path="/administrasi" element={<Administrasi />} />
         <Route path="/laporan" element={<Laporan />} />
         <Route path="/kajianawal/:id" element={<KajianAwal />} />
+        <Route path="print_pdf" element={<PrintPDF />} />
         {/* Dokter */}
         <Route path="/dokter" element={<Dokter />} />
         <Route path="/kunjungan_dokter/:id" element={<KunjunganDokter />} />
