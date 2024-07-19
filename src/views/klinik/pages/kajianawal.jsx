@@ -20,7 +20,7 @@ export default function KajianAwal() {
       />
 
       <div className="flex relative flex-1">
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 ">
           <div className="flex flex-col place-content-center">
             <div className="py-5 bg-primary-600 shadow-lg flex-none text-start rounded-lg ml-28 mr-14 mt-5">
               <h1 className="ml-10 text-white font-secondary-Karla font-bold text-xl ">
@@ -46,7 +46,7 @@ export default function KajianAwal() {
             <div className="flex mt-7 ml-44 mr-28 items-baseline">
               <Pengajuan id={id} />
 
-              <div className="grid grid-rows-2 gap-5 flex-[40%]">
+              <div className="grid grid-rows-2 gap-5 flex-[40%] mb-10">
                 <KeadaanFisik id={id} />
 
                 <TekananDarah id={id} />

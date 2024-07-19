@@ -4,11 +4,9 @@ import { jwtDecode } from "jwt-decode";
 import Sidebar_Klinik from "../../../components/klinik/sidebar_klinik";
 import Header from "../../../components/header";
 import FormComponent from "./components/FormComponent";
-import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import crypto from "crypto-js"; // Menambahkan library crypto-js
-import { ppkData } from "../../../json/ppkData";
+import { fetchPatientData } from "../../../bpjs/generateSignature";
 
 const Administrasi = () => {
   const [username, setUsername] = useState("");
@@ -31,92 +29,26 @@ const Administrasi = () => {
     }
   }, [navigate]);
 
-  const generateTimestamp = () => Math.floor(Date.now() / 1000);
-
-  const generateSignature = (consid, timestamp, consumerSecret) => {
-    const message = `${consid}&${timestamp}`;
-    const hash = crypto.HmacSHA256(message, consumerSecret);
-    return crypto.enc.Base64.stringify(hash);
-  };
-
-  const generateAuthorization = (username, password, kdAplikasi) => {
-    const credentials = `${username}:${password}:${kdAplikasi}`;
-    return btoa(credentials);
-  };
-
   const handleSearch = async (searchType, searchValue) => {
-    let baseUrl = "https://apijkn-dev.bpjs-kesehatan.go.id";
-    let serviceName = "pcare-rest-dev";
-    let apiUrl = `${baseUrl}/${serviceName}/peserta/${searchType}/${searchValue}`;
-
-    const selectedPpk = ppkData[0];
-    const {
-      consid,
-      consumerSecret,
-      userKeyPcare,
-      usernamePcare,
-      passwordPcare,
-      kdAplikasi,
-    } = selectedPpk;
-
-    const timestamp = generateTimestamp();
-    const signature = generateSignature(consid, timestamp, consumerSecret);
-    const authorization = generateAuthorization(
-      usernamePcare,
-      passwordPcare,
-      kdAplikasi
-    );
-
     try {
-      const response = await axios.get(apiUrl, {
-        headers: {
-          "X-cons-id": consid,
-          "X-timestamp": timestamp,
-          "X-signature": signature,
-          "X-authorization": authorization,
-          user_key: userKeyPcare,
-          "Content-Type": "application/json; charset=utf-8",
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-      });
-
-      if (response.data.response) {
-        const formattedPatient = {
-          nobpjs: response.data.response.noKartu,
-          nama: response.data.response.nama,
-          statuspeserta: response.data.response.jnsPeserta.nama,
-          tgllahir: new Date(
-            response.data.response.tglLahir.split("-").reverse().join("-")
-          ),
-          gender: response.data.response.sex,
-          ppkumum: response.data.response.kdProviderPst
-            ? response.data.response.kdProviderPst.nmProvider
-            : "",
-          nohp: response.data.response.noHP,
-          norm: "",
-          role: "pasien",
-        };
-        setExistingPatient(formattedPatient);
-      } else {
-        setExistingPatient(null);
-      }
+      const patientData = await fetchPatientData(searchType, searchValue);
+      const formattedPatient = {
+        nobpjs: patientData.noKartu,
+        nama: patientData.nama,
+        statuspeserta: patientData.jnsPeserta.nama,
+        tgllahir: new Date(patientData.tglLahir.split("-").reverse().join("-")),
+        gender: patientData.sex,
+        ppkumum: patientData.kdProviderPst
+          ? patientData.kdProviderPst.nmProvider
+          : "",
+        nohp: patientData.noHP,
+        norm: "",
+        role: "pasien",
+      };
+      setExistingPatient(formattedPatient);
     } catch (error) {
-      console.log("Nothing searching patient in Server BPJS:");
-      console.log("Try to catch in server klinik!");
-      try {
-        const response = await axios.get(`/pasiens/nobpjs/${searchValue}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-        });
-        if (response.data) {
-          setExistingPatient(response.data);
-        } else {
-          setExistingPatient(null);
-        }
-      } catch (error) {
-        console.error("Error searching patient:", error);
-      }
+      console.error("Error searching patient:", error);
+      setExistingPatient(null);
     }
   };
 
@@ -159,7 +91,7 @@ const Administrasi = () => {
                     name="bpjsType"
                     className="py-1 px-2 rounded-md border border-white mb-9 w-[15.8rem] bg-primary-600 font-secondary-Karla font-medium text-white focus:outline-none focus:border-indigo-50"
                   >
-                    <option className="bg-primary-600 text-white" value="bpjs">
+                    <option className="bg-primary-600 text-white" value="noka">
                       BPJS
                     </option>
                     <option className="bg-primary-600 text-white" value="nik">

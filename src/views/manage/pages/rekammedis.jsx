@@ -6,9 +6,11 @@ import TambahButton from "../../../components/manage/tambahButton";
 import { DataSakit, head_data_rekam_medis } from "../model/dataSakit";
 import TabelRekamMedis from "../../../components/manage/tabel-rekam-medis";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import useAxios from "../../../useAxios";
 
 export default function RekamMedis() {
   const navigate = useNavigate();
+  const axiosInstance = useAxios();
 
   const [data, setData] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
