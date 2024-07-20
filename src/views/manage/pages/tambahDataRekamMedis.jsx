@@ -1,16 +1,8 @@
-import { useState, useEffect } from "react";
 import Sidebar from "../../../components/manage/sidebar";
 import Header from "../../../components/header";
-import { DataRekamMedis } from "../model/dataRekamMedis";
 import { FormDataRekamMedis } from "../../../components/manage/formDataRekamMedis";
 
 export default function TambahDataRekamMedis() {
-  const [, setData] = useState([]);
-
-  useEffect(() => {
-    DataRekamMedis.getDataRekamMedis().then((data) => setData(data));
-  }, []);
-
   return (
     <div className=" font-primary">
       {/* Sidebar */}

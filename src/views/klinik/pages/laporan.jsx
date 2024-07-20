@@ -233,7 +233,7 @@ export default function Laporan() {
                 <div className="flex items-center">
                   <button
                     type="button"
-                    className="relative overflow-hidden group px-3 py-1 mb-1 bg-success-600 text-white rounded-md font-medium focus:outline-none focus:ring-2 focus:ring-success-700 flex items-center justify-center transition-transform duration-200 transform hover:rotate-10 hover:scale-90"
+                    className="relative overflow-hidden group px-3 py-1 mb-1 bg-success-600 text-white rounded-md font-medium  flex items-center justify-center "
                     onClick={handleClick}
                   >
                     Tambah Data

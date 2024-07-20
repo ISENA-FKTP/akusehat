@@ -1,12 +1,18 @@
 import { Card, Typography } from "@material-tailwind/react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
+import { format } from "date-fns";
 
 export default function TabelRekamMedis({ table_head, table_row }) {
   TabelRekamMedis.propTypes = {
     table_head: PropTypes.arrayOf(PropTypes.string).isRequired,
     table_row: PropTypes.arrayOf(PropTypes.object).isRequired,
   };
+
+  const formatDate = (dateString) => {
+    return format(new Date(dateString), "dd MMM yyyy");
+  };
+
   return (
     <div>
       <Card className="h-full w-full overflow-auto">
@@ -29,18 +35,17 @@ export default function TabelRekamMedis({ table_head, table_row }) {
           <tbody>
             {table_row.map(
               ({
-                nrp,
-                nama,
-                pangkat,
-                satuan_kerja,
-                tanggal,
+                pegawai: { nrp, namapegawai, pangkat, satuankerja },
+                createdAt,
                 keterangan,
-                pdf_url,
+                filerekammedis,
+                pegawaiId,
               }) => {
                 const classes = "p-4";
+                const urlImage = "http://localhost:5000/";
 
                 return (
-                  <tr key={nrp} className="even:bg-primary-300">
+                  <tr key={nrp} className="even:bg-primary-300 ">
                     <td className={classes}>
                       <Typography
                         variant="small"
@@ -56,7 +61,7 @@ export default function TabelRekamMedis({ table_head, table_row }) {
                         color="blue-gray"
                         className="font-normal"
                       >
-                        {nama}
+                        {namapegawai}
                       </Typography>
                     </td>
                     <td className={classes}>
@@ -74,7 +79,7 @@ export default function TabelRekamMedis({ table_head, table_row }) {
                         color="blue-gray"
                         className="font-normal"
                       >
-                        {satuan_kerja}
+                        {satuankerja}
                       </Typography>
                     </td>
                     <td className={classes}>
@@ -83,7 +88,7 @@ export default function TabelRekamMedis({ table_head, table_row }) {
                         color="blue-gray"
                         className="font-normal"
                       >
-                        {tanggal}
+                        {formatDate(createdAt)}
                       </Typography>
                     </td>
                     <td className={classes}>
@@ -98,16 +103,17 @@ export default function TabelRekamMedis({ table_head, table_row }) {
                     <td className={classes}>
                       <Typography
                         as="a"
-                        href={pdf_url}
+                        href={`${urlImage}${filerekammedis}`}
                         variant="small"
-                        color="blue-gray"
-                        className="font-normal"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-normal text-primary-600 underline font-primary"
                       >
-                        {pdf_url}
+                        Lihat Foto
                       </Typography>
                     </td>
                     <td className={classes}>
-                      <Link to={`manage/detail/${nrp}`}>
+                      <Link to={`/detail/${pegawaiId}`}>
                         <Typography
                           as="a"
                           href="#"

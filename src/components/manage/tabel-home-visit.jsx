@@ -10,7 +10,7 @@ export default function TabelHomeVisit({ table_head, table_row }) {
   };
 
   const formatDate = (dateString) => {
-    return format(new Date(dateString), "dd MMM yyyy HH:mm:ss");
+    return format(new Date(dateString), "dd MMM yyyy");
   };
 
   return (
@@ -46,6 +46,7 @@ export default function TabelHomeVisit({ table_head, table_row }) {
                 pegawaiId,
               }) => {
                 const classes = "p-4";
+                const urlImage = "http://localhost:5000/";
 
                 return (
                   <tr key={nrp} className="even:bg-primary-300">
@@ -140,21 +141,16 @@ export default function TabelHomeVisit({ table_head, table_row }) {
                       </Typography>
                     </td>
                     <td className={classes}>
-                      {fotodokumentasi && (
-                        <a
-                          href={fotodokumentasi}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="font-medium"
-                          >
-                            Lihat Foto
-                          </Typography>
-                        </a>
-                      )}
+                      <Typography
+                        as="a"
+                        href={`${urlImage}${fotodokumentasi}`}
+                        variant="small"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-normal text-primary-600 underline font-primary"
+                      >
+                        Lihat Foto
+                      </Typography>
                     </td>
                     <td className={classes}>
                       <Link to={`/detail/${pegawaiId}`}>

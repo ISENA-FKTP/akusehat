@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import useAxios from "../../useAxios";
 
 const Dashboard = () => {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const navigate = useNavigate();
   const axiosInstance = useAxios();
 
@@ -20,7 +20,7 @@ const Dashboard = () => {
         }
         if (accessToken) {
           const decoded = jwtDecode(accessToken);
-          setEmail(decoded.email);
+          setUsername(decoded.username);
         } else {
           navigate("/");
         }
@@ -40,7 +40,7 @@ const Dashboard = () => {
       </div>
       <Header
         title="Pendaftaran Pelayanan Pasien"
-        userName={email}
+        userName={username}
         userStatus="Dokter Poli Umum"
         profilePicture="logo.png"
       />

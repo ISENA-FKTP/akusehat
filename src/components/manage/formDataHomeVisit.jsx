@@ -19,6 +19,8 @@ export const FormDataHomeVisit = () => {
     saranmedis: "",
   });
 
+  const [selectedFile, setSelectedFile] = useState(null);
+
   const handleNrpChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -32,6 +34,10 @@ export const FormDataHomeVisit = () => {
       e.preventDefault();
       await fetchData(formData.nrp);
     }
+  };
+
+  const handleFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
   };
 
   const handleChange = (e) => {
@@ -155,20 +161,28 @@ export const FormDataHomeVisit = () => {
 
   const addSickData = async (token, pegawaiId) => {
     try {
+      const formDataToSend = new FormData();
+      formDataToSend.append("keluhan", formData.keluhan);
+      formDataToSend.append("pemeriksaanfisik", formData.pemeriksaanfisik);
+      formDataToSend.append("diagnosa", formData.diagnosa);
+      formDataToSend.append("terapi", formData.terapi);
+      formDataToSend.append("saranmedis", formData.saranmedis);
+      formDataToSend.append("fotodokumentasi", selectedFile);
+      formDataToSend.append("pegawaiId", pegawaiId);
+
+      for (let [key, value] of formDataToSend.entries()) {
+        console.log(`${key}: ${value}`);
+      }
+
+      console.log(formDataToSend);
+
       const addSakitResponse = await axiosInstance.post(
         "/homevisits",
-        {
-          keluhan: formData.keluhan,
-          pemeriksaanfisik: formData.pemeriksaanfisik,
-          diagnosa: formData.diagnosa,
-          terapi: formData.terapi,
-          saranmedis: formData.saranmedis,
-          fotodokumentasi: formData.fotodokumentasi,
-          pegawaiId: pegawaiId,
-        },
+        formDataToSend,
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
           },
         }
       );
@@ -198,8 +212,8 @@ export const FormDataHomeVisit = () => {
   };
 
   return (
-    <div className="w-full h-max rounded-md border-3  shadow overflow-auto">
-      <div className=" pt-2 pl-4  w-full bg-secondary-300">
+    <div className="w-full h-max rounded-md border-3 shadow overflow-auto">
+      <div className="pt-2 pl-4 w-full bg-secondary-300">
         <h3 className="text-xl mb-6">Data Pegawai Sakit</h3>
       </div>
       <form className="px-5 pb-5" onSubmit={handleSubmit}>
@@ -310,11 +324,10 @@ export const FormDataHomeVisit = () => {
           <div className="mb-4 w-1/3">
             <label className="block text-gray-700">Foto Dokumentasi</label>
             <input
+              type="file"
               name="fotodokumentasi"
-              value={formData.fotodokumentasi}
-              onChange={handleChange}
+              onChange={handleFileChange}
               className="w-full px-3 py-2 border rounded-md"
-              placeholder="Masukkan URL foto dokumentasi"
             />
           </div>
         </div>

@@ -3,7 +3,7 @@ import Sidebar from "../../../components/manage/sidebar";
 import Header from "../../../components/header";
 import SearchBar from "../../../components/manage/searchBar";
 import TambahButton from "../../../components/manage/tambahButton";
-import { DataSakit, head_data_rekam_medis } from "../model/dataSakit";
+import { head_data_rekam_medis } from "../model/dataSakit";
 import TabelRekamMedis from "../../../components/manage/tabel-rekam-medis";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import useAxios from "../../../useAxios";
@@ -11,7 +11,6 @@ import useAxios from "../../../useAxios";
 export default function RekamMedis() {
   const navigate = useNavigate();
   const axiosInstance = useAxios();
-
   const [data, setData] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const [keyword, setKeyword] = useState(() => {
@@ -19,20 +18,38 @@ export default function RekamMedis() {
   });
 
   useEffect(() => {
-    DataSakit.getDataRekamMedis().then((data) => setData(data));
-  }, []);
+    const fetchData = async () => {
+      const token = localStorage.getItem("accessToken");
+      try {
+        const response = await axiosInstance.get("/datarekammedis", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setData(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
-  const tambahDataHandler = () => {
-    navigate("/manage/data-rekam-medis/tambah-data");
-  };
+    fetchData();
+  }, [axiosInstance]);
+
   function onKeywordChangeHandler(keyword) {
     setKeyword(keyword);
     setSearchParams({ keyword });
   }
 
-  const filteredData = data.filter((data) => {
-    return data.nama.toLowerCase().includes(keyword.toLowerCase());
-  });
+  const tambahDataHandler = () => {
+    navigate("/manage/data-rekam-medis/tambah-data");
+  };
+
+  const filteredData =
+    data.filter((data) => {
+      return data.pegawai?.namapegawai
+        ?.toLowerCase()
+        .includes(keyword?.toLowerCase());
+    }) || [];
 
   return (
     <div className=" font-primary">
