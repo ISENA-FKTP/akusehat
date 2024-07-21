@@ -25,7 +25,7 @@ export default function Laporan() {
     setGlitch(true);
     setTimeout(() => {
       setGlitch(false);
-      navigate("/KajianAwal");
+      navigate("/administrasi");
     }, 1000);
   };
 

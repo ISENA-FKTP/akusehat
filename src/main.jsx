@@ -5,7 +5,7 @@ import "./index.css";
 import axios from "axios";
 
 axios.defaults.withCredentials = true;
-// axios.defaults.baseURL = "http://36.93.24.60:5000";
+// axios.defaults.baseURL = "http://36.88.12.26:5000";
 axios.defaults.baseURL = "http://localhost:5000";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
