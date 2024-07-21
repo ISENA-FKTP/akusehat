@@ -6,98 +6,9 @@ import Header from "../../../components/header";
 import CardDataSakit from "../../../components/manage/cardDataSakit";
 import CardDataHomeVisit from "../../../components/manage/cardDataHomeVisit";
 import CardDataRekamMedis from "../../../components/manage/cardDataRekamMedis";
-import {
-  Page,
-  Text,
-  View,
-  Document,
-  StyleSheet,
-  PDFDownloadLink,
-} from "@react-pdf/renderer";
-import PropTypes from "prop-types";
-
-const styles = StyleSheet.create({
-  page: { padding: 30 },
-  section: { marginBottom: 10, padding: 10, borderBottom: "1px solid #eaeaea" },
-  heading: { fontSize: 18, marginBottom: 10 },
-  text: { fontSize: 12, marginBottom: 5 },
-});
-
-const PdfDocument = ({ data }) => (
-  <Document>
-    <Page style={styles.page}>
-      <View style={styles.section}>
-        <Text style={styles.heading}>Identitas</Text>
-        <Text style={styles.text}>NRP: {data.pegawai.nrp}</Text>
-        <Text style={styles.text}>Nama: {data.pegawai.namapegawai}</Text>
-        <Text style={styles.text}>Pangkat: {data.pegawai.pangkat}</Text>
-        <Text style={styles.text}>
-          Satuan kerja: {data.pegawai.satuankerja}
-        </Text>
-      </View>
-      <View style={styles.section}>
-        <Text style={styles.heading}>Data Sakit</Text>
-        {data.data_sakit && data.data_sakit.length > 0 ? (
-          data.data_sakit.map((item, index) => (
-            <Text key={index} style={styles.text}>
-              {item.detail}
-            </Text>
-          ))
-        ) : (
-          <Text style={styles.text}>No data available</Text>
-        )}
-      </View>
-      <View style={styles.section}>
-        <Text style={styles.heading}>Data Home Visit</Text>
-        {data.data_home_visit && data.data_home_visit.length > 0 ? (
-          data.data_home_visit.map((item, index) => (
-            <Text key={index} style={styles.text}>
-              {item.detail}
-            </Text>
-          ))
-        ) : (
-          <Text style={styles.text}>No data available</Text>
-        )}
-      </View>
-      <View style={styles.section}>
-        <Text style={styles.heading}>Data Rekam Medis</Text>
-        {data.data_rekam_medis && data.data_rekam_medis.length > 0 ? (
-          data.data_rekam_medis.map((item, index) => (
-            <Text key={index} style={styles.text}>
-              {item.detail}
-            </Text>
-          ))
-        ) : (
-          <Text style={styles.text}>No data available</Text>
-        )}
-      </View>
-    </Page>
-  </Document>
-);
+import { Button } from "@headlessui/react";
 
 export default function DetailPage() {
-  PdfDocument.propTypes = {
-    data: PropTypes.shape({
-      pegawai: PropTypes.shape({
-        nrp: PropTypes.number,
-        namapegawai: PropTypes.string,
-        pangkat: PropTypes.string,
-        satuankerja: PropTypes.string,
-      }).isRequired,
-      data_sakit: PropTypes.arrayOf(
-        PropTypes.shape({
-          detail: PropTypes.string,
-        })
-      ),
-      data_home_visit: PropTypes.array,
-      data_rekam_medis: PropTypes.arrayOf(
-        PropTypes.shape({
-          detail: PropTypes.string,
-        })
-      ),
-    }).isRequired,
-  };
-
   const axiosInstance = useAxios();
   const { pegawaiId } = useParams();
   const [data, setData] = useState({
@@ -112,55 +23,132 @@ export default function DetailPage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const dataSakitResponse = await axiosInstance.get(
-          `/datasakits/pegawai/${pegawaiId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        const datasakits = dataSakitResponse.data;
+      let uuid = "";
 
-        if (datasakits.length === 0) {
-          throw new Error("No data found");
+      const fetchDataSakit = async () => {
+        try {
+          const response = await axiosInstance.get(
+            `/datasakits/pegawai/${pegawaiId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          const datasakits = response.data;
+          uuid = datasakits.length > 0 ? datasakits[0].Pegawais.uuid : "";
+          setData((prevData) => ({
+            ...prevData,
+            data_sakit: datasakits,
+          }));
+        } catch (error) {
+          if (error.response && error.response.status === 404) {
+            setData((prevData) => ({
+              ...prevData,
+              data_sakit: [],
+            }));
+          } else {
+            setError(error);
+          }
         }
+      };
 
-        const dataUuid = datasakits[0].Pegawais.uuid;
-
-        const dataHomeVisitResponse = await axiosInstance.get(
-          `/homevisits/pegawai/${pegawaiId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+      const fetchDataHomeVisit = async () => {
+        try {
+          const response = await axiosInstance.get(
+            `/homevisits/pegawai/${pegawaiId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          const datahomevisits = response.data;
+          if (datahomevisits.length > 0 && !uuid) {
+            uuid = datahomevisits[0].Pegawais.uuid;
           }
-        );
-
-        const datahomevisits = dataHomeVisitResponse.data;
-
-        const employeeResponse = await axiosInstance.get(
-          `/pegawais/${dataUuid}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+          setData((prevData) => ({
+            ...prevData,
+            data_home_visit: datahomevisits,
+          }));
+        } catch (error) {
+          if (error.response && error.response.status === 404) {
+            setData((prevData) => ({
+              ...prevData,
+              data_home_visit: [],
+            }));
+          } else {
+            setError(error);
           }
-        );
-        const employeeData = employeeResponse.data;
+        }
+      };
 
-        setData({
-          pegawai: employeeData,
-          data_sakit: datasakits,
-          data_home_visit: datahomevisits,
-          data_rekam_medis: [],
-        });
-      } catch (error) {
-        setError(error);
-      } finally {
-        setLoading(false);
-      }
+      const fetchDataRekamMedis = async () => {
+        try {
+          const response = await axiosInstance.get(
+            `/datarekammedis/pegawai/${pegawaiId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          const datarekammedis = response.data;
+          if (datarekammedis.length > 0 && !uuid) {
+            uuid = datarekammedis[0].Pegawais.uuid;
+          }
+          setData((prevData) => ({
+            ...prevData,
+            data_rekam_medis: datarekammedis,
+          }));
+        } catch (error) {
+          if (error.response && error.response.status === 404) {
+            setData((prevData) => ({
+              ...prevData,
+              data_rekam_medis: [],
+            }));
+          } else {
+            setError(error);
+          }
+        }
+      };
+
+      const fetchEmployeeData = async () => {
+        if (uuid) {
+          try {
+            const response = await axiosInstance.get(`/pegawais/${uuid}`, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
+            const employeeData = response.data;
+            setData((prevData) => ({
+              ...prevData,
+              pegawai: employeeData,
+            }));
+          } catch (error) {
+            if (error.response && error.response.status === 404) {
+              setData((prevData) => ({
+                ...prevData,
+                pegawai: {},
+              }));
+            } else {
+              setError(error);
+            }
+          }
+        } else {
+          setData((prevData) => ({
+            ...prevData,
+            pegawai: {},
+          }));
+        }
+      };
+
+      await fetchDataSakit();
+      await fetchDataHomeVisit();
+      await fetchDataRekamMedis();
+      await fetchEmployeeData();
+      setLoading(false);
     };
 
     fetchData();
@@ -189,13 +177,9 @@ export default function DetailPage() {
         profilePicture="/logo.png"
       />
       <main className="mt-12 ml-32 mr-12 space-y-4">
-        <PDFDownloadLink
-          document={<PdfDocument data={data} />}
-          fileName={`Detail_${data.pegawai.nrp}.pdf`}
-          className="px-4 py-2 bg-indigo-600 text-white rounded"
-        >
-          {({ loading }) => (loading ? "Loading document..." : "Export to PDF")}
-        </PDFDownloadLink>
+        <Button className="px-4 py-2 bg-indigo-600 text-white rounded">
+          Export to PDF
+        </Button>
         <div>
           <div className="w-full py-8 px-8 border-2 border-gray rounded-md bg-white space-y-4">
             <div className="w-full py-2 px-2 rounded-md bg-primary-200">

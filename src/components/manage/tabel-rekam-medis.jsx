@@ -109,7 +109,7 @@ export default function TabelRekamMedis({ table_head, table_row }) {
                         rel="noopener noreferrer"
                         className="font-normal text-primary-600 underline font-primary"
                       >
-                        Lihat Foto
+                        Lihat Dokumen
                       </Typography>
                     </td>
                     <td className={classes}>

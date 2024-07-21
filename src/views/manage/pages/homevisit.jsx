@@ -43,7 +43,6 @@ export default function HomeVisit() {
     setKeyword(keyword);
     setSearchParams({ keyword });
   }
-  console.log(data);
   const filteredData =
     data.filter((data) => {
       return data.pegawai?.namapegawai
