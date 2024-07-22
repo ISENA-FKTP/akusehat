@@ -203,9 +203,15 @@ const DashboardApotek = () => {
               {requests.map((request) => (
                 <li
                   key={request.uuid}
-                  className="mb-2 flex justify-between items-center "
+                  className="mb-2 flex justify-between items-center"
                 >
                   <div>
+                    <div>
+                      <strong>Nama Pasien:</strong> {request.pasien.nama}
+                      <br />
+                      <strong>Tanggal Lahir Pasien:</strong>{" "}
+                      {formatDate(request.pasien.tgllahir)}
+                    </div>
                     {[
                       request.jenisobat1,
                       request.jenisobat2,
@@ -223,7 +229,7 @@ const DashboardApotek = () => {
                         )
                     )}
                     <span>BMHP: {request.BMHP}</span>
-                    <div className="border-b border-primary-950 my-1 "></div>
+                    <div className="border-b border-primary-950 my-1"></div>
                   </div>
                   <button
                     onClick={() => handleRequestComplete(request.uuid)}
