@@ -1,25 +1,28 @@
 import { ResponsivePie } from "@nivo/pie";
-import { DataObat } from "../../model/dataObat";
 import PropTypes from "prop-types";
 
-const calculateTotals = (DataObat) => {
+// Menghitung total jumlah obat dan obat keluar
+const calculateTotals = (dataMasuk, dataKeluar) => {
   let totalJumlahObat = 0;
   let totalObatKeluar = 0;
 
-  DataObat.forEach((item) => {
+  dataMasuk.forEach((item) => {
     totalJumlahObat += item.jumlahobat;
-    totalObatKeluar += item.totalobatkeluar;
+  });
+
+  dataKeluar.forEach((item) => {
+    totalObatKeluar += item.jumlahobat;
   });
 
   return { totalJumlahObat, totalObatKeluar };
 };
 
-export const TotalObatYear = (year) => {
-  const filteredData = DataObat.filter(
-    (data) => new Date(data.tanggal).getFullYear() === parseInt(year)
+// Menghitung total obat untuk tahun tertentu
+export const TotalObatYear = (dataMasuk, dataKeluar) => {
+  const { totalJumlahObat, totalObatKeluar } = calculateTotals(
+    dataMasuk,
+    dataKeluar
   );
-
-  const { totalJumlahObat, totalObatKeluar } = calculateTotals(filteredData);
 
   return {
     totalJumlahObat,
@@ -27,19 +30,24 @@ export const TotalObatYear = (year) => {
   };
 };
 
-const PieChart = ({ colors, year }) => {
+// Komponen PieChart
+const PieChart = ({ colors, dataMasuk, dataKeluar }) => {
+  // Definisi tipe properti komponen
   PieChart.propTypes = {
+    dataMasuk: PropTypes.array.isRequired,
+    dataKeluar: PropTypes.array.isRequired,
     colors: PropTypes.arrayOf(PropTypes.string),
     year: PropTypes.string,
   };
 
-  const filteredData = DataObat.filter(
-    (data) => new Date(data.tanggal).getFullYear() === parseInt(year)
+  // Menghitung total jumlah obat dan obat keluar
+  const { totalJumlahObat, totalObatKeluar } = calculateTotals(
+    dataMasuk,
+    dataKeluar
   );
+  const totalObat = totalJumlahObat + totalObatKeluar;
 
-  const { totalJumlahObat, totalObatKeluar } = calculateTotals(filteredData);
-  const totalObat = totalObatKeluar + totalJumlahObat;
-
+  // Data untuk PieChart
   const data = [
     {
       id: "Total Jumlah Obat",
