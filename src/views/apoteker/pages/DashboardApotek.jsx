@@ -39,6 +39,17 @@ const DashboardApotek = () => {
     return `${year}-${month}-${day}`;
   };
 
+  const formatCurrency = (number) => {
+    return number
+      .toLocaleString("id-ID", {
+        style: "currency",
+        currency: "IDR",
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      })
+      .replace("Rp", "Rp ");
+  };
+
   useEffect(() => {
     setToken(localStorage.getItem("accessToken"));
   }, []);
@@ -317,7 +328,7 @@ const DashboardApotek = () => {
                       {formatDate(medicine.tglkadaluarsa)}
                     </td>
                     <td className="border border-primary-600 px-4 py-2 text-center">
-                      Rp{medicine.hargaobat}
+                      {formatCurrency(medicine.hargaobat)}
                     </td>
                     <td className="border border-primary-600 px-4 py-2 text-center flex items-center justify-center space-x-2">
                       <button
