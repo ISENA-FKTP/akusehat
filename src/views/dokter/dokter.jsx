@@ -235,7 +235,7 @@ export default function Dokter() {
         </form>
       </div>
 
-      <div className="ml-28 mr-14 mt-10">
+      <div className="ml-28 mr-14 mt-10 mb-10">
         <div className="overflow-x-auto pr-5 lg:pr-0">
           <table className="table-auto w-full">
             <thead>

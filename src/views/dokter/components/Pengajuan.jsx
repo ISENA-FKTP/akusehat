@@ -8,6 +8,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import Diagosa from "./Diagosa";
 import Pemeriksaan from "./Pemeriksaan";
 import useAxios from "../../../useAxios";
+import TekananDarah from "./TekananDarah";
+import KeadaanFisik from "./KeadaanFisik";
 
 export default function Pengajuan() {
   const MySwal = withReactContent(Swal);
@@ -78,7 +80,7 @@ export default function Pengajuan() {
   };
 
   return (
-    <div className="grid grid-cols-1 mt-7 mx-auto gap-7 items-baseline container ">
+    <div className="grid grid-cols-1 mx-auto gap-7 items-baseline container ">
       <div>
         <div className="h-10 w-full bg-primary-600 shadow-lg rounded-t-lg ">
           <h1 className="text-white font-primary-Poppins font-bold text-xl justify-center flex items-center py-1">
@@ -179,7 +181,7 @@ export default function Pengajuan() {
 
             <div className="flex items-center space-x-5 mr-14">
               <label className=" text-black font-secondary-Karla font-bold flex-[30%]">
-                Anestesi
+                Anamnesa
               </label>
               <textarea
                 name="keterangan"
@@ -210,11 +212,16 @@ export default function Pengajuan() {
           </form>
         </div>
 
-        {/* Form Diagnosa */}
-        <Diagosa />
+        {/* Form Tekanan Darah */}
+        <div className="mt-6">
+            <TekananDarah />
+          </div>
 
-        {/* Form Pemeriksaan */}
-        <Pemeriksaan />
+          {/* Form Keadaan Fisik */}
+          <div className="mt-6">
+            <KeadaanFisik />
+          </div>
+       
       </div>
     </div>
   );

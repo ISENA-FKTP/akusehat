@@ -88,7 +88,7 @@ export default function Diagnosa() {
   };
 
   return (
-    <div className="py-6">
+    <div className="py-1">
       <div className="h-10 bg-primary-600 shadow-lg rounded-t-lg py-4 justify-center flex items-center">
         <h1 className="text-white font-primary-Poppins font-bold text-xl">
           Diagnosa

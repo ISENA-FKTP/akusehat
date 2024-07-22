@@ -7,6 +7,8 @@ import Obat from "./components/Obat";
 import RiwayatAlergi from "./components/RiwayatAlergi";
 import TekananDarah from "./components/TekananDarah";
 import KeadaanFisik from "./components/KeadaanFisik";
+import Diagnosa from "./components/Diagosa";
+import Pemeriksaan from "./components/Pemeriksaan";
 
 export default function KunjunganDokter() {
   const { id } = useParams();
@@ -51,20 +53,19 @@ export default function KunjunganDokter() {
             <Obat />
 
             {/* Form Riwayat Alergi */}
-            <div className="mt-5">
+            <div className="mt-2">
               <RiwayatAlergi />
             </div>
           </div>
 
-          {/* Form Tekanan Darah */}
-          <div className="">
-            <TekananDarah />
-          </div>
-
-          {/* Form Keadaan Fisik */}
-          <div className="">
-            <KeadaanFisik />
-          </div>
+           {/* Form Diagnosa */}
+        <div className="">
+        <Diagnosa />
+        </div>
+        {/* Form Pemeriksaan */}
+        <div className="">
+        <Pemeriksaan />
+        </div>
         </div>
       </div>
     </>
