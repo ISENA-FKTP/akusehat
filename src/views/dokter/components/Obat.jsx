@@ -138,17 +138,7 @@ export default function Obat() {
             ))}
           </div>
         </div>
-        <div className="flex items-center space-x-5">
-          <label className="text-black font-secondary-Karla font-bold w-40">
-            Dosis :
-          </label>
-          <textarea
-            type="text"
-            name="Dosis"
-            placeholder="Keterangan....."
-            className="p-2 h-24 rounded-md w-full border border-black font-secondary-Karla font-medium text-black focus:outline-none focus:border-blue-500"
-          />
-        </div>
+
         <div className="flex items-center space-x-5">
           <label className="text-black font-secondary-Karla font-bold w-40">
             BMHP :
