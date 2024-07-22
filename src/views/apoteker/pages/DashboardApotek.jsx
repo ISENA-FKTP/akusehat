@@ -52,9 +52,11 @@ const DashboardApotek = () => {
     setMedicines(sorted);
   };
 
-  const filteredMedicines = medicines.filter((medicine) =>
-    medicine.namaobat.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredMedicines = medicines
+    .filter((medicine) =>
+      medicine.namaobat.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .filter((medicine) => medicine.jumlahobat > 0);
 
   useEffect(() => {
     const getDataobats = async () => {

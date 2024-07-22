@@ -148,11 +148,12 @@ const Pengingat = () => {
     });
     closeModal();
   };
-
   const filteredMedicines = (medicines, searchTerm) =>
-    medicines.filter((medicine) =>
-      medicine.namaobat.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    medicines
+      .filter((medicine) =>
+        medicine.namaobat.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+      .filter((medicine) => medicine.jumlahobat > 0);
 
   return (
     <div className="flex">

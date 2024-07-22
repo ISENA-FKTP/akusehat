@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate dari react-router-dom
 import Sidebar from "../../../components/apotik/sidebar";
 import Header from "../../../components/header";
 import useAxios from "../../../useAxios";
@@ -8,10 +9,13 @@ const LaporanApotek = () => {
   const [medicines, setMedicines] = useState([]);
   const [selectedMonth, setSelectedMonth] = useState("");
   const [selectedYear, setSelectedYear] = useState("");
+  const [filteredMedicines, setFilteredMedicines] = useState([]);
   const [, setTotalUsedMedicinehargaobat] = useState(0);
   const [, setTotalRemainingMedicinehargaobat] = useState(0);
   const axiosInstance = useAxios();
   const token = localStorage.getItem("accessToken");
+
+  const navigate = useNavigate(); // Gunakan useNavigate untuk navigasi
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -20,6 +24,15 @@ const LaporanApotek = () => {
     const day = String(date.getDate()).padStart(2, "0");
 
     return `${year}-${month}-${day}`;
+  };
+
+  const formatCurrency = (number) => {
+    return number.toLocaleString("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    });
   };
 
   useEffect(() => {
@@ -54,6 +67,7 @@ const LaporanApotek = () => {
             ...obat,
             deletedJumlah: deleted ? deleted.jumlahobat : 0,
             deletedHarga: deleted ? deleted.hargaobat : 0,
+            tanggalPengeluaran: deleted ? deleted.tanggalPengeluaran : null,
           };
         });
 
@@ -61,6 +75,7 @@ const LaporanApotek = () => {
           a.namaobat.localeCompare(b.namaobat)
         );
         setMedicines(sortedData);
+        setFilteredMedicines(sortedData); // Initialize filtered medicines
         calculatehargaobats(sortedData);
       } catch (error) {
         console.error("Error fetching medicines:", error);
@@ -86,15 +101,17 @@ const LaporanApotek = () => {
 
   const filterMedicines = () => {
     const filtered = medicines.filter((medicine) => {
-      const tglmasuk = new Date(medicine.tglmasuk);
+      if (!medicine.tanggalPengeluaran) return false;
+      const tanggalPengeluaran = new Date(medicine.tanggalPengeluaran);
       const monthMatches = selectedMonth
-        ? tglmasuk.getMonth() + 1 === parseInt(selectedMonth)
+        ? tanggalPengeluaran.getMonth() + 1 === parseInt(selectedMonth)
         : true;
       const yearMatches = selectedYear
-        ? tglmasuk.getFullYear() === parseInt(selectedYear)
+        ? tanggalPengeluaran.getFullYear() === parseInt(selectedYear)
         : true;
       return monthMatches && yearMatches;
     });
+    setFilteredMedicines(filtered); // Update filtered medicines
     calculatehargaobats(filtered);
   };
 
@@ -141,29 +158,46 @@ const LaporanApotek = () => {
       (sum, medicine) => sum + medicine.deletedJumlah,
       0
     );
-    return { totalUsed, totalRemaining, totalObatKeluar };
+    const totalSisaObat = kategoriMedicines.reduce(
+      (sum, medicine) => sum + medicine.jumlahobat,
+      0
+    );
+    return { totalUsed, totalRemaining, totalObatKeluar, totalSisaObat };
   };
 
-  const groupedMedicines = groupBykategori(medicines);
+  const groupedMedicines = groupBykategori(filteredMedicines);
 
   const calculateOverallTotals = () => {
-    const totalUsedOverall = medicines.reduce(
+    const totalUsedOverall = filteredMedicines.reduce(
       (sum, medicine) => sum + medicine.deletedHarga * medicine.deletedJumlah,
       0
     );
-    const totalRemainingOverall = medicines.reduce(
+    const totalRemainingOverall = filteredMedicines.reduce(
       (sum, medicine) => sum + medicine.hargaobat * medicine.jumlahobat,
       0
     );
-    const totalObatKeluarOverall = medicines.reduce(
+    const totalObatKeluarOverall = filteredMedicines.reduce(
       (sum, medicine) => sum + medicine.deletedJumlah,
       0
     );
-    return { totalUsedOverall, totalRemainingOverall, totalObatKeluarOverall };
+    const totalRemainingObatOverall = filteredMedicines.reduce(
+      (sum, medicine) => sum + medicine.jumlahobat,
+      0
+    );
+    return {
+      totalUsedOverall,
+      totalRemainingOverall,
+      totalObatKeluarOverall,
+      totalRemainingObatOverall,
+    };
   };
 
-  const { totalUsedOverall, totalRemainingOverall, totalObatKeluarOverall } =
-    calculateOverallTotals();
+  const {
+    totalUsedOverall,
+    totalRemainingOverall,
+    totalObatKeluarOverall,
+    totalRemainingObatOverall,
+  } = calculateOverallTotals();
 
   return (
     <div className="flex">
@@ -184,6 +218,13 @@ const LaporanApotek = () => {
           <h2 className="text-xl font-semibold mb-4 text-secondary-400">
             Seluruh data terkait keluar masuknya obat di apotek
           </h2>
+          {/* Button untuk navigasi ke halaman lain */}
+          <button
+            onClick={() => navigate("/apotek/print")} // Menggunakan navigate untuk berpindah halaman
+            className="mt-4 mb-2 px-4 py-2 bg-secondary-500 text-white rounded-md shadow-sm hover:bg-blue-700 focus:outline-none"
+          >
+            Print Laporan
+          </button>
           <div className="flex justify-between mb-4">
             <div>
               <label htmlFor="month">Bulan:</label>
@@ -220,44 +261,51 @@ const LaporanApotek = () => {
               </select>
             </div>
           </div>
-          {Object.keys(groupedMedicines).map((kategori, index) => {
-            const { totalUsed, totalRemaining, totalObatKeluar } =
-              calculatekategoriTotals(groupedMedicines[kategori]);
+          {Object.keys(groupedMedicines).map((kategori) => {
+            const kategoriTotals = calculatekategoriTotals(
+              groupedMedicines[kategori]
+            );
+            const {
+              totalUsed,
+              totalRemaining,
+              totalObatKeluar,
+              totalSisaObat,
+            } = kategoriTotals;
             return (
-              <div key={index} className="mb-6">
-                <h1 className="text-xl font-bold mt-4 mb-2">{kategori}</h1>
+              <div key={kategori} className="mb-8">
+                <h2 className="text-xl font-bold mb-2">{kategori}</h2>
                 <div className="overflow-x-auto">
                   <table className="table-auto w-full">
                     <thead>
                       <tr>
-                        <th className="border px-4 py-2 bg-primary-600 text-white">
+                        <th className="border px-4 py-2 bg-primary-600 text-white border-primary-600">
                           Nama Obat
                         </th>
-                        <th className="border px-4 py-2 bg-primary-600 text-white">
+                        <th className="border px-4 py-2 bg-primary-600 text-white border-primary-600">
                           Harga
                         </th>
-                        <th className="border px-4 py-2 bg-primary-600 text-white">
+                        <th className="border px-4 py-2 bg-primary-600 text-white border-primary-600">
                           Kategori
                         </th>
-                        <th className="border px-4 py-2 bg-primary-600 text-white">
+                        <th className="border px-4 py-2 bg-primary-600 text-white border-primary-600">
                           Jenis
                         </th>
-                        <th className="border px-4 py-2 bg-primary-600 text-white">
+                        <th className="border px-4 py-2 bg-primary-600 text-white border-primary-600">
                           Tanggal Masuk
                         </th>
-                        <th className="border px-4 py-2 bg-primary-600 text-white">
+                        <th className="border px-4 py-2 bg-primary-600 text-white border-primary-600">
                           Tanggal Kadaluarsa
                         </th>
-                        <th className="border px-4 py-2 bg-primary-600 text-white">
+                        <th className="border px-4 py-2 bg-primary-600 text-white border-primary-600">
                           Obat Keluar
                         </th>
-                        <th className="border px-4 py-2 bg-primary-600 text-white">
+                        <th className="border px-4 py-2 bg-primary-600 text-white border-primary-600">
                           Total Harga Obat Keluar
                         </th>
-                        <th className="border px-4 py-2 bg-primary-600 text-white">
+                        <th className="border px-4 py-2 bg-primary-600 text-white border-primary-600">
                           Sisa Obat
                         </th>
-                        <th className="border px-4 py-2 bg-primary-600 text-white">
+                        <th className="border px-4 py-2 bg-primary-600 text-white border-primary-600">
                           Total Harga Sisa Obat
                         </th>
                       </tr>
@@ -273,47 +321,55 @@ const LaporanApotek = () => {
                                 : "bg-primary-100"
                             }
                           >
-                            <td className="border px-4 py-2">
+                            <td className="border px-4 py-2 border-primary-600">
                               {medicine.namaobat}
                             </td>
-                            <td className="border px-4 py-2">
-                              Rp{medicine.hargaobat}
+                            <td className="border px-4 py-2 border-primary-600">
+                              {formatCurrency(medicine.hargaobat)}
                             </td>
-                            <td className="border px-4 py-2">
+                            <td className="border px-4 py-2 border-primary-600">
                               {medicine.kategori}
                             </td>
-                            <td className="border px-4 py-2">
+                            <td className="border px-4 py-2 border-primary-600">
                               {medicine.jenisobat}
                             </td>
-                            <td className="border px-4 py-2">
+                            <td className="border px-4 py-2 border-primary-600">
                               {formatDate(medicine.tglmasuk)}
                             </td>
-                            <td className="border px-4 py-2">
+                            <td className="border px-4 py-2 border-primary-600">
                               {formatDate(medicine.tglkadaluarsa)}
                             </td>
-                            <td className="border px-4 py-2">
+                            <td className="border px-4 py-2 border-primary-600">
                               {medicine.deletedJumlah}
                             </td>
-                            <td className="border px-4 py-2">
-                              Rp{medicine.deletedHarga * medicine.deletedJumlah}
+                            <td className="border px-4 py-2 border-primary-600">
+                              {formatCurrency(
+                                medicine.deletedHarga * medicine.deletedJumlah
+                              )}
                             </td>
-                            <td className="border px-4 py-2">
+                            <td className="border px-4 py-2 border-primary-600">
                               {medicine.jumlahobat}
                             </td>
-                            <td className="border px-4 py-2">
-                              Rp{medicine.hargaobat * medicine.jumlahobat}
+                            <td className="border px-4 py-2 border-primary-600">
+                              {formatCurrency(
+                                medicine.hargaobat * medicine.jumlahobat
+                              )}
                             </td>
                           </tr>
                         );
                       })}
                       <tr className="bg-primary-500 text-white font-semibold">
                         <td className="border px-4 py-2 text-left" colSpan="6">
-                          Total Harga Keseluruhan {kategori}
+                          Total Harga Obat Keseluruhan {kategori}
                         </td>
                         <td className="border px-4 py-2">{totalObatKeluar}</td>
-                        <td className="border px-4 py-2">Rp{totalUsed}</td>
-                        <td className="border px-4 py-2"></td>
-                        <td className="border px-4 py-2">Rp{totalRemaining}</td>
+                        <td className="border px-4 py-2">
+                          {formatCurrency(totalUsed)}
+                        </td>
+                        <td className="border px-4 py-2">{totalSisaObat}</td>
+                        <td className="border px-4 py-2">
+                          {formatCurrency(totalRemaining)}
+                        </td>
                       </tr>
                     </tbody>
                   </table>
@@ -333,6 +389,9 @@ const LaporanApotek = () => {
                     Total Harga Obat Keluar
                   </th>
                   <th className="border px-4 py-2 bg-primary-600 text-white">
+                    Total Sisa Obat
+                  </th>
+                  <th className="border px-4 py-2 bg-primary-600 text-white">
                     Total Harga Sisa Obat
                   </th>
                 </tr>
@@ -340,9 +399,14 @@ const LaporanApotek = () => {
               <tbody>
                 <tr className="bg-primary-500 text-white font-semibold">
                   <td className="border px-4 py-2">{totalObatKeluarOverall}</td>
-                  <td className="border px-4 py-2">Rp{totalUsedOverall}</td>
                   <td className="border px-4 py-2">
-                    Rp{totalRemainingOverall}
+                    {formatCurrency(totalUsedOverall)}
+                  </td>
+                  <td className="border px-4 py-2">
+                    {totalRemainingObatOverall}
+                  </td>
+                  <td className="border px-4 py-2">
+                    {formatCurrency(totalRemainingOverall)}
                   </td>
                 </tr>
               </tbody>
