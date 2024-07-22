@@ -7,32 +7,28 @@ const LineChart = ({ data }) => {
     year: PropTypes.string,
   };
 
-
   const groupedData = {};
   data.forEach((item) => {
     const month = new Date(item.awalsakit).toLocaleString("default", {
       month: "short",
     });
-    const satuankerja = item.pegawai.satuankerja;
 
-    if (!groupedData[satuankerja]) {
-      groupedData[satuankerja] = {};
+    if (!groupedData[month]) {
+      groupedData[month] = 0;
     }
-    if (!groupedData[satuankerja][month]) {
-      groupedData[satuankerja][month] = 0;
-    }
-    groupedData[satuankerja][month] += 1;
+    groupedData[month] += 1;
   });
 
-  const DataPeningkatanSakitPolisi = Object.keys(groupedData).map(
-    (satuankerja) => ({
-      id: satuankerja,
-      data: Object.keys(groupedData[satuankerja]).map((month) => ({
+  // Membuat data untuk Nivo Line Chart
+  const DataPeningkatanSakitPolisi = [
+    {
+      id: "Jumlah Sakit",
+      data: Object.keys(groupedData).map((month) => ({
         x: month,
-        y: groupedData[satuankerja][month],
+        y: groupedData[month],
       })),
-    })
-  );
+    },
+  ];
 
   return (
     <ResponsiveLine

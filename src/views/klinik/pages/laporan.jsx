@@ -293,27 +293,28 @@ export default function Laporan() {
                     {index + 1}
                   </td>
                   <td className="border border-primary-600 px-4 py-2 text-center">
-                    {formatDate(entry.createdAt)}
+                    {formatDate(entry.createdAt) ||
+                      "Data Belum Diisi Oleh Admin"}
                   </td>
                   <td className="border border-primary-600 px-4 py-2 text-center">
-                    {entry.norm}
+                    {entry.norm || "Data Belum Diisi Oleh Admin"}
                   </td>
                   <td className="border border-primary-600 px-4 py-2 text-center">
                     {entry.pengajuan?.poli || "Data Belum Diisi Oleh Dokter"}
                   </td>
                   <td className="border border-primary-600 px-4 py-2 text-center">
-                    {entry.nama}
+                    {entry.nama || "Data Belum Diisi Oleh Admin"}
                   </td>
                   <td className="border border-primary-600 px-4 py-2 text-center">
                     {`${formatDate(entry.tgllahir)} (${calculateAge(
                       entry.tgllahir
-                    )} tahun)`}
+                    )} tahun)` || "Data Belum Diisi Oleh Admin"}
                   </td>
                   <td className="border border-primary-600 px-4 py-2 text-center">
-                    {entry.gender}
+                    {entry.gender || "Data Belum Diisi Oleh Admin"}
                   </td>
                   <td className="border border-primary-600 px-4 py-2 text-center">
-                    {entry.statuspeserta}
+                    {entry.statuspeserta || "Data Belum Diisi Oleh Admin"}
                   </td>
                   <td className="border border-primary-600 px-4 py-2 text-center">
                     {entry.diagnosa ? (

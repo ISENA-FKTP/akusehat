@@ -50,6 +50,7 @@ export default function EditObat({
       tglkadaluarsa: PropTypes.string,
       tglmasuk: PropTypes.string,
       hargaobat: PropTypes.number,
+      nobatch: PropTypes.string,
     }).isRequired,
     uuid: PropTypes.string.isRequired,
     handleEditChange: PropTypes.func.isRequired,
@@ -124,6 +125,17 @@ export default function EditObat({
         </div>
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700">
+            No. Batch
+          </label>
+          <input
+            name="nobatch"
+            value={medicine.nobatch}
+            onChange={handleEditChange}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700">
             Entry Date
           </label>
           <input
@@ -146,9 +158,10 @@ export default function EditObat({
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
           />
         </div>
+
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700">
-            hargaobat
+            Harga Obat
           </label>
           <input
             type="number"

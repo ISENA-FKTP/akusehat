@@ -40,12 +40,23 @@ const DashboardApotek = () => {
   };
 
   const formatCurrency = (number) => {
+<<<<<<< HEAD
     return number.toLocaleString('id-ID', {
       style: 'currency',
       currency: 'IDR',
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).replace('Rp', 'Rp ');
+=======
+    return number
+      .toLocaleString("id-ID", {
+        style: "currency",
+        currency: "IDR",
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      })
+      .replace("Rp", "Rp ");
+>>>>>>> e4373c028260050104f5f047260dcd9062f50250
   };
 
   useEffect(() => {

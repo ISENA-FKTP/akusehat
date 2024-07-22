@@ -28,20 +28,24 @@ export default function Statistik() {
   const [year, setYear] = useState(currentYear);
 
   const [datasakitpolisi, setDatasakitpolisi] = useState([]);
-  const [dataPengajuan, setDataPengajuan] = useState([]);
   const [dataObat, setDataObat] = useState([]);
-  const [dataDiagnosa, setDataDiagnosa] = useState([]);
+  const [dataObatDelete, setDataObatDelete] = useState([]);
 
   const [jumlahDataSakit, setJumlahDataSakit] = useState(0);
   const [jumlahDataKlinik, setJumlahDataKlinik] = useState(0);
   const [jumlahDataObat, setJumlahDataObat] = useState(0);
+  const [jumlahDataObatKeluar, setJumlahDataObatKeluar] = useState(0);
   const [jumlahDataDiagnosa, setJumlahDataDiagnosa] = useState(0);
 
-  const { totalJumlahObat, totalObatKeluar } = TotalObatYear(year);
-  const total = totalJumlahObat + totalObatKeluar;
   const [keyword, setKeyword] = useState(() => {
     return searchParams.get("keyword") || "";
   });
+
+  const { totalJumlahObat, totalObatKeluar } = TotalObatYear(
+    dataObat,
+    dataObatDelete
+  );
+  const total = totalJumlahObat + totalObatKeluar;
   let persen_obat_masuk = 0;
   let persen_obat_keluar = 0;
 
@@ -91,7 +95,6 @@ export default function Statistik() {
             Authorization: `Bearer ${token}`,
           },
         });
-        setDataPengajuan(response.data);
 
         const totalData = response.data.length;
 
@@ -143,7 +146,6 @@ export default function Statistik() {
         });
 
         const diagnosaData = response.data;
-        setDataDiagnosa(diagnosaData);
 
         const uniquePenyakit = new Set();
 
@@ -162,6 +164,33 @@ export default function Statistik() {
         });
 
         setJumlahDataDiagnosa(uniquePenyakit.size);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [axiosInstance]);
+
+  // Data Delete Obat
+  useEffect(() => {
+    const fetchData = async () => {
+      const token = localStorage.getItem("accessToken");
+      try {
+        const response = await axiosInstance.get("/deletedataobatStatistik", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const obatData = response.data;
+        setDataObatDelete(obatData);
+
+        const totalJumlahObat = obatData.reduce((total, item) => {
+          return total + (item.jumlahobat || 0);
+        }, 0);
+
+        setJumlahDataObatKeluar(totalJumlahObat);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -288,7 +317,7 @@ export default function Statistik() {
                 <GiMedicines size={70} className="p-2" />
               </div>
               <div className="place-content-center ml-3">
-                <h1 className="text-3xl font-bold">{totalObatKeluar}</h1>
+                <h1 className="text-3xl font-bold">{jumlahDataObatKeluar}</h1>
                 <h3 className="font-semibold text-lg">Obat Keluar</h3>
               </div>
             </div>
@@ -376,7 +405,11 @@ export default function Statistik() {
                   </div>
                   <div className="flex">
                     <div className="h-[151px] w-44 mt-2 ">
-                      <PieChartApotik colors={colorsSektor} />
+                      <PieChartApotik
+                        dataMasuk={dataObat}
+                        dataKeluar={dataObatDelete}
+                        colors={colorsSektor}
+                      />
                     </div>
                     <div className="place-content-center text-base font-semibold ">
                       <div className="flex gap-4 place-content-center mb-3">

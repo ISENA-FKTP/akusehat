@@ -7,8 +7,10 @@ import FormComponent from "./components/FormComponent";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { fetchPatientData } from "../../../bpjs/generateSignature";
+import useAxios from "../../../useAxios";
 
 const Administrasi = () => {
+  const axiosInstance = useAxios();
   const [username, setUsername] = useState("");
   const [existingPatient, setExistingPatient] = useState(null);
   const navigate = useNavigate();
@@ -48,7 +50,27 @@ const Administrasi = () => {
       setExistingPatient(formattedPatient);
     } catch (error) {
       console.error("Error searching patient:", error);
-      setExistingPatient(null);
+      try {
+        const response = await axiosInstance.get(
+          `/pasiens/nobpjs/${searchValue}`
+        );
+        const patientData = response.data;
+        const formattedPatient = {
+          nobpjs: patientData.nobpjs,
+          nama: patientData.nama,
+          statuspeserta: patientData.statuspeserta,
+          tgllahir: new Date(patientData.tgllahir),
+          gender: patientData.gender,
+          ppkumum: patientData.ppkumum,
+          nohp: patientData.nohp,
+          norm: patientData.norm,
+          role: "pasien",
+        };
+        setExistingPatient(formattedPatient);
+      } catch (apiError) {
+        console.error("Error fetching patient from API:", apiError);
+        setExistingPatient(null);
+      }
     }
   };
 

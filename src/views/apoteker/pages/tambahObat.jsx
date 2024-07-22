@@ -35,7 +35,14 @@ const TambahObat = () => {
     // Menggunakan nilai dari jenisobatLainnya jika jenisobat adalah "Jenis Lainnya"
     const dataToSubmit = {
       ...formData,
+<<<<<<< HEAD
       jenisobat: formData.jenisobat === "Jenis Lainnya" ? formData.jenisobatLainnya : formData.jenisobat,
+=======
+      jenisobat:
+        formData.jenisobat === "Jenis Lainnya"
+          ? formData.jenisobatLainnya
+          : formData.jenisobat,
+>>>>>>> e4373c028260050104f5f047260dcd9062f50250
     };
 
     Swal.fire({
@@ -50,11 +57,23 @@ const TambahObat = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
+<<<<<<< HEAD
           const response = await axiosInstance.post("/dataobats", dataToSubmit, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           });
+=======
+          const response = await axiosInstance.post(
+            "/dataobats",
+            dataToSubmit,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+>>>>>>> e4373c028260050104f5f047260dcd9062f50250
 
           if (response.status === 201) {
             Swal.fire("Data obat telah disimpan!", "", "success");
@@ -196,6 +215,7 @@ const TambahObat = () => {
                 {formData.jenisobat || "Pilih Jenis"}
               </Menu.Button>
               <Menu.Items className="absolute mt-1 w-full bg-white border border-gray-200 rounded-md shadow-lg z-10">
+<<<<<<< HEAD
                 {["Tablet", "Syrup", "Krim", "Jenis Lainnya"].map((jenisobat) => (
                   <Menu.Item key={jenisobat}>
                     {({ active }) => (
@@ -212,6 +232,28 @@ const TambahObat = () => {
                     )}
                   </Menu.Item>
                 ))}
+=======
+                {["Tablet", "Syrup", "Krim", "Jenis Lainnya"].map(
+                  (jenisobat) => (
+                    <Menu.Item key={jenisobat}>
+                      {({ active }) => (
+                        <div
+                          className={`${
+                            active
+                              ? "bg-secondary-400 text-white"
+                              : "text-black"
+                          } px-4 py-2 cursor-pointer`}
+                          onClick={() =>
+                            setFormData({ ...formData, jenisobat })
+                          }
+                        >
+                          {jenisobat}
+                        </div>
+                      )}
+                    </Menu.Item>
+                  )
+                )}
+>>>>>>> e4373c028260050104f5f047260dcd9062f50250
               </Menu.Items>
             </Menu>
             {formData.jenisobat === "Jenis Lainnya" && (

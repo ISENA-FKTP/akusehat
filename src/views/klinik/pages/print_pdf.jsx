@@ -130,7 +130,7 @@ export default function PrintPDF() {
 
       <div className="space-x-10 mb-10 flex justify-center">
         <div className="">
-          <div className="w-[297mm] h-[210mm] bg-white shadow-xl items-center border border-black rounded-md">
+          <div className="w-auto h-auto bg-white shadow-xl items-center border border-black rounded-md">
             <div ref={componentRef}>
               <div className="flex items-center justify-center ml-8 mt-8">
                 <img
@@ -164,7 +164,7 @@ export default function PrintPDF() {
               </div>
               <div className="border-t-2 border-gray-800 mt-2  mx-20 flex justify-center" />
 
-              <div className="ml-14 mr-10 pt-12">
+              <div className="ml-14 mr-10 pt-12 mb-7">
                 <div className="overflow-x-auto pr-4 lg:pr-0">
                   <table className="table-auto w-full">
                     <thead>
