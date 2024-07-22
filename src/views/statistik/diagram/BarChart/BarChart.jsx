@@ -1,26 +1,55 @@
 import PropTypes from "prop-types";
 import { ResponsiveBar } from "@nivo/bar";
-import { DataPolisi } from "../../model/dataPolisi";
-const BarChart = ({ colors, year }) => {
+import { useState, useEffect } from "react";
+
+const BarChart = ({ data, colors }) => {
   BarChart.propTypes = {
+    data: PropTypes.array.isRequired,
     year: PropTypes.string,
     colors: PropTypes.arrayOf(PropTypes.string),
   };
 
-  const filteredData = DataPolisi.filter(
-    (data) => new Date(data.tanggal).getFullYear() === parseInt(year)
-  );
+  const [dataInput, setDataInput] = useState([]);
+  const [keys, setKeys] = useState([]);
 
-  const data = filteredData.map(({ bulan, polda, polres }) => ({
-    bulan,
-    "Jumlah Polda": polda,
-    "Jumlah Polres": polres,
-  }));
+  useEffect(() => {
+    const processData = (data) => {
+      const satuankerjaSet = new Set();
+      const groupedData = data.reduce((acc, curr) => {
+        const month = new Date(curr.awalsakit).toLocaleString("default", {
+          month: "long",
+        });
+        const satuankerja = curr.pegawai.satuankerja;
+
+        satuankerjaSet.add(satuankerja);
+
+        if (!acc[month]) {
+          acc[month] = {};
+        }
+        if (!acc[month][satuankerja]) {
+          acc[month][satuankerja] = 0;
+        }
+
+        acc[month][satuankerja] += 1;
+        return acc;
+      }, {});
+
+      setKeys([...satuankerjaSet]);
+
+      return Object.entries(groupedData).map(([month, values]) => ({
+        bulan: month,
+        ...values,
+      }));
+    };
+
+    const outputData = processData(data);
+    setDataInput(outputData);
+  }, [data]);
 
   return (
     <ResponsiveBar
-      data={data}
-      keys={["Jumlah Polda", "Jumlah Polres"]}
+      data={dataInput}
+      keys={keys}
       indexBy="bulan"
       margin={{ top: 20, right: 10, bottom: 100, left: 55 }}
       padding={0.15}

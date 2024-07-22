@@ -1,5 +1,4 @@
 import { Card, Typography } from "@material-tailwind/react";
-import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 
 export default function Tabel({ table_head, table_row }) {
@@ -44,7 +43,6 @@ export default function Tabel({ table_head, table_row }) {
                 lamacuti,
                 wfh,
                 keterangan,
-                pegawaiId,
               }) => {
                 const classes = "p-4";
 
@@ -157,17 +155,6 @@ export default function Tabel({ table_head, table_row }) {
                       >
                         {keterangan}
                       </Typography>
-                    </td>
-                    <td className={classes}>
-                      <Link to={`/detail/${pegawaiId}`}>
-                        <Typography
-                          variant="small"
-                          color="blue-gray"
-                          className="font-medium"
-                        >
-                          Detail
-                        </Typography>
-                      </Link>
                     </td>
                   </tr>
                 );

@@ -62,7 +62,9 @@ function App() {
           path="/statistik/data-obat-klinik"
           element={<DataObatKlinik />}
         />
+        <Route path="/detailStatistik/:pegawaiId" element={<DetailPage />} />
 
+        {/* Manage */}
         <Route path="/manage" element={<Manage />} />
         <Route path="/manage/data-home-visit" element={<HomeVisit />} />
         <Route path="/manage/data-rekam-medis" element={<RekamMedis />} />

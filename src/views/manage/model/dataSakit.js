@@ -709,6 +709,21 @@ export const head_data_sakit = [
   "Detail",
 ];
 
+export const head_data_sakit_statistik = [
+  "NRP",
+  "Nama",
+  "Pangkat",
+  "Satuan Kerja",
+  "Tanggal",
+  "Jenis Sakit",
+  "Jenis Perawatan",
+  "Sumber Biaya",
+  "Awal Sakit",
+  "Lama Cuti",
+  "WFH",
+  "Keterangan",
+];
+
 export const head_data_home_visit = [
   "NRP",
   "Nama",

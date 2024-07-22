@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
+import Header from "../../components/header";
+import Sidebar from "../../components/statistik/sidebar";
 import PieChartPolisi from "./diagram/PieChart/PieChartPolisi";
 import PieChartApotik, {
   TotalObatYear,
 } from "./diagram/PieChart/PieChartApotik";
-import Sidebar from "../../components/statistik/sidebar";
 import BarChart from "./diagram/BarChart/BarChart";
 import LineChart from "./diagram/LineChart/LineChart";
 import { FaCircleArrowUp } from "react-icons/fa6";
@@ -12,24 +13,35 @@ import { BsPeopleFill } from "react-icons/bs";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { GiMedicines } from "react-icons/gi";
 import { FaVirus } from "react-icons/fa6";
-import Header from "../../components/header";
-import axios from "axios";
-import { DataSektor } from "./model/dataSektor";
-import { IoSearch } from "react-icons/io5";
-import { DataPegawaiRawat } from "./model/dataPegawaiRawat";
+import SearchBar from "../../components/manage/searchBar";
+import { useSearchParams } from "react-router-dom";
+import { head_data_sakit_statistik } from "../manage/model/dataSakit";
+import Tabel from "./components/tabel";
+
+import useAxios from "../../useAxios";
 
 const currentYear = new Date().getFullYear();
 
 export default function Statistik() {
+  const axiosInstance = useAxios();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [year, setYear] = useState(currentYear);
-  const [data, setData] = useState([]);
-  const [filteredData, setFilteredData] = useState([]);
-  const [sortBy, setSortBy] = useState("most");
-  const [sortedData, setSortedData] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
+
+  const [datasakitpolisi, setDatasakitpolisi] = useState([]);
+  const [dataPengajuan, setDataPengajuan] = useState([]);
+  const [dataObat, setDataObat] = useState([]);
+  const [dataDiagnosa, setDataDiagnosa] = useState([]);
+
+  const [jumlahDataSakit, setJumlahDataSakit] = useState(0);
+  const [jumlahDataKlinik, setJumlahDataKlinik] = useState(0);
+  const [jumlahDataObat, setJumlahDataObat] = useState(0);
+  const [jumlahDataDiagnosa, setJumlahDataDiagnosa] = useState(0);
 
   const { totalJumlahObat, totalObatKeluar } = TotalObatYear(year);
   const total = totalJumlahObat + totalObatKeluar;
+  const [keyword, setKeyword] = useState(() => {
+    return searchParams.get("keyword") || "";
+  });
   let persen_obat_masuk = 0;
   let persen_obat_keluar = 0;
 
@@ -41,27 +53,122 @@ export default function Statistik() {
     persen_obat_keluar = ((totalObatKeluar / total) * 100).toFixed(1);
   }
 
+  // Data Sakit
   useEffect(() => {
-    axios
-      .get("https://65fcf9c49fc4425c6530ec6c.mockapi.io/dataShoe")
-      .then((response) => {
-        const data = response.data;
-        setData(data);
-        filterDataByYear(data, year);
-      })
-      .catch((error) => console.error("Error fetching data: ", error));
-  }, [year]);
+    const fetchData = async () => {
+      const token = localStorage.getItem("accessToken");
+      try {
+        const response = await axiosInstance.get("/datasakitstatistik", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setDatasakitpolisi(response.data);
 
+        const uniquePegawaiIds = response.data.reduce((acc, item) => {
+          acc[item.pegawaiId] = true;
+          return acc;
+        }, {});
+
+        const totalData = Object.keys(uniquePegawaiIds).length;
+
+        setJumlahDataSakit(totalData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [axiosInstance]);
+
+  // Data Pengajuan
   useEffect(() => {
-    filterDataByYear(data, year);
-  }, [year, data]);
+    const fetchData = async () => {
+      const token = localStorage.getItem("accessToken");
+      try {
+        const response = await axiosInstance.get("/pengajuansStatistik", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setDataPengajuan(response.data);
 
-  const filterDataByYear = (data, year) => {
-    const filtered = data.filter(
-      (item) => new Date(item.tanggal).getFullYear() === parseInt(year)
-    );
-    setFilteredData(filtered);
-  };
+        const totalData = response.data.length;
+
+        setJumlahDataKlinik(totalData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [axiosInstance]);
+
+  // Data Obat
+  useEffect(() => {
+    const fetchData = async () => {
+      const token = localStorage.getItem("accessToken");
+      try {
+        const response = await axiosInstance.get("/dataobatStatistik", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const obatData = response.data;
+        setDataObat(obatData);
+
+        const totalJumlahObat = obatData.reduce((total, item) => {
+          return total + (item.jumlahobat || 0);
+        }, 0);
+
+        setJumlahDataObat(totalJumlahObat);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [axiosInstance]);
+
+  // Data Diagnosa
+  useEffect(() => {
+    const fetchData = async () => {
+      const token = localStorage.getItem("accessToken");
+      try {
+        const response = await axiosInstance.get("/diagnosaStatistik", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const diagnosaData = response.data;
+        setDataDiagnosa(diagnosaData);
+
+        const uniquePenyakit = new Set();
+
+        diagnosaData.forEach((item) => {
+          [
+            "jenispenyakit1",
+            "jenispenyakit2",
+            "jenispenyakit3",
+            "jenispenyakit4",
+            "jenispenyakit5",
+          ].forEach((field) => {
+            if (item[field]) {
+              uniquePenyakit.add(item[field].toLowerCase());
+            }
+          });
+        });
+
+        setJumlahDataDiagnosa(uniquePenyakit.size);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [axiosInstance]);
 
   const handleYearChange = (e) => {
     const selectedYear = e.target.value;
@@ -77,30 +184,24 @@ export default function Statistik() {
   ];
   const colorsSektor = ["#5726FF", "#FD9A28"];
 
-  const combinedData = DataSektor.map((polisi) => ({
-    ...polisi,
-    rawat: DataPegawaiRawat.find((rawat) => rawat.uuid === polisi.uuid),
-  }));
+  function onKeywordChangeHandler(keyword) {
+    setKeyword(keyword);
+    setSearchParams({ keyword });
+  }
 
-  useEffect(() => {
-    const sorted =
-      sortBy === "most"
-        ? [...combinedData].sort((a, b) => b.rawat.lamacuti - a.rawat.lamacuti)
-        : [...combinedData].sort((a, b) => a.rawat.lamacuti - b.rawat.lamacuti);
-    setSortedData(sorted);
-  }, [combinedData, sortBy]);
-
-  const handleSortChange = (e) => {
-    setSortBy(e.target.value);
-  };
-
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
-  };
-
-  const filteredPolisi = sortedData.filter((entry) =>
-    entry.namapegawai.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredData = datasakitpolisi.filter((datasakitpolisi) => {
+    if (year !== "All") {
+      return (
+        new Date(datasakitpolisi.awalsakit).getFullYear() === parseInt(year) &&
+        datasakitpolisi.pegawai?.namapegawai
+          ?.toLowerCase()
+          .includes(keyword?.toLowerCase())
+      );
+    }
+    return datasakitpolisi.pegawai?.namapegawai
+      ?.toLowerCase()
+      .includes(keyword?.toLowerCase());
+  });
 
   return (
     <>
@@ -133,6 +234,7 @@ export default function Statistik() {
                 onChange={handleYearChange}
                 className="p-2 rounded-md"
               >
+                <option value="All">All</option>
                 {[...Array(10)].map((_, i) => {
                   const y = currentYear - i;
                   return (
@@ -153,7 +255,7 @@ export default function Statistik() {
                 <BsPeopleFill size={75} className="p-2" />
               </div>
               <div className="place-content-center ml-3">
-                <h1 className="text-3xl font-bold">28</h1>
+                <h1 className="text-3xl font-bold">{jumlahDataSakit}</h1>
                 <h3 className="font-semibold text-lg">Polisi Sakit</h3>
               </div>
             </div>
@@ -164,7 +266,7 @@ export default function Statistik() {
                 <FaPeopleGroup size={70} className="p-2" />
               </div>
               <div className="place-content-center ml-3">
-                <h1 className="text-3xl font-bold">108</h1>
+                <h1 className="text-3xl font-bold">{jumlahDataKlinik}</h1>
                 <h3 className="font-semibold text-lg">Pengunjung Klinik</h3>
               </div>
             </div>
@@ -175,8 +277,8 @@ export default function Statistik() {
                 <GiMedicines size={70} className="p-2" />
               </div>
               <div className="place-content-center ml-3">
-                <h1 className="text-3xl font-bold">{totalJumlahObat}</h1>
-                <h3 className="font-semibold text-lg">Obat Masuk</h3>
+                <h1 className="text-3xl font-bold">{jumlahDataObat}</h1>
+                <h3 className="font-semibold text-lg">Total Obat</h3>
               </div>
             </div>
 
@@ -197,7 +299,7 @@ export default function Statistik() {
                 <FaVirus size={70} className="p-2" />
               </div>
               <div className="place-content-center ml-3">
-                <h1 className="text-3xl font-bold">12</h1>
+                <h1 className="text-3xl font-bold">{jumlahDataDiagnosa}</h1>
                 <h3 className="font-semibold text-lg">Jenis Penyakit</h3>
               </div>
             </div>
@@ -236,7 +338,7 @@ export default function Statistik() {
                   </p>
                 </div>
                 <div className="h-96 w-96 mt-2 lg:px-0 px-2">
-                  <BarChart colors={colorsSektor} year={year.toString()} />
+                  <BarChart data={filteredData} colors={colorsSektor} />
                 </div>
               </div>
             </div>
@@ -255,7 +357,7 @@ export default function Statistik() {
                     </p>
                   </div>
                   <div className="lg:h-[149px] lg:px-0 px-2 h-60 w-96 mt-2 ">
-                    <LineChart year={year.toString()} />
+                    <LineChart data={filteredData} />
                   </div>
                 </div>
               </div>
@@ -274,10 +376,7 @@ export default function Statistik() {
                   </div>
                   <div className="flex">
                     <div className="h-[151px] w-44 mt-2 ">
-                      <PieChartApotik
-                        colors={colorsSektor}
-                        year={year.toString()}
-                      />
+                      <PieChartApotik colors={colorsSektor} />
                     </div>
                     <div className="place-content-center text-base font-semibold ">
                       <div className="flex gap-4 place-content-center mb-3">
@@ -303,125 +402,23 @@ export default function Statistik() {
             </div>
           </div>
         </div>
+
         {/* Data Pengunjung */}
-        <div className="container mx-auto pb-10 lg:pl-3 pl-5">
-          <h1 className="text-2xl font-bold mt-4 mb-2 ">
-            Data Seluruh Pengunjung Klinik
-          </h1>
-          <h2 className="text-xl font-semibold mb-4 text-secondary-500">
-            Seluruh data terkait pengunjung di klinik
-          </h2>
-          <div className="flex justify-between mb-4">
-            <div>
-              <label htmlFor="sort">Urutkan berdasarkan:</label>
-              <select
-                id="sort"
-                value={sortBy}
-                onChange={handleSortChange}
-                className="lg:ml-2 mt-2 lg:mt-0 border border-primary-600 rounded-md shadow-sm "
-              >
-                <option value="most">Cuti Terbanyak</option>
-                <option value="least">Cuti Tersedikit</option>
-              </select>
-            </div>
-            <div className="flex items-center mt-9 lg:mt-0">
-              <div className="relative">
-                <span className="absolute inset-y-0 left-0 flex items-center pl-2">
-                  <IoSearch className="text-xl text-gray-500" />
-                </span>
-                <input
-                  type="text"
-                  placeholder="Cari pengunjung..."
-                  value={searchTerm}
-                  onChange={handleSearch}
-                  className="lg:px-2 lg:w-auto w-40 py-1 pl-8 border rounded-md focus:outline-none focus:ring-blue-500 focus:border-primary-600 placeholder:ml-5"
-                  style={{ paddingLeft: "2rem" }}
-                />
-              </div>
-            </div>
+        <main className="mt-12 ml-32 mr-12 space-y-4 mb-10">
+          <div>
+            <h1 className="text-2xl">Data Sakit Polisi</h1>
           </div>
-          <div className="overflow-x-auto pr-5 lg:pr-0">
-            <table className="table-auto w-full">
-              <thead>
-                <tr>
-                  <th className="px-4 py-2 bg-primary-600 text-white rounded-tl-lg">
-                    No
-                  </th>
-                  <th className="px-4 py-2 bg-primary-600 text-white">Nama</th>
-                  <th className="px-4 py-2 bg-primary-600 text-white">
-                    Pangkat/NRP
-                  </th>
-                  <th className="px-4 py-2 bg-primary-600 text-white">
-                    Satuan Kerja
-                  </th>
-                  <th className="px-4 py-2 bg-primary-600 text-white">
-                    Jenis Sakit
-                  </th>
-                  <th className="px-4 py-2 bg-primary-600 text-white">
-                    Jenis Perawatan
-                  </th>
-                  <th className="px-4 py-2 bg-primary-600 text-white">
-                    Sumber Biaya
-                  </th>
-                  <th className="px-4 py-2 bg-primary-600 text-white">
-                    Awal Sakit
-                  </th>
-                  <th className="px-4 py-2 bg-primary-600 text-white">
-                    Lama Cuti
-                  </th>
-                  <th className="px-4 py-2 bg-primary-600 text-white ">WFH</th>
-                  <th className="px-4 py-2 bg-primary-600 text-white rounded-tr-lg">
-                    Keterangan
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredPolisi.map((entry, index) => (
-                  <tr
-                    key={index}
-                    className={
-                      index % 2 === 0 ? "bg-primary-50" : "bg-primary-100"
-                    }
-                  >
-                    <td className="border border-primary-600 px-4 py-2 text-center">
-                      {index + 1}
-                    </td>
-                    <td className="border border-primary-600 px-4 py-2 text-center">
-                      {entry.namapegawai}
-                    </td>
-                    <td className="border border-primary-600 px-4 py-2 text-center">
-                      {entry.pangkat + "/" + entry.nrp}
-                    </td>
-                    <td className="border border-primary-600 px-4 py-2 text-center">
-                      {entry.satuankerja}
-                    </td>
-                    <td className="border border-primary-600 px-4 py-2 text-center">
-                      {entry.rawat.jenispenyakit}
-                    </td>
-                    <td className="border border-primary-600 px-4 py-2 text-center">
-                      {entry.rawat.jenisperawatan}
-                    </td>
-                    <td className="border border-primary-600 px-4 py-2 text-center">
-                      {entry.rawat.sumberbiaya}
-                    </td>
-                    <td className="border border-primary-600 px-4 py-2 text-center">
-                      {entry.rawat.awalsakit}
-                    </td>
-                    <td className="border border-primary-600 px-4 py-2 text-center">
-                      {entry.rawat.lamacuti}
-                    </td>
-                    <td className="border border-primary-600 px-4 py-2 text-center">
-                      {entry.rawat.WFH}
-                    </td>
-                    <td className="border border-primary-600 px-4 py-2 text-center">
-                      {entry.rawat.keterangan}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="w-full my-4 flex gap-4">
+            <SearchBar
+              keyword={keyword}
+              keywordChange={onKeywordChangeHandler}
+            />
           </div>
-        </div>
+          <Tabel
+            table_head={head_data_sakit_statistik}
+            table_row={filteredData}
+          />
+        </main>
       </div>
     </>
   );

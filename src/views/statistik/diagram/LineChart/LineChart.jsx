@@ -1,24 +1,39 @@
 import { ResponsiveLine } from "@nivo/line";
-import { DataPolisi } from "../../model/dataPolisi";
 import PropTypes from "prop-types";
 
-const LineChart = ({ year }) => {
+const LineChart = ({ data }) => {
   LineChart.propTypes = {
+    data: PropTypes.array.isRequired,
     year: PropTypes.string,
   };
-  const filteredData = DataPolisi.filter(
-    (data) => new Date(data.tanggal).getFullYear() === parseInt(year)
+
+
+  const groupedData = {};
+  data.forEach((item) => {
+    const month = new Date(item.awalsakit).toLocaleString("default", {
+      month: "short",
+    });
+    const satuankerja = item.pegawai.satuankerja;
+
+    if (!groupedData[satuankerja]) {
+      groupedData[satuankerja] = {};
+    }
+    if (!groupedData[satuankerja][month]) {
+      groupedData[satuankerja][month] = 0;
+    }
+    groupedData[satuankerja][month] += 1;
+  });
+
+  const DataPeningkatanSakitPolisi = Object.keys(groupedData).map(
+    (satuankerja) => ({
+      id: satuankerja,
+      data: Object.keys(groupedData[satuankerja]).map((month) => ({
+        x: month,
+        y: groupedData[satuankerja][month],
+      })),
+    })
   );
 
-  const DataPeningkatanSakitPolisi = [
-    {
-      id: "Peningkatan Sakit Polisi",
-      data: filteredData.map((item) => ({
-        x: item.bulan,
-        y: item.polda + item.polres,
-      })),
-    },
-  ];
   return (
     <ResponsiveLine
       data={DataPeningkatanSakitPolisi}
