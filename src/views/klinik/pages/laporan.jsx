@@ -200,6 +200,7 @@ export default function Laporan() {
                 <option value="PNS">PNS</option>
                 <option value="Keluarga">Keluarga</option>
                 <option value="Mandiri">Mandiri</option>
+                <option value="Umum">Umum</option>
               </select>
             </div>
 

@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { ResponsiveBar } from "@nivo/bar";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const BarChart = ({ data, colors }) => {
   BarChart.propTypes = {
@@ -9,8 +9,10 @@ const BarChart = ({ data, colors }) => {
     colors: PropTypes.arrayOf(PropTypes.string),
   };
 
+  const chartRef = useRef(null);
   const [dataInput, setDataInput] = useState([]);
   const [keys, setKeys] = useState([]);
+  const [legendWidth, setLegendWidth] = useState(100);
 
   useEffect(() => {
     const processData = (data) => {
@@ -46,88 +48,106 @@ const BarChart = ({ data, colors }) => {
     setDataInput(outputData);
   }, [data]);
 
-  return (
-    <ResponsiveBar
-      data={dataInput}
-      keys={keys}
-      indexBy="bulan"
-      margin={{ top: 20, right: 10, bottom: 100, left: 55 }}
-      padding={0.15}
-      groupMode="grouped"
-      valueScale={{ type: "linear" }}
-      indexScale={{ type: "band", round: true }}
-      colors={colors}
-      borderColor={{
-        from: "color",
-        modifiers: [["darker", "5"]],
-      }}
-      axisTop={null}
-      axisRight={null}
-      axisBottom={{
-        tickSize: 5,
-        tickPadding: 5,
-        tickRotation: 0,
-        legend: "Kesatuan Polisi",
-        legendPosition: "middle",
-        legendOffset: 36,
-        truncateTickAt: 0,
-      }}
-      axisLeft={{
-        tickSize: 5,
-        tickPadding: 5,
-        tickRotation: 0,
-        legend: "Total Polisi",
-        legendPosition: "middle",
-        legendOffset: -50,
-        truncateTickAt: 0,
-      }}
-      enableLabel={true}
-      enableTotals={false}
-      labelSkipHeight={12}
-      labelTextColor={{
-        from: "color",
-        modifiers: [["brighter", "5"]],
-      }}
-      theme={{
-        legends: {
-          text: {
-            textTransform: "capitalize",
-            fontSize: "12px",
-            fontWeight: 600,
-          },
-        },
-      }}
-      legends={[
-        {
-          dataFrom: "keys",
-          anchor: "bottom",
-          direction: "row",
-          justify: false,
-          translateX: 20,
-          translateY: 75,
-          itemsSpacing: 10,
-          itemWidth: 153,
-          itemHeight: 20,
-          itemDirection: "left-to-right",
-          itemOpacity: 0.85,
-          symbolShape: "circle",
-          symbolSize: 20,
-          effects: [
-            {
-              on: "hover",
-              style: {
-                itemOpacity: 1,
-              },
-            },
-          ],
-        },
-      ]}
-      role="application"
-      ariaLabel="Nivo bar chart demo"
-      barAriaLabel={(e) =>
-        e.id + ": " + e.formattedValue + " in country: " + e.indexValue
+  useEffect(() => {
+    const updateLegendWidth = () => {
+      if (chartRef.current) {
+        const chartWidth = chartRef.current.offsetWidth;
+        setLegendWidth(chartWidth / keys.length);
       }
-    />
+    };
+
+    window.addEventListener("resize", updateLegendWidth);
+    updateLegendWidth();
+
+    return () => {
+      window.removeEventListener("resize", updateLegendWidth);
+    };
+  }, [keys]);
+
+  return (
+    <div ref={chartRef} style={{ width: "100%", height: "500px" }}>
+      <ResponsiveBar
+        data={dataInput}
+        keys={keys}
+        indexBy="bulan"
+        margin={{ top: 20, right: 10, bottom: 220, left: 55 }}
+        padding={0.15}
+        groupMode="grouped"
+        valueScale={{ type: "linear" }}
+        indexScale={{ type: "band", round: true }}
+        colors={colors}
+        borderColor={{
+          from: "color",
+          modifiers: [["darker", "5"]],
+        }}
+        axisTop={null}
+        axisRight={null}
+        axisBottom={{
+          tickSize: 5,
+          tickPadding: 5,
+          tickRotation: 0,
+          legend: "Kesatuan Polisi",
+          legendPosition: "middle",
+          legendOffset: 36,
+          truncateTickAt: 0,
+        }}
+        axisLeft={{
+          tickSize: 5,
+          tickPadding: 5,
+          tickRotation: 0,
+          legend: "Total Polisi",
+          legendPosition: "middle",
+          legendOffset: -50,
+          truncateTickAt: 0,
+        }}
+        enableLabel={true}
+        enableTotals={false}
+        labelSkipHeight={12}
+        labelTextColor={{
+          from: "color",
+          modifiers: [["brighter", "5"]],
+        }}
+        theme={{
+          legends: {
+            text: {
+              textTransform: "capitalize",
+              fontSize: "12px",
+              fontWeight: 600,
+            },
+          },
+        }}
+        legends={[
+          {
+            dataFrom: "keys",
+            anchor: "bottom",
+            direction: "row",
+            justify: false,
+            translateX: 10,
+            translateY: 75,
+            itemsSpacing: 10,
+            itemWidth: legendWidth,
+            itemHeight: 20,
+            itemDirection: "left-to-right",
+            itemOpacity: 0.85,
+            symbolShape: "circle",
+            symbolSize: 20,
+            effects: [
+              {
+                on: "hover",
+                style: {
+                  itemOpacity: 1,
+                },
+              },
+            ],
+          },
+        ]}
+        role="application"
+        ariaLabel="Nivo bar chart demo"
+        barAriaLabel={(e) =>
+          e.id + ": " + e.formattedValue + " in country: " + e.indexValue
+        }
+      />
+    </div>
   );
 };
 

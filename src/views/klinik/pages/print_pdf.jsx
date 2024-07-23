@@ -129,7 +129,7 @@ export default function PrintPDF() {
       </div>
 
       <div className="space-x-10 mb-10 flex justify-center">
-        <div className="">
+        <div>
           <div className="w-auto h-auto bg-white shadow-xl items-center border border-black rounded-md">
             <div ref={componentRef}>
               <div className="flex items-center justify-center ml-8 mt-8">

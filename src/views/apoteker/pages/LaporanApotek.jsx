@@ -9,6 +9,7 @@ const LaporanApotek = () => {
   const [medicines, setMedicines] = useState([]);
   const [selectedMonth, setSelectedMonth] = useState("");
   const [selectedYear, setSelectedYear] = useState("");
+  const [selectedPeriod, setSelectedPeriod] = useState(""); // State untuk memilih periode
   const [filteredMedicines, setFilteredMedicines] = useState([]);
   const [, setTotalUsedMedicinehargaobat] = useState(0);
   const [, setTotalRemainingMedicinehargaobat] = useState(0);
@@ -89,7 +90,7 @@ const LaporanApotek = () => {
 
   useEffect(() => {
     filterMedicines();
-  }, [selectedMonth, selectedYear]);
+  }, [selectedMonth, selectedYear, selectedPeriod]);
 
   const handleMonthChange = (e) => {
     setSelectedMonth(e.target.value);
@@ -99,16 +100,29 @@ const LaporanApotek = () => {
     setSelectedYear(e.target.value);
   };
 
+  const handlePeriodChange = (e) => {
+    setSelectedPeriod(e.target.value);
+  };
+
   const filterMedicines = () => {
     const filtered = medicines.filter((medicine) => {
       if (!medicine.tanggalPengeluaran) return false;
       const tanggalPengeluaran = new Date(medicine.tanggalPengeluaran);
-      const monthMatches = selectedMonth
-        ? tanggalPengeluaran.getMonth() + 1 === parseInt(selectedMonth)
-        : true;
+      const month = tanggalPengeluaran.getMonth() + 1;
       const yearMatches = selectedYear
         ? tanggalPengeluaran.getFullYear() === parseInt(selectedYear)
         : true;
+
+      let monthMatches = true;
+
+      if (selectedPeriod === "firstHalf") {
+        monthMatches = month >= 1 && month <= 6;
+      } else if (selectedPeriod === "secondHalf") {
+        monthMatches = month >= 7 && month <= 12;
+      } else {
+        monthMatches = selectedMonth ? month === parseInt(selectedMonth) : true;
+      }
+
       return monthMatches && yearMatches;
     });
     setFilteredMedicines(filtered); // Update filtered medicines
@@ -221,11 +235,11 @@ const LaporanApotek = () => {
           {/* Button untuk navigasi ke halaman lain */}
           <button
             onClick={() => navigate("/apotek/print")} // Menggunakan navigate untuk berpindah halaman
-            className="mt-4 mb-2 px-4 py-2 bg-secondary-500 text-white rounded-md shadow-sm hover:bg-blue-700 focus:outline-none"
+            className="mt-4 mb-4 px-4 py-2 bg-secondary-500 text-white rounded-md shadow-sm hover:bg-blue-700 focus:outline-none"
           >
             Print Laporan
           </button>
-          <div className="flex justify-between mb-4">
+          <div className="flex flex-col md:flex-row justify-start mb-4 space-y-4 md:space-y-0 md:space-x-4">
             <div>
               <label htmlFor="month">Bulan:</label>
               <select
@@ -234,7 +248,7 @@ const LaporanApotek = () => {
                 onChange={handleMonthChange}
                 className="ml-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               >
-                <option value="">Semua</option>
+                <option value="">Pilih Bulan</option>
                 {[...Array(12)].map((_, i) => (
                   <option key={i + 1} value={i + 1}>
                     {new Date(0, i).toLocaleString("default", {
@@ -245,6 +259,19 @@ const LaporanApotek = () => {
               </select>
             </div>
             <div>
+              <label htmlFor="period">Periode:</label>
+              <select
+                id="period"
+                value={selectedPeriod}
+                onChange={handlePeriodChange}
+                className="ml-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="">Pilih Periode</option>
+                <option value="firstHalf">6 Bulan Awal</option>
+                <option value="secondHalf">6 Bulan Akhir</option>
+              </select>
+            </div>
+            <div>
               <label htmlFor="year">Tahun:</label>
               <select
                 id="year"
@@ -252,7 +279,7 @@ const LaporanApotek = () => {
                 onChange={handleYearChange}
                 className="ml-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               >
-                <option value="">Semua</option>
+                <option value="">Pilih Tahun</option>
                 {years.map((year) => (
                   <option key={year} value={year}>
                     {year}
@@ -261,6 +288,7 @@ const LaporanApotek = () => {
               </select>
             </div>
           </div>
+
           {Object.keys(groupedMedicines).map((kategori) => {
             const kategoriTotals = calculatekategoriTotals(
               groupedMedicines[kategori]
@@ -289,6 +317,9 @@ const LaporanApotek = () => {
                         </th>
                         <th className="border px-4 py-2 bg-primary-600 text-white border-primary-600">
                           Jenis
+                        </th>
+                        <th className="border px-4 py-2 bg-primary-600 text-white border-primary-600">
+                          No. Batch
                         </th>
                         <th className="border px-4 py-2 bg-primary-600 text-white border-primary-600">
                           Tanggal Masuk
@@ -334,6 +365,9 @@ const LaporanApotek = () => {
                               {medicine.jenisobat}
                             </td>
                             <td className="border px-4 py-2 border-primary-600">
+                              {medicine.nobatch}
+                            </td>
+                            <td className="border px-4 py-2 border-primary-600">
                               {formatDate(medicine.tglmasuk)}
                             </td>
                             <td className="border px-4 py-2 border-primary-600">
@@ -359,7 +393,7 @@ const LaporanApotek = () => {
                         );
                       })}
                       <tr className="bg-primary-500 text-white font-semibold">
-                        <td className="border px-4 py-2 text-left" colSpan="6">
+                        <td className="border px-4 py-2 text-left" colSpan="7">
                           Total Harga Obat Keseluruhan {kategori}
                         </td>
                         <td className="border px-4 py-2">{totalObatKeluar}</td>

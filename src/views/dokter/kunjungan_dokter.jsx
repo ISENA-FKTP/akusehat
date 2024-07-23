@@ -5,8 +5,6 @@ import Header from "../../components/header";
 import Sidebar_Dokter from "../../components/klinik/sidebar_dokter";
 import Obat from "./components/Obat";
 import RiwayatAlergi from "./components/RiwayatAlergi";
-import TekananDarah from "./components/TekananDarah";
-import KeadaanFisik from "./components/KeadaanFisik";
 import Diagnosa from "./components/Diagosa";
 import Pemeriksaan from "./components/Pemeriksaan";
 
@@ -58,14 +56,14 @@ export default function KunjunganDokter() {
             </div>
           </div>
 
-           {/* Form Diagnosa */}
-        <div className="">
-        <Diagnosa />
-        </div>
-        {/* Form Pemeriksaan */}
-        <div className="">
-        <Pemeriksaan />
-        </div>
+          {/* Form Diagnosa */}
+          <div className="">
+            <Diagnosa />
+          </div>
+          {/* Form Pemeriksaan */}
+          <div className="">
+            <Pemeriksaan />
+          </div>
         </div>
       </div>
     </>

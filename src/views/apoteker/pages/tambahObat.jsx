@@ -18,6 +18,7 @@ const TambahObat = () => {
     kategori: "",
     jenisobat: "",
     hargaobat: "",
+    jenisobatLainnya: "", // untuk menyimpan jenis obat lainnya
   });
 
   const handleChange = (e) => {
@@ -30,6 +31,16 @@ const TambahObat = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // Menggunakan nilai dari jenisobatLainnya jika jenisobat adalah "Jenis Lainnya"
+    const dataToSubmit = {
+      ...formData,
+      jenisobat:
+        formData.jenisobat === "Jenis Lainnya"
+          ? formData.jenisobatLainnya
+          : formData.jenisobat,
+    };
+
     Swal.fire({
       title: "Simpan Data?",
       text: "Apakah Anda yakin ingin menyimpan data obat ini?",
@@ -42,11 +53,15 @@ const TambahObat = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const response = await axiosInstance.post("/dataobats", formData, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
+          const response = await axiosInstance.post(
+            "/dataobats",
+            dataToSubmit,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
 
           if (response.status === 201) {
             Swal.fire("Data obat telah disimpan!", "", "success");
@@ -65,7 +80,7 @@ const TambahObat = () => {
   };
 
   return (
-    <div>
+    <div className="">
       {/* Sidebar */}
       <div className="fixed z-50">
         <Sidebar />
@@ -188,26 +203,43 @@ const TambahObat = () => {
                 {formData.jenisobat || "Pilih Jenis"}
               </Menu.Button>
               <Menu.Items className="absolute mt-1 w-full bg-white border border-gray-200 rounded-md shadow-lg z-10">
-                {["Tablet", "Syrup", "Krim"].map((jenisobat) => (
-                  <Menu.Item key={jenisobat}>
-                    {({ active }) => (
-                      <div
-                        className={`${
-                          active ? "bg-secondary-400 text-white" : "text-black"
-                        } px-4 py-2 cursor-pointer`}
-                        onClick={() => setFormData({ ...formData, jenisobat })}
-                      >
-                        {jenisobat}
-                      </div>
-                    )}
-                  </Menu.Item>
-                ))}
+                {["Tablet", "Syrup", "Krim", "Jenis Lainnya"].map(
+                  (jenisobat) => (
+                    <Menu.Item key={jenisobat}>
+                      {({ active }) => (
+                        <div
+                          className={`${
+                            active
+                              ? "bg-secondary-400 text-white"
+                              : "text-black"
+                          } px-4 py-2 cursor-pointer`}
+                          onClick={() =>
+                            setFormData({ ...formData, jenisobat })
+                          }
+                        >
+                          {jenisobat}
+                        </div>
+                      )}
+                    </Menu.Item>
+                  )
+                )}
               </Menu.Items>
             </Menu>
+            {formData.jenisobat === "Jenis Lainnya" && (
+              <input
+                type="text"
+                name="jenisobatLainnya"
+                value={formData.jenisobatLainnya}
+                onChange={handleChange}
+                className="shadow appearance-none border rounded w-full py-2 px-4 text-black leading-tight focus:outline-none focus:shadow-outline mt-2"
+                placeholder="Masukkan jenis obat lainnya"
+                required
+              />
+            )}
           </div>
           <div className="mb-4">
             <label className="block text-black text-base font-bold mb-2">
-              Hargaobat
+              Harga Obat
             </label>
             <input
               type="number"

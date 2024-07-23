@@ -138,7 +138,6 @@ export default function Obat() {
             ))}
           </div>
         </div>
-        
         <div className="flex items-center space-x-5">
           <label className="text-black font-secondary-Karla font-bold w-40">
             BMHP :
@@ -168,5 +167,6 @@ export default function Obat() {
         </div>
       </form>
     </div>
+
   );
 }

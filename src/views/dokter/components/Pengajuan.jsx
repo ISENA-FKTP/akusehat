@@ -1,12 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { AiOutlineCalendar, AiOutlineClockCircle } from "react-icons/ai";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import Diagosa from "./Diagosa";
-import Pemeriksaan from "./Pemeriksaan";
+
 import useAxios from "../../../useAxios";
 import TekananDarah from "./TekananDarah";
 import KeadaanFisik from "./KeadaanFisik";
@@ -15,13 +14,38 @@ export default function Pengajuan() {
   const MySwal = withReactContent(Swal);
   const axiosInstance = useAxios();
   const { id } = useParams();
-  const [poli, setPoli] = useState("");
-  const [perawatan, setPerawatan] = useState("");
-  const [jeniskunjungan, setJeniskunjungan] = useState("");
-  const [keluhan, setKeluhan] = useState("");
+  const [data, setData] = useState({
+    politujuan: "",
+    perawatan: "",
+    jeniskunjungan: "",
+    keluhan: "",
+  });
   const [anestesi, setAnestesi] = useState("");
   const [startDate, setStartDate] = useState(new Date());
   const [startTime, setStartTime] = useState(new Date());
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+
+    axiosInstance
+      .get(`/pengajuans/dokter/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        const fetchedData = response.data;
+        setData({
+          politujuan: fetchedData.politujuan || "",
+          perawatan: fetchedData.perawatan || "",
+          jeniskunjungan: fetchedData.jeniskunjungan || "",
+          keluhan: fetchedData.keluhan || "",
+        });
+      })
+      .catch((error) => {
+        console.error("There was an error fetching the data!", error);
+      });
+  }, [axiosInstance, id]);
 
   const handleSave = () => {
     MySwal.fire({
@@ -60,12 +84,13 @@ export default function Pengajuan() {
   const saveData = async () => {
     try {
       await axiosInstance.post("/pelayanans", {
-        poli: poli,
-        perawatan: perawatan,
-        jeniskunjungan: jeniskunjungan,
-        keluhan: keluhan,
+        poli: data.politujuan,
+        perawatan: data.perawatan,
+        jeniskunjungan: data.jeniskunjungan,
+        keluhan: data.keluhan,
         anestesi: anestesi,
         tanggalkunjungan: startDate,
+        waktukunjungan: startTime,
         pasienId: id,
       });
 
@@ -94,14 +119,17 @@ export default function Pengajuan() {
                 Perawatan:
               </label>
               <select
+                disabled="true"
                 name="Perawatan"
-                value={perawatan}
-                onChange={(e) => setPerawatan(e.target.value)}
+                value={data.perawatan}
+                onChange={(e) =>
+                  setData({ ...data, perawatan: e.target.value })
+                }
                 className="p-1 rounded-md  flex-[70%] pr-20 border border-black font-secondary-Karla font-medium text-black focus:outline-none focus:border-blue-500"
               >
                 <option value=""></option>
-                <option value="rawat jalan">Rawat Jalan</option>
-                <option value="rawat inap">Rawat Inap</option>
+                <option value="Rawat Jalan">Rawat Jalan</option>
+                <option value="Rawat Inap">Rawat Inap</option>
                 <option value="Promotif Preventif">Promotif Preventif</option>
               </select>
             </div>
@@ -110,9 +138,12 @@ export default function Pengajuan() {
                 Jenis Kunjungan
               </label>
               <select
+                disabled="true"
                 name="Perawatan"
-                value={jeniskunjungan}
-                onChange={(e) => setJeniskunjungan(e.target.value)}
+                value={data.jeniskunjungan}
+                onChange={(e) =>
+                  setData({ ...data, jeniskunjungan: e.target.value })
+                }
                 className="p-1 rounded-md flex-[70%] pr-20 border border-black font-secondary-Karla font-medium text-black focus:outline-none focus:border-blue-500"
               >
                 <option value=""></option>
@@ -125,10 +156,11 @@ export default function Pengajuan() {
                 Poli
               </label>
               <select
+                disabled="true"
                 name="Poli"
-                value={poli}
-                onChange={(e) => setPoli(e.target.value)}
-                className="p-1 h-9 flex-[70%] rounded-md text-left bg-white border border-black focus:outline-none"
+                value={data.politujuan}
+                onChange={(e) => setData({ ...data, poli: e.target.value })}
+                className="p-1 h-9 flex-[70%] rounded-md text-left bg-white border font-medium border-black focus:outline-none"
               >
                 <option value=""></option>
                 <option value="Poli Umum">Poli Umum</option>
@@ -170,10 +202,11 @@ export default function Pengajuan() {
               <label className=" text-black font-secondary-Karla font-bold flex-[30%]">
                 Keluhan
               </label>
-              <textarea
+              <input
+                disabled="true"
                 name="keterangan"
-                value={keluhan}
-                onChange={(e) => setKeluhan(e.target.value)}
+                value={data.keluhan}
+                onChange={(e) => setData({ ...data, keluhan: e.target.value })}
                 className="p-1 h-24 rounded-md text-left bg-white border border-black focus:outline-none flex-[70%]"
                 placeholder="Keterangan......"
               />
@@ -214,14 +247,13 @@ export default function Pengajuan() {
 
         {/* Form Tekanan Darah */}
         <div className="mt-6">
-            <TekananDarah />
-          </div>
+          <TekananDarah />
+        </div>
 
-          {/* Form Keadaan Fisik */}
-          <div className="mt-6">
-            <KeadaanFisik />
-          </div>
-       
+        {/* Form Keadaan Fisik */}
+        <div className="mt-6">
+          <KeadaanFisik />
+        </div>
       </div>
     </div>
   );

@@ -39,6 +39,15 @@ const DashboardApotek = () => {
     return `${year}-${month}-${day}`;
   };
 
+  const formatCurrency = (number) => {
+    return number.toLocaleString('id-ID', {
+      style: 'currency',
+      currency: 'IDR',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).replace('Rp', 'Rp ');
+  };
+
   useEffect(() => {
     setToken(localStorage.getItem("accessToken"));
   }, []);
@@ -203,9 +212,15 @@ const DashboardApotek = () => {
               {requests.map((request) => (
                 <li
                   key={request.uuid}
-                  className="mb-2 flex justify-between items-center "
+                  className="mb-2 flex justify-between items-center"
                 >
                   <div>
+                    <div>
+                      <strong>Nama Pasien:</strong> {request.pasien.nama}
+                      <br />
+                      <strong>Tanggal Lahir Pasien:</strong>{" "}
+                      {formatDate(request.pasien.tgllahir)}
+                    </div>
                     {[
                       request.jenisobat1,
                       request.jenisobat2,
@@ -223,7 +238,7 @@ const DashboardApotek = () => {
                         )
                     )}
                     <span>BMHP: {request.BMHP}</span>
-                    <div className="border-b border-primary-950 my-1 "></div>
+                    <div className="border-b border-primary-950 my-1"></div>
                   </div>
                   <button
                     onClick={() => handleRequestComplete(request.uuid)}
@@ -272,6 +287,7 @@ const DashboardApotek = () => {
                     Kategori
                   </th>
                   <th className="px-4 py-2 bg-primary-600 text-white">Jenis</th>
+                  <th className="px-4 py-2 bg-primary-600 text-white">No. Batch</th>
                   <th className="px-4 py-2 bg-primary-600 text-white">
                     Entry Date
                   </th>
@@ -305,13 +321,16 @@ const DashboardApotek = () => {
                       {medicine.jenisobat}
                     </td>
                     <td className="border border-primary-600 px-4 py-2 text-center">
+                      {medicine.nobatch}
+                    </td>
+                    <td className="border border-primary-600 px-4 py-2 text-center">
                       {formatDate(medicine.tglmasuk)}
                     </td>
                     <td className="border border-primary-600 px-4 py-2 text-center">
                       {formatDate(medicine.tglkadaluarsa)}
                     </td>
                     <td className="border border-primary-600 px-4 py-2 text-center">
-                      Rp{medicine.hargaobat}
+                      {formatCurrency(medicine.hargaobat)}
                     </td>
                     <td className="border border-primary-600 px-4 py-2 text-center flex items-center justify-center space-x-2">
                       <button

@@ -220,6 +220,7 @@ const FormComponent = ({ existingPatient }) => {
           <option value="PNS">PNS</option>
           <option value="Keluarga">Keluarga</option>
           <option value="Siswa Dikban">Siswa Dikban</option>
+          <option value="Umum">Umum</option>
         </select>
       </div>
 
