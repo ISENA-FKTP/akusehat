@@ -40,23 +40,12 @@ const DashboardApotek = () => {
   };
 
   const formatCurrency = (number) => {
-<<<<<<< HEAD
     return number.toLocaleString('id-ID', {
       style: 'currency',
       currency: 'IDR',
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).replace('Rp', 'Rp ');
-=======
-    return number
-      .toLocaleString("id-ID", {
-        style: "currency",
-        currency: "IDR",
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      })
-      .replace("Rp", "Rp ");
->>>>>>> e4373c028260050104f5f047260dcd9062f50250
   };
 
   useEffect(() => {
@@ -298,6 +287,7 @@ const DashboardApotek = () => {
                     Kategori
                   </th>
                   <th className="px-4 py-2 bg-primary-600 text-white">Jenis</th>
+                  <th className="px-4 py-2 bg-primary-600 text-white">No. Batch</th>
                   <th className="px-4 py-2 bg-primary-600 text-white">
                     Entry Date
                   </th>
@@ -329,6 +319,9 @@ const DashboardApotek = () => {
                     </td>
                     <td className="border border-primary-600 px-4 py-2 text-center">
                       {medicine.jenisobat}
+                    </td>
+                    <td className="border border-primary-600 px-4 py-2 text-center">
+                      {medicine.nobatch}
                     </td>
                     <td className="border border-primary-600 px-4 py-2 text-center">
                       {formatDate(medicine.tglmasuk)}

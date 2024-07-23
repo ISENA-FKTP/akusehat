@@ -92,11 +92,6 @@ const PrintPage = () => {
   useEffect(() => {
     filterMedicines();
   }, [selectedMonth, selectedYear, selectedPeriod]);
-<<<<<<< HEAD
-  
-=======
-
->>>>>>> e4373c028260050104f5f047260dcd9062f50250
   const handleMonthChange = (e) => {
     setSelectedMonth(e.target.value);
   };
@@ -125,13 +120,7 @@ const PrintPage = () => {
       } else if (selectedPeriod === "secondHalf") {
         monthMatches = month >= 7 && month <= 12;
       } else {
-<<<<<<< HEAD
-        monthMatches = selectedMonth
-          ? month === parseInt(selectedMonth)
-          : true;
-=======
         monthMatches = selectedMonth ? month === parseInt(selectedMonth) : true;
->>>>>>> e4373c028260050104f5f047260dcd9062f50250
       }
 
       return monthMatches && yearMatches;
@@ -267,56 +256,6 @@ const PrintPage = () => {
         />
         <div className="container mx-auto pl-5 text-black">
           <div className="flex flex-col md:flex-row justify-start mb-4 mt-4 space-y-4 md:space-y-0 md:space-x-4">
-<<<<<<< HEAD
-  <div>
-    <label htmlFor="month">Bulan:</label>
-    <select
-      id="month"
-      value={selectedMonth}
-      onChange={handleMonthChange}
-      className="ml-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-    >
-      <option value="">Pilih Bulan</option>
-      {[...Array(12)].map((_, i) => (
-        <option key={i + 1} value={i + 1}>
-          {new Date(0, i).toLocaleString("default", {
-            month: "long",
-          })}
-        </option>
-      ))}
-    </select>
-  </div>
-  <div>
-    <label htmlFor="period">Periode:</label>
-    <select
-      id="period"
-      value={selectedPeriod}
-      onChange={handlePeriodChange}
-      className="ml-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-    >
-      <option value="">Pilih Periode</option>
-      <option value="firstHalf">6 Bulan Awal</option>
-      <option value="secondHalf">6 Bulan Akhir</option>
-    </select>
-  </div>
-  <div>
-    <label htmlFor="year">Tahun:</label>
-    <select
-      id="year"
-      value={selectedYear}
-      onChange={handleYearChange}
-      className="ml-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-    >
-      <option value="">Pilih Tahun</option>
-      {years.map((year) => (
-        <option key={year} value={year}>
-          {year}
-        </option>
-      ))}
-    </select>
-  </div>
-</div>
-=======
             <div>
               <label htmlFor="month">Bulan:</label>
               <select
@@ -365,7 +304,6 @@ const PrintPage = () => {
               </select>
             </div>
           </div>
->>>>>>> e4373c028260050104f5f047260dcd9062f50250
           <button
             onClick={handlePrint}
             className="mt-2 px-4 py-2 bg-success-500 text-white rounded hover:bg-success-400 focus:outline-none"
@@ -436,6 +374,9 @@ const PrintPage = () => {
                               Jenis
                             </th>
                             <th className="border px-4 py-2 text-black border-black">
+                              No. Batch
+                            </th>
+                            <th className="border px-4 py-2 text-black border-black">
                               Tanggal Masuk
                             </th>
                             <th className="border px-4 py-2 text-black border-black">
@@ -472,6 +413,9 @@ const PrintPage = () => {
                                   {medicine.jenisobat}
                                 </td>
                                 <td className="border px-4 py-2 border-black">
+                                  {medicine.nobatch}
+                                </td>
+                                <td className="border px-4 py-2 border-black">
                                   {formatDate(medicine.tglmasuk)}
                                 </td>
                                 <td className="border px-4 py-2 border-black">
@@ -500,7 +444,7 @@ const PrintPage = () => {
                           <tr className="bg-white text-black font-semibold">
                             <td
                               className="border px-4 py-2 text-left border-black"
-                              colSpan="6"
+                              colSpan="7"
                             >
                               Total Harga Keseluruhan {kategori}
                             </td>
