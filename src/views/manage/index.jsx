@@ -7,6 +7,7 @@ import { head_data_sakit } from "./model/dataSakit";
 import Tabel from "../../components/manage/tabel";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import useAxios from "../../useAxios";
+import { IoPrintOutline } from "react-icons/io5";
 
 export default function Manage() {
   const navigate = useNavigate();
@@ -37,6 +38,10 @@ export default function Manage() {
 
   const tambahDataHandler = () => {
     navigate("/manage/data-sakit/tambah-data");
+  };
+
+  const printDataHandler = () => {
+    navigate("/manage/print");
   };
 
   function onKeywordChangeHandler(keyword) {
@@ -70,6 +75,15 @@ export default function Manage() {
         <div className="w-full my-4 flex gap-4">
           <SearchBar keyword={keyword} keywordChange={onKeywordChangeHandler} />
           <TambahButton onClicked={tambahDataHandler} />
+          <div className="w-1/2  ">
+      <button
+        className="text-white bg-primary-500 px-4 py-3 rounded-md hover:bg-primary-400 inline-flex items-center"
+        onClick={printDataHandler }
+      >
+        <IoPrintOutline className="w-6 h-6 mr-2" />
+        <span>Print Data</span>
+      </button>
+    </div>
         </div>
         <Tabel table_head={head_data_sakit} table_row={filteredData} />
       </main>

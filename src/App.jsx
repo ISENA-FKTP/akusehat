@@ -25,6 +25,7 @@ import Dashboard_Dokter from "./views/dokter/index";
 import Dokter from "./views/dokter/dokter";
 import KunjunganDokter from "./views/dokter/kunjungan_dokter";
 import PrintPDF from "./views/klinik/pages/print_pdf";
+import PrintDataSakit from "./views/manage/pages/printDataSakit";
 
 function App() {
   return (
@@ -64,6 +65,7 @@ function App() {
         />
 
         <Route path="/manage" element={<Manage />} />
+        <Route path="/manage/print" element={<PrintDataSakit />} />
         <Route path="/manage/data-home-visit" element={<HomeVisit />} />
         <Route path="/manage/data-rekam-medis" element={<RekamMedis />} />
         <Route

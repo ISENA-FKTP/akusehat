@@ -9,7 +9,7 @@ const PrintButton = () => {
     setGlitch(true);
     setTimeout(() => {
       setGlitch(false);
-      navigate("/print_pdf");
+      navigate("/manage/print");
     }, 1000);
   };
 

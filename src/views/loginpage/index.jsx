@@ -70,6 +70,7 @@ const Login = () => {
     if (token) {
       const decoded = jwtDecode(token);
       const userRole = decoded.role.toLowerCase();
+      // const userRole = decoded.role;
 
       switch (userRole) {
         case "admin":
