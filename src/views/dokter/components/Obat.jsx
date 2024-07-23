@@ -47,7 +47,6 @@ export default function Obat() {
   const saveData = async () => {
     const data = {
       jenisobat: jenisObat,
-      dosis: document.querySelector('textarea[name="Dosis"]').value,
       BMHP: document.querySelector('textarea[name="BMHP"]').value,
       pasienId: id,
     };
