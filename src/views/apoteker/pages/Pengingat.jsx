@@ -178,7 +178,7 @@ const Pengingat = () => {
           userStatus="Apoteker"
           profilePicture="/logo.png"
         />
-        <div className="container mx-auto pl-5">
+        <div className="container mx-auto pl-20">
           <div className="flex justify-between mb-4 mt-5">
             <div>
               <label htmlFor="expiring-sort">Urutkan berdasarkan:</label>

@@ -199,7 +199,7 @@ const DashboardApotek = () => {
           userStatus="Apoteker"
           profilePicture="/logo.png"
         />
-        <div className="container mx-auto pl-5">
+        <div className="container mx-auto pl-20">
           <h1 className="text-2xl font-bold mt-4 mb-2">
             Data Seluruh Obat Apotek
           </h1>

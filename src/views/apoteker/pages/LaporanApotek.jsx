@@ -225,7 +225,7 @@ const LaporanApotek = () => {
           userStatus="Apoteker"
           profilePicture="/logo.png"
         />
-        <div className="container mx-auto pl-5">
+        <div className="container mx-auto pl-20">
           <h1 className="text-2xl font-bold mt-4 mb-2">
             Laporan Penggunaan Obat Apotek
           </h1>
