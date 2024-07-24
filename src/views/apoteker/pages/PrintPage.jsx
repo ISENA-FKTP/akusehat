@@ -1,10 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Sidebar from "../../../components/apotik/sidebar";
 import Header from "../../../components/header";
 import useAxios from "../../../useAxios";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
+import { useReactToPrint } from "react-to-print";
 
 const PrintPage = () => {
   const [medicines, setMedicines] = useState([]);
@@ -16,6 +15,11 @@ const PrintPage = () => {
   const [, setTotalRemainingMedicinehargaobat] = useState(0);
   const axiosInstance = useAxios();
   const token = localStorage.getItem("accessToken");
+  const componentRef = useRef();
+
+  const handlepdfClick = useReactToPrint({
+    content: () => componentRef.current,
+  });
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -214,35 +218,6 @@ const PrintPage = () => {
     totalRemainingObatOverall,
   } = calculateOverallTotals();
 
-  const handlePrint = () => {
-    const input = document.getElementById("report");
-    const pdf = new jsPDF("l", "mm", "a4"); // Menggunakan orientasi potrait ('p') untuk format A4
-    const margin = 10; // margin dalam mm
-    const pageHeight = pdf.internal.pageSize.height;
-    const pageWidth = pdf.internal.pageSize.width;
-
-    html2canvas(input, { scale: 2 }).then((canvas) => {
-      // Menyesuaikan skala untuk meningkatkan kualitas gambar
-      const imgData = canvas.toDataURL("image/png");
-      const imgWidth = pageWidth - margin * 2;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      let heightLeft = imgHeight;
-      let position = margin;
-
-      pdf.addImage(imgData, "PNG", margin, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight - margin;
-
-      while (heightLeft > 0) {
-        position = heightLeft - imgHeight;
-        pdf.addPage();
-        pdf.addImage(imgData, "PNG", margin, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
-      }
-
-      pdf.save("laporan_apotek.pdf");
-    });
-  };
-
   return (
     <div className="flex">
       <div className="fixed z-50">
@@ -305,13 +280,35 @@ const PrintPage = () => {
     </select>
   </div>
 </div>
+
+<style jsx>{`
+  @media print {
+    @page {
+      size: landscape; /* Atur orientasi halaman menjadi landscape */
+      margin: 20mm; /* Atur margin halaman di sini */
+    }
+    table {
+      width: 100%; /* Tabel mengambil lebar penuh */
+      font-size: 12px; /* Ukuran teks dalam tabel */
+      border-collapse: collapse; /* Hapus jarak antar border */
+    }
+    th, td {
+      padding: 2px; /* Padding sel tabel */
+      border: 1px solid black; /* Border hitam untuk tabel */
+    }
+  }
+`}</style>
+
+
+
+
           <button
-            onClick={handlePrint}
+            onClick={handlepdfClick}
             className="mt-2 px-4 py-2 bg-success-500 text-white rounded hover:bg-success-400 focus:outline-none"
           >
             Print Laporan
           </button>
-          <div id="report">
+          <div ref={componentRef}>
             <div className="flex items-center justify-center ml-8 mt-8">
               <img
                 src="/logo.png"
