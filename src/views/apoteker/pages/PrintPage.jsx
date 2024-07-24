@@ -27,14 +27,12 @@ const PrintPage = () => {
   };
 
   const formatCurrency = (number) => {
-    return number
-      .toLocaleString("id-ID", {
-        style: "currency",
-        currency: "IDR",
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      })
-      .replace("Rp", "Rp ");
+    return number.toLocaleString("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    });
   };
 
   useEffect(() => {
@@ -404,7 +402,7 @@ const PrintPage = () => {
                                   {medicine.namaobat}
                                 </td>
                                 <td className="border px-4 py-2 border-black">
-                                  {formatCurrency(medicine.hargaobat)}){" "}
+                                  {formatCurrency(medicine.hargaobat)}{" "}
                                 </td>
                                 <td className="border px-4 py-2 border-black">
                                   {medicine.kategori}
