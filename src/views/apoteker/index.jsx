@@ -62,19 +62,20 @@ const Dashboard = () => {
               Selamat Datang
             </h3>
             <div className="text-white text-6xl font-primary-Poppins font-extrabold mb-6">
-              <h3>ISENA-FKTP</h3>
+              <h3>AKUSEHAT</h3>
             </div>
             <div className="text-secondary-400 text-2xl font-primary-Poppins font-extrabold">
               <h3>
                 <p>
-                  Solusi Manajemen Data Apotik dan Kesehatan Polisi Polda NTB
+                  Aplikasi Kesehatan Unram - Fasilitas Kesehatan Bhayangkara
+                  Terpadu.
                 </p>
               </h3>
             </div>
             <div className="text-white text-1xl font-primary-Poppins mb-10">
               <p className="leading-relaxed">
-                ISENA-FKTP adalah platform digital inovatif untuk pengelolaan
-                data apotik dan riwayat kesehatan personel <br />
+                AKUSEHAT adalah platform digital inovatif untuk pengelolaan data
+                apotik dan riwayat kesehatan personel <br />
                 kepolisian di Polda NTB. Kami menawarkan fitur lengkap untuk
                 mengelola stok obat, resep, serta mencatat <br />
                 dan memantau riwayat medis dengan mudah dan aman.

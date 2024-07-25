@@ -1,9 +1,11 @@
 /** @type {import('tailwindcss').Config} */
-const colors = require('tailwindcss/colors')
+const colors = require("tailwindcss/colors");
 export default {
-  content: ["./index.html",
-  "./node_modules/primereact/**/*.{js,ts,jsx,tsx}",
-  "./src/**/*.{js,ts,jsx,tsx}"],
+  content: [
+    "./index.html",
+    "./node_modules/primereact/**/*.{js,ts,jsx,tsx}",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
   theme: {
     colors: {
       transparent: "transparent",
@@ -15,30 +17,30 @@ export default {
       indigo: colors.indigo,
       yellow: colors.yellow,
       primary: {
-        50: "#f2f2ff",
-        100: "#e9e7ff",
-        200: "#d4d2ff",
-        300: "#b4aeff",
-        400: "#8f80ff",
-        500: "#6c4dff",
-        600: "#5726ff",
-        700: "#4b16eb",
-        800: "#3e12c5",
-        900: "#3411a1",
-        950: "#1c076e",
+        50: "#ecfff7",
+        100: "#d3ffee",
+        200: "#aaffdf",
+        300: "#69ffc7",
+        400: "#21ffa9",
+        500: "#00f28b",
+        600: "#00ca6f",
+        700: "#009e5a",
+        800: "#007f4e",
+        900: "#026540",
+        950: "#003921",
       },
       secondary: {
-        50: "#fff7eb",
-        100: "#fee9c7",
-        200: "#fed189",
-        300: "#feb34b",
-        400: "#fd9a28",
-        500: "#f77309",
-        600: "#db4f04",
-        700: "#b63207",
-        800: "#93270d",
-        900: "#79210e",
-        950: "#460d02",
+        50: "#fefce8",
+        100: "#fdf9c4",
+        200: "#fdef8b",
+        300: "#fbdf49",
+        400: "#f8cc1b",
+        500: "#e8b20a",
+        600: "#c88906",
+        700: "#a06208",
+        800: "#844d0f",
+        900: "#703f13",
+        950: "#412007",
       },
       warning: {
         50: "#fefae8",
@@ -87,7 +89,5 @@ export default {
       },
     },
   },
-  plugins: [
-    require('@tailwindcss/forms'),
-  ],
+  plugins: [require("@tailwindcss/forms")],
 };

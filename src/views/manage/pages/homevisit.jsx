@@ -60,7 +60,7 @@ export default function HomeVisit() {
         title="Data Home Visit Polisi"
         userName="Rifki Rusdi Satma Putra"
         userStatus="Kepala Polisi"
-        profilePicture="logo.png"
+        profilePicture="/logo.png"
       />
       <main className="mt-12 ml-32 mr-12 space-y-4  ">
         <div>

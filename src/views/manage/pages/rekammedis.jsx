@@ -61,7 +61,7 @@ export default function RekamMedis() {
         title="Data Rekam Medis Polisi"
         userName="Rifki Rusdi Satma Putra"
         userStatus="Kepala Polisi"
-        profilePicture="logo.png"
+        profilePicture="/logo.png"
       />
       <main className="mt-12 ml-32 mr-12 space-y-4  ">
         <div>
