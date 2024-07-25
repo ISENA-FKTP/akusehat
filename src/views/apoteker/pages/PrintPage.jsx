@@ -92,7 +92,6 @@ const PrintPage = () => {
   useEffect(() => {
     filterMedicines();
   }, [selectedMonth, selectedYear, selectedPeriod]);
-
   const handleMonthChange = (e) => {
     setSelectedMonth(e.target.value);
   };
@@ -375,6 +374,9 @@ const PrintPage = () => {
                               Jenis
                             </th>
                             <th className="border px-4 py-2 text-black border-black">
+                              No. Batch
+                            </th>
+                            <th className="border px-4 py-2 text-black border-black">
                               Tanggal Masuk
                             </th>
                             <th className="border px-4 py-2 text-black border-black">
@@ -411,6 +413,9 @@ const PrintPage = () => {
                                   {medicine.jenisobat}
                                 </td>
                                 <td className="border px-4 py-2 border-black">
+                                  {medicine.nobatch}
+                                </td>
+                                <td className="border px-4 py-2 border-black">
                                   {formatDate(medicine.tglmasuk)}
                                 </td>
                                 <td className="border px-4 py-2 border-black">
@@ -439,7 +444,7 @@ const PrintPage = () => {
                           <tr className="bg-white text-black font-semibold">
                             <td
                               className="border px-4 py-2 text-left border-black"
-                              colSpan="6"
+                              colSpan="7"
                             >
                               Total Harga Keseluruhan {kategori}
                             </td>

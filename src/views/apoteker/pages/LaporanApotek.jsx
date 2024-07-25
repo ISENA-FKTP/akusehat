@@ -319,6 +319,9 @@ const LaporanApotek = () => {
                           Jenis
                         </th>
                         <th className="border px-4 py-2 bg-primary-600 text-white border-primary-600">
+                          No. Batch
+                        </th>
+                        <th className="border px-4 py-2 bg-primary-600 text-white border-primary-600">
                           Tanggal Masuk
                         </th>
                         <th className="border px-4 py-2 bg-primary-600 text-white border-primary-600">
@@ -362,6 +365,9 @@ const LaporanApotek = () => {
                               {medicine.jenisobat}
                             </td>
                             <td className="border px-4 py-2 border-primary-600">
+                              {medicine.nobatch}
+                            </td>
+                            <td className="border px-4 py-2 border-primary-600">
                               {formatDate(medicine.tglmasuk)}
                             </td>
                             <td className="border px-4 py-2 border-primary-600">
@@ -387,7 +393,7 @@ const LaporanApotek = () => {
                         );
                       })}
                       <tr className="bg-primary-500 text-white font-semibold">
-                        <td className="border px-4 py-2 text-left" colSpan="6">
+                        <td className="border px-4 py-2 text-left" colSpan="7">
                           Total Harga Obat Keseluruhan {kategori}
                         </td>
                         <td className="border px-4 py-2">{totalObatKeluar}</td>
