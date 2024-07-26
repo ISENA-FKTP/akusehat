@@ -178,7 +178,7 @@ const Pengingat = () => {
           userStatus="Apoteker"
           profilePicture="/logo.png"
         />
-        <div className="container mx-auto pl-5">
+        <div className="container mx-auto pl-20">
           <div className="flex justify-between mb-4 mt-5">
             <div>
               <label htmlFor="expiring-sort">Urutkan berdasarkan:</label>
@@ -225,10 +225,10 @@ const Pengingat = () => {
                   <th className="px-4 py-2 bg-primary-600 text-white">Jenis</th>
                   <th className="px-4 py-2 bg-primary-600 text-white">No. Batch</th>
                   <th className="px-4 py-2 bg-primary-600 text-white">
-                    Entry Date
+                    Tanggal Masuk
                   </th>
                   <th className="px-4 py-2 bg-primary-600 text-white">
-                    Expiry Date
+                    Tanggal Kadaluarsa
                   </th>
                   <th className="px-4 py-2 bg-primary-600 text-white">Harga</th>
                   <th className="px-4 py-2 bg-primary-600 text-white rounded-tr-lg">
@@ -348,10 +348,10 @@ const Pengingat = () => {
                   <th className="px-4 py-2 bg-primary-600 text-white">Jenis</th>
                   <th className="px-4 py-2 bg-primary-600 text-white">No. Batch</th>
                   <th className="px-4 py-2 bg-primary-600 text-white">
-                    Entry Date
+                    Tanggal Masuk
                   </th>
                   <th className="px-4 py-2 bg-primary-600 text-white">
-                    Expiry Date
+                    Tanggal Kadaluarsa
                   </th>
                   <th className="px-4 py-2 bg-primary-600 text-white">Harga</th>
                   <th className="px-4 py-2 bg-primary-600 text-white rounded-tr-lg">
