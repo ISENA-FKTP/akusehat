@@ -199,7 +199,7 @@ const DashboardApotek = () => {
           userStatus="Apoteker"
           profilePicture="/logo.png"
         />
-        <div className="container mx-auto pl-5">
+        <div className="container mx-auto pl-20">
           <h1 className="text-2xl font-bold mt-4 mb-2">
             Data Seluruh Obat Apotek
           </h1>
@@ -289,10 +289,10 @@ const DashboardApotek = () => {
                   <th className="px-4 py-2 bg-primary-600 text-white">Jenis</th>
                   <th className="px-4 py-2 bg-primary-600 text-white">No. Batch</th>
                   <th className="px-4 py-2 bg-primary-600 text-white">
-                    Entry Date
+                    Tanggal Masuk
                   </th>
                   <th className="px-4 py-2 bg-primary-600 text-white">
-                    Expiry Date
+                    Tanggal Kadaluarsa
                   </th>
                   <th className="px-4 py-2 bg-primary-600 text-white">Harga</th>
                   <th className="px-4 py-2 bg-primary-600 text-white rounded-tr-lg">

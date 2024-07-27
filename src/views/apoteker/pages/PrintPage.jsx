@@ -1,10 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Sidebar from "../../../components/apotik/sidebar";
 import Header from "../../../components/header";
 import useAxios from "../../../useAxios";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
+import { useReactToPrint } from "react-to-print";
 
 const PrintPage = () => {
   const [medicines, setMedicines] = useState([]);
@@ -16,6 +15,11 @@ const PrintPage = () => {
   const [, setTotalRemainingMedicinehargaobat] = useState(0);
   const axiosInstance = useAxios();
   const token = localStorage.getItem("accessToken");
+  const componentRef = useRef();
+
+  const handlepdfClick = useReactToPrint({
+    content: () => componentRef.current,
+  });
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -27,14 +31,12 @@ const PrintPage = () => {
   };
 
   const formatCurrency = (number) => {
-    return number
-      .toLocaleString("id-ID", {
-        style: "currency",
-        currency: "IDR",
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      })
-      .replace("Rp", "Rp ");
+    return number.toLocaleString("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    });
   };
 
   useEffect(() => {
@@ -92,6 +94,7 @@ const PrintPage = () => {
   useEffect(() => {
     filterMedicines();
   }, [selectedMonth, selectedYear, selectedPeriod]);
+  
   const handleMonthChange = (e) => {
     setSelectedMonth(e.target.value);
   };
@@ -120,7 +123,9 @@ const PrintPage = () => {
       } else if (selectedPeriod === "secondHalf") {
         monthMatches = month >= 7 && month <= 12;
       } else {
-        monthMatches = selectedMonth ? month === parseInt(selectedMonth) : true;
+        monthMatches = selectedMonth
+          ? month === parseInt(selectedMonth)
+          : true;
       }
 
       return monthMatches && yearMatches;
@@ -213,35 +218,6 @@ const PrintPage = () => {
     totalRemainingObatOverall,
   } = calculateOverallTotals();
 
-  const handlePrint = () => {
-    const input = document.getElementById("report");
-    const pdf = new jsPDF("l", "mm", "a4"); // Menggunakan orientasi potrait ('p') untuk format A4
-    const margin = 10; // margin dalam mm
-    const pageHeight = pdf.internal.pageSize.height;
-    const pageWidth = pdf.internal.pageSize.width;
-
-    html2canvas(input, { scale: 2 }).then((canvas) => {
-      // Menyesuaikan skala untuk meningkatkan kualitas gambar
-      const imgData = canvas.toDataURL("image/png");
-      const imgWidth = pageWidth - margin * 2;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      let heightLeft = imgHeight;
-      let position = margin;
-
-      pdf.addImage(imgData, "PNG", margin, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight - margin;
-
-      while (heightLeft > 0) {
-        position = heightLeft - imgHeight;
-        pdf.addPage();
-        pdf.addImage(imgData, "PNG", margin, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
-      }
-
-      pdf.save("laporan_apotek.pdf");
-    });
-  };
-
   return (
     <div className="flex">
       <div className="fixed z-50">
@@ -254,63 +230,85 @@ const PrintPage = () => {
           userStatus="Apoteker"
           profilePicture="/logo.png"
         />
-        <div className="container mx-auto pl-5 text-black">
+        <div className="container mx-auto pl-20 text-black">
           <div className="flex flex-col md:flex-row justify-start mb-4 mt-4 space-y-4 md:space-y-0 md:space-x-4">
-            <div>
-              <label htmlFor="month">Bulan:</label>
-              <select
-                id="month"
-                value={selectedMonth}
-                onChange={handleMonthChange}
-                className="ml-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              >
-                <option value="">Pilih Bulan</option>
-                {[...Array(12)].map((_, i) => (
-                  <option key={i + 1} value={i + 1}>
-                    {new Date(0, i).toLocaleString("default", {
-                      month: "long",
-                    })}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label htmlFor="period">Periode:</label>
-              <select
-                id="period"
-                value={selectedPeriod}
-                onChange={handlePeriodChange}
-                className="ml-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              >
-                <option value="">Pilih Periode</option>
-                <option value="firstHalf">6 Bulan Awal</option>
-                <option value="secondHalf">6 Bulan Akhir</option>
-              </select>
-            </div>
-            <div>
-              <label htmlFor="year">Tahun:</label>
-              <select
-                id="year"
-                value={selectedYear}
-                onChange={handleYearChange}
-                className="ml-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              >
-                <option value="">Pilih Tahun</option>
-                {years.map((year) => (
-                  <option key={year} value={year}>
-                    {year}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
+  <div>
+    <label htmlFor="month">Bulan:</label>
+    <select
+      id="month"
+      value={selectedMonth}
+      onChange={handleMonthChange}
+      className="ml-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+    >
+      <option value="">Pilih Bulan</option>
+      {[...Array(12)].map((_, i) => (
+        <option key={i + 1} value={i + 1}>
+          {new Date(0, i).toLocaleString("default", {
+            month: "long",
+          })}
+        </option>
+      ))}
+    </select>
+  </div>
+  <div>
+    <label htmlFor="period">Periode:</label>
+    <select
+      id="period"
+      value={selectedPeriod}
+      onChange={handlePeriodChange}
+      className="ml-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+    >
+      <option value="">Pilih Periode</option>
+      <option value="firstHalf">6 Bulan Awal</option>
+      <option value="secondHalf">6 Bulan Akhir</option>
+    </select>
+  </div>
+  <div>
+    <label htmlFor="year">Tahun:</label>
+    <select
+      id="year"
+      value={selectedYear}
+      onChange={handleYearChange}
+      className="ml-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+    >
+      <option value="">Pilih Tahun</option>
+      {years.map((year) => (
+        <option key={year} value={year}>
+          {year}
+        </option>
+      ))}
+    </select>
+  </div>
+</div>
+
+<style jsx>{`
+  @media print {
+    @page {
+      size: landscape; /* Atur orientasi halaman menjadi landscape */
+      margin: 20mm; /* Atur margin halaman di sini */
+    }
+    table {
+      width: 100%; /* Tabel mengambil lebar penuh */
+      font-size: 12px; /* Ukuran teks dalam tabel */
+      border-collapse: collapse; /* Hapus jarak antar border */
+    }
+    th, td {
+      padding: 2px; /* Padding sel tabel */
+      border: 1px solid black; /* Border hitam untuk tabel */
+    }
+  }
+`}</style>
+
+
+
+
           <button
-            onClick={handlePrint}
+            onClick={handlepdfClick}
             className="mt-2 px-4 py-2 bg-success-500 text-white rounded hover:bg-success-400 focus:outline-none"
           >
             Print Laporan
           </button>
-          <div id="report">
+          <div ref={componentRef}>
             <div className="flex items-center justify-center ml-8 mt-8">
               <img
                 src="/logo.png"
@@ -374,9 +372,6 @@ const PrintPage = () => {
                               Jenis
                             </th>
                             <th className="border px-4 py-2 text-black border-black">
-                              No. Batch
-                            </th>
-                            <th className="border px-4 py-2 text-black border-black">
                               Tanggal Masuk
                             </th>
                             <th className="border px-4 py-2 text-black border-black">
@@ -404,16 +399,13 @@ const PrintPage = () => {
                                   {medicine.namaobat}
                                 </td>
                                 <td className="border px-4 py-2 border-black">
-                                  {formatCurrency(medicine.hargaobat)}){" "}
+                                  {formatCurrency(medicine.hargaobat)}{" "}
                                 </td>
                                 <td className="border px-4 py-2 border-black">
                                   {medicine.kategori}
                                 </td>
                                 <td className="border px-4 py-2 border-black">
                                   {medicine.jenisobat}
-                                </td>
-                                <td className="border px-4 py-2 border-black">
-                                  {medicine.nobatch}
                                 </td>
                                 <td className="border px-4 py-2 border-black">
                                   {formatDate(medicine.tglmasuk)}
@@ -444,7 +436,7 @@ const PrintPage = () => {
                           <tr className="bg-white text-black font-semibold">
                             <td
                               className="border px-4 py-2 text-left border-black"
-                              colSpan="7"
+                              colSpan="6"
                             >
                               Total Harga Keseluruhan {kategori}
                             </td>
