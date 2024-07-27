@@ -32,17 +32,17 @@ export default function Sidebar({ userName, userStatus, profilePicture }) {
     { title: "Dashboard", path: "/statistik" },
     {
       title: "Data Sakit Polisi",
-      path: "/statistik/data-sakit-polisi",
+      path: "#",
       icon: <MdSick />,
     },
     {
       title: "Data Pengunjung Klinik",
-      path: "/statistik/data-pengunjung-klinik",
+      path: "#",
       icon: <FaPeopleGroup />,
     },
     {
       title: "Data Obat Klinik",
-      path: "/statistik/data-obat-klinik",
+      path: "#",
       icon: <GiMedicines />,
     },
   ];

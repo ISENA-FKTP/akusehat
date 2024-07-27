@@ -301,7 +301,7 @@ export default function Laporan() {
                     {entry.norm || "Data Belum Diisi Oleh Admin"}
                   </td>
                   <td className="border border-primary-600 px-4 py-2 text-center">
-                    {entry.pengajuan?.poli || "Data Belum Diisi Oleh Dokter"}
+                    {entry.pengajuan?.poli || "Data Belum Diisi Oleh Admin"}
                   </td>
                   <td className="border border-primary-600 px-4 py-2 text-center">
                     {entry.nama || "Data Belum Diisi Oleh Admin"}

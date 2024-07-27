@@ -12,13 +12,13 @@ const FormDataSakit = () => {
     namapegawai: "",
     pangkat: "",
     satuankerja: "",
-    jenis_sakit: "",
-    jenis_perawatan: "",
-    sumber_biaya: "",
-    awal_sakit: "",
-    lama_cuti: "",
+    jenissakit: "",
+    jenisperawatan: "",
+    sumberbiaya: "",
+    awalsakit: "",
+    lamacuti: "",
     WFH: "",
-    Keterangan: "",
+    keterangan: "",
     pegawaiId: "",
     penyakitLainnya: "",
   });
@@ -171,15 +171,15 @@ const FormDataSakit = () => {
         "/datasakits",
         {
           jenispenyakit:
-            formData.jenis_sakit === "Lainnya"
+            formData.jenissakit === "Lainnya"
               ? formData.penyakitLainnya
-              : formData.jenis_sakit,
-          jenisperawatan: formData.jenis_perawatan,
-          lamacuti: formData.lama_cuti,
-          awalsakit: formData.awal_sakit,
-          keterangan: formData.Keterangan,
+              : formData.jenissakit,
+          jenisperawatan: formData.jenisperawatan,
+          lamacuti: formData.lamacuti,
+          awalsakit: formData.awalsakit,
+          keterangan: formData.keterangan,
           WFH: formData.WFH,
-          sumberbiaya: formData.sumber_biaya,
+          sumberbiaya: formData.sumberbiaya,
           pegawaiId: pegawaiId,
         },
         {
@@ -269,8 +269,8 @@ const FormDataSakit = () => {
           <div className="mb-4 w-1/2">
             <label className="block text-gray-700">Jenis Penyakit</label>
             <select
-              name="jenis_sakit"
-              value={formData.jenis_sakit}
+              name="jenissakit"
+              value={formData.jenissakit}
               onChange={handleJenisSakitChange}
               className="w-full px-3 py-2 border rounded-md"
             >
@@ -281,7 +281,7 @@ const FormDataSakit = () => {
               <option value="Ginjal">Ginjal</option>
               <option value="Lainnya">Lainnya</option>
             </select>
-            {formData.jenis_sakit === "Lainnya" && (
+            {formData.jenissakit === "Lainnya" && (
               <input
                 type="text"
                 name="penyakitLainnya"
@@ -295,8 +295,8 @@ const FormDataSakit = () => {
           <div className="mb-4 w-1/2">
             <label className="block text-gray-700">Jenis Perawatan</label>
             <select
-              name="jenis_perawatan"
-              value={formData.jenis_perawatan}
+              name="jenisperawatan"
+              value={formData.jenisperawatan}
               onChange={handleChange}
               className="w-full px-3 py-2 border rounded-md"
             >
@@ -311,26 +311,26 @@ const FormDataSakit = () => {
           <div className="mb-4 w-1/2">
             <label className="block text-gray-700">Lama Cuti</label>
             <select
-              name="lama_cuti"
-              value={formData.lama_cuti}
+              name="lamacuti"
+              value={formData.lamacuti}
               onChange={handleChange}
               className="w-full px-3 py-2 border rounded-md"
             >
               <option value="">Pilih Lama Cuti</option>
-              <option value="Cuti ke-1">Cuti ke-1</option>
-              <option value="Cuti ke-2">Cuti ke-2</option>
-              <option value="Cuti ke-3">Cuti ke-3</option>
-              <option value="Cuti ke-4">Cuti ke-4</option>
-              <option value="Cuti ke-5">Cuti ke-5</option>
-              <option value="Cuti ke-6">Cuti ke-6</option>
+              <option value="1">Cuti ke-1</option>
+              <option value="2">Cuti ke-2</option>
+              <option value="3">Cuti ke-3</option>
+              <option value="4">Cuti ke-4</option>
+              <option value="5">Cuti ke-5</option>
+              <option value="6">Cuti ke-6</option>
             </select>
           </div>
           <div className="mb-4 w-1/2">
             <label className="block text-gray-700">Awal Sakit</label>
             <input
               type="date"
-              name="awal_sakit"
-              value={formData.awal_sakit}
+              name="awalsakit"
+              value={formData.awalsakit}
               onChange={handleChange}
               className="w-full px-3 py-2 border rounded-md"
               placeholder="Masukkan awal sakit"
@@ -341,8 +341,8 @@ const FormDataSakit = () => {
           <div className="mb-4 w-1/2">
             <label className="block text-gray-700">Keterangan</label>
             <textarea
-              name="Keterangan"
-              value={formData.Keterangan}
+              name="keterangan"
+              value={formData.keterangan}
               onChange={handleChange}
               className="w-full px-3 py-2 border rounded-md"
               placeholder="Masukkan keterangan"
@@ -380,9 +380,9 @@ const FormDataSakit = () => {
                 <label className="mr-4">
                   <input
                     type="radio"
-                    name="sumber_biaya"
+                    name="sumberbiaya"
                     value="BPJS"
-                    checked={formData.sumber_biaya === "BPJS"}
+                    checked={formData.sumberbiaya === "BPJS"}
                     onChange={handleChange}
                   />{" "}
                   BPJS
@@ -390,9 +390,9 @@ const FormDataSakit = () => {
                 <label>
                   <input
                     type="radio"
-                    name="sumber_biaya"
+                    name="sumberbiaya"
                     value="Non-BPJS"
-                    checked={formData.sumber_biaya === "Non-BPJS"}
+                    checked={formData.sumberbiaya === "Non-BPJS"}
                     onChange={handleChange}
                   />{" "}
                   Non-BPJS

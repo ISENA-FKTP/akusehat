@@ -1,0 +1,14 @@
+{
+  "project": {
+    "default": "akusehat-bidokkes"
+  },
+  "targets": {
+    "akusehat-bidokkes": {
+      "hosting": {
+        "development": [
+          "akusehat-bidokkes"
+        ]
+      }
+    }
+  }
+}

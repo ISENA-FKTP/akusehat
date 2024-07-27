@@ -10,10 +10,10 @@ export default function TambahDataRekamMedis() {
         <Sidebar />
       </div>
       <Header
-        title="Tambah Data Sakit Polisi"
+        title="Tambah Rekam Medis Sakit Polisi"
         userName="Rifki Rusdi Satma Putra"
         userStatus="Kepala Polisi"
-        profilePicture="logo.png"
+        profilePicture="/logo.png"
       />
       <main className="mt-12 ml-32 mr-12 space-y-4 pb-10 ">
         <FormDataRekamMedis />

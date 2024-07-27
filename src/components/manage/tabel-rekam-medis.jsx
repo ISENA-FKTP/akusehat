@@ -42,7 +42,7 @@ export default function TabelRekamMedis({ table_head, table_row }) {
                 pegawaiId,
               }) => {
                 const classes = "p-4";
-                const urlImage = "http://localhost:5000/";
+                // const urlImage = "http://localhost:5000/";
 
                 return (
                   <tr key={nrp} className="even:bg-primary-300 ">
@@ -103,7 +103,7 @@ export default function TabelRekamMedis({ table_head, table_row }) {
                     <td className={classes}>
                       <Typography
                         as="a"
-                        href={`${urlImage}${filerekammedis}`}
+                        href={`${filerekammedis}`}
                         variant="small"
                         target="_blank"
                         rel="noopener noreferrer"

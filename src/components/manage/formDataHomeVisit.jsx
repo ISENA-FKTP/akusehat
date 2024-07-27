@@ -17,6 +17,8 @@ export const FormDataHomeVisit = () => {
     diagnosa: "",
     terapi: "",
     saranmedis: "",
+    fotodokumentasi:
+      "https://statik.tempo.co/data/2019/01/29/id_815619/815619_720.jpg",
   });
 
   const [selectedFile, setSelectedFile] = useState(null);
@@ -36,8 +38,10 @@ export const FormDataHomeVisit = () => {
     }
   };
 
-  const handleFileChange = (event) => {
-    setSelectedFile(event.target.files[0]);
+  const handleFileChange = () => {
+    setSelectedFile(
+      "https://statik.tempo.co/data/2019/01/29/id_815619/815619_720.jpg"
+    );
   };
 
   const handleChange = (e) => {
@@ -161,28 +165,20 @@ export const FormDataHomeVisit = () => {
 
   const addSickData = async (token, pegawaiId) => {
     try {
-      const formDataToSend = new FormData();
-      formDataToSend.append("keluhan", formData.keluhan);
-      formDataToSend.append("pemeriksaanfisik", formData.pemeriksaanfisik);
-      formDataToSend.append("diagnosa", formData.diagnosa);
-      formDataToSend.append("terapi", formData.terapi);
-      formDataToSend.append("saranmedis", formData.saranmedis);
-      formDataToSend.append("fotodokumentasi", selectedFile);
-      formDataToSend.append("pegawaiId", pegawaiId);
-
-      for (let [key, value] of formDataToSend.entries()) {
-        console.log(`${key}: ${value}`);
-      }
-
-      console.log(formDataToSend);
-
       const addSakitResponse = await axiosInstance.post(
         "/homevisits",
-        formDataToSend,
+        {
+          pegawaiId: pegawaiId,
+          keluhan: formData.keluhan,
+          pemeriksaanfisik: formData.pemeriksaanfisik,
+          diagnosa: formData.diagnosa,
+          terapi: formData.terapi,
+          saranmedis: formData.saranmedis,
+          fotodokumentasi: formData.fotodokumentasi,
+        },
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
           },
         }
       );
@@ -214,7 +210,7 @@ export const FormDataHomeVisit = () => {
   return (
     <div className="w-full h-max rounded-md border-3 shadow overflow-auto">
       <div className="pt-2 pl-4 w-full bg-secondary-300">
-        <h3 className="text-xl mb-6">Data Pegawai Sakit</h3>
+        <h3 className="text-xl mb-6">Data Home Visit</h3>
       </div>
       <form className="px-5 pb-5" onSubmit={handleSubmit}>
         <div className="w-full my-4 flex gap-4">

@@ -40,12 +40,14 @@ const DashboardApotek = () => {
   };
 
   const formatCurrency = (number) => {
-    return number.toLocaleString('id-ID', {
-      style: 'currency',
-      currency: 'IDR',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).replace('Rp', 'Rp ');
+    return number
+      .toLocaleString("id-ID", {
+        style: "currency",
+        currency: "IDR",
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      })
+      .replace("Rp", "Rp ");
   };
 
   useEffect(() => {
@@ -232,7 +234,7 @@ const DashboardApotek = () => {
                         jenisobat && (
                           <div key={idx}>
                             <span>
-                              Obat ke-{idx + 1}: {jenisobat} - {request.dosis}{" "}
+                              Obat ke-{idx + 1}: {jenisobat}
                             </span>
                           </div>
                         )
@@ -287,7 +289,9 @@ const DashboardApotek = () => {
                     Kategori
                   </th>
                   <th className="px-4 py-2 bg-primary-600 text-white">Jenis</th>
-                  <th className="px-4 py-2 bg-primary-600 text-white">No. Batch</th>
+                  <th className="px-4 py-2 bg-primary-600 text-white">
+                    No. Batch
+                  </th>
                   <th className="px-4 py-2 bg-primary-600 text-white">
                     Tanggal Masuk
                   </th>

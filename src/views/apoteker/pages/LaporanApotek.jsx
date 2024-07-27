@@ -411,7 +411,7 @@ const LaporanApotek = () => {
               </div>
             );
           })}
-          <div className="mt-8">
+          <div className="mt-8 mb-10">
             <h2 className="text-xl font-bold">Total Keseluruhan</h2>
             <table className="table-auto w-full mt-4">
               <thead>
