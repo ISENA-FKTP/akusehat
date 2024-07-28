@@ -43,6 +43,17 @@ export default function KajianAwal() {
               </h1>
             </div>
 
+            <div className="border border-primary-700 flex ml-44 mr-40 p-6 justify-center">
+              <h1 className="font-secondary-karla font-medium text-lg ml-32">
+                Nama Pasien :
+              </h1>
+              <div className="">
+                <h1 className="font-secondary-karla font-medium text-lg">
+                  Tanggal Lahir :
+                </h1>
+              </div>
+            </div>
+
             <div className="flex mt-7 ml-44 mr-28 items-baseline">
               <Pengajuan id={id} />
 
