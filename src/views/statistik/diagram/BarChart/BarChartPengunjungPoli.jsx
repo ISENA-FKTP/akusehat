@@ -1,21 +1,14 @@
 import { ResponsiveBar } from "@nivo/bar";
-import {
-  DataKunjunganKlinik,
-  calculateTotalsPoli,
-} from "../../model/dataKunjunganKlinik";
+import { calculateTotalsPoli } from "../../model/dataKunjunganKlinik";
 import PropTypes from "prop-types";
 
-const BarChart = ({ colors, year }) => {
+const BarChart = ({ dataInput, colors }) => {
   BarChart.propTypes = {
-    year: PropTypes.string,
+    dataInput: PropTypes.array.isRequired,
     colors: PropTypes.arrayOf(PropTypes.string),
   };
 
-  const filteredData = DataKunjunganKlinik.filter(
-    (data) => new Date(data.tanggal).getFullYear() === parseInt(year)
-  );
-
-  const totals = calculateTotalsPoli(filteredData);
+  const totals = calculateTotalsPoli(dataInput);
 
   const updatedTotals = {
     ...totals,

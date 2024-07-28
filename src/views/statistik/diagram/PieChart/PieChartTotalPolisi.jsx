@@ -1,40 +1,31 @@
 import { ResponsivePie } from "@nivo/pie";
-import { DataPolisi, calculateTotalsPasien } from "../../model/dataPolisi";
+import { calculateTotalsPasien } from "../../model/dataPolisi";
 import PropTypes from "prop-types";
 
-const PieChart = ({ colors, year }) => {
+const PieChart = ({ data, colors }) => {
   PieChart.propTypes = {
-    year: PropTypes.string,
+    data: PropTypes.array.isRequired,
     colors: PropTypes.arrayOf(PropTypes.string),
   };
 
-  const filteredData = DataPolisi.filter(
-    (data) => new Date(data.tanggal).getFullYear() === parseInt(year)
+  const totalsBySatuanKerja = calculateTotalsPasien(data);
+
+  // Hitung total semua nilai dalam totalsBySatuanKerja
+  const total = Object.values(totalsBySatuanKerja).reduce(
+    (sum, value) => sum + value,
+    0
   );
 
-  const { totalJumlahPolda, totalObatPolres } =
-    calculateTotalsPasien(filteredData);
-
-  let totalPolicePercentage = 0;
-  if (totalJumlahPolda === 0 || totalObatPolres === 0) {
-    totalPolicePercentage = 0;
-  } else {
-    totalPolicePercentage = (
-      (totalJumlahPolda / (totalJumlahPolda + totalObatPolres)) *
-      100
-    ).toFixed(2);
-  }
-  const totalObatPercentage = 100 - totalPolicePercentage;
-
-  const data = [
-    { id: `Polda (${totalJumlahPolda})`, value: totalPolicePercentage },
-    { id: `Polres (${totalObatPolres})`, value: totalObatPercentage },
-  ];
+  // Ubah setiap nilai dalam chartData menjadi persentase dari total
+  const chartData = Object.keys(totalsBySatuanKerja).map((key) => ({
+    id: `${key} (${totalsBySatuanKerja[key]})`,
+    value: ((totalsBySatuanKerja[key] / total) * 100).toFixed(1),
+  }));
 
   return (
     <ResponsivePie
-      data={data}
-      margin={{ top: -50, right: 10, bottom: 10, left: 10 }}
+      data={chartData}
+      margin={{ top: -20, right: 10, bottom: 10, left: 10 }}
       sortByValue={true}
       cornerRadius={3}
       activeOuterRadiusOffset={8}
@@ -52,31 +43,6 @@ const PieChart = ({ colors, year }) => {
         modifiers: [["brighter", 5]],
       }}
       valueFormat={(value) => `${value}%`}
-      legends={[
-        {
-          anchor: "bottom",
-          direction: "row",
-          justify: false,
-          translateX: 10,
-          translateY: -45,
-          itemsSpacing: 0,
-          itemWidth: 120,
-          itemHeight: 0,
-          itemTextColor: "#999",
-          itemDirection: "top-to-bottom",
-          itemOpacity: 1,
-          symbolSize: 18,
-          symbolShape: "circle",
-          effects: [
-            {
-              on: "hover",
-              style: {
-                itemTextColor: "#000",
-              },
-            },
-          ],
-        },
-      ]}
     />
   );
 };

@@ -14,7 +14,8 @@ export const FormDataRekamMedis = () => {
     pangkat: "",
     satuankerja: "",
     keterangan: "",
-    filerekammedis: "",
+    filerekammedis:
+      "https://kki.go.id/uploads/media/1683690349_52608b7cd44a11a99d43.pdf",
   });
 
   const handleNrpChange = (e) => {
@@ -32,8 +33,10 @@ export const FormDataRekamMedis = () => {
     }
   };
 
-  const handleFileChange = (event) => {
-    setSelectedFile(event.target.files[0]);
+  const handleFileChange = () => {
+    setSelectedFile(
+      "https://statik.tempo.co/data/2019/01/29/id_815619/815619_720.jpg"
+    );
   };
 
   const handleChange = (e) => {
@@ -157,18 +160,16 @@ export const FormDataRekamMedis = () => {
 
   const addSickData = async (token, pegawaiId) => {
     try {
-      const formDataToSend = new FormData();
-      formDataToSend.append("keterangan", formData.keterangan);
-      formDataToSend.append("filerekammedis", selectedFile);
-      formDataToSend.append("pegawaiId", pegawaiId);
-
       const addSakitResponse = await axiosInstance.post(
         "/datarekammedis",
-        formDataToSend,
+        {
+          pegawaiId: pegawaiId,
+          filerekammedis: formData.filerekammedis,
+          keterangan: formData.keterangan,
+        },
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
           },
         }
       );

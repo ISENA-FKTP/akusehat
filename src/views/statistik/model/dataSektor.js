@@ -111,11 +111,11 @@ export const DataSektor = [
   },
 ];
 
-export const calculateSektorTotals = (DataSektor) => {
+export const calculateSektorTotals = (dataInput) => {
   const totals = {};
 
-  DataSektor.forEach((pegawai) => {
-    const { satuankerja } = pegawai;
+  dataInput.forEach((data) => {
+    const satuankerja = data.pegawai.satuankerja.toLowerCase();
     if (!totals[satuankerja]) {
       totals[satuankerja] = 0;
     }
@@ -124,7 +124,7 @@ export const calculateSektorTotals = (DataSektor) => {
 
   const totalsArray = Object.entries(totals);
 
-  totalsArray.sort((a, b) => b[1] - a[1]); // Corrected sorting to descending order
+  totalsArray.sort((a, b) => b[1] - a[1]);
 
   const top5Totals = totalsArray.slice(0, 5);
 

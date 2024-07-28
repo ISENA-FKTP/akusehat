@@ -33,7 +33,7 @@ const PieChartPolisi = ({ data, colors }) => {
   return (
     <ResponsivePie
       data={topFiveData}
-      margin={{ top: 10, right: 50, bottom: 50, left: 50 }}
+      margin={{ top: 10, right: 30, bottom: 10, left: 30 }}
       sortByValue={true}
       cornerRadius={3}
       activeOuterRadiusOffset={8}
@@ -58,31 +58,6 @@ const PieChartPolisi = ({ data, colors }) => {
           },
         },
       }}
-      legends={[
-        {
-          anchor: "bottom",
-          direction: "row",
-          justify: false,
-          translateX: 10,
-          translateY: 10,
-          itemsSpacing: 0,
-          itemWidth: 65,
-          itemHeight: 0,
-          itemTextColor: "#999",
-          itemDirection: "top-to-bottom",
-          itemOpacity: 1,
-          symbolSize: 18,
-          symbolShape: "circle",
-          effects: [
-            {
-              on: "hover",
-              style: {
-                itemTextColor: "#000",
-              },
-            },
-          ],
-        },
-      ]}
     />
   );
 };

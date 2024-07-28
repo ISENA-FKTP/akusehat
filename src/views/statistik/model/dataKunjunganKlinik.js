@@ -101,10 +101,13 @@ export const calculateTotals = (filteredData) => {
   let totalSick = 0;
 
   for (const data of filteredData) {
-    if (data.jeniskunjungan === "Sehat") {
-      totalHealthy++;
-    } else if (data.jeniskunjungan === "Sakit") {
-      totalSick++;
+    if (data && data.pengajuan && data.pengajuan.jeniskunjungan) {
+      const jenisKunjungan = data.pengajuan.jeniskunjungan;
+      if (jenisKunjungan.toLowerCase() === "kunjungan sehat") {
+        totalHealthy++;
+      } else if (jenisKunjungan.toLowerCase() === "kunjungan sakit") {
+        totalSick++;
+      }
     }
   }
 
@@ -116,10 +119,12 @@ export const calculateTotalsPoli = (DataKunjunganKlinik) => {
   let poliGigiCount = 0;
 
   for (const data of DataKunjunganKlinik) {
-    if (data.politujuan === "Poli Umum") {
-      poliUmumCount++;
-    } else if (data.politujuan === "Poli Gigi") {
-      poliGigiCount++;
+    if (data && data.pengajuan && data.pengajuan.jeniskunjungan) {
+      if (data.pengajuan.poli === "Poli Umum") {
+        poliUmumCount++;
+      } else if (data.pengajuan.poli === "Poli Gigi") {
+        poliGigiCount++;
+      }
     }
   }
 

@@ -43,26 +43,29 @@ export const DataPolisi = [
   },
 ];
 
-export const calculateTotals = () => {
-  let totalJumlahPolda = 0;
-  let totalObatPolres = 0;
+export const calculateTotalsPasien = (dataSet) => {
+  const totalsBySatuanKerja = {};
 
-  for (const data of DataPolisi) {
-    totalJumlahPolda += data.polda;
-    totalObatPolres += data.polres;
+  for (const data of dataSet) {
+    const satuanKerja = data.pegawai.satuankerja;
+
+    if (!totalsBySatuanKerja[satuanKerja]) {
+      totalsBySatuanKerja[satuanKerja] = 0;
+    }
+
+    totalsBySatuanKerja[satuanKerja] += 1;
   }
 
-  return { totalJumlahPolda, totalObatPolres };
+  return totalsBySatuanKerja;
 };
 
-export const calculateTotalsPasien = (DataSet) => {
-  let totalJumlahPolda = 0;
-  let totalObatPolres = 0;
+export const calculateTotalJumlahSemuaPasien = (dataSet) => {
+  let totalJumlahSemuaPasien = 0;
 
-  for (const data of DataSet) {
-    totalJumlahPolda += data.polda;
-    totalObatPolres += data.polres;
+  // eslint-disable-next-line no-unused-vars
+  for (const data of dataSet) {
+    totalJumlahSemuaPasien += 1;
   }
 
-  return { totalJumlahPolda, totalObatPolres };
+  return totalJumlahSemuaPasien;
 };

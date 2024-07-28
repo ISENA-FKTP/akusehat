@@ -1,21 +1,14 @@
 import { ResponsivePie } from "@nivo/pie";
-import {
-  DataKunjunganKlinik,
-  calculateTotals,
-} from "../../model/dataKunjunganKlinik";
+import { calculateTotals } from "../../model/dataKunjunganKlinik";
 import PropTypes from "prop-types";
 
-const PieChart = ({ colors, year }) => {
+const PieChart = ({ dataInput, colors }) => {
   PieChart.propTypes = {
-    year: PropTypes.string,
+    dataInput: PropTypes.array.isRequired,
     colors: PropTypes.arrayOf(PropTypes.string),
   };
 
-  const filteredData = DataKunjunganKlinik.filter(
-    (data) => new Date(data.tanggal).getFullYear() === parseInt(year)
-  );
-
-  const { totalHealthy, totalSick } = calculateTotals(filteredData);
+  const { totalHealthy, totalSick } = calculateTotals(dataInput);
 
   const totalVisits = totalHealthy + totalSick;
 

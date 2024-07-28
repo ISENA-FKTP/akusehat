@@ -179,10 +179,20 @@ export const dataSakitKlinik = [
 
 export const calculateTotals = (dataSakitKlinik) => {
   const totals = {};
-  dataSakitKlinik.forEach((diagnosa) => {
-    const jenisPenyakit = diagnosa.jenispenyakit;
-    totals[jenisPenyakit] = (totals[jenisPenyakit] || 0) + 1;
+
+  dataSakitKlinik.forEach((data) => {
+    if (data.diagnosa) {
+      for (let i = 1; i <= 5; i++) {
+        const jenisPenyakit = data.diagnosa[`jenispenyakit${i}`];
+        if (jenisPenyakit) {
+          const lowerCaseJenisPenyakit = jenisPenyakit.toLowerCase();
+          totals[lowerCaseJenisPenyakit] =
+            (totals[lowerCaseJenisPenyakit] || 0) + 1;
+        }
+      }
+    }
   });
+
   return totals;
 };
 

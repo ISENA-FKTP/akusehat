@@ -33,10 +33,10 @@ const calculateAge = (birthDateString) => {
 };
 
 export default function Dokter() {
-  const [dataPasien, setDataPasien] = useState([]);
   const [approvalStatus, setApprovalStatus] = useState({});
   const navigate = useNavigate();
   const axiosInstance = useAxios();
+  const [sortedData, setSortedData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -64,7 +64,7 @@ export default function Dokter() {
           return pengajuans.map((pengajuan) => ({ ...pasien, pengajuan }));
         });
 
-        setDataPasien(combinedData);
+        setSortedData(combinedData);
 
         const initialApprovalStatus = combinedData.reduce((acc, entry) => {
           acc[entry.pengajuan.uuid] = entry.pengajuan.approved;
@@ -88,6 +88,12 @@ export default function Dokter() {
     fetchData();
   }, [axiosInstance]);
 
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
   const handleEditClick = (id, nama) => {
     toast.info(`Edit pasien ${nama}`, {
       position: "top-right",
@@ -100,6 +106,10 @@ export default function Dokter() {
     });
     navigate(`/kunjungan_dokter/${id}`);
   };
+
+  const filteredKlinik = sortedData.filter((entry) =>
+    entry.nama.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const handleApproveClick = async (nama, id, uuid) => {
     try {
@@ -225,6 +235,8 @@ export default function Dokter() {
                 </span>
                 <input
                   type="text"
+                  value={searchTerm}
+                  onChange={handleSearch}
                   placeholder="Cari pengunjung..."
                   className="lg:px-2 lg:w-auto w-40 py-1 pl-8 border rounded-md focus:outline-none focus:ring-blue-500 focus:border-primary-600 placeholder:ml-5"
                   style={{ paddingLeft: "2rem" }}
@@ -280,7 +292,7 @@ export default function Dokter() {
               </tr>
             </thead>
             <tbody>
-              {dataPasien.map((entry, index) => (
+              {filteredKlinik.map((entry, index) => (
                 <tr
                   key={index}
                   className={

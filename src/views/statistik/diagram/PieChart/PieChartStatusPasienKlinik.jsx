@@ -1,26 +1,24 @@
 import { ResponsivePie } from "@nivo/pie";
 import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
-import {
-  DataStatusPasienKlinik,
-  calculateTotals,
-} from "../../model/dataStatusPasienKlinik";
+import { calculateTotals } from "../../model/dataStatusPasienKlinik";
 
-const PieChart = ({ colors, year }) => {
+const PieChart = ({ dataInput, colors }) => {
   PieChart.propTypes = {
-    year: PropTypes.string,
+    dataInput: PropTypes.array.isRequired,
     colors: PropTypes.arrayOf(PropTypes.string),
   };
 
-  const filteredData = DataStatusPasienKlinik.filter(
-    (data) => new Date(data.tanggal).getFullYear() === parseInt(year)
-  );
-
-  const { totalPolisi, totalPNS, totalKeluarga, totalPesertaMandiri } =
-    calculateTotals(filteredData);
+  const {
+    totalPolisi,
+    totalPNS,
+    totalKeluarga,
+    totalPesertaMandiri,
+    totalUmum,
+  } = calculateTotals(dataInput);
 
   const totalVisits =
-    totalPolisi + totalPNS + totalKeluarga + totalPesertaMandiri;
+    totalPolisi + totalPNS + totalKeluarga + totalPesertaMandiri + totalUmum;
 
   const totalPolisiPercentage = ((totalPolisi / totalVisits) * 100).toFixed(1);
   const totalPNSPercentage = ((totalPNS / totalVisits) * 100).toFixed(1);
@@ -31,6 +29,7 @@ const PieChart = ({ colors, year }) => {
     (totalPesertaMandiri / totalVisits) *
     100
   ).toFixed(1);
+  const totalUmumPercentage = ((totalUmum / totalVisits) * 100).toFixed(1);
 
   const data = [
     { id: `Polisi (${totalPolisi})`, value: parseFloat(totalPolisiPercentage) },
@@ -42,6 +41,10 @@ const PieChart = ({ colors, year }) => {
     {
       id: `Peserta Mandiri (${totalPesertaMandiri})`,
       value: parseFloat(totalPesertaMandiriPercentage),
+    },
+    {
+      id: `Umum (${totalUmum})`,
+      value: parseFloat(totalUmumPercentage),
     },
   ];
 
@@ -71,7 +74,7 @@ const PieChart = ({ colors, year }) => {
   return (
     <ResponsivePie
       data={data}
-      margin={{ top: 10, right: 100, bottom: 10, left: 10 }}
+      margin={{ top: 10, right: 110, bottom: 10, left: 10 }}
       sortByValue={true}
       cornerRadius={3}
       activeOuterRadiusOffset={8}

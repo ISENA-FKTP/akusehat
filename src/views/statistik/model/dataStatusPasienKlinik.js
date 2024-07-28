@@ -217,6 +217,7 @@ export const calculateTotals = (DataStatusPasienKlinik) => {
     totalPNS: 0,
     totalKeluarga: 0,
     totalPesertaMandiri: 0,
+    totalUmum: 0,
   };
 
   DataStatusPasienKlinik.forEach((pasien) => {

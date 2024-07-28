@@ -17,7 +17,6 @@ import SearchBar from "../../components/manage/searchBar";
 import { useSearchParams } from "react-router-dom";
 import { head_data_sakit_statistik } from "../manage/model/dataSakit";
 import Tabel from "./components/tabel";
-
 import useAxios from "../../useAxios";
 
 const currentYear = new Date().getFullYear();

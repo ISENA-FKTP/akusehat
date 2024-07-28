@@ -5,17 +5,13 @@ import {
 } from "../../model/dataPegawaiRawat";
 import PropTypes from "prop-types";
 
-const PieChart = ({ colors, year }) => {
+const PieChart = ({ dataInput, colors }) => {
   PieChart.propTypes = {
-    year: PropTypes.string,
+    dataInput: PropTypes.array.isRequired,
     colors: PropTypes.arrayOf(PropTypes.string),
   };
 
-  const filteredData = DataPegawaiRawat.filter(
-    (data) => new Date(data.awalsakit).getFullYear() === parseInt(year)
-  );
-
-  const percentages = calculateTotals(filteredData);
+  const percentages = calculateTotals(dataInput);
 
   const data = [
     { id: "BPJS", value: percentages.bpjs },
