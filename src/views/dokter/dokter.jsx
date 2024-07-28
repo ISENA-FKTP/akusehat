@@ -34,6 +34,8 @@ const calculateAge = (birthDateString) => {
 
 export default function Dokter() {
   const [approvalStatus, setApprovalStatus] = useState({});
+  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedPoli, setSelectedPoli] = useState(""); // Tambahkan state poli
   const navigate = useNavigate();
   const axiosInstance = useAxios();
   const [sortedData, setSortedData] = useState([]);
@@ -94,6 +96,14 @@ export default function Dokter() {
     setSearchTerm(e.target.value);
   };
 
+  const handleDateChange = (e) => {
+    setSelectedDate(e.target.value);
+  };
+
+  const handlePoliChange = (e) => {
+    setSelectedPoli(e.target.value);
+  };
+
   const handleEditClick = (id, nama) => {
     toast.info(`Edit pasien ${nama}`, {
       position: "top-right",
@@ -107,9 +117,19 @@ export default function Dokter() {
     navigate(`/kunjungan_dokter/${id}`);
   };
 
-  const filteredKlinik = sortedData.filter((entry) =>
-    entry.nama.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredKlinik = sortedData
+    .filter((entry) =>
+      entry.nama.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .filter((entry) => {
+      if (selectedDate && !entry.createdAt.startsWith(selectedDate)) {
+        return false;
+      }
+      if (selectedPoli && entry.pengajuan.politujuan !== selectedPoli) {
+        return false;
+      }
+      return true;
+    });
 
   const handleApproveClick = async (nama, id, uuid) => {
     try {
@@ -196,14 +216,8 @@ export default function Dokter() {
         </h1>
       </div>
 
-      <div className="bg-primary-600 mx-auto shadow-lg flex justify-center items-center text-center w-[80%] rounded ml-44 mt-5 py-10">
-        <h1 className="flex w-auto text-white font-primary-Poppins font-bold text-2xl">
-          PENDAFTARAN PASIEN
-        </h1>
-      </div>
-
-      <div className="border border-primary-600 mx-auto shadow-lg flex items-center text-center w-[80%] rounded ml-44 py-5">
-        <form className="w-full mx-8 space-y-4">
+      <div className="ml-28 mr-14">
+        <form className="lg:py-4 lg:px-5 py-4 px-2 bg-white shadow-lg w-full space-y-4">
           <div className="flex justify-around">
             <div className="flex items-center space-x-3">
               <label className="text-black font-secondary-Karla font-bold">
@@ -211,9 +225,11 @@ export default function Dokter() {
               </label>
               <select
                 name="Poli"
-                className="p-1 rounded-md border border-black font-secondary-Karla font-medium text-black focus:outline-none focus:border-blue-500"
+                value={selectedPoli}
+                onChange={handlePoliChange}
+                className="p-1 w-32 rounded-md border border-black font-secondary-Karla font-medium text-black focus:outline-none focus:border-blue-500"
               >
-                <option value=""></option>
+                <option value="">Semua Poli</option>
                 <option value="Poli Umum">Poli Umum</option>
                 <option value="Poli Gigi">Poli Gigi</option>
               </select>
@@ -225,6 +241,8 @@ export default function Dokter() {
               </label>
               <input
                 type="date"
+                value={selectedDate}
+                onChange={handleDateChange}
                 className="p-1 rounded-md border border-black font-secondary-Karla font-medium text-black focus:outline-none focus:border-blue-500"
               />
             </div>
