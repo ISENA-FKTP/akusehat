@@ -42,7 +42,7 @@ export default function KajianAwal() {
                 (Diisi pada Saat Pasien Pertama Kali Datang Ke Klinik)
               </h1>
             </div>
-
+           
             <div className="border border-primary-700 flex ml-44 mr-40 p-6 justify-center">
               <h1 className="font-secondary-karla font-medium text-lg ml-32">
                 Nama Pasien :

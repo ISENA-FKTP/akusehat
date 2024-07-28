@@ -13,6 +13,7 @@ export default function Laporan() {
   const [sortedData, setSortedData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
+  const [selectedDate, setSelectedDate] = useState("");
   const [dataPasien, setDataPasien] = useState([]);
   const [dataPengajuans, setPengajuans] = useState([]);
   const [dataDiagnosa, setDataDiagnosa] = useState([]);
@@ -116,11 +117,20 @@ export default function Laporan() {
     setSelectedStatus(event.target.value);
   };
 
-  const filteredKlinik = sortedData.filter(
-    (entry) =>
+  const handleDateChange = (event) => {
+    setSelectedDate(event.target.value);
+  };
+
+  const filteredKlinik = sortedData.filter((entry) => {
+    const entryDate = new Date(entry.createdAt).toISOString().split("T")[0];
+    return (
       entry.nama.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      (selectedStatus ? entry.statuspeserta === selectedStatus : true)
-  );
+      (selectedStatus ? entry.statuspeserta === selectedStatus : true) &&
+      (selectedDate ? entryDate === selectedDate : true)
+    );
+  });
+
+  console.log(filteredKlinik);
 
   const calculateAge = (birthDateString) => {
     const birthDate = new Date(birthDateString);
@@ -210,6 +220,8 @@ export default function Laporan() {
               </label>
               <input
                 type="date"
+                value={selectedDate}
+                onChange={handleDateChange}
                 className="p-1 rounded-md border border-black font-secondary-Karla font-medium text-black focus:outline-none focus:border-blue-500"
               />
             </div>

@@ -146,7 +146,7 @@ export default function PrintPDF() {
                   </div>
                   <div className=" mr-24">
                     <h1 className="text-3xl font-extrabold font-primary-Poppins">
-                      ISENA FKTP
+                      AKUSEHAT
                     </h1>
                   </div>
                   <div className="mr-24">

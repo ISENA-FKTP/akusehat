@@ -5,7 +5,6 @@ import Header from "../../components/header";
 import Sidebar_Dokter from "../../components/klinik/sidebar_dokter";
 import Obat from "./components/Obat";
 import RiwayatAlergi from "./components/RiwayatAlergi";
-
 import Diagnosa from "./components/Diagosa";
 import Pemeriksaan from "./components/Pemeriksaan";
 

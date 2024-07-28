@@ -108,7 +108,7 @@ const Administrasi = () => {
                   handleSearch(searchType, searchValue);
                 }}
               >
-                <div className="flex items-center space-x-5">
+                <div className="flex items-center space-x-5 mt-7">
                   <select
                     name="bpjsType"
                     className="py-1 px-2 rounded-md border border-white mb-9 w-[15.8rem] bg-primary-600 font-secondary-Karla font-medium text-white focus:outline-none focus:border-indigo-50"
@@ -135,20 +135,6 @@ const Administrasi = () => {
                 </div>
               </form>
 
-              <form className="h-12 rounded-md absolute right-5 -mb-14">
-                <div className="flex items-center space-x-5">
-                  <h1 className="text-white font-secondary-Karla font-medium mb-9 w-60">
-                    No. Pendaftaran
-                  </h1>
-                  <input
-                    type="search"
-                    name="search"
-                    className="p-1 rounded-md bg-white focus:outline-none mb-10"
-                    placeholder=""
-                    style={{ width: "100%" }}
-                  />
-                </div>
-              </form>
             </div>
           </div>
           <FormComponent existingPatient={existingPatient} />
