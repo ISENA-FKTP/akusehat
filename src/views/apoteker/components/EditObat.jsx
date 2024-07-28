@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { FaTrash } from "react-icons/fa";
 import useAxios from "../../../useAxios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function EditObat({
   uuid,
@@ -14,7 +14,14 @@ export default function EditObat({
   types,
 }) {
   const axiosInstance = useAxios();
-  const [jenisObatLainnya, setJenisObatLainnya] = useState(medicine.jenisobat === "Jenis Lainnya" ? "" : medicine.jenisobat);
+  const [jenisObatLainnya, setJenisObatLainnya] = useState(medicine.jenisobat === "Jenis Lainnya" ? "" : "");
+  const [selectedJenis, setSelectedJenis] = useState(medicine.jenisobat);
+
+  useEffect(() => {
+    if (selectedJenis !== "Jenis Lainnya") {
+      setJenisObatLainnya("");
+    }
+  }, [selectedJenis]);
 
   const saveChanges = async () => {
     const token = localStorage.getItem("accessToken");
@@ -25,7 +32,7 @@ export default function EditObat({
 
     const dataToSubmit = {
       ...medicine,
-      jenisobat: medicine.jenisobat === "Jenis Lainnya" ? jenisObatLainnya : medicine.jenisobat,
+      jenisobat: selectedJenis === "Jenis Lainnya" ? jenisObatLainnya : selectedJenis,
     };
 
     try {
@@ -70,17 +77,15 @@ export default function EditObat({
   };
 
   const handleJenisObatChange = (e) => {
+    const { value } = e.target;
+    setSelectedJenis(value);
     handleEditChange(e);
-    if (e.target.value === "Jenis Lainnya") {
-      setJenisObatLainnya("");
-    } else {
-      setJenisObatLainnya(e.target.value);
-    }
   };
 
   const handleJenisObatLainnyaChange = (e) => {
-    setJenisObatLainnya(e.target.value);
-    handleEditChange({ target: { name: "jenisobat", value: e.target.value } });
+    const { value } = e.target;
+    setJenisObatLainnya(value);
+    handleEditChange({ target: { name: "jenisobat", value } });
   };
 
   return (
@@ -134,7 +139,7 @@ export default function EditObat({
           </label>
           <select
             name="jenisobat"
-            value={medicine.jenisobat}
+            value={selectedJenis}
             onChange={handleJenisObatChange}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
           >
@@ -144,7 +149,7 @@ export default function EditObat({
               </option>
             ))}
           </select>
-          {medicine.jenisobat === "Jenis Lainnya" && (
+          {selectedJenis === "Jenis Lainnya" && (
             <input
               type="text"
               name="jenisobatLainnya"
@@ -229,4 +234,3 @@ export default function EditObat({
     </div>
   );
 }
-Z
