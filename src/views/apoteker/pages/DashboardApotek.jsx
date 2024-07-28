@@ -28,7 +28,7 @@ const DashboardApotek = () => {
     "Obat Padat",
     "Obat Lainnya",
   ];
-  const types = ["Tablet", "Syrup", "Krim"];
+  const types = ["Tablet", "Syrup", "Krim", "Jenis Lainnya"];
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);

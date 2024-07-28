@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import { FaTrash } from "react-icons/fa";
 import useAxios from "../../../useAxios";
+import { useState } from "react";
 
 export default function EditObat({
   uuid,
@@ -13,6 +14,8 @@ export default function EditObat({
   types,
 }) {
   const axiosInstance = useAxios();
+  const [jenisObatLainnya, setJenisObatLainnya] = useState(medicine.jenisobat === "Jenis Lainnya" ? "" : medicine.jenisobat);
+
   const saveChanges = async () => {
     const token = localStorage.getItem("accessToken");
     if (!token) {
@@ -20,8 +23,13 @@ export default function EditObat({
       return;
     }
 
+    const dataToSubmit = {
+      ...medicine,
+      jenisobat: medicine.jenisobat === "Jenis Lainnya" ? jenisObatLainnya : medicine.jenisobat,
+    };
+
     try {
-      await axiosInstance.patch(`/dataobats/${uuid}`, medicine, {
+      await axiosInstance.patch(`/dataobats/${uuid}`, dataToSubmit, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -59,6 +67,20 @@ export default function EditObat({
     openDeleteModal: PropTypes.func.isRequired,
     categories: PropTypes.array.isRequired,
     types: PropTypes.array.isRequired,
+  };
+
+  const handleJenisObatChange = (e) => {
+    handleEditChange(e);
+    if (e.target.value === "Jenis Lainnya") {
+      setJenisObatLainnya("");
+    } else {
+      setJenisObatLainnya(e.target.value);
+    }
+  };
+
+  const handleJenisObatLainnyaChange = (e) => {
+    setJenisObatLainnya(e.target.value);
+    handleEditChange({ target: { name: "jenisobat", value: e.target.value } });
   };
 
   return (
@@ -113,7 +135,7 @@ export default function EditObat({
           <select
             name="jenisobat"
             value={medicine.jenisobat}
-            onChange={handleEditChange}
+            onChange={handleJenisObatChange}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
           >
             {types.map((jenisobat, index) => (
@@ -122,6 +144,16 @@ export default function EditObat({
               </option>
             ))}
           </select>
+          {medicine.jenisobat === "Jenis Lainnya" && (
+            <input
+              type="text"
+              name="jenisobatLainnya"
+              value={jenisObatLainnya}
+              onChange={handleJenisObatLainnyaChange}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+              placeholder="Masukkan jenis obat lainnya"
+            />
+          )}
         </div>
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700">
@@ -197,3 +229,4 @@ export default function EditObat({
     </div>
   );
 }
+Z

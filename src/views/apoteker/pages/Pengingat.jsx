@@ -37,7 +37,7 @@ const Pengingat = () => {
   const handleSearch = (e, setSearchTerm) => {
     setSearchTerm(e.target.value);
   };
-  const types = ["Tablet", "Syrup", "Krim"];
+  const types = ["Tablet", "Syrup", "Krim", "Jenis Lainnya"];
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
