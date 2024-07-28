@@ -94,7 +94,7 @@ const PrintPage = () => {
   useEffect(() => {
     filterMedicines();
   }, [selectedMonth, selectedYear, selectedPeriod]);
-
+  
   const handleMonthChange = (e) => {
     setSelectedMonth(e.target.value);
   };
@@ -123,7 +123,9 @@ const PrintPage = () => {
       } else if (selectedPeriod === "secondHalf") {
         monthMatches = month >= 7 && month <= 12;
       } else {
-        monthMatches = selectedMonth ? month === parseInt(selectedMonth) : true;
+        monthMatches = selectedMonth
+          ? month === parseInt(selectedMonth)
+          : true;
       }
 
       return monthMatches && yearMatches;
@@ -230,73 +232,75 @@ const PrintPage = () => {
         />
         <div className="container mx-auto pl-20 text-black">
           <div className="flex flex-col md:flex-row justify-start mb-4 mt-4 space-y-4 md:space-y-0 md:space-x-4">
-            <div>
-              <label htmlFor="month">Bulan:</label>
-              <select
-                id="month"
-                value={selectedMonth}
-                onChange={handleMonthChange}
-                className="ml-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              >
-                <option value="">Pilih Bulan</option>
-                {[...Array(12)].map((_, i) => (
-                  <option key={i + 1} value={i + 1}>
-                    {new Date(0, i).toLocaleString("default", {
-                      month: "long",
-                    })}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label htmlFor="period">Periode:</label>
-              <select
-                id="period"
-                value={selectedPeriod}
-                onChange={handlePeriodChange}
-                className="ml-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              >
-                <option value="">Pilih Periode</option>
-                <option value="firstHalf">6 Bulan Awal</option>
-                <option value="secondHalf">6 Bulan Akhir</option>
-              </select>
-            </div>
-            <div>
-              <label htmlFor="year">Tahun:</label>
-              <select
-                id="year"
-                value={selectedYear}
-                onChange={handleYearChange}
-                className="ml-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              >
-                <option value="">Pilih Tahun</option>
-                {years.map((year) => (
-                  <option key={year} value={year}>
-                    {year}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
+  <div>
+    <label htmlFor="month">Bulan:</label>
+    <select
+      id="month"
+      value={selectedMonth}
+      onChange={handleMonthChange}
+      className="ml-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+    >
+      <option value="">Pilih Bulan</option>
+      {[...Array(12)].map((_, i) => (
+        <option key={i + 1} value={i + 1}>
+          {new Date(0, i).toLocaleString("default", {
+            month: "long",
+          })}
+        </option>
+      ))}
+    </select>
+  </div>
+  <div>
+    <label htmlFor="period">Periode:</label>
+    <select
+      id="period"
+      value={selectedPeriod}
+      onChange={handlePeriodChange}
+      className="ml-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+    >
+      <option value="">Pilih Periode</option>
+      <option value="firstHalf">6 Bulan Awal</option>
+      <option value="secondHalf">6 Bulan Akhir</option>
+    </select>
+  </div>
+  <div>
+    <label htmlFor="year">Tahun:</label>
+    <select
+      id="year"
+      value={selectedYear}
+      onChange={handleYearChange}
+      className="ml-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+    >
+      <option value="">Pilih Tahun</option>
+      {years.map((year) => (
+        <option key={year} value={year}>
+          {year}
+        </option>
+      ))}
+    </select>
+  </div>
+</div>
 
-          <style jsx>{`
-            @media print {
-              @page {
-                size: landscape; /* Atur orientasi halaman menjadi landscape */
-                margin: 20mm; /* Atur margin halaman di sini */
-              }
-              table {
-                width: 100%; /* Tabel mengambil lebar penuh */
-                font-size: 12px; /* Ukuran teks dalam tabel */
-                border-collapse: collapse; /* Hapus jarak antar border */
-              }
-              th,
-              td {
-                padding: 2px; /* Padding sel tabel */
-                border: 1px solid black; /* Border hitam untuk tabel */
-              }
-            }
-          `}</style>
+<style jsx>{`
+  @media print {
+    @page {
+      size: landscape; /* Atur orientasi halaman menjadi landscape */
+      margin: 20mm; /* Atur margin halaman di sini */
+    }
+    table {
+      width: 100%; /* Tabel mengambil lebar penuh */
+      font-size: 12px; /* Ukuran teks dalam tabel */
+      border-collapse: collapse; /* Hapus jarak antar border */
+    }
+    th, td {
+      padding: 2px; /* Padding sel tabel */
+      border: 1px solid black; /* Border hitam untuk tabel */
+    }
+  }
+`}</style>
+
+
+
 
           <button
             onClick={handlepdfClick}
@@ -455,7 +459,7 @@ const PrintPage = () => {
                   </div>
                 );
               })}
-              <div className="mt-8 mb-10">
+              <div className="mt-8">
                 <h2 className="text-xl font-bold">Total Keseluruhan</h2>
                 <table className="table-auto w-full mt-4">
                   <thead>

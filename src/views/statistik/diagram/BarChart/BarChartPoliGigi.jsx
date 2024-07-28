@@ -1,35 +1,44 @@
 import { ResponsiveBar } from "@nivo/bar";
 import {
   getTop10Penyakit,
-  dataSakitKlinik,
   calculateTotals,
 } from "../../model/dataSakitPoliGigi";
 import PropTypes from "prop-types";
 
-const BarChart = ({ colors, year }) => {
+const BarChart = ({ dataInput, colors }) => {
   BarChart.propTypes = {
-    year: PropTypes.string,
+    dataInput: PropTypes.array.isRequired,
     colors: PropTypes.arrayOf(PropTypes.string),
   };
 
-  const filteredData = dataSakitKlinik.filter(
-    (data) => new Date(data.tanggal).getFullYear() === parseInt(year)
-  );
-
   let data = [];
 
-  if (filteredData.length > 0) {
-    const totals = calculateTotals(filteredData);
+  if (dataInput.length > 0) {
+    const filteredDataInput = dataInput.filter(
+      (item) => item.pengajuan && item.pengajuan.poli === "Poli Gigi"
+    );
 
-    const top10Penyakit = getTop10Penyakit(totals);
+    if (filteredDataInput.length > 0) {
+      const totals = calculateTotals(filteredDataInput);
 
-    const highestTotal = top10Penyakit[top10Penyakit.length - 1][1];
+      const top10Penyakit = getTop10Penyakit(totals);
 
-    data = top10Penyakit.map(([jenisPenyakit, total]) => ({
-      sektor: jenisPenyakit,
-      total: total,
-      color: total === highestTotal ? colors[0] : "#FEC27E",
-    }));
+      const highestTotal = top10Penyakit[top10Penyakit.length - 1][1];
+
+      data = top10Penyakit.map(([jenisPenyakit, total]) => ({
+        sektor: jenisPenyakit,
+        total: total,
+        color: total === highestTotal ? colors[0] : "#FEC27E",
+      }));
+    } else {
+      data = [
+        {
+          sektor: "Data tidak tersedia",
+          total: 0,
+          color: "#FEC27E",
+        },
+      ];
+    }
   } else {
     data = [
       {

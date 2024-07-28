@@ -9,6 +9,7 @@ import { IoMdArrowDropleft } from "react-icons/io";
 import { CgLogOut } from "react-icons/cg";
 import PropTypes from "prop-types";
 import axios from "axios";
+import useClearTokensOnUnload from "../../useClearTokensOnUnload";
 
 export default function Sidebar({ userName, userStatus, profilePicture }) {
   Sidebar.propTypes = {
@@ -20,6 +21,8 @@ export default function Sidebar({ userName, userStatus, profilePicture }) {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+
+  useClearTokensOnUnload();
 
   const truncateText = (text, maxLength) => {
     if (text.length > maxLength) {
