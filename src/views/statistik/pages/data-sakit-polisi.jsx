@@ -7,57 +7,67 @@ import BarChart from "../diagram/BarChart/BarChart";
 import BarChartSektor from "../diagram/BarChart/BarChartSektor";
 import BarChartRawat from "../diagram/BarChart/BarChartRawat";
 import LineChart from "../diagram/LineChart/LineChart";
-import { calculateTotals } from "../model/dataPolisi";
-import {
-  DataPegawaiRawat,
-  calculateTotals as calculateBpjsTotals,
-} from "../model/dataPegawaiRawat";
+import SearchBar from "../../../components/manage/searchBar";
+import { calculateTotalJumlahSemuaPasien } from "../model/dataPolisi";
+import Tabel from "../components/tabel";
+import { calculateTotals as calculateBpjsTotals } from "../model/dataPegawaiRawat";
 import Header from "../../../components/header";
-import axios from "axios";
-import { IoSearch } from "react-icons/io5";
-import { DataSektor } from "../model/dataSektor";
+import { head_data_sakit_statistik } from "../../manage/model/dataSakit";
+import useAxios from "../../../useAxios";
+import { useSearchParams } from "react-router-dom";
 
 const currentYear = new Date().getFullYear();
 
 export default function DataSakitPolisi() {
+  const axiosInstance = useAxios();
   const [year, setYear] = useState(currentYear);
-  const [data, setData] = useState([]);
-  const [filteredData, setFilteredData] = useState([]);
-  const [sortBy, setSortBy] = useState("most");
-  const [sortedData, setSortedData] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [datasakitpolisi, setDatasakitpolisi] = useState([]);
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const { totalJumlahPolda, totalObatPolres } = calculateTotals();
+  const [keyword, setKeyword] = useState(() => {
+    return searchParams.get("keyword") || "";
+  });
 
-  const totalJumlahSemua = totalJumlahPolda + totalObatPolres;
-
-  const filteredDataPegawai = DataPegawaiRawat.filter(
-    (data) => new Date(data.awalsakit).getFullYear() === parseInt(year)
-  );
-
-  const percentages = calculateBpjsTotals(filteredDataPegawai);
-
+  // Data Sakit
   useEffect(() => {
-    axios
-      .get("https://65fcf9c49fc4425c6530ec6c.mockapi.io/dataShoe")
-      .then((response) => {
-        const data = response.data;
-        setData(data);
-        filterDataByYear(data, year);
-      })
-      .catch((error) => console.error("Error fetching data: ", error));
-  }, [year]);
+    const fetchData = async () => {
+      const token = localStorage.getItem("accessToken");
+      try {
+        const response = await axiosInstance.get("/datasakitstatistik", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setDatasakitpolisi(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
-  useEffect(() => {
-    filterDataByYear(data, year);
-  }, [year, data]);
+    fetchData();
+  }, [axiosInstance]);
 
-  const filterDataByYear = (data, year) => {
-    const filtered = data.filter(
-      (item) => new Date(item.tanggal).getFullYear() === parseInt(year)
-    );
-    setFilteredData(filtered);
-  };
+  function onKeywordChangeHandler(keyword) {
+    setKeyword(keyword);
+    setSearchParams({ keyword });
+  }
+
+  const filteredData = datasakitpolisi.filter((datasakitpolisi) => {
+    if (year !== "All") {
+      return (
+        new Date(datasakitpolisi.awalsakit).getFullYear() === parseInt(year) &&
+        datasakitpolisi.pegawai?.namapegawai
+          ?.toLowerCase()
+          .includes(keyword?.toLowerCase())
+      );
+    }
+    return datasakitpolisi.pegawai?.namapegawai
+      ?.toLowerCase()
+      .includes(keyword?.toLowerCase());
+  });
+
+  const percentages = calculateBpjsTotals(filteredData);
+  const totalJumlahSemuaPasien = calculateTotalJumlahSemuaPasien(filteredData);
 
   const handleYearChange = (e) => {
     const selectedYear = e.target.value;
@@ -87,31 +97,6 @@ export default function DataSakitPolisi() {
   ];
 
   const colorsSektor = ["#5726FF", "#FD9A28"];
-
-  const combinedData = DataSektor.map((polisi) => ({
-    ...polisi,
-    rawat: DataPegawaiRawat.find((rawat) => rawat.uuid === polisi.uuid),
-  }));
-
-  useEffect(() => {
-    const sorted =
-      sortBy === "most"
-        ? [...combinedData].sort((a, b) => b.rawat.lamacuti - a.rawat.lamacuti)
-        : [...combinedData].sort((a, b) => a.rawat.lamacuti - b.rawat.lamacuti);
-    setSortedData(sorted);
-  }, [combinedData, sortBy]);
-
-  const handleSortChange = (e) => {
-    setSortBy(e.target.value);
-  };
-
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
-  };
-
-  const filteredPolisi = sortedData.filter((entry) =>
-    entry.namapegawai.toLowerCase().includes(searchTerm.toLowerCase())
-  );
 
   return (
     <>
@@ -145,6 +130,7 @@ export default function DataSakitPolisi() {
                 onChange={handleYearChange}
                 className="p-2 rounded-md"
               >
+                <option value="All">All</option>
                 {[...Array(10)].map((_, i) => {
                   const y = currentYear - i;
                   return (
@@ -169,7 +155,7 @@ export default function DataSakitPolisi() {
                   </div>
                 </div>
                 <div className="h-96 lg:w-[26rem] mt-2">
-                  <BarChart colors={colorsSektor} year={year.toString()} />
+                  <BarChart colors={colorsSektor} data={filteredData} />
                 </div>
               </div>
             </div>
@@ -185,7 +171,7 @@ export default function DataSakitPolisi() {
                     </div>
                   </div>
                   <div className="h-96 lg:w-[26rem] mt-2">
-                    <LineChart year={year.toString()} />
+                    <LineChart data={filteredData} />
                   </div>
                 </div>
               </div>
@@ -194,10 +180,10 @@ export default function DataSakitPolisi() {
             {/* Pie Chart Total Pasien */}
             <div className="pb-5 lg:pb-7">
               <div className="shadow-lg py-2 px-5 rounded-lg bg-white relative">
-                <div className="absolute inset-0 flex items-center justify-center h-[29rem] text-center">
+                <div className="absolute inset-0 flex items-center justify-center h-[30rem] text-center">
                   <div>
                     <h1 className="text-4xl text-primary-950 font-semibold">
-                      {totalJumlahSemua}
+                      {totalJumlahSemuaPasien}
                     </h1>
                     <p className="text-secondary-400 font-semibold">Total</p>
                   </div>
@@ -211,8 +197,8 @@ export default function DataSakitPolisi() {
                 <div className="flex z-50">
                   <div className="h-96 lg:w-72 w-full px-5 lg:px-0 mt-2">
                     <PieChartTotalPolisi
+                      data={filteredData}
                       colors={colorsSektor}
-                      year={year.toString()}
                     />
                   </div>
                 </div>
@@ -247,8 +233,8 @@ export default function DataSakitPolisi() {
                 </div>
                 <div className="h-96 lg:w-[26rem] mt-2">
                   <BarChartSektor
+                    dataInput={filteredData}
                     colors={colorsPenyakit}
-                    year={year.toString()}
                   />
                 </div>
               </div>
@@ -272,8 +258,8 @@ export default function DataSakitPolisi() {
                   <div className="flex">
                     <div className="h-40 lg:w-64 mt-2">
                       <PieChartTotalRawat
+                        dataInput={filteredData}
                         colors={colorsSektor}
-                        year={year.toString()}
                       />
                     </div>
                     <div className="place-content-center text-base font-semibold">
@@ -294,8 +280,8 @@ export default function DataSakitPolisi() {
                   </div>
                   <div className="h-[9.5rem] lg:w-80">
                     <BarChartRawat
+                      dataInput={filteredData}
                       colors={colorsPenyakit}
-                      year={year.toString()}
                     />
                   </div>
                 </div>
@@ -305,124 +291,21 @@ export default function DataSakitPolisi() {
         </div>
 
         {/* Data Pengunjung */}
-        <div className="container mx-auto pb-10 lg:pl-3 pl-5">
-          <h1 className="text-2xl font-bold mt-4 mb-2 ">
-            Data Seluruh Pengunjung Klinik
-          </h1>
-          <h2 className="text-xl font-semibold mb-4 text-secondary-500">
-            Seluruh data terkait pengunjung di klinik
-          </h2>
-          <div className="flex justify-between mb-4">
-            <div>
-              <label htmlFor="sort">Urutkan berdasarkan:</label>
-              <select
-                id="sort"
-                value={sortBy}
-                onChange={handleSortChange}
-                className="lg:ml-2 mt-2 lg:mt-0 border border-primary-600 rounded-md shadow-sm "
-              >
-                <option value="most">Cuti Terbanyak</option>
-                <option value="least">Cuti Tersedikit</option>
-              </select>
-            </div>
-            <div className="flex items-center mt-9 lg:mt-0">
-              <div className="relative">
-                <span className="absolute inset-y-0 left-0 flex items-center pl-2">
-                  <IoSearch className="text-xl text-gray-500" />
-                </span>
-                <input
-                  type="text"
-                  placeholder="Cari pengunjung..."
-                  value={searchTerm}
-                  onChange={handleSearch}
-                  className="lg:px-2 lg:w-auto w-40 py-1 pl-8 border rounded-md focus:outline-none focus:ring-blue-500 focus:border-primary-600 placeholder:ml-5"
-                  style={{ paddingLeft: "2rem" }}
-                />
-              </div>
-            </div>
+        <main className="mt-12 ml-32 mr-12 space-y-4 mb-10">
+          <div>
+            <h1 className="text-2xl">Data Sakit Polisi</h1>
           </div>
-          <div className="overflow-x-auto pr-5 lg:pr-0">
-            <table className="table-auto w-full">
-              <thead>
-                <tr>
-                  <th className="px-4 py-2 bg-primary-600 text-white rounded-tl-lg">
-                    No
-                  </th>
-                  <th className="px-4 py-2 bg-primary-600 text-white">Nama</th>
-                  <th className="px-4 py-2 bg-primary-600 text-white">
-                    Pangkat/NRP
-                  </th>
-                  <th className="px-4 py-2 bg-primary-600 text-white">
-                    Satuan Kerja
-                  </th>
-                  <th className="px-4 py-2 bg-primary-600 text-white">
-                    Jenis Sakit
-                  </th>
-                  <th className="px-4 py-2 bg-primary-600 text-white">
-                    Jenis Perawatan
-                  </th>
-                  <th className="px-4 py-2 bg-primary-600 text-white">
-                    Sumber Biaya
-                  </th>
-                  <th className="px-4 py-2 bg-primary-600 text-white">
-                    Awal Sakit
-                  </th>
-                  <th className="px-4 py-2 bg-primary-600 text-white">
-                    Lama Cuti
-                  </th>
-                  <th className="px-4 py-2 bg-primary-600 text-white ">WFH</th>
-                  <th className="px-4 py-2 bg-primary-600 text-white rounded-tr-lg">
-                    Keterangan
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredPolisi.map((entry, index) => (
-                  <tr
-                    key={index}
-                    className={
-                      index % 2 === 0 ? "bg-primary-50" : "bg-primary-100"
-                    }
-                  >
-                    <td className="border border-primary-600 px-4 py-2 text-center">
-                      {index + 1}
-                    </td>
-                    <td className="border border-primary-600 px-4 py-2 text-center">
-                      {entry.namapegawai}
-                    </td>
-                    <td className="border border-primary-600 px-4 py-2 text-center">
-                      {entry.pangkat + "/" + entry.nrp}
-                    </td>
-                    <td className="border border-primary-600 px-4 py-2 text-center">
-                      {entry.satuankerja}
-                    </td>
-                    <td className="border border-primary-600 px-4 py-2 text-center">
-                      {entry.rawat.jenispenyakit}
-                    </td>
-                    <td className="border border-primary-600 px-4 py-2 text-center">
-                      {entry.rawat.jenisperawatan}
-                    </td>
-                    <td className="border border-primary-600 px-4 py-2 text-center">
-                      {entry.rawat.sumberbiaya}
-                    </td>
-                    <td className="border border-primary-600 px-4 py-2 text-center">
-                      {entry.rawat.awalsakit}
-                    </td>
-                    <td className="border border-primary-600 px-4 py-2 text-center">
-                      {entry.rawat.lamacuti}
-                    </td>
-                    <td className="border border-primary-600 px-4 py-2 text-center">
-                      {entry.rawat.WFH}
-                    </td>
-                    <td className="border border-primary-600 px-4 py-2 text-center">
-                      {entry.rawat.keterangan}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="w-full my-4 flex gap-4">
+            <SearchBar
+              keyword={keyword}
+              keywordChange={onKeywordChangeHandler}
+            />
           </div>
-        </div>
+          <Tabel
+            table_head={head_data_sakit_statistik}
+            table_row={filteredData}
+          />
+        </main>
       </div>
     </>
   );

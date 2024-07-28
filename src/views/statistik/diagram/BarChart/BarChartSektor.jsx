@@ -1,18 +1,14 @@
 import { ResponsiveBar } from "@nivo/bar";
-import { DataSektor, calculateSektorTotals } from "../../model/dataSektor";
+import { calculateSektorTotals } from "../../model/dataSektor";
 import PropTypes from "prop-types";
 
-const BarChart = ({ colors, year }) => {
+const BarChart = ({ dataInput, colors }) => {
   BarChart.propTypes = {
-    year: PropTypes.string,
+    dataInput: PropTypes.array.isRequired,
     colors: PropTypes.arrayOf(PropTypes.string),
   };
 
-  const filteredData = DataSektor.filter(
-    (data) => new Date(data.tanggal).getFullYear() === parseInt(year)
-  );
-
-  const totals = calculateSektorTotals(filteredData);
+  const totals = calculateSektorTotals(dataInput);
 
   const data = Object.keys(totals).map((key) => ({
     sektor: key,
@@ -31,7 +27,7 @@ const BarChart = ({ colors, year }) => {
 
   return (
     <ResponsiveBar
-      data={sortedData} // Menggunakan data yang telah diurutkan
+      data={sortedData}
       keys={["total"]}
       indexBy="sektor"
       margin={{ top: 20, right: 10, bottom: 60, left: 100 }}

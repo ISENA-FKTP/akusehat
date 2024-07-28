@@ -166,9 +166,9 @@ export const calculateRawatTotals = (DataPegawaiRawat) => {
     const jenisperawatan = item.jenisperawatan.toLowerCase();
     if (jenisperawatan === "rawat jalan") {
       totals.rawatJalan += 1;
-    } else if (jenisperawatan === "rawat inap") {
+    } else if (jenisperawatan === "rawat di rs") {
       totals.rawatInap += 1;
-    } else {
+    } else if (jenisperawatan === "rawat di rumah") {
       totals.lainnya += 1;
     }
   });
