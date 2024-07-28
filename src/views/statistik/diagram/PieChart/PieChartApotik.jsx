@@ -37,7 +37,6 @@ const PieChart = ({ colors, dataMasuk, dataKeluar }) => {
     dataMasuk: PropTypes.array.isRequired,
     dataKeluar: PropTypes.array.isRequired,
     colors: PropTypes.arrayOf(PropTypes.string),
-    year: PropTypes.string,
   };
 
   // Menghitung total jumlah obat dan obat keluar

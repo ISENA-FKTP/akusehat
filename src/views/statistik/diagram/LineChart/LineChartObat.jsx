@@ -1,14 +1,14 @@
 import { ResponsiveLine } from "@nivo/line";
-import { DataObat, calculateByYearAndMonth } from "../../model/dataObat";
+import { calculateByYearAndMonth } from "../../model/dataObat";
 import PropTypes from "prop-types";
 
 const LineChart = ({
   showNextSixMonths,
   startMonthIndex,
   endMonthIndex,
-  year,
+  dataInput,
 }) => {
-  const dataYear = calculateByYearAndMonth(year, showNextSixMonths, DataObat);
+  const dataYear = calculateByYearAndMonth(showNextSixMonths, dataInput);
 
   const dataToShow = dataYear.slice(startMonthIndex, endMonthIndex);
 
@@ -69,7 +69,7 @@ LineChart.propTypes = {
   showNextSixMonths: PropTypes.bool,
   startMonthIndex: PropTypes.number,
   endMonthIndex: PropTypes.number,
-  year: PropTypes.string,
+  dataInput: PropTypes.array.isRequired,
 };
 
 export default LineChart;

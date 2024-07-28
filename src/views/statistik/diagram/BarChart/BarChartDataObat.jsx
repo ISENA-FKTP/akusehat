@@ -1,18 +1,19 @@
 import { ResponsiveBar } from "@nivo/bar";
 import PropTypes from "prop-types";
-import { DataObat, calculateByYearAndMonthForBar } from "../../model/dataObat";
+import { calculateByYearAndMonthForBar } from "../../model/dataObat";
 
 const BarChart = ({
   colors,
   showNextSixMonths,
   startMonthIndex,
   endMonthIndex,
-  year,
+  dataInput,
+  dataDelete,
 }) => {
   const data2024 = calculateByYearAndMonthForBar(
-    year,
     showNextSixMonths,
-    DataObat
+    dataInput,
+    dataDelete
   );
 
   const data = data2024.slice(startMonthIndex, endMonthIndex);
@@ -94,7 +95,8 @@ BarChart.propTypes = {
   showNextSixMonths: PropTypes.bool.isRequired,
   startMonthIndex: PropTypes.number,
   endMonthIndex: PropTypes.number,
-  year: PropTypes.string,
+  dataInput: PropTypes.array.isRequired,
+  dataDelete: PropTypes.array.isRequired,
 };
 
 export default BarChart;

@@ -6,8 +6,8 @@ import axios from "axios";
 
 axios.defaults.withCredentials = true;
 // axios.defaults.baseURL = "http://36.88.12.26:5000";
-axios.defaults.baseURL = "https://akusehat-api-rivopncpgq-et.a.run.app";
-// axios.defaults.baseURL = "http://localhost:8080";
+// axios.defaults.baseURL = "https://akusehat-api-rivopncpgq-et.a.run.app";
+axios.defaults.baseURL = "http://localhost:8080";
 // axios.defaults.baseURL = "https://be-isena-fktp.onrender.com";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

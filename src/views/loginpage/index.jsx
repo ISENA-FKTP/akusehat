@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import coverImage from "./cover.png";
+import imageBg from "./imageBg.png";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
@@ -103,11 +104,25 @@ const Login = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 h-screen">
       {/* Bagian Kiri: Gambar Cover */}
-      <div className="hidden md:flex items-center justify-center bg-warning-100">
+      <div
+        className="hidden md:flex items-center justify-center"
+        style={{
+          backgroundImage: `url(${coverImage})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          position: "relative",
+          height: "100vh",
+        }}
+      >
         <img
-          src={coverImage}
+          src={imageBg}
           alt="Cover"
-          className="w-full h-full object-cover"
+          style={{
+            width: "auto",
+            height: "auto",
+            position: "absolute",
+            bottom: 0,
+          }}
         />
       </div>
 

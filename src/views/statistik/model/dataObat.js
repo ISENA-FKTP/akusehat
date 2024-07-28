@@ -154,9 +154,7 @@ export const calculateTotalObat = (DataObat) => {
 };
 
 export const calculateObatTerpakai = (DataObat) => {
-  const sortedData = [...DataObat].sort(
-    (a, b) => b.totalobatkeluar - a.totalobatkeluar
-  );
+  const sortedData = [...DataObat].sort((a, b) => b.jumlahobat - a.jumlahobat);
 
   const top10Obat = sortedData.slice(0, 10);
 
@@ -178,14 +176,10 @@ const monthNames = [
   "Des",
 ];
 
-export const calculateByYearAndMonth = (year, showNextSixMonths, DataObat) => {
-  const filteredData = DataObat.filter(
-    (data) => new Date(data.tanggal).getFullYear() === parseInt(year)
-  );
-
+export const calculateByYearAndMonth = (showNextSixMonths, DataObat) => {
   const result = Array(showNextSixMonths ? 12 : 6).fill(0);
 
-  filteredData.forEach((item) => {
+  DataObat.forEach((item) => {
     const date = new Date(item.tglkadaluarsa);
     const month = date.getMonth();
 
@@ -207,14 +201,10 @@ export const calculateByYearAndMonth = (year, showNextSixMonths, DataObat) => {
 };
 
 export const calculateByYearAndMonthForBar = (
-  year,
   showNextSixMonths,
-  DataObat
+  DataObat,
+  DataDelete
 ) => {
-  const filteredData = DataObat.filter(
-    (data) => new Date(data.tanggal).getFullYear() === parseInt(year)
-  );
-
   const result = Array(showNextSixMonths ? 12 : 6)
     .fill(null)
     .map(() => ({
@@ -222,18 +212,23 @@ export const calculateByYearAndMonthForBar = (
       obatKeluar: 0,
     }));
 
-  filteredData.forEach((item) => {
+  // Proses DataObat
+  DataObat.forEach((item) => {
     const date = new Date(item.tglkadaluarsa);
     const month = date.getMonth();
 
-    if (showNextSixMonths) {
+    if (showNextSixMonths || month < 6) {
       result[month].totalObat += item.jumlahobat;
-      result[month].obatKeluar += item.totalobatkeluar;
-    } else {
-      if (month < 6) {
-        result[month].totalObat += item.jumlahobat;
-        result[month].obatKeluar += item.totalobatkeluar;
-      }
+    }
+  });
+
+  // Proses DataDelete
+  DataDelete.forEach((item) => {
+    const date = new Date(item.deletedAt);
+    const month = date.getMonth();
+
+    if (showNextSixMonths || month < 6) {
+      result[month].obatKeluar += item.jumlahobat;
     }
   });
 

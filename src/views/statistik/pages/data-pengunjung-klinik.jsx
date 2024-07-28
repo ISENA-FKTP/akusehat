@@ -313,11 +313,11 @@ export default function DataPengunjungKlinik() {
           </div>
         </div>
 
-        <div className="border border-primary-600 mx-auto shadow-lg flex items-center text-center w-[80%] rounded ml-44 py-5">
-          <form className="w-full mx-8 space-y-4">
-            <div className="flex  justify-between">
+        <div className="border border-primary-600 mx-auto shadow-lg flex items-center text-center lg:w-[80%] mr-5  rounded lg:ml-44 ml-5 py-5">
+          <form className="w-full grid place-content-center mx-8 space-y-4">
+            <div className="lg:flex justify-between space-y-3 lg:space-x-5 lg:space-y-0">
               <div className="flex items-center space-x-3">
-                <div className="flex items-center space-x-3 ">
+                <div className="flex items-center space-x-3">
                   <label
                     htmlFor="sort"
                     className="text-black font-secondary-Karla font-bold"
@@ -366,7 +366,7 @@ export default function DataPengunjungKlinik() {
               </div>
 
               <div className="flex items-center space-x-5">
-                <div className="flex items-center mt-9 lg:mt-0">
+                <div className="flex items-center lg:mt-0 mt-9 ">
                   <div className="relative mx-2">
                     <span className="absolute inset-y-0 left-0 flex items-center pl-2">
                       <IoSearch className="text-xl text-gray-500" />
@@ -376,7 +376,7 @@ export default function DataPengunjungKlinik() {
                       placeholder="Nama Pasien..."
                       value={searchTerm}
                       onChange={handleSearch}
-                      className="lg:px-2 lg:w-auto w-40 py-1 pl-8 border rounded-md focus:outline-none focus:ring-blue-500 focus:border-primary-600 placeholder:ml-5"
+                      className="lg:px-2 lg:w-auto py-1 pl-8 border rounded-md focus:outline-none focus:ring-blue-500 focus:border-primary-600 placeholder:ml-5"
                       style={{ paddingLeft: "2rem" }}
                     />
                   </div>
@@ -387,7 +387,7 @@ export default function DataPengunjungKlinik() {
         </div>
 
         {/* Data Pengunjung */}
-        <div className="ml-28 mr-14 mt-10">
+        <div className="lg:ml-28 ml-5 lg:mr-14 mr-5 mt-10">
           <div className="overflow-x-auto pr-5 lg:pr-0">
             <table className="table-auto w-full">
               <thead>

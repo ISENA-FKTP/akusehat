@@ -1,19 +1,36 @@
 import { ResponsivePie } from "@nivo/pie";
-import { DataObat, calculateTotals } from "../../model/dataObat";
 import PropTypes from "prop-types";
 
-const PieChart = ({ colors, year }) => {
+// Menghitung total jumlah obat dan obat keluar
+const calculateTotals = (dataMasuk, dataKeluar) => {
+  let totalJumlahObat = 0;
+  let totalObatKeluar = 0;
+
+  dataMasuk.forEach((item) => {
+    totalJumlahObat += item.jumlahobat;
+  });
+
+  dataKeluar.forEach((item) => {
+    totalObatKeluar += item.jumlahobat;
+  });
+
+  return { totalJumlahObat, totalObatKeluar };
+};
+
+const PieChart = ({ colors, dataMasuk, dataKeluar }) => {
   PieChart.propTypes = {
-    year: PropTypes.string,
+    dataMasuk: PropTypes.array.isRequired,
+    dataKeluar: PropTypes.array.isRequired,
     colors: PropTypes.arrayOf(PropTypes.string),
   };
 
-  const filteredData = DataObat.filter(
-    (data) => new Date(data.tanggal).getFullYear() === parseInt(year)
+  // Menghitung total jumlah obat dan obat keluar
+  const { totalJumlahObat, totalObatKeluar } = calculateTotals(
+    dataMasuk,
+    dataKeluar
   );
 
-  const { totalJumlahObat, totalObatKeluar } = calculateTotals(filteredData);
-  const totalObat = totalObatKeluar + totalJumlahObat;
+  const totalObat = totalJumlahObat + totalObatKeluar;
 
   const data = [
     {

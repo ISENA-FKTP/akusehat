@@ -436,7 +436,7 @@ export default function Statistik() {
         </div>
 
         {/* Data Pengunjung */}
-        <main className="mt-12 ml-32 mr-12 space-y-4 mb-10">
+        <main className="mt-12 lg:ml-32 ml-5 lg:mr-12 mr-5 space-y-4 mb-10">
           <div>
             <h1 className="text-2xl">Data Sakit Polisi</h1>
           </div>

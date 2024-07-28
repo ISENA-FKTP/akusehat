@@ -3,7 +3,6 @@ import Sidebar from "../../../components/statistik/sidebar";
 import Header from "../../../components/header";
 import BarChartObatTerpakai from "../diagram/BarChart/BarChartObatTerpakai";
 import PieChartTotalObat from "../diagram/PieChart/PieChartTotalObat";
-import { DataObat, calculateTotalObat } from "../model/dataObat";
 import LineChart from "../diagram/LineChart/LineChartObat";
 import {
   MdOutlineKeyboardDoubleArrowRight,
@@ -11,11 +10,12 @@ import {
 } from "react-icons/md";
 import BarChart from "../diagram/BarChart/BarChartDataObat";
 import { IoSearch } from "react-icons/io5";
-import { apotek } from "../model/data/apotek";
+import useAxios from "../../../useAxios";
 
 const currentYear = new Date().getFullYear();
 
 export default function DataObatKlinik() {
+  const axiosInstance = useAxios();
   const [year, setYear] = useState(currentYear);
   const [showNextSixMonthsForLine, setShowNextSixMonthsForLine] =
     useState(false);
@@ -23,6 +23,10 @@ export default function DataObatKlinik() {
   const [sortBy, setSortBy] = useState("most");
   const [sortedMedicines, setSortedMedicines] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [dataObat, setDataObat] = useState([]);
+  const [dataObatDelete, setDataObatDelete] = useState([]);
+  const [jumlahDataObat, setJumlahDataObat] = useState(0);
+  const [jumlahDataObatKeluar, setJumlahDataObatKeluar] = useState(0);
 
   const handleToggleMonthsForLine = () => {
     setShowNextSixMonthsForLine(!showNextSixMonthsForLine);
@@ -42,12 +46,6 @@ export default function DataObatKlinik() {
   const startMonthIndexBar = showNextSixMonthsForBar ? 6 : 0;
   const endMonthIndexBar = showNextSixMonthsForBar ? 12 : 6;
 
-  const filteredData = DataObat.filter(
-    (data) => new Date(data.tanggal).getFullYear() === parseInt(year)
-  );
-
-  const totalObat = calculateTotalObat(filteredData);
-
   const colorsPenyakit = [
     "#5726FF",
     "#FACC15",
@@ -58,13 +56,72 @@ export default function DataObatKlinik() {
 
   const colorsSektor = ["#5726FF", "#FD9A28"];
 
+  // Data Obat
+  useEffect(() => {
+    const fetchData = async () => {
+      const token = localStorage.getItem("accessToken");
+      try {
+        const response = await axiosInstance.get("/dataobatStatistik", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const obatData = response.data;
+        setDataObat(obatData);
+
+        const totalJumlahObat = obatData.reduce((total, item) => {
+          return total + (item.jumlahobat || 0);
+        }, 0);
+
+        setJumlahDataObat(totalJumlahObat);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [axiosInstance]);
+
+  // Data Delete Obat
+  useEffect(() => {
+    const fetchData = async () => {
+      const token = localStorage.getItem("accessToken");
+      try {
+        const response = await axiosInstance.get("/deletedataobatStatistik", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const obatData = response.data;
+        setDataObatDelete(obatData);
+
+        const totalJumlahObat = obatData.reduce((total, item) => {
+          return total + (item.jumlahobat || 0);
+        }, 0);
+
+        setJumlahDataObatKeluar(totalJumlahObat);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [axiosInstance]);
+
+  const formatDate = (dateString) => {
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
   useEffect(() => {
     const sorted =
       sortBy === "most"
-        ? [...apotek].sort((a, b) => b.quantity - a.quantity)
-        : [...apotek].sort((a, b) => a.quantity - b.quantity);
+        ? [...dataObat].sort((a, b) => b.jumlahobat - a.jumlahobat)
+        : [...dataObat].sort((a, b) => a.jumlahobat - b.jumlahobat);
     setSortedMedicines(sorted);
-  }, [sortBy]);
+  }, [dataObat, sortBy]);
 
   const handleSortChange = (e) => {
     setSortBy(e.target.value);
@@ -74,9 +131,19 @@ export default function DataObatKlinik() {
     setSearchTerm(e.target.value);
   };
 
-  const filteredMedicines = sortedMedicines.filter((medicine) =>
-    medicine.medicineName.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredDataObat = sortedMedicines.filter((dataKlinik) => {
+    if (year !== "All") {
+      return new Date(dataKlinik.createdAt).getFullYear() === parseInt(year);
+    }
+    return true;
+  });
+
+  const filteredDataObatDelete = dataObatDelete.filter((dataKlinik) => {
+    if (year !== "All") {
+      return new Date(dataKlinik.deletedAt).getFullYear() === parseInt(year);
+    }
+    return true;
+  });
 
   return (
     <>
@@ -99,7 +166,7 @@ export default function DataObatKlinik() {
 
         <div className="container mx-auto pl-5 pt-20 lg:pt-0">
           {/* Filter */}
-          <div className="flex place-content-end pt-7 pr-5">
+          <div className="flex pt-7 gap-3 place-content-end pr-5">
             <div>
               <label htmlFor="year" className="mr-2">
                 Tahun:
@@ -108,8 +175,9 @@ export default function DataObatKlinik() {
                 id="year"
                 value={year}
                 onChange={handleYearChange}
-                className="px-2 rounded-md"
+                className="p-2 rounded-md"
               >
+                <option value="All">All</option>
                 {[...Array(10)].map((_, i) => {
                   const y = currentYear - i;
                   return (
@@ -129,7 +197,7 @@ export default function DataObatKlinik() {
               <div className="absolute inset-0 flex items-center justify-center h-[29rem] text-center">
                 <div>
                   <h1 className="text-4xl text-primary-950 font-semibold">
-                    {totalObat}
+                    {jumlahDataObat}
                   </h1>
                   <p className="text-secondary-400 font-semibold">Total</p>
                 </div>
@@ -143,8 +211,9 @@ export default function DataObatKlinik() {
               <div className="flex z-50">
                 <div className="h-96 lg:w-[13rem] w-full px-5 lg:px-0 mt-2">
                   <PieChartTotalObat
+                    dataMasuk={filteredDataObat}
+                    dataKeluar={filteredDataObatDelete}
                     colors={colorsSektor}
-                    year={year.toString()}
                   />
                 </div>
               </div>
@@ -160,8 +229,8 @@ export default function DataObatKlinik() {
               </div>
               <div className="h-96 lg:w-[18rem] mt-2">
                 <BarChartObatTerpakai
+                  dataInput={dataObatDelete}
                   colors={colorsPenyakit}
-                  year={year.toString()}
                 />
               </div>
             </div>
@@ -194,7 +263,7 @@ export default function DataObatKlinik() {
                       showNextSixMonths={showNextSixMonthsForLine}
                       startMonthIndex={startMonthIndexLine}
                       endMonthIndex={endMonthIndexLine}
-                      year={year.toString()}
+                      dataInput={filteredDataObat}
                     />
                   </div>
                 </div>
@@ -229,7 +298,8 @@ export default function DataObatKlinik() {
                     showNextSixMonths={showNextSixMonthsForBar}
                     startMonthIndex={startMonthIndexBar}
                     endMonthIndex={endMonthIndexBar}
-                    year={year.toString()}
+                    dataInput={filteredDataObat}
+                    dataDelete={filteredDataObatDelete}
                   />
                 </div>
               </div>
@@ -239,12 +309,6 @@ export default function DataObatKlinik() {
 
         {/* Data Obat */}
         <div className="container mx-auto pb-10 lg:pl-3 pl-5">
-          <h1 className="text-2xl font-bold mt-4 mb-2 ">
-            Data Seluruh Obat Apotek
-          </h1>
-          <h2 className="text-xl font-semibold mb-4 text-secondary-500">
-            Seluruh data terkait obat di apotek
-          </h2>
           <div className="flex justify-between mb-4">
             <div>
               <label htmlFor="sort">Urutkan berdasarkan:</label>
@@ -303,7 +367,7 @@ export default function DataObatKlinik() {
                 </tr>
               </thead>
               <tbody>
-                {filteredMedicines.map((medicine, index) => (
+                {filteredDataObat.map((medicine, index) => (
                   <tr
                     key={index}
                     className={
@@ -314,25 +378,25 @@ export default function DataObatKlinik() {
                       {index + 1}
                     </td>
                     <td className="border border-primary-600 px-4 py-2 text-center">
-                      {medicine.medicineName}
+                      {medicine.namaobat}
                     </td>
                     <td className="border border-primary-600 px-4 py-2 text-center">
-                      {medicine.quantity}
+                      {medicine.jumlahobat}
                     </td>
                     <td className="border border-primary-600 px-4 py-2 text-center">
-                      {medicine.category}
+                      {medicine.kategori}
                     </td>
                     <td className="border border-primary-600 px-4 py-2 text-center">
-                      {medicine.type}
+                      {medicine.jenisobat}
                     </td>
                     <td className="border border-primary-600 px-4 py-2 text-center">
-                      {medicine.entryDate}
+                      {formatDate(medicine.tglmasuk)}
                     </td>
                     <td className="border border-primary-600 px-4 py-2 text-center">
-                      {medicine.expiryDate}
+                      {formatDate(medicine.tglkadaluarsa)}
                     </td>
                     <td className="border border-primary-600 px-4 py-2 text-center">
-                      {medicine.price}
+                      {medicine.hargaobat}
                     </td>
                   </tr>
                 ))}
