@@ -209,7 +209,7 @@ export default function DataObatKlinik() {
                 </div>
               </div>
               <div className="flex z-50">
-                <div className="h-96 lg:w-[13rem] w-full px-5 lg:px-0 mt-2">
+                <div className="h-96 lg:w-[13rem] w-full px-12 lg:px-0 mt-2">
                   <PieChartTotalObat
                     dataMasuk={filteredDataObat}
                     dataKeluar={filteredDataObatDelete}

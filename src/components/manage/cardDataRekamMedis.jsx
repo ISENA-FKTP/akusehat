@@ -11,7 +11,6 @@ export default function CardDataRekamMedis({
     filerekammedis: PropTypes.string.isRequired,
   };
   const classes = "px-2 py-1";
-  const urlImage = "http://localhost:5000/";
 
   return (
     <table>
@@ -31,7 +30,7 @@ export default function CardDataRekamMedis({
         <td className={classes}>
           {filerekammedis && (
             <a
-              href={`${urlImage}/${filerekammedis}`}
+              href={`${filerekammedis}`}
               alt="Dokumentasi"
               width="100"
               height="100"

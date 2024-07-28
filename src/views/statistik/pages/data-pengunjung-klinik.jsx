@@ -263,7 +263,7 @@ export default function DataPengunjungKlinik() {
                       </div>
                     </div>
                     <div className="flex z-50">
-                      <div className="lg:h-56 h-96 lg:w-44 w-full px-8 lg:px-0 mt-2">
+                      <div className="lg:h-56 h-96 lg:w-44 w-full px-12 lg:px-0 mt-2">
                         <PieChartTotalPengunjungKlinik
                           dataInput={filteredData}
                           colors={colorsSektor}

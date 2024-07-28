@@ -2,28 +2,30 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useAxios from "../../useAxios";
 import Swal from "sweetalert2";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { initializeApp } from "firebase/app";
+import { firebaseConfig } from "../../../firebase/config";
+
+initializeApp(firebaseConfig);
+const storage = getStorage();
 
 export const FormDataRekamMedis = () => {
   const axiosInstance = useAxios();
   const navigate = useNavigate();
   const [selectedFile, setSelectedFile] = useState(null);
-
   const [formData, setFormData] = useState({
     nrp: "",
     namapegawai: "",
     pangkat: "",
     satuankerja: "",
     keterangan: "",
-    filerekammedis:
-      "https://kki.go.id/uploads/media/1683690349_52608b7cd44a11a99d43.pdf",
+    filerekammedis: "",
   });
+  const [fileUrl, setFileUrl] = useState(null);
 
   const handleNrpChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleNrpKeyDown = async (e) => {
@@ -33,27 +35,20 @@ export const FormDataRekamMedis = () => {
     }
   };
 
-  const handleFileChange = () => {
-    setSelectedFile(
-      "https://statik.tempo.co/data/2019/01/29/id_815619/815619_720.jpg"
-    );
+  const handleFileChange = (e) => {
+    setSelectedFile(e.target.files[0]);
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData({ ...formData, [name]: value });
   };
 
   const fetchData = async (nrp) => {
     const token = localStorage.getItem("accessToken");
     try {
       const response = await axiosInstance.get(`/pegawais/nonrp/${nrp}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       const foundData = response.data[0];
@@ -85,14 +80,38 @@ export const FormDataRekamMedis = () => {
     }
   };
 
+  const uploadFile = async () => {
+    if (!selectedFile) return null;
+
+    const fileRef = ref(storage, `rekammedis/${selectedFile.name}`);
+    await uploadBytes(fileRef, selectedFile);
+    const fileUrl = await getDownloadURL(fileRef);
+    setFileUrl(fileUrl);
+
+    return fileUrl;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem("accessToken");
 
     try {
-      await fetchData(formData.nrp);
-      const pegawaiId = formData.pegawaiId;
-      await addSickData(token, pegawaiId);
+      // Upload file and get URL
+      const fileUrl = await uploadFile();
+      if (!fileUrl) {
+        throw new Error("File upload failed");
+      }
+
+      // Update formData with fileUrl
+      const updatedFormData = {
+        ...formData,
+        filerekammedis: fileUrl,
+      };
+
+      // Fetch employee data and add medical record
+      await fetchData(updatedFormData.nrp);
+      const pegawaiId = updatedFormData.pegawaiId;
+      await addSickData(token, pegawaiId, updatedFormData);
     } catch (error) {
       if (error.response && error.response.status === 404) {
         Swal.fire({
@@ -114,9 +133,7 @@ export const FormDataRekamMedis = () => {
                   satuankerja: formData.satuankerja,
                 },
                 {
-                  headers: {
-                    Authorization: `Bearer ${token}`,
-                  },
+                  headers: { Authorization: `Bearer ${token}` },
                 }
               );
 
@@ -124,13 +141,14 @@ export const FormDataRekamMedis = () => {
                 const response = await axiosInstance.get(
                   `/pegawais/nonrp/${formData.nrp}`,
                   {
-                    headers: {
-                      Authorization: `Bearer ${token}`,
-                    },
+                    headers: { Authorization: `Bearer ${token}` },
                   }
                 );
                 const pegawaiId = response.data[0].id;
-                await addSickData(token, pegawaiId);
+                await addSickData(token, pegawaiId, {
+                  ...formData,
+                  filerekammedis: fileUrl,
+                });
               } else {
                 Swal.fire({
                   icon: "error",
@@ -158,19 +176,17 @@ export const FormDataRekamMedis = () => {
     }
   };
 
-  const addSickData = async (token, pegawaiId) => {
+  const addSickData = async (token, pegawaiId, data) => {
     try {
       const addSakitResponse = await axiosInstance.post(
         "/datarekammedis",
         {
           pegawaiId: pegawaiId,
-          filerekammedis: formData.filerekammedis,
-          keterangan: formData.keterangan,
+          filerekammedis: data.filerekammedis,
+          keterangan: data.keterangan,
         },
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
 
@@ -199,14 +215,14 @@ export const FormDataRekamMedis = () => {
   };
 
   return (
-    <div className="w-full h-max rounded-md border-3  shadow overflow-auto">
-      <div className=" pt-2 pl-4  w-full bg-secondary-300">
+    <div className="w-full h-max rounded-md border-3 shadow overflow-auto">
+      <div className="pt-2 pl-4 w-full bg-secondary-300">
         <h3 className="text-xl mb-6">Data Rekam Medis</h3>
       </div>
       <form className="px-5 pb-5" onSubmit={handleSubmit}>
         <div className="w-full my-4 flex gap-4">
           <div className="mb-4 w-1/3">
-            <label className="block text-gray-700">nrp</label>
+            <label className="block text-gray-700">NRP</label>
             <input
               type="text"
               name="nrp"
@@ -225,7 +241,7 @@ export const FormDataRekamMedis = () => {
               value={formData.namapegawai}
               onChange={handleChange}
               className="w-full px-3 py-2 border rounded-md"
-              placeholder="nama pegawai"
+              placeholder="Nama pegawai"
             />
           </div>
         </div>
@@ -238,7 +254,7 @@ export const FormDataRekamMedis = () => {
               value={formData.pangkat}
               onChange={handleChange}
               className="w-full px-3 py-2 border rounded-md"
-              placeholder="pangkat"
+              placeholder="Pangkat"
             />
           </div>
           <div className="mb-4 w-1/3">

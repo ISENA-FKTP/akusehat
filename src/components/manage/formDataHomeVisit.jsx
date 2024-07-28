@@ -2,10 +2,14 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useAxios from "../../useAxios";
 import Swal from "sweetalert2";
+import { imageDb } from "../../../firebase/config";
+import { v4 } from "uuid";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 export const FormDataHomeVisit = () => {
   const axiosInstance = useAxios();
   const navigate = useNavigate();
+  const [img, setImg] = useState(null);
 
   const [formData, setFormData] = useState({
     nrp: "",
@@ -17,11 +21,22 @@ export const FormDataHomeVisit = () => {
     diagnosa: "",
     terapi: "",
     saranmedis: "",
-    fotodokumentasi:
-      "https://statik.tempo.co/data/2019/01/29/id_815619/815619_720.jpg",
+    fotodokumentasi: "",
   });
 
-  const [selectedFile, setSelectedFile] = useState(null);
+  const handleClick = () => {
+    if (img !== null) {
+      const imgRef = ref(imageDb, `files/${v4()}`);
+      uploadBytes(imgRef, img).then((value) => {
+        getDownloadURL(value.ref).then((url) => {
+          setFormData((prevFormData) => ({
+            ...prevFormData,
+            fotodokumentasi: url,
+          }));
+        });
+      });
+    }
+  };
 
   const handleNrpChange = (e) => {
     const { name, value } = e.target;
@@ -36,12 +51,6 @@ export const FormDataHomeVisit = () => {
       e.preventDefault();
       await fetchData(formData.nrp);
     }
-  };
-
-  const handleFileChange = () => {
-    setSelectedFile(
-      "https://statik.tempo.co/data/2019/01/29/id_815619/815619_720.jpg"
-    );
   };
 
   const handleChange = (e) => {
@@ -92,6 +101,10 @@ export const FormDataHomeVisit = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (img) {
+      await handleClick(); // Upload image and update fotodokumentasi URL
+    }
+
     const token = localStorage.getItem("accessToken");
 
     try {
@@ -234,7 +247,7 @@ export const FormDataHomeVisit = () => {
               value={formData.namapegawai}
               onChange={handleChange}
               className="w-full px-3 py-2 border rounded-md"
-              placeholder="nama pegawai"
+              placeholder="Nama pegawai"
             />
           </div>
         </div>
@@ -247,7 +260,7 @@ export const FormDataHomeVisit = () => {
               value={formData.pangkat}
               onChange={handleChange}
               className="w-full px-3 py-2 border rounded-md"
-              placeholder="pangkat"
+              placeholder="Pangkat"
             />
           </div>
           <div className="mb-4 w-1/3">
@@ -265,74 +278,80 @@ export const FormDataHomeVisit = () => {
         <div className="w-full my-4 flex gap-4">
           <div className="mb-4 w-1/3">
             <label className="block text-gray-700">Keluhan</label>
-            <textarea
+            <input
+              type="text"
               name="keluhan"
               value={formData.keluhan}
               onChange={handleChange}
               className="w-full px-3 py-2 border rounded-md"
-              placeholder="Masukkan keluhan"
+              placeholder="Keluhan"
             />
           </div>
           <div className="mb-4 w-1/3">
             <label className="block text-gray-700">Pemeriksaan Fisik</label>
-            <textarea
+            <input
+              type="text"
               name="pemeriksaanfisik"
               value={formData.pemeriksaanfisik}
               onChange={handleChange}
               className="w-full px-3 py-2 border rounded-md"
-              placeholder="Masukkan hasil pemeriksaan"
+              placeholder="Pemeriksaan fisik"
             />
           </div>
         </div>
         <div className="w-full my-4 flex gap-4">
           <div className="mb-4 w-1/3">
             <label className="block text-gray-700">Diagnosa</label>
-            <textarea
+            <input
+              type="text"
               name="diagnosa"
               value={formData.diagnosa}
               onChange={handleChange}
               className="w-full px-3 py-2 border rounded-md"
-              placeholder="Masukkan hasil diagnosa"
+              placeholder="Diagnosa"
             />
           </div>
           <div className="mb-4 w-1/3">
             <label className="block text-gray-700">Terapi</label>
-            <textarea
+            <input
+              type="text"
               name="terapi"
               value={formData.terapi}
               onChange={handleChange}
               className="w-full px-3 py-2 border rounded-md"
-              placeholder="Masukkan terapi yang diberikan"
+              placeholder="Terapi"
             />
           </div>
         </div>
         <div className="w-full my-4 flex gap-4">
           <div className="mb-4 w-1/3">
             <label className="block text-gray-700">Saran Medis</label>
-            <textarea
+            <input
+              type="text"
               name="saranmedis"
               value={formData.saranmedis}
               onChange={handleChange}
               className="w-full px-3 py-2 border rounded-md"
-              placeholder="Masukkan saran medis yang diberikan"
+              placeholder="Saran medis"
             />
           </div>
           <div className="mb-4 w-1/3">
             <label className="block text-gray-700">Foto Dokumentasi</label>
             <input
               type="file"
-              name="fotodokumentasi"
-              onChange={handleFileChange}
+              onChange={(e) => setImg(e.target.files[0])}
               className="w-full px-3 py-2 border rounded-md"
             />
           </div>
         </div>
-        <button
-          type="submit"
-          className="w-1/3 bg-primary-500 text-white py-2 rounded-md"
-        >
-          Tambah Data
-        </button>
+        <div className="flex ">
+          <button
+            type="submit"
+            className="w-1/3 bg-primary-500 text-white py-2 rounded-md"
+          >
+            Tambah Data
+          </button>
+        </div>
       </form>
     </div>
   );

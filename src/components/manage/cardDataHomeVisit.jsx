@@ -18,7 +18,6 @@ export default function CardDataHomeVisit({
     saranmedis: PropTypes.string,
     fotodokumentasi: PropTypes.string,
   };
-  const urlImage = "http://localhost:5000/";
   const classes = "px-2 py-1";
 
   return (
@@ -59,7 +58,7 @@ export default function CardDataHomeVisit({
         <td className={classes}>
           {fotodokumentasi && (
             <img
-              src={`${urlImage}/${fotodokumentasi}`}
+              src={`${fotodokumentasi}`}
               target="_blank"
               rel="noopener noreferrer"
               alt="Dokumentasi"
