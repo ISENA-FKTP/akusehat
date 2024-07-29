@@ -26,6 +26,7 @@ import Dokter from "./views/dokter/dokter";
 import KunjunganDokter from "./views/dokter/kunjungan_dokter";
 import PrintPDF from "./views/klinik/pages/print_pdf";
 import PrintPage from "./views/apoteker/pages/PrintPage";
+import PDFdatasakit from "./views/manage/pages/pdf_datasakit";
 
 function App() {
   return (
@@ -69,6 +70,7 @@ function App() {
         {/* Manage */}
         <Route path="/manage" element={<Manage />} />
         <Route path="/manage/data-home-visit" element={<HomeVisit />} />
+        <Route path="/manage/printDatasakit/:pegawaiId" element={<PDFdatasakit/>} />
         <Route path="/manage/data-rekam-medis" element={<RekamMedis />} />
         <Route
           path="/manage/data-sakit/tambah-data"

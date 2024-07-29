@@ -1,15 +1,17 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useAxios from "../../../useAxios";
 import Sidebar from "../../../components/manage/sidebar";
 import Header from "../../../components/header";
 import CardDataSakit from "../../../components/manage/cardDataSakit";
 import CardDataHomeVisit from "../../../components/manage/cardDataHomeVisit";
 import CardDataRekamMedis from "../../../components/manage/cardDataRekamMedis";
-import { Button } from "@headlessui/react";
+// import { Button } from "@headlessui/react";
+import ButtonPDF from "../../../components/manage/buttonPDF";
 
 export default function DetailPage() {
   const axiosInstance = useAxios();
+  const navigate = useNavigate();
   const { pegawaiId } = useParams();
   const [data, setData] = useState({
     pegawai: {},
@@ -163,6 +165,9 @@ export default function DetailPage() {
   if (error) {
     return <div>Error: {error.message}</div>;
   }
+  const printHandler = () => {
+    navigate(`/manage/printDatasakit/${pegawaiId}`);
+  };
 
   return (
     <div className="font-primary">
@@ -177,9 +182,9 @@ export default function DetailPage() {
         profilePicture="/logo.png"
       />
       <main className="mt-12 ml-32 mr-12 space-y-4">
-        <Button className="px-4 py-2 bg-indigo-600 text-white rounded">
-          Export to PDF
-        </Button>
+        <ButtonPDF
+         onClicked={printHandler}
+         />
         <div>
           <div className="w-full py-8 px-8 border-2 border-gray rounded-md bg-white space-y-4">
             <div className="w-full py-2 px-2 rounded-md bg-primary-200">
