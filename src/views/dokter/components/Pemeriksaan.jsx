@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import SignaturePad from "react-signature-canvas";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
@@ -29,27 +29,6 @@ export default function Pemeriksaan() {
     "Dr. Ira Atmi Indiyanti": "123456",
     "Dr. Lita Yuliati": "789012",
     "Drg. Liem Frisca Anatasia": "345678",
-  };
-
-  useEffect(() => {
-    if (formData.nrpDokter && formData.namadokter !== "Dokter Lain-lain") {
-      getSignature(formData.nrpDokter);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formData.nrpDokter, formData.namadokter]);
-
-  const getSignature = (nrp) => {
-    axiosInstance
-      .get(`/tts/${nrp}`)
-      .then((response) => {
-        const signature = response.data.tandatangan;
-        if (signature) {
-          setSignatureURL(signature);
-        }
-      })
-      .catch((error) => {
-        console.error("Ada kesalahan saat mengambil tanda tangan:", error);
-      });
   };
 
   const handleSave = () => {
