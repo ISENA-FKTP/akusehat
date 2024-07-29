@@ -6,7 +6,6 @@ import Header from "../../../components/header";
 import CardDataSakit from "../../../components/manage/cardDataSakit";
 import CardDataHomeVisit from "../../../components/manage/cardDataHomeVisit";
 import CardDataRekamMedis from "../../../components/manage/cardDataRekamMedis";
-// import { Button } from "@headlessui/react";
 import ButtonPDF from "../../../components/manage/buttonPDF";
 
 export default function DetailPage() {
@@ -182,9 +181,7 @@ export default function DetailPage() {
         profilePicture="/logo.png"
       />
       <main className="mt-12 ml-32 mr-12 space-y-4">
-        <ButtonPDF
-         onClicked={printHandler}
-         />
+        <ButtonPDF onClicked={printHandler} />
         <div>
           <div className="w-full py-8 px-8 border-2 border-gray rounded-md bg-white space-y-4">
             <div className="w-full py-2 px-2 rounded-md bg-primary-200">

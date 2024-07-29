@@ -3,7 +3,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import useAxios from "../../../useAxios";
 import { useReactToPrint } from "react-to-print";
 import { IoPrintOutline } from "react-icons/io5";
-// import { useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 export default function PDFDatasakit() {
   const axiosInstance = useAxios();
@@ -11,11 +11,9 @@ export default function PDFDatasakit() {
   const [sortedData, setSortedData] = useState([]);
   const [searchTerm] = useState("");
   const [selectedStatus] = useState("");
-  const [dataPegawai, setDataPegawai] = useState([]);
   const [dataDatasakits, setDatasakits] = useState([]);
   const componentRef = useRef();
-//   const { pegawaiId } = useParams();
-  
+  const { pegawaiId } = useParams();
 
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "long", day: "numeric" };
@@ -29,15 +27,10 @@ export default function PDFDatasakit() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [
-          pegawaisRes,
-          datasakitsRes,
-        ] = await Promise.all([
-          axiosInstance.get(`/pegawais`),
-          axiosInstance.get(`/datasakits`),
+        const [datasakitsRes] = await Promise.all([
+          axiosInstance.get(`/datasakits/pegawai/${pegawaiId}`),
         ]);
 
-        setDataPegawai(pegawaisRes.data);
         setDatasakits(datasakitsRes.data);
       } catch (error) {
         console.error("Error fetching data", error);
@@ -45,18 +38,16 @@ export default function PDFDatasakit() {
     };
 
     fetchData();
-  }, [axiosInstance]);
+  }, [axiosInstance, pegawaiId]);
+
+  console.log(dataDatasakits);
 
   const combinedData = useMemo(
     () =>
-      dataPegawai.map((pegawai) => ({
-        ...pegawai,
-        datasakit: dataDatasakits.find(
-          (datasakit) => datasakit.pegawaiId === pegawai.id
-        ),
-        
+      dataDatasakits.map((datasakit) => ({
+        ...datasakit,
       })),
-    [dataPegawai, dataDatasakits]
+    [dataDatasakits]
   );
 
   const countStatusOccurrences = (data) => {
@@ -83,32 +74,22 @@ export default function PDFDatasakit() {
 
   const filteredPegawai = sortedData.filter(
     (datasakit) =>
-      datasakit.namapegawai.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      (selectedStatus ? datasakit.satuankerja === selectedStatus : true)
+      datasakit.Pegawais?.namapegawai
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) &&
+      (selectedStatus
+        ? datasakit.Pegawais?.satuankerja === selectedStatus
+        : true)
   );
-
-  const calculateAge = (birthDateString) => {
-    const birthDate = new Date(birthDateString);
-    const referenceDate = new Date("2024-07-08T00:00:00.000Z");
-    let age = referenceDate.getFullYear() - birthDate.getFullYear();
-    const monthDifference = referenceDate.getMonth() - birthDate.getMonth();
-    if (
-      monthDifference < 0 ||
-      (monthDifference === 0 && referenceDate.getDate() < birthDate.getDate())
-    ) {
-      age--;
-    }
-    return age;
-  };
 
   return (
     <>
       <div className="flex justify-end mr-28 mt-6 mb-2">
         <button
           onClick={handlepdfClick}
-          className="flex items-center bg-white border border-black text-black bg-blue-500 hover:bg-blue-600 px-3 py-2 rounded-md"
+          className="flex items-center bg-white border border-black text-black px-3 py-2 rounded-md"
         >
-          <IoPrintOutline className="px-4 py-2 bg-indigo-600 text-white rounded" />
+          <IoPrintOutline className="mr-2 rounded" />
           Export to PDF
         </button>
       </div>
@@ -150,13 +131,14 @@ export default function PDFDatasakit() {
               <div className="border-t-2 border-gray-800 mt-2  mx-20 flex justify-center" />
               <div className="ml-20 mr-16 pt-12 mb-7">
                 {filteredPegawai.map((pegawai, index) => (
-                <div key={index} className="mb-4">
+                  <div key={index} className="mb-4">
                     <div className="bg-white rounded-lg  shadow-sm">
-                        <p className="text-base text-gray-600">
-                            <span className="font-medium text-gray-700">NRP:</span> {pegawai.nrp}
-                        </p>
+                      <p className="text-base text-gray-600">
+                        <span className="font-medium text-gray-700">NRP:</span>{" "}
+                        {pegawai.Pegawais?.nrp}
+                      </p>
                     </div>
-                </div>
+                  </div>
                 ))}
                 <div className="overflow-x-auto pr-4 lg:pr-0">
                   <table className="table-auto w-full">
